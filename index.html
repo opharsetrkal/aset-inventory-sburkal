@@ -35,10 +35,8 @@
     @keyframes skeleton-loading { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
     @keyframes spin { to{transform:rotate(360deg)} }
     .spin { animation:spin .7s linear infinite; }
-    /* Card interaktif — kursor pointer + efek hover naik */
     .card-filter { cursor:pointer; transition:all 0.15s ease; }
     .card-filter:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.12); }
-    /* Outline biru = filter card ini sedang aktif */
     .card-filter.active-filter { outline:2.5px solid #00288e; outline-offset:2px; }
     @media print {
       nav,.no-print,#filters-section { display:none!important; }
@@ -75,11 +73,12 @@
 <!-- NAVIGASI ATAS -->
 <nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 h-16 bg-surface border-b border-outline-variant shadow-sm">
   <div class="flex items-center gap-6">
-    <!-- #22: judul diperbarui -->
-    <span class="text-base font-bold text-primary leading-tight">Aset &amp; Inventory<br><span class="text-xs font-semibold text-on-surface-variant">SBU Reg Kalimantan</span></span>
+    <span class="text-base font-bold text-primary leading-tight">Aset &amp; Inventory<br>
+      <span class="text-xs font-semibold text-on-surface-variant">SBU Reg Kalimantan</span>
+    </span>
     <div class="hidden md:flex gap-6 items-center">
-      <a class="text-xs font-bold text-primary border-b-2 border-primary pb-1" href="#">Dashboard</a>
-      <!-- #4: Rekap Inv dihapus -->
+      <!-- Dashboard diganti Administrasi Keuangan -->
+      <a class="text-xs font-bold text-primary border-b-2 border-primary pb-1" href="#">Administrasi Keuangan</a>
     </div>
   </div>
   <div class="flex items-center gap-2">
@@ -89,18 +88,15 @@
         id="globalSearch" placeholder="Cari material, AWB, mitra…" type="text"/>
     </div>
     <div class="flex items-center gap-2 border-l border-outline-variant pl-3">
-      <!-- Reset Filter -->
       <button onclick="resetAllFilters()"
         class="flex items-center gap-1 px-3 py-2 border border-outline-variant rounded text-xs font-bold text-on-surface-variant hover:bg-surface-container transition-all no-print"
         title="Reset semua filter">
         <span class="material-symbols-outlined text-[16px]">filter_alt_off</span> Reset Filter
       </button>
-      <!-- Cetak PDF -->
       <button onclick="window.print()"
         class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded text-xs font-bold hover:bg-primary-container transition-all no-print">
         <span class="material-symbols-outlined text-[18px]">print</span> Cetak PDF
       </button>
-      <!-- #12: tooltip diperbarui -->
       <button onclick="loadData()" class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full no-print" title="Refresh Data">
         <span class="material-symbols-outlined" id="refreshIcon">sync</span>
       </button>
@@ -111,7 +107,7 @@
 <!-- KONTEN UTAMA -->
 <main class="pt-24 pb-12 px-8 max-w-[1600px] mx-auto space-y-6">
 
-  <!-- KELOMPOK 1: RESUME (#6, #10) -->
+  <!-- KELOMPOK 1: RESUME -->
   <section>
     <h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3 flex items-center gap-2">
       <span class="material-symbols-outlined text-[16px]">payments</span>
@@ -126,7 +122,6 @@
   </section>
 
   <!-- KELOMPOK 2: STATUS AGING & REMINDER -->
-  <!-- #8: label subtitle diperbarui, #9: urutan card dibalik -->
   <section>
     <h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3 flex items-center gap-2">
       <span class="material-symbols-outlined text-[16px]">schedule</span>
@@ -143,27 +138,30 @@
     </div>
   </section>
 
-  <!-- KELOMPOK 3: DISTRIBUSI STATUS -->
-  <!-- #11: "Klik card untuk filter tabel" dihapus -->
+  <!-- KELOMPOK 3: DISTRIBUSI STATUS — DINAMIS dari Sheets -->
   <section>
     <h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3 flex items-center gap-2">
       <span class="material-symbols-outlined text-[16px]">account_tree</span>
       Distribusi Status Pengiriman
     </h3>
-    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3" id="statusCards">
-      <div class="skeleton rounded-xl h-24"></div>
-      <div class="skeleton rounded-xl h-24"></div>
-      <div class="skeleton rounded-xl h-24"></div>
-      <div class="skeleton rounded-xl h-24"></div>
-      <div class="skeleton rounded-xl h-24"></div>
-      <div class="skeleton rounded-xl h-24"></div>
-      <div class="skeleton rounded-xl h-24"></div>
+    <!--
+      Card status dirender DINAMIS oleh renderStatusCards()
+      berdasarkan nilai unik kolom Status dari Google Sheets.
+      Tidak hardcode — status baru di Sheets otomatis muncul di sini.
+    -->
+    <div class="flex flex-wrap gap-3" id="statusCards">
+      <div class="skeleton rounded-xl h-24 w-36"></div>
+      <div class="skeleton rounded-xl h-24 w-36"></div>
+      <div class="skeleton rounded-xl h-24 w-36"></div>
+      <div class="skeleton rounded-xl h-24 w-36"></div>
+      <div class="skeleton rounded-xl h-24 w-36"></div>
+      <div class="skeleton rounded-xl h-24 w-36"></div>
+      <div class="skeleton rounded-xl h-24 w-36"></div>
     </div>
   </section>
 
   <!-- CHARTS -->
   <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-    <!-- Chart tren nominal per bulan -->
     <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
       <div class="flex flex-wrap justify-between items-start gap-4 mb-4">
         <div>
@@ -183,7 +181,6 @@
       <div class="h-[260px]"><canvas id="trendChart"></canvas></div>
     </div>
 
-    <!-- Top 3 rute + Aging -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
       <h4 class="text-base font-bold mb-1">Top 3 Rute Terbanyak</h4>
       <p class="text-xs text-on-surface-variant mb-4">Berdasarkan jumlah pengiriman</p>
@@ -193,7 +190,6 @@
         <div class="skeleton h-10 rounded-lg"></div>
       </div>
       <div class="border-t border-outline-variant my-4"></div>
-      <!-- #22: label aging diperbarui, #21: aging ikut filter -->
       <h4 class="text-base font-bold mb-1">Distribusi Aging</h4>
       <p class="text-xs text-on-surface-variant mb-3">Ikut filter aktif · belum Dibayar</p>
       <div class="h-[160px]"><canvas id="agingChart"></canvas></div>
@@ -201,7 +197,6 @@
   </section>
 
   <!-- Nominal per Mitra -->
-  <!-- #23: tinggi chart diperbesar, font label dikecilkan via options -->
   <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
     <h4 class="text-base font-bold mb-6">Nominal per Mitra</h4>
     <div class="h-[280px]"><canvas id="mitraChart"></canvas></div>
@@ -222,6 +217,10 @@
       <div class="flex flex-wrap items-center gap-3">
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold text-on-surface-variant">Status:</span>
+          <!--
+            Chip status dirender dinamis oleh buildFilters()
+            berdasarkan nilai unik dari Sheets
+          -->
           <div class="flex gap-1 flex-wrap" id="statusChips"></div>
         </div>
         <div class="h-6 w-px bg-outline-variant"></div>
@@ -262,23 +261,28 @@
 </main>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// KONFIGURASI
+// ══════════════════════════════════════════════════════════
 const API_URL   = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vbmk6bDp-7obfoCuyyUtYSMnv41X7b212F3fFezjiu8O2ukfaVb/exec';
 const PAGE_SIZE = 10;
 
-// ── STATE ─────────────────────────────────────────────────
-let ALL_ROWS   = [];
-let FILTERED   = [];
-let SUMMARY    = {};
-let TOP_ROUTES = [];
-let ALL_MONTHS = [];
-let ALL_YEARS  = [];
+// ══════════════════════════════════════════════════════════
+// VARIABEL GLOBAL
+// ══════════════════════════════════════════════════════════
+let ALL_ROWS    = [];
+let FILTERED    = [];
+let SUMMARY     = {};
+let TOP_ROUTES  = [];
+let ALL_MONTHS  = [];
+let ALL_YEARS   = [];
+let STATUS_LIST = []; // diisi DINAMIS dari Sheets
 let currentPage = 1;
-let charts = {};
+let charts      = {};
 
 const filters = {
-  search: '', status: 'SEMUA', bulan: '', mitra: '',
-  jenis: '', reminder: '', activeCardFilter: ''
+  search:'', status:'SEMUA', bulan:'', mitra:'',
+  jenis:'', reminder:'', activeCardFilter:''
 };
 
 const HEADERS_DISPLAY = [
@@ -287,37 +291,68 @@ const HEADERS_DISPLAY = [
   'No INV','Service Billing','Mitra','Nominal (Rp)','Status','Keterangan'
 ];
 
-const STATUS_CONFIG = {
-  'Submitted Invoice':    { bg:'bg-blue-100',   text:'text-blue-800',   card:'#dbeafe', border:'#93c5fd' },
-  'Under Review Invoice': { bg:'bg-yellow-100', text:'text-yellow-800', card:'#fef9c3', border:'#fde047' },
-  'Revisi Invoice':       { bg:'bg-orange-100', text:'text-orange-800', card:'#ffedd5', border:'#fdba74' },
-  'Submitted Nodin':      { bg:'bg-purple-100', text:'text-purple-800', card:'#f3e8ff', border:'#d8b4fe' },
-  'Revisi Nodin':         { bg:'bg-red-100',    text:'text-red-800',    card:'#fee2e2', border:'#fca5a5' },
-  'Waiting Payment':      { bg:'bg-cyan-100',   text:'text-cyan-800',   card:'#cffafe', border:'#67e8f9' },
-  'Paid':                 { bg:'bg-green-100',  text:'text-green-800',  card:'#dcfce7', border:'#86efac' },
-};
+const NAMA_BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
 
-const STATUS_LIST = Object.keys(STATUS_CONFIG);
-const NAMA_BULAN  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+/*
+  PALET WARNA OTOMATIS untuk card status dinamis.
+  Setiap status mendapat warna dari daftar ini secara berurutan.
+  Format: [background card, border, warna teks, badge bg, badge text]
+*/
+const COLOR_PALETTE = [
+  { card:'#dbeafe', border:'#93c5fd', text:'#1e3a8a', bg:'bg-blue-100',   tx:'text-blue-800'   },
+  { card:'#fef9c3', border:'#fde047', text:'#713f12', bg:'bg-yellow-100', tx:'text-yellow-800' },
+  { card:'#ffedd5', border:'#fdba74', text:'#7c2d12', bg:'bg-orange-100', tx:'text-orange-800' },
+  { card:'#f3e8ff', border:'#d8b4fe', text:'#4c1d95', bg:'bg-purple-100', tx:'text-purple-800' },
+  { card:'#fee2e2', border:'#fca5a5', text:'#7f1d1d', bg:'bg-red-100',    tx:'text-red-800'    },
+  { card:'#cffafe', border:'#67e8f9', text:'#164e63', bg:'bg-cyan-100',   tx:'text-cyan-800'   },
+  { card:'#dcfce7', border:'#86efac', text:'#14532d', bg:'bg-green-100',  tx:'text-green-800'  },
+  { card:'#fce7f3', border:'#f9a8d4', text:'#831843', bg:'bg-pink-100',   tx:'text-pink-800'   },
+  { card:'#e0e7ff', border:'#a5b4fc', text:'#312e81', bg:'bg-indigo-100', tx:'text-indigo-800' },
+  { card:'#f0fdf4', border:'#86efac', text:'#052e16', bg:'bg-emerald-100',tx:'text-emerald-800'},
+];
 
+/*
+  Map warna per status — diisi saat data pertama kali dimuat.
+  Key: nama status, Value: objek warna dari COLOR_PALETTE
+*/
+const STATUS_COLOR_MAP = {};
 
-// ── LOAD DATA ─────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// LOAD DATA
+// ══════════════════════════════════════════════════════════
 async function loadData() {
   const icon = document.getElementById('refreshIcon');
   icon.classList.add('spin');
   try {
     const res  = await fetch(API_URL);
     const json = await res.json();
-    if (!json.ok) throw new Error(json.error || 'Gagal memuat data');
+    if (!json.ok) throw new Error(json.error||'Gagal memuat data');
+
     ALL_ROWS   = json.allRows   || json.rows || [];
     SUMMARY    = json.summary   || {};
     TOP_ROUTES = json.topRoutes || [];
     ALL_MONTHS = json.monthOptions || [];
     ALL_YEARS  = json.yearOptions  || [];
-    buildFilters(json.mitraOptions||[], json.monthOptions||[], json.statusOptions||[]);
+
+    /*
+      STATUS_LIST diambil dari data Sheets langsung (dinamis).
+      Menggunakan statusOptions dari Apps Script, atau fallback
+      ke nilai unik dari kolom Status di ALL_ROWS.
+    */
+    STATUS_LIST = json.statusOptions && json.statusOptions.length
+      ? json.statusOptions
+      : [...new Set(ALL_ROWS.map(r => r['Status']).filter(Boolean))];
+
+    // Assign warna otomatis ke setiap status
+    STATUS_LIST.forEach((s, i) => {
+      STATUS_COLOR_MAP[s] = COLOR_PALETTE[i % COLOR_PALETTE.length];
+    });
+
+    buildFilters(json.mitraOptions||[], json.monthOptions||[]);
     buildTrendFilterOptions();
     applyFilters();
     renderTopRoutes();
+
   } catch(err) {
     document.getElementById('tableBody').innerHTML = `
       <tr><td colspan="20" class="p-8 text-center">
@@ -329,15 +364,18 @@ async function loadData() {
   }
 }
 
-
-// ── BUILD FILTERS ─────────────────────────────────────────
-function buildFilters(mitras, months, statusOptions) {
+// ══════════════════════════════════════════════════════════
+// BUILD FILTERS
+// ══════════════════════════════════════════════════════════
+function buildFilters(mitras, months) {
+  // Status chips — dinamis dari STATUS_LIST
   const chipsEl = document.getElementById('statusChips');
-  chipsEl.innerHTML = ['SEMUA', ...STATUS_LIST].map((s,i) => `
+  chipsEl.innerHTML = ['SEMUA', ...STATUS_LIST].map((s, i) => `
     <button class="chip px-2 py-1 text-[10px] font-bold rounded transition-colors
       ${i===0?'bg-primary text-on-primary active':'bg-surface-container text-on-surface-variant hover:bg-primary/10'}"
       data-status="${s}">${s==='SEMUA'?'Semua':s}</button>
   `).join('');
+
   chipsEl.querySelectorAll('.chip').forEach(chip => {
     chip.addEventListener('click', () => {
       setChipActive(chip.dataset.status);
@@ -346,58 +384,71 @@ function buildFilters(mitras, months, statusOptions) {
       applyFilters();
     });
   });
+
+  // Mitra dropdown
   document.getElementById('mitraFilter').innerHTML =
-    '<option value="">Semua Mitra</option>' + mitras.map(m=>`<option value="${m}">${m}</option>`).join('');
+    '<option value="">Semua Mitra</option>' +
+    mitras.map(m=>`<option value="${m}">${m}</option>`).join('');
+
+  // Bulan dropdown
   document.getElementById('bulanFilter').innerHTML =
-    '<option value="">Semua Bulan</option>' + months.map(k=>`<option value="${k}">${monthLabel(k)}</option>`).join('');
+    '<option value="">Semua Bulan</option>' +
+    months.map(k=>`<option value="${k}">${monthLabel(k)}</option>`).join('');
 }
 
 function buildTrendFilterOptions() {
   const bOpts = NAMA_BULAN.map((n,i)=>`<option value="${String(i+1).padStart(2,'0')}">${n}</option>`).join('');
   const yOpts = ALL_YEARS.map(y=>`<option value="${y}">${y}</option>`).join('');
   ['trendBulanAwal','trendBulanAkhir'].forEach(id=>{
-    document.getElementById(id).innerHTML = '<option value="">Bulan</option>'+bOpts;
+    document.getElementById(id).innerHTML='<option value="">Bulan</option>'+bOpts;
   });
   ['trendTahunAwal','trendTahunAkhir'].forEach(id=>{
-    document.getElementById(id).innerHTML = '<option value="">Tahun</option>'+yOpts;
+    document.getElementById(id).innerHTML='<option value="">Tahun</option>'+yOpts;
   });
 }
 
 function setChipActive(status) {
   document.querySelectorAll('#statusChips .chip').forEach(c => {
     const a = c.dataset.status === status;
-    c.classList.toggle('bg-primary',a); c.classList.toggle('text-on-primary',a); c.classList.toggle('active',a);
-    c.classList.toggle('bg-surface-container',!a); c.classList.toggle('text-on-surface-variant',!a);
+    c.classList.toggle('bg-primary',a);
+    c.classList.toggle('text-on-primary',a);
+    c.classList.toggle('active',a);
+    c.classList.toggle('bg-surface-container',!a);
+    c.classList.toggle('text-on-surface-variant',!a);
   });
 }
 
-
-// ── APPLY FILTERS ─────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// APPLY FILTERS
+// ══════════════════════════════════════════════════════════
 function applyFilters() {
   const q = filters.search.toLowerCase();
+
   FILTERED = ALL_ROWS.filter(r => {
     const aging    = calcAging(r['Tgl AWB'], r['Status']);
     const reminder = getReminderLevel(aging, r['Status']);
-    // Filter khusus dari card click
-    if (filters.activeCardFilter === 'outstanding:belum-dibayar' && r['Status'] === 'Paid') return false;
-    if (filters.activeCardFilter === 'aging:normal') {
-      if (r['Status'] === 'Paid' || aging >= 8) return false;
+
+    if (filters.activeCardFilter==='outstanding:belum-dibayar' && r['Status']==='Paid') return false;
+    if (filters.activeCardFilter==='aging:normal') {
+      if (r['Status']==='Paid' || aging>=8) return false;
     }
-    if (filters.status !== 'SEMUA' && r['Status'] !== filters.status)          return false;
-    if (filters.bulan  && monthKey(r['Tgl AWB']) !== filters.bulan)            return false;
-    if (filters.mitra  && r['Mitra'] !== filters.mitra)                        return false;
+    if (filters.status!=='SEMUA' && r['Status']!==filters.status)          return false;
+    if (filters.bulan  && monthKey(r['Tgl AWB'])!==filters.bulan)          return false;
+    if (filters.mitra  && r['Mitra']!==filters.mitra)                      return false;
     if (filters.jenis  && !String(r['IO/PRK']||'').startsWith(filters.jenis)) return false;
-    if (filters.reminder && reminder !== filters.reminder)                     return false;
-    if (q && !JSON.stringify(r).toLowerCase().includes(q))                     return false;
+    if (filters.reminder && reminder!==filters.reminder)                   return false;
+    if (q && !JSON.stringify(r).toLowerCase().includes(q))                 return false;
     return true;
   });
+
   const filteredNominal = FILTERED.reduce((s,r)=>s+(parseFloat(r['Nominal (Rp)'])||0),0);
+
   renderKpiFinansial(filteredNominal);
   renderKpiAging();
-  renderStatusCards();
+  renderStatusCards();   // render dinamis
   renderTrendChart();
   renderMitraChart();
-  renderAgingChart(); // #21: aging ikut filter
+  renderAgingChart();
   updateActiveFilterLabel();
   currentPage = 1;
   renderTable();
@@ -414,7 +465,7 @@ function onDropdownChange() {
 
 function updateActiveFilterLabel() {
   const parts = [];
-  if (filters.status !== 'SEMUA') parts.push('Status: '+filters.status);
+  if (filters.status!=='SEMUA') parts.push('Status: '+filters.status);
   if (filters.bulan)    parts.push('Bulan: '+monthLabel(filters.bulan));
   if (filters.mitra)    parts.push('Mitra: '+filters.mitra);
   if (filters.jenis)    parts.push('Jenis: '+filters.jenis);
@@ -424,26 +475,25 @@ function updateActiveFilterLabel() {
     parts.length ? 'Filter aktif: '+parts.join(' · ') : 'Menampilkan semua data';
 }
 
-
-// ── CARD CLICK HANDLER ────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// CARD CLICK HANDLER
+// ══════════════════════════════════════════════════════════
 function onCardClick(filterType, filterValue) {
   const cardKey = filterType+':'+filterValue;
-  // Toggle: klik card sama → reset
-  if (filters.activeCardFilter === cardKey ||
+  // Toggle: klik card yang sama → reset
+  if (filters.activeCardFilter===cardKey ||
      (filterType==='status' && filters.status===filterValue) ||
      (filterType==='paid' && filters.status==='Paid')) {
-    resetAllFilters();
-    return;
+    resetAllFilters(); return;
   }
-  // Reset semua filter dulu
-  filters.status = 'SEMUA'; filters.reminder = ''; filters.activeCardFilter = cardKey;
-  if (filterType === 'reset') { resetAllFilters(); return; }
-  else if (filterType === 'status') { filters.status = filterValue; setChipActive(filterValue); }
-  else if (filterType === 'paid') { filters.status = 'Paid'; setChipActive('Paid'); }
-  else if (filterType === 'outstanding') { filters.status = 'SEMUA'; setChipActive('SEMUA'); }
-  else if (filterType === 'aging') {
-    if (filterValue === 'normal') { filters.activeCardFilter = 'aging:normal'; }
-    else { filters.reminder = filterValue; }
+  filters.status='SEMUA'; filters.reminder=''; filters.activeCardFilter=cardKey;
+  if (filterType==='reset')       { resetAllFilters(); return; }
+  else if (filterType==='status') { filters.status=filterValue; setChipActive(filterValue); }
+  else if (filterType==='paid')   { filters.status='Paid'; setChipActive('Paid'); }
+  else if (filterType==='outstanding') { filters.status='SEMUA'; setChipActive('SEMUA'); }
+  else if (filterType==='aging') {
+    if (filterValue==='normal') { filters.activeCardFilter='aging:normal'; }
+    else { filters.reminder=filterValue; }
     setChipActive('SEMUA');
   }
   applyFilters();
@@ -462,53 +512,49 @@ function resetAllFilters() {
   applyFilters();
 }
 
-
-// ── RENDER KPI FINANSIAL (Kelompok 1) ─────────────────────
+// ══════════════════════════════════════════════════════════
+// RENDER KPI FINANSIAL (Kelompok 1)
+// ══════════════════════════════════════════════════════════
 function renderKpiFinansial(filteredNominal) {
   const s = SUMMARY;
   document.getElementById('kpiFinansial').innerHTML = `
-    <!-- Card 1: Total Record -->
     <div class="card-filter bg-white p-5 rounded-xl shadow-sm border border-slate-200
-      ${!filters.activeCardFilter && filters.status==='SEMUA'?'active-filter':''}"
+      ${!filters.activeCardFilter&&filters.status==='SEMUA'?'active-filter':''}"
       onclick="onCardClick('reset','all')" title="Reset semua filter">
       <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Total Record</p>
       <p class="text-4xl font-black text-primary">${FILTERED.length.toLocaleString('id-ID')}</p>
     </div>
-    <!-- Card 2: Total Nominal -->
     <div class="card-filter bg-white p-5 rounded-xl shadow-sm border border-slate-200"
       onclick="onCardClick('reset','all')" title="Reset semua filter">
       <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Total Nominal</p>
       <p class="text-2xl font-black text-primary">${fmtRp(filteredNominal)}</p>
     </div>
-    <!-- Card 3: Belum Dibayar (#7) -->
     <div class="card-filter bg-orange-50 p-5 rounded-xl shadow-sm border border-orange-200
       ${filters.activeCardFilter==='outstanding:belum-dibayar'?'active-filter':''}"
       onclick="onCardClick('outstanding','belum-dibayar')" title="Filter: belum Dibayar">
       <p class="text-xs font-bold text-orange-700 uppercase tracking-wider mb-2">Belum Dibayar</p>
       <p class="text-2xl font-black text-orange-700">${fmtRp(s.globalOutstanding||0)}</p>
     </div>
-    <!-- Card 4: Sudah Dibayar -->
     <div class="card-filter bg-green-50 p-5 rounded-xl shadow-sm border border-green-200
       ${filters.status==='Paid'?'active-filter':''}"
-      onclick="onCardClick('paid','Paid')" title="Filter: Status = Paid">
+      onclick="onCardClick('paid','Paid')" title="Filter: Paid">
       <p class="text-xs font-bold text-green-700 uppercase tracking-wider mb-2">Sudah Dibayar</p>
       <p class="text-2xl font-black text-green-700">${fmtRp(s.globalPaid||0)}</p>
     </div>
   `;
 }
 
-
-// ── RENDER KPI AGING (Kelompok 2) ─────────────────────────
-// #9: urutan card: Belum Dibayar | Normal | R1 | R2
+// ══════════════════════════════════════════════════════════
+// RENDER KPI AGING (Kelompok 2)
+// ══════════════════════════════════════════════════════════
 function renderKpiAging() {
-  const s  = SUMMARY;
-  const r1 = s.agingBuckets?.r1 || 0;
-  const r2 = s.agingBuckets?.r2 || 0;
-  const normal    = s.agingBuckets?.normal || 0;
-  const belumBayar= ALL_ROWS.filter(r=>r['Status']!=='Paid').length;
+  const s       = SUMMARY;
+  const r1      = s.agingBuckets?.r1 || 0;
+  const r2      = s.agingBuckets?.r2 || 0;
+  const normal  = s.agingBuckets?.normal || 0;
+  const belumBayar = ALL_ROWS.filter(r=>r['Status']!=='Paid').length;
 
   document.getElementById('kpiAging').innerHTML = `
-    <!-- Card Belum Dibayar — posisi pertama (#9) -->
     <div class="card-filter bg-slate-50 p-5 rounded-xl shadow-sm border border-slate-200
       ${filters.activeCardFilter==='outstanding:belum-dibayar'?'active-filter':''}"
       onclick="onCardClick('outstanding','belum-dibayar')" title="Filter: semua belum Dibayar">
@@ -516,7 +562,6 @@ function renderKpiAging() {
       <p class="text-4xl font-black text-slate-700">${belumBayar}</p>
       <p class="text-xs text-slate-500 mt-2">Semua status aktif</p>
     </div>
-    <!-- Card Normal — posisi kedua (#9) -->
     <div class="card-filter bg-blue-50 p-5 rounded-xl shadow-sm border border-blue-200
       ${filters.activeCardFilter==='aging:normal'?'active-filter':''}"
       onclick="onCardClick('aging','normal')" title="Filter: aging 0-7 hari">
@@ -524,7 +569,6 @@ function renderKpiAging() {
       <p class="text-4xl font-black text-blue-700">${normal}</p>
       <p class="text-xs text-blue-600 mt-2">0–7 hari</p>
     </div>
-    <!-- Card Reminder 1 — #17: label diperbarui -->
     <div class="card-filter bg-orange-50 p-5 rounded-xl border border-orange-200
       ${filters.reminder==='R1'?'active-filter':''}"
       onclick="onCardClick('aging','R1')" title="Filter: Perhatian 8-14 hari">
@@ -535,7 +579,6 @@ function renderKpiAging() {
       <p class="text-4xl font-black text-orange-600">${r1}</p>
       <p class="text-xs text-orange-500 mt-2">8–14 hari · PERHATIAN</p>
     </div>
-    <!-- Card Reminder 2 — #18: label diperbarui -->
     <div class="card-filter p-5 rounded-xl border
       ${r2>0?'bg-error-container border-error animate-pulse-red':'bg-red-50 border-red-200'}
       ${filters.reminder==='R2'?'active-filter':''}"
@@ -550,27 +593,41 @@ function renderKpiAging() {
   `;
 }
 
-
-// ── RENDER 7 CARD STATUS (Kelompok 3) ─────────────────────
-// #20: teks "pengiriman" dihapus dari tiap card
+// ══════════════════════════════════════════════════════════
+// RENDER STATUS CARDS — DINAMIS dari STATUS_LIST
+// Tidak hardcode — semua status dari Sheets otomatis muncul
+// Klik card → filter tabel ke status tersebut
+// ══════════════════════════════════════════════════════════
 function renderStatusCards() {
   const byStatus = SUMMARY.byStatus || {};
-  document.getElementById('statusCards').innerHTML = STATUS_LIST.map(status => {
-    const cfg   = STATUS_CONFIG[status];
-    const count = byStatus[status] || 0;
+
+  /*
+    Hitung semua status yang ada di ALL_ROWS
+    termasuk yang mungkin belum ada di SUMMARY.byStatus
+  */
+  const allStatuses = STATUS_LIST.length
+    ? STATUS_LIST
+    : [...new Set(ALL_ROWS.map(r=>r['Status']).filter(Boolean))];
+
+  document.getElementById('statusCards').innerHTML = allStatuses.map((status, i) => {
+    const clr      = STATUS_COLOR_MAP[status] || COLOR_PALETTE[i % COLOR_PALETTE.length];
+    const count    = byStatus[status] || 0;
     const isActive = filters.status === status;
+
     return `
-      <div class="card-filter p-4 rounded-xl border-2 ${isActive?'active-filter':''}"
-        style="background:${cfg.card};border-color:${cfg.border};"
-        onclick="onCardClick('status','${status}')" title="${status}">
-        <p class="text-[11px] font-bold text-on-surface-variant mb-2 leading-tight">${status}</p>
-        <p class="text-3xl font-black ${cfg.text}">${count}</p>
+      <div class="card-filter flex-shrink-0 p-4 rounded-xl border-2 min-w-[130px]
+        ${isActive?'active-filter':''}"
+        style="background:${clr.card};border-color:${clr.border};"
+        onclick="onCardClick('status','${status.replace(/'/g,"\\'")}')">
+        <p class="text-[11px] font-bold mb-2 leading-tight" style="color:${clr.text}">${status}</p>
+        <p class="text-3xl font-black" style="color:${clr.text}">${count}</p>
       </div>`;
   }).join('');
 }
 
-
-// ── RENDER CHARTS ─────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// RENDER CHARTS
+// ══════════════════════════════════════════════════════════
 function renderTrendChart() {
   const bAwal=document.getElementById('trendBulanAwal').value;
   const tAwal=document.getElementById('trendTahunAwal').value;
@@ -597,11 +654,7 @@ function renderTrendChart() {
     }]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false}},
-      scales:{
-        // #1: format Rp dengan 2 desimal
-        y:{beginAtZero:true,ticks:{callback:v=>fmtRp(v)}},
-        x:{grid:{display:false}}
-      }}
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>fmtRp(v)}},x:{grid:{display:false}}}}
   });
 }
 
@@ -612,8 +665,6 @@ function resetTrendFilter() {
   renderTrendChart();
 }
 
-// #23: font label dikecilkan, maxBarThickness dibatasi
-// agar nama mitra tidak terpotong
 function renderMitraChart() {
   const byMitra={};
   FILTERED.forEach(r=>{
@@ -632,31 +683,26 @@ function renderMitraChart() {
       responsive:true,maintainAspectRatio:false,indexAxis:'y',
       plugins:{legend:{display:false}},
       scales:{
-        // font label dikecilkan agar semua nama mitra muat
         y:{ticks:{font:{size:10},crossAlign:'far'}},
         x:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:10}}}
-      },
-      layout:{padding:{left:0}}
+      }
     }
   });
 }
 
-// #21: aging chart ikut FILTERED (bukan ALL_ROWS)
-// #22: label diperbarui
 function renderAgingChart() {
-  // Hitung dari FILTERED — ikut filter aktif
-  const ag = {normal:0, r1:0, r2:0};
-  FILTERED.forEach(r => {
-    if (r['Status']==='Paid') return;
-    const days = calcAging(r['Tgl AWB'], r['Status']);
-    if (days>14)      ag.r2++;
-    else if (days>=8) ag.r1++;
-    else              ag.normal++;
+  // Ikut FILTERED — hitung ulang dari data yang sedang ditampilkan
+  const ag={normal:0,r1:0,r2:0};
+  FILTERED.forEach(r=>{
+    if(r['Status']==='Paid') return;
+    const days=calcAging(r['Tgl AWB'],r['Status']);
+    if(days>14)      ag.r2++;
+    else if(days>=8) ag.r1++;
+    else             ag.normal++;
   });
   rebuildChart('agingChart',{
     type:'bar',
     data:{
-      // #22: label diperbarui
       labels:['Normal (0–7)','Perhatian (8–14)','Kritis (>14)'],
       datasets:[{data:[ag.normal,ag.r1,ag.r2],
         backgroundColor:['#3b82f6','#f97316','#ba1a1a'],borderRadius:4}]
@@ -686,13 +732,14 @@ function renderTopRoutes() {
   }).join('');
 }
 
-function rebuildChart(id,config) {
+function rebuildChart(id,config){
   if(charts[id]) charts[id].destroy();
   charts[id]=new Chart(document.getElementById(id),config);
 }
 
-
-// ── RENDER TABEL ──────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// RENDER TABEL
+// ══════════════════════════════════════════════════════════
 function renderTable() {
   document.getElementById('tableHead').innerHTML='<tr>'+
     '<th class="p-4 text-xs font-bold text-on-surface-variant border-b border-outline-variant">#</th>'+
@@ -711,7 +758,7 @@ function renderTable() {
   }
 
   tbody.innerHTML=paged.map((r,idx)=>{
-    const aging=calcAging(r['Tgl AWB'], r['Status']);
+    const aging=calcAging(r['Tgl AWB'],r['Status']);
     const reminder=getReminderLevel(aging,r['Status']);
     let rowBg='';
     if(r['Status']!=='Paid'){
@@ -721,25 +768,23 @@ function renderTable() {
     const cells=HEADERS_DISPLAY.map(h=>{
       const v=r[h];
       if(h==='Status') return `<td class="p-4">${badgeStatus(v)}</td>`;
-      // #1: nominal dengan format 2 desimal
       if(h==='Nominal (Rp)') return `<td class="p-4 font-mono font-bold text-right whitespace-nowrap">${v?fmtRpFull(+v):'-'}</td>`;
       if(h==='Tgl AWB'||h==='Tgl Nodin') return `<td class="p-4 whitespace-nowrap text-sm">${fmtDate(v)}</td>`;
       if(h==='Deskripsi Material') return `<td class="p-4 font-semibold text-sm max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v}">${v||'-'}</td>`;
       return `<td class="p-4 text-sm whitespace-nowrap">${v||'-'}</td>`;
     }).join('');
 
-    // #22: badge reminder
-    const reminderBadge = reminder==='R2'
-      ? '<span class="px-2 py-1 rounded-full bg-error text-on-error text-[10px] font-bold">Kritis</span>'
-      : reminder==='R1'
-      ? '<span class="px-2 py-1 rounded-full bg-orange-500 text-white text-[10px] font-bold">Perhatian</span>'
-      : '<span class="text-xs text-on-surface-variant">—</span>';
+    const reminderBadge=reminder==='R2'
+      ?'<span class="px-2 py-1 rounded-full bg-error text-on-error text-[10px] font-bold">Kritis</span>'
+      :reminder==='R1'
+      ?'<span class="px-2 py-1 rounded-full bg-orange-500 text-white text-[10px] font-bold">Perhatian</span>'
+      :'<span class="text-xs text-on-surface-variant">—</span>';
 
     return `<tr class="hover:bg-surface-container-low cursor-pointer transition-colors ${rowBg}"
       onclick='openModal(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
       <td class="p-4 text-xs text-on-surface-variant">${start+idx+1}</td>
       ${cells}
-      <td class="p-4 font-bold text-sm whitespace-nowrap ${reminder==='R2'?'text-error':reminder==='R1'?'text-orange-600':'text-on-surface-variant'}">${aging} hari</td>
+      <td class="p-4 font-bold text-sm whitespace-nowrap ${reminder==='R2'?'text-error':reminder==='R1'?'text-orange-600':'text-on-surface-variant'}">${aging>0?aging+' hari':'—'}</td>
       <td class="p-4">${reminderBadge}</td>
     </tr>`;
   }).join('');
@@ -747,8 +792,9 @@ function renderTable() {
   renderPagination();
 }
 
-
-// ── PAGINATION ────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// PAGINATION
+// ══════════════════════════════════════════════════════════
 function renderPagination() {
   const total=FILTERED.length, pages=Math.ceil(total/PAGE_SIZE)||1;
   const start=(currentPage-1)*PAGE_SIZE+1, end=Math.min(currentPage*PAGE_SIZE,total);
@@ -769,10 +815,12 @@ function goPage(p){
   renderTable();
 }
 
-
-// ── MODAL ─────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════════════
 function openModal(row) {
-  const aging=calcAging(row['Tgl AWB'], row['Status']), reminder=getReminderLevel(aging,row['Status']);
+  const aging=calcAging(row['Tgl AWB'],row['Status']);
+  const reminder=getReminderLevel(aging,row['Status']);
   document.getElementById('modalContent').innerHTML=
     HEADERS_DISPLAY.map(h=>`
       <div class="space-y-1">
@@ -780,9 +828,10 @@ function openModal(row) {
         <p class="text-base font-semibold">${h==='Nominal (Rp)'&&row[h]?fmtRpFull(+row[h]):row[h]||'—'}</p>
       </div>`).join('')+
     `<div class="space-y-1"><p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Aging</p>
-    <p class="text-base font-semibold ${aging>14?'text-error':aging>=8?'text-orange-600':'text-green-600'}">${aging} hari</p></div>
+    <p class="text-base font-semibold ${aging>14?'text-error':aging>=8?'text-orange-600':'text-green-600'}">${aging>0?aging+' hari':'—'}</p></div>
     <div class="space-y-1"><p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Reminder</p>
     <p class="text-base font-semibold">${reminder==='R2'?'Kritis':reminder==='R1'?'Perhatian':'— (Normal)'}</p></div>`;
+
   document.getElementById('copyAwbBtn').onclick=()=>{
     navigator.clipboard.writeText(row['AWB']||'');
     const btn=document.getElementById('copyAwbBtn');
@@ -792,19 +841,22 @@ function openModal(row) {
   document.getElementById('detailModal').classList.remove('hidden');
   document.getElementById('detailModal').classList.add('flex');
 }
+
 function closeModal(){
   document.getElementById('detailModal').classList.add('hidden');
   document.getElementById('detailModal').classList.remove('flex');
 }
 
-
-// ── EXPORT CSV ────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// EXPORT CSV
+// ══════════════════════════════════════════════════════════
 function exportCSV() {
   const rows=[([...HEADERS_DISPLAY,'Aging (hari)','Reminder']).join(',')];
   FILTERED.forEach(r=>{
-    const aging=calcAging(r['Tgl AWB'], r['Status']), reminder=getReminderLevel(aging,r['Status']);
+    const aging=calcAging(r['Tgl AWB'],r['Status']);
+    const reminder=getReminderLevel(aging,r['Status']);
     const cells=HEADERS_DISPLAY.map(h=>`"${String(r[h]||'').replace(/"/g,'""')}"`);
-    cells.push(aging, reminder==='R2'?'Kritis':reminder==='R1'?'Perhatian':'Normal');
+    cells.push(aging>0?aging:'—', reminder==='R2'?'Kritis':reminder==='R1'?'Perhatian':'Normal');
     rows.push(cells.join(','));
   });
   const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
@@ -814,60 +866,68 @@ function exportCSV() {
   a.click();
 }
 
+// ══════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════
 
-// ── HELPERS ───────────────────────────────────────────────
-function calcAging(tgl, status){
-  if(!tgl) return 0;
-  if(status === 'Paid') return 0; // Paid = stop hitung aging
-  const d=new Date(tgl);
-  return isNaN(d)?0:Math.ceil(Math.abs(new Date()-d)/864e5);
+// Hitung aging dari Tgl AWB — stop jika status Paid
+function calcAging(tgl, status) {
+  if (!tgl) return 0;
+  if (status === 'Paid') return 0; // Paid = stop hitung aging
+  const d = new Date(tgl);
+  return isNaN(d) ? 0 : Math.ceil(Math.abs(new Date()-d)/864e5);
 }
-function getReminderLevel(days,status){
-  if(status==='Paid') return '-';
-  if(days>14) return 'R2';
-  if(days>=8) return 'R1';
+
+function getReminderLevel(days, status) {
+  if (status==='Paid') return '-';
+  if (days>14)  return 'R2';
+  if (days>=8)  return 'R1';
   return '-';
 }
-function monthKey(tgl){
-  if(!tgl) return null;
+
+function monthKey(tgl) {
+  if (!tgl) return null;
   const d=new Date(tgl);
-  if(isNaN(d)) return null;
+  if (isNaN(d)) return null;
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
 }
-function monthLabel(k){
-  if(!k) return k;
+
+function monthLabel(k) {
+  if (!k) return k;
   const p=k.split('-');
   return NAMA_BULAN[parseInt(p[1])-1]+' '+p[0];
 }
-function fmtDate(d){
-  if(!d) return '-';
+
+function fmtDate(d) {
+  if (!d) return '-';
   const p=String(d).split('-');
   return p.length<3?d:`${p[2]}/${p[1]}/${p[0]}`;
 }
 
-// #1: Format rupiah singkat dengan 2 angka desimal
-// Contoh: 2500000 → Rp 2,50jt | 169800000 → Rp 169,80jt
-function fmtRp(n){
-  if(n>=1e12) return 'Rp '+(n/1e12).toFixed(2)+'T';
-  if(n>=1e9)  return 'Rp '+(n/1e9).toFixed(2)+'M';
-  if(n>=1e6)  return 'Rp '+(n/1e6).toFixed(2)+'jt';
-  if(n>=1e3)  return 'Rp '+(n/1e3).toFixed(2)+'rb';
+// Format rupiah singkat dengan 2 desimal untuk card & chart
+function fmtRp(n) {
+  if (n>=1e12) return 'Rp '+(n/1e12).toFixed(2)+'T';
+  if (n>=1e9)  return 'Rp '+(n/1e9).toFixed(2)+'M';
+  if (n>=1e6)  return 'Rp '+(n/1e6).toFixed(2)+'jt';
+  if (n>=1e3)  return 'Rp '+(n/1e3).toFixed(2)+'rb';
   return 'Rp '+n.toFixed(2);
 }
 
-// Format rupiah penuh untuk tabel & modal (titik sebagai pemisah ribuan)
-// Contoh: 6000000 → Rp 6.000.000,00
-function fmtRpFull(n){
+// Format rupiah penuh untuk tabel & modal
+function fmtRpFull(n) {
   return 'Rp '+n.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
-function badgeStatus(s){
-  const cfg=STATUS_CONFIG[s]||{bg:'bg-gray-100',text:'text-gray-600'};
-  return `<span class="px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap ${cfg.bg} ${cfg.text}">${s||'—'}</span>`;
+// Badge status — warna dari STATUS_COLOR_MAP (dinamis)
+function badgeStatus(s) {
+  const clr = STATUS_COLOR_MAP[s];
+  if (clr) return `<span class="px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap ${clr.bg} ${clr.tx}">${s}</span>`;
+  return `<span class="px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap bg-gray-100 text-gray-600">${s||'—'}</span>`;
 }
 
-
-// ── INIT ──────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
   loadData();
   document.getElementById('globalSearch').addEventListener('input',e=>{
