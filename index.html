@@ -145,18 +145,18 @@
       Distribusi Status Pengiriman
     </h3>
     <!--
-      Card status dirender DINAMIS oleh renderStatusCards()
-      berdasarkan nilai unik kolom Status dari Google Sheets.
-      Tidak hardcode — status baru di Sheets otomatis muncul di sini.
+      Grid adaptif: auto-fill kolom min 130px.
+      4 card → tiap card ~25% lebar. 9 card → lebih rapat otomatis.
+      Tidak hardcode jumlah kolom — menyesuaikan jumlah status dari Sheets.
     -->
-    <div class="flex flex-wrap gap-3" id="statusCards">
-      <div class="skeleton rounded-xl h-24 w-36"></div>
-      <div class="skeleton rounded-xl h-24 w-36"></div>
-      <div class="skeleton rounded-xl h-24 w-36"></div>
-      <div class="skeleton rounded-xl h-24 w-36"></div>
-      <div class="skeleton rounded-xl h-24 w-36"></div>
-      <div class="skeleton rounded-xl h-24 w-36"></div>
-      <div class="skeleton rounded-xl h-24 w-36"></div>
+    <div class="grid gap-3" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))" id="statusCards">
+      <div class="skeleton rounded-xl h-24"></div>
+      <div class="skeleton rounded-xl h-24"></div>
+      <div class="skeleton rounded-xl h-24"></div>
+      <div class="skeleton rounded-xl h-24"></div>
+      <div class="skeleton rounded-xl h-24"></div>
+      <div class="skeleton rounded-xl h-24"></div>
+      <div class="skeleton rounded-xl h-24"></div>
     </div>
   </section>
 
@@ -615,7 +615,7 @@ function renderStatusCards() {
     const isActive = filters.status === status;
 
     return `
-      <div class="card-filter flex-shrink-0 p-4 rounded-xl border-2 min-w-[130px]
+      <div class="card-filter p-4 rounded-xl border-2
         ${isActive?'active-filter':''}"
         style="background:${clr.card};border-color:${clr.border};"
         onclick="onCardClick('status','${status.replace(/'/g,"\\'")}')">
