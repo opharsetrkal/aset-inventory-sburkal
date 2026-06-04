@@ -263,7 +263,7 @@
 
 <script>
 // ── CONFIG ────────────────────────────────────────────────
-const API_URL   = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vbmk6bDp-7obfoCuyyUtYSMnv41X7b212F3fFezjiu8O2ukfaVb/exec';
+const API_URL   = 'PASTE_YOUR_WEB_APP_URL_HERE';
 const PAGE_SIZE = 10;
 
 // ── STATE ─────────────────────────────────────────────────
@@ -376,7 +376,7 @@ function setChipActive(status) {
 function applyFilters() {
   const q = filters.search.toLowerCase();
   FILTERED = ALL_ROWS.filter(r => {
-    const aging    = calcAging(r['Tgl AWB']);
+    const aging    = calcAging(r['Tgl AWB'], r['Status']);
     const reminder = getReminderLevel(aging, r['Status']);
     // Filter khusus dari card click
     if (filters.activeCardFilter === 'outstanding:belum-dibayar' && r['Status'] === 'Paid') return false;
@@ -648,7 +648,7 @@ function renderAgingChart() {
   const ag = {normal:0, r1:0, r2:0};
   FILTERED.forEach(r => {
     if (r['Status']==='Paid') return;
-    const days = calcAging(r['Tgl AWB']);
+    const days = calcAging(r['Tgl AWB'], r['Status']);
     if (days>14)      ag.r2++;
     else if (days>=8) ag.r1++;
     else              ag.normal++;
@@ -711,7 +711,7 @@ function renderTable() {
   }
 
   tbody.innerHTML=paged.map((r,idx)=>{
-    const aging=calcAging(r['Tgl AWB']);
+    const aging=calcAging(r['Tgl AWB'], r['Status']);
     const reminder=getReminderLevel(aging,r['Status']);
     let rowBg='';
     if(r['Status']!=='Paid'){
@@ -772,7 +772,7 @@ function goPage(p){
 
 // ── MODAL ─────────────────────────────────────────────────
 function openModal(row) {
-  const aging=calcAging(row['Tgl AWB']), reminder=getReminderLevel(aging,row['Status']);
+  const aging=calcAging(row['Tgl AWB'], row['Status']), reminder=getReminderLevel(aging,row['Status']);
   document.getElementById('modalContent').innerHTML=
     HEADERS_DISPLAY.map(h=>`
       <div class="space-y-1">
@@ -802,7 +802,7 @@ function closeModal(){
 function exportCSV() {
   const rows=[([...HEADERS_DISPLAY,'Aging (hari)','Reminder']).join(',')];
   FILTERED.forEach(r=>{
-    const aging=calcAging(r['Tgl AWB']), reminder=getReminderLevel(aging,r['Status']);
+    const aging=calcAging(r['Tgl AWB'], r['Status']), reminder=getReminderLevel(aging,r['Status']);
     const cells=HEADERS_DISPLAY.map(h=>`"${String(r[h]||'').replace(/"/g,'""')}"`);
     cells.push(aging, reminder==='R2'?'Kritis':reminder==='R1'?'Perhatian':'Normal');
     rows.push(cells.join(','));
@@ -816,8 +816,9 @@ function exportCSV() {
 
 
 // ── HELPERS ───────────────────────────────────────────────
-function calcAging(tgl){
+function calcAging(tgl, status){
   if(!tgl) return 0;
+  if(status === 'Paid') return 0; // Paid = stop hitung aging
   const d=new Date(tgl);
   return isNaN(d)?0:Math.ceil(Math.abs(new Date()-d)/864e5);
 }
