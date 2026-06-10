@@ -244,7 +244,7 @@ const COLS = [
 ];
 
 const SLOC_RUSAK  = ['9999'];
-const BATCH_AKTIF = ['BAIK','DISMANTLE'];
+const BATCH_RUSAK = ['RUSAK-TL','RUSAK-L'];
 
 // ══════════════════════════════════════════════════════════
 // STATE — semua filter terpusat
@@ -274,7 +274,7 @@ const F = {
 // Exclude rusak dari semua perhitungan stok aktif
 const isAktif = r => {
   const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
-  return !SLOC_RUSAK.includes(sloc) && BATCH_AKTIF.includes(r['Batch'])
+  return !SLOC_RUSAK.includes(sloc) && !BATCH_RUSAK.includes(r['Batch'])
     && (r['Sloc - KP']||'').toLowerCase() !== 'rusak';
 };
 
