@@ -33,6 +33,13 @@
     #topnav{left:0;right:0}
     .sb-item{flex-direction:column;padding:4px 12px;min-width:64px}
   }
+  /* Multi-select dropdown */
+  .ms-menu::-webkit-scrollbar{width:4px}
+  .ms-menu::-webkit-scrollbar-thumb{background:#c4c5d5;border-radius:4px}
+  .ms-item{display:flex;align-items:center;gap:6px;padding:5px 10px;cursor:pointer;font-size:10px;color:#444653;white-space:nowrap}
+  .ms-item:hover{background:#f2f3ff}
+  .ms-item input[type=checkbox]{width:12px;height:12px;accent-color:#00288e;cursor:pointer;flex-shrink:0}
+  .ms-active .ms-btn{border-color:#00288e;background:#eaedff;color:#00288e}
   @media print{
     #sidebar,#topnav,.no-print{display:none!important}
     #maincontent{margin:0!important;padding-top:0!important}
@@ -198,15 +205,59 @@
           <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
         </button>
       </div>
-      <div class="px-3 py-2 border-b border-gray-100 flex flex-wrap gap-1.5 items-center" id="filters-section">
-        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fSlocGudang" onchange="onFilterChange()"><option value="">Sloc Gudang</option></select>
-        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fSlocKp" onchange="onFilterChange()"><option value="">Sloc KP</option></select>
-        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fBrand" onchange="onFilterChange()"><option value="">Brand</option></select>
-        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fKatSap" onchange="onFilterChange()"><option value="">Kat. SAP</option></select>
-        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fKatTeknik" onchange="onFilterChange()"><option value="">Kat. Teknik</option></select>
-        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fBatch" onchange="onFilterChange()"><option value="">Batch</option></select>
-        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fMoving" onchange="onFilterChange()"><option value="">Moving</option></select>
-        <input type="text" id="searchInput" oninput="onFilterChange()" placeholder="Cari…"
+      <!-- Filter strip dengan multi-select checkbox dropdown -->
+      <div class="px-3 py-2 border-b border-gray-100 flex flex-wrap gap-1.5 items-center relative" id="filters-section">
+        <!-- Multi-select dropdown untuk setiap filter -->
+        <div class="ms-wrap relative" id="ms-slocGudang">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors" onclick="toggleMs('slocGudang')">
+            <span id="ms-slocGudang-label">Sloc Gudang</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-slocGudang-menu"></div>
+        </div>
+        <div class="ms-wrap relative" id="ms-slocKp">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors" onclick="toggleMs('slocKp')">
+            <span id="ms-slocKp-label">Sloc KP</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-slocKp-menu"></div>
+        </div>
+        <div class="ms-wrap relative" id="ms-brand">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors" onclick="toggleMs('brand')">
+            <span id="ms-brand-label">Brand</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-brand-menu"></div>
+        </div>
+        <div class="ms-wrap relative" id="ms-katSap">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors" onclick="toggleMs('katSap')">
+            <span id="ms-katSap-label">Kat. SAP</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-katSap-menu"></div>
+        </div>
+        <div class="ms-wrap relative" id="ms-katTeknik">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors" onclick="toggleMs('katTeknik')">
+            <span id="ms-katTeknik-label">Kat. Teknik</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-katTeknik-menu"></div>
+        </div>
+        <div class="ms-wrap relative" id="ms-batch">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors" onclick="toggleMs('batch')">
+            <span id="ms-batch-label">Batch</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px] max-h-48 overflow-y-auto" id="ms-batch-menu"></div>
+        </div>
+        <div class="ms-wrap relative" id="ms-moving">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors" onclick="toggleMs('moving')">
+            <span id="ms-moving-label">Moving</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px] max-h-48 overflow-y-auto" id="ms-moving-menu"></div>
+        </div>
+        <input type="text" id="searchInput" oninput="onSearchChange()" placeholder="Cari…"
           class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-24 md:w-32">
       </div>
       <div class="overflow-x-auto custom-scrollbar">
@@ -235,7 +286,7 @@
 // ══════════════════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════════════════
-const API_URL   = 'https://script.google.com/macros/s/AKfycbyTT9el_nffM_e7wFryJe6f18TZILIC7X-HelG1iRv_GjGigrYnDrqKb9thFmeAYYTdRQ/exec';
+const API_URL   = 'PASTE_STOK_WEB_APP_URL_HERE';
 const PAGE_SIZE = 15;
 
 const COLS = [
@@ -261,10 +312,22 @@ let gudangChart = null;
   cardKp     : filter dari klik card kelompok 2
   cardGudang : filter dari klik baris/bar kelompok 3
 */
+// Filter state — array untuk multi-select, string untuk card/search/tglUpdate
 const F = {
-  slocGudang:'', slocKp:'', brand:'', katSap:'',
-  katTeknik:'', batch:'', moving:'', tglUpdate:'',
+  slocGudang:[], slocKp:[], brand:[], katSap:[],
+  katTeknik:[], batch:[], moving:[], tglUpdate:'',
   search:'', cardKp:'', cardGudang:''
+};
+
+// Config multi-select: id → { col, label }
+const MS_CONFIG = {
+  slocGudang: { col:'Sloc - Gudang',     label:'Sloc Gudang' },
+  slocKp:     { col:'Sloc - KP',         label:'Sloc KP'     },
+  brand:      { col:'Material - Brand',  label:'Brand'       },
+  katSap:     { col:'Kategori - SAP',    label:'Kat. SAP'    },
+  katTeknik:  { col:'Kategori - Teknik', label:'Kat. Teknik' },
+  batch:      { col:'Batch',             label:'Batch'       },
+  moving:     { col:'Kategori - Moving', label:'Moving'      },
 };
 
 // ══════════════════════════════════════════════════════════
@@ -279,18 +342,21 @@ const isAktif = r => {
 };
 
 // Terapkan semua filter ke array rows
+// Helper: cek apakah nilai lolos filter array (kosong = semua lolos)
+const chk = (arr, val) => !arr.length || arr.includes(val);
+
 const applyF = (rows) => {
   const q = F.search.toLowerCase();
   return rows.filter(r => {
     const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
     if (SLOC_RUSAK.includes(sloc)) return false;
-    if (F.slocGudang && r['Sloc - Gudang']    !== F.slocGudang) return false;
-    if (F.slocKp     && r['Sloc - KP']        !== F.slocKp)     return false;
-    if (F.brand      && r['Material - Brand'] !== F.brand)      return false;
-    if (F.katSap     && r['Kategori - SAP']   !== F.katSap)     return false;
-    if (F.katTeknik  && r['Kategori - Teknik']!== F.katTeknik)  return false;
-    if (F.batch      && r['Batch']            !== F.batch)      return false;
-    if (F.moving     && r['Kategori - Moving']!== F.moving)     return false;
+    if (!chk(F.slocGudang, r['Sloc - Gudang']))    return false;
+    if (!chk(F.slocKp,     r['Sloc - KP']))        return false;
+    if (!chk(F.brand,      r['Material - Brand'])) return false;
+    if (!chk(F.katSap,     r['Kategori - SAP']))   return false;
+    if (!chk(F.katTeknik,  r['Kategori - Teknik']))return false;
+    if (!chk(F.batch,      r['Batch']))            return false;
+    if (!chk(F.moving,     r['Kategori - Moving']))return false;
     if (F.tglUpdate  && r['Tgl Update']       !== F.tglUpdate)  return false;
     if (F.cardKp     && r['Sloc - KP']        !== F.cardKp)     return false;
     if (F.cardGudang && r['Sloc - Gudang']    !== F.cardGudang) return false;
@@ -350,40 +416,69 @@ function buildAllDropdowns() {
   katEl.innerHTML = '<option value="">Semua Kategori Teknik</option>' +
     uniq('Kategori - Teknik').map(v=>`<option value="${v}">${v}</option>`).join('');
 
-  // Tabel filter dropdowns
-  const map = {
-    fSlocGudang:['Sloc - Gudang','Sloc Gudang'],
-    fSlocKp:    ['Sloc - KP','Sloc KP'],
-    fBrand:     ['Material - Brand','Brand'],
-    fKatSap:    ['Kategori - SAP','Kat. SAP'],
-    fKatTeknik: ['Kategori - Teknik','Kat. Teknik'],
-    fBatch:     ['Batch','Batch'],
-    fMoving:    ['Kategori - Moving','Moving'],
-  };
-  Object.entries(map).forEach(([id,[col,lbl]])=>{
-    const el=document.getElementById(id);
-    if(!el) return;
-    el.innerHTML=`<option value="">${lbl}</option>`+
-      uniq(col).map(v=>`<option value="${v}">${v}</option>`).join('');
+  // Build multi-select menus
+  Object.entries(MS_CONFIG).forEach(([key, {col, label}]) => {
+    const vals = uniq(col);
+    const menu = document.getElementById('ms-'+key+'-menu');
+    if (!menu) return;
+    menu.innerHTML = vals.map(v => `
+      <label class="ms-item">
+        <input type="checkbox" value="${v.replace(/"/g,'&quot;')}"
+          onchange="onMsChange('${key}')" ${F[key]&&F[key].includes(v)?'checked':''}>
+        ${v}
+      </label>`).join('');
   });
 }
 
 // ══════════════════════════════════════════════════════════
 // FILTER CHANGE HANDLERS
 // ══════════════════════════════════════════════════════════
-function onFilterChange() {
-  F.slocGudang = document.getElementById('fSlocGudang').value;
-  F.slocKp     = document.getElementById('fSlocKp').value;
-  F.brand      = document.getElementById('fBrand').value;
-  F.katSap     = document.getElementById('fKatSap').value;
-  F.katTeknik  = document.getElementById('fKatTeknik').value;
-  F.batch      = document.getElementById('fBatch').value;
-  F.moving     = document.getElementById('fMoving').value;
-  F.search     = document.getElementById('searchInput').value;
-  // Reset card filter saat dropdown manual diubah
+// Dipanggil saat checkbox multi-select berubah
+function onMsChange(key) {
+  const menu = document.getElementById('ms-'+key+'-menu');
+  const checked = [...menu.querySelectorAll('input:checked')].map(el=>el.value);
+  F[key] = checked;
   F.cardKp=''; F.cardGudang='';
+  updateMsLabel(key);
   applyAll();
 }
+
+// Update label tombol multi-select
+function updateMsLabel(key) {
+  const label  = document.getElementById('ms-'+key+'-label');
+  const wrap   = document.getElementById('ms-'+key);
+  const cfg    = MS_CONFIG[key];
+  const sel    = F[key]||[];
+  if (!label || !wrap || !cfg) return;
+  label.textContent = sel.length ? cfg.label+' ('+sel.length+')' : cfg.label;
+  wrap.classList.toggle('ms-active', sel.length > 0);
+}
+
+// Toggle buka/tutup dropdown multi-select
+function toggleMs(key) {
+  const menu = document.getElementById('ms-'+key+'-menu');
+  if (!menu) return;
+  const isHidden = menu.classList.contains('hidden');
+  // Tutup semua menu lain dulu
+  document.querySelectorAll('.ms-menu').forEach(m => m.classList.add('hidden'));
+  if (isHidden) menu.classList.remove('hidden');
+}
+
+// Tutup semua dropdown jika klik di luar
+document.addEventListener('click', e => {
+  if (!e.target.closest('.ms-wrap')) {
+    document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
+  }
+});
+
+// Search input
+function onSearchChange() {
+  F.search = document.getElementById('searchInput').value;
+  applyAll();
+}
+
+// Legacy — tidak dipakai lagi tapi dijaga agar tidak error
+function onFilterChange() { applyAll(); }
 
 function onTglUpdateChange() {
   F.tglUpdate = document.getElementById('topTglUpdate').value;
@@ -391,9 +486,18 @@ function onTglUpdateChange() {
 }
 
 function onKatTeknikChange() {
-  F.katTeknik = document.getElementById('ddKatTeknik').value;
-  document.getElementById('fKatTeknik').value = F.katTeknik;
+  const val = document.getElementById('ddKatTeknik').value;
+  // Set array filter katTeknik dari dropdown kelompok 3
+  F.katTeknik = val ? [val] : [];
   F.cardGudang='';
+  // Sync ke checkbox multi-select di tabel
+  const menu = document.getElementById('ms-katTeknik-menu');
+  if (menu) {
+    menu.querySelectorAll('input[type=checkbox]').forEach(cb => {
+      cb.checked = F.katTeknik.includes(cb.value);
+    });
+  }
+  updateMsLabel('katTeknik');
   applyAll();
 }
 
@@ -412,29 +516,38 @@ function toggleCardGudang(g) {
 }
 
 function resetAllFilters() {
-  Object.keys(F).forEach(k=>F[k]='');
-  document.querySelectorAll('.fsel').forEach(el=>el.value='');
+  // Reset array filters
+  ['slocGudang','slocKp','brand','katSap','katTeknik','batch','moving'].forEach(k => F[k]=[]);
+  // Reset string filters
+  F.tglUpdate=''; F.search=''; F.cardKp=''; F.cardGudang='';
+  // Reset UI
   document.getElementById('searchInput').value='';
   document.getElementById('topTglUpdate').value='';
   document.getElementById('ddKatTeknik').value='';
+  // Uncheck semua checkbox
+  document.querySelectorAll('.ms-menu input[type=checkbox]').forEach(cb=>cb.checked=false);
+  // Reset semua label button
+  Object.keys(MS_CONFIG).forEach(k=>updateMsLabel(k));
+  // Tutup semua dropdown
+  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
   applyAll();
 }
 
 function updateFilterLabel() {
   const parts=[];
-  if(F.slocGudang) parts.push(F.slocGudang.split(' - ')[1]||F.slocGudang);
-  if(F.slocKp)     parts.push(F.slocKp);
-  if(F.brand)      parts.push(F.brand);
-  if(F.katSap)     parts.push(F.katSap);
-  if(F.katTeknik)  parts.push(F.katTeknik);
-  if(F.batch)      parts.push(F.batch);
-  if(F.moving)     parts.push(F.moving);
-  if(F.tglUpdate)  parts.push('Tgl: '+F.tglUpdate);
-  if(F.cardKp)     parts.push('KP: '+F.cardKp);
-  if(F.cardGudang) parts.push('Gudang: '+(F.cardGudang.split(' - ')[1]||F.cardGudang));
-  if(F.search)     parts.push('"'+F.search+'"');
+  if(F.slocGudang.length) parts.push('Gudang('+F.slocGudang.length+')');
+  if(F.slocKp.length)     parts.push('KP('+F.slocKp.length+')');
+  if(F.brand.length)      parts.push('Brand('+F.brand.length+')');
+  if(F.katSap.length)     parts.push('SAP('+F.katSap.length+')');
+  if(F.katTeknik.length)  parts.push('Teknik('+F.katTeknik.length+')');
+  if(F.batch.length)      parts.push('Batch('+F.batch.length+')');
+  if(F.moving.length)     parts.push('Moving('+F.moving.length+')');
+  if(F.tglUpdate)         parts.push('Tgl: '+F.tglUpdate);
+  if(F.cardKp)            parts.push('KP: '+F.cardKp);
+  if(F.cardGudang)        parts.push('Gudang: '+(F.cardGudang.split(' - ')[1]||F.cardGudang));
+  if(F.search)            parts.push('"'+F.search+'"');
   document.getElementById('activeFilterLabel').textContent =
-    parts.length ? 'Filter: '+parts.join(' · ') : 'Menampilkan semua data';
+    parts.length ? 'Filter aktif: '+parts.join(' · ') : 'Menampilkan semua data';
 }
 
 // ══════════════════════════════════════════════════════════
@@ -485,14 +598,17 @@ function renderKpiKondisi(filtered) {
   src.forEach(r => {
     const kp = r['Sloc - KP'];
     if (!kp || kp.toLowerCase()==='rusak') return;
-    if (!byKp[kp]) byKp[kp]={ baik:0, dismantle:0 };
+    if (!byKp[kp]) byKp[kp]={ baik:0, dismantle:0, other:0, total:0 };
     const qty = parseFloat(r['Unrestricted'])||0;
+    // Hitung semua batch aktif (non-rusak), breakdown BAIK & DISMANTLE tetap ditampilkan
+    byKp[kp].total = (byKp[kp].total||0) + qty;
     if (r['Batch']==='BAIK')      byKp[kp].baik      += qty;
-    if (r['Batch']==='DISMANTLE') byKp[kp].dismantle += qty;
+    else if (r['Batch']==='DISMANTLE') byKp[kp].dismantle += qty;
+    else byKp[kp].other = (byKp[kp].other||0) + qty;
   });
 
   const sorted = Object.entries(byKp)
-    .map(([kp,d])=>({kp,baik:d.baik,dismantle:d.dismantle,total:d.baik+d.dismantle}))
+    .map(([kp,d])=>({kp,baik:d.baik||0,dismantle:d.dismantle||0,other:d.other||0,total:d.total||0}))
     .sort((a,b)=>b.total-a.total);
 
   document.getElementById('kpiKondisi').innerHTML = sorted.map(d=>{
@@ -519,16 +635,17 @@ function renderKpiKondisi(filtered) {
 // applyF2: sama dengan applyF tapi pakai custom filter object
 function applyF2(rows, f) {
   const q = (f.search||'').toLowerCase();
+  const c = (arr, val) => !arr.length || arr.includes(val);
   return rows.filter(r => {
     const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
     if (SLOC_RUSAK.includes(sloc)) return false;
-    if (f.slocGudang && r['Sloc - Gudang']    !== f.slocGudang) return false;
-    if (f.slocKp     && r['Sloc - KP']        !== f.slocKp)     return false;
-    if (f.brand      && r['Material - Brand'] !== f.brand)      return false;
-    if (f.katSap     && r['Kategori - SAP']   !== f.katSap)     return false;
-    if (f.katTeknik  && r['Kategori - Teknik']!== f.katTeknik)  return false;
-    if (f.batch      && r['Batch']            !== f.batch)      return false;
-    if (f.moving     && r['Kategori - Moving']!== f.moving)     return false;
+    if (!c(f.slocGudang||[], r['Sloc - Gudang']))    return false;
+    if (!c(f.slocKp    ||[], r['Sloc - KP']))        return false;
+    if (!c(f.brand     ||[], r['Material - Brand'])) return false;
+    if (!c(f.katSap    ||[], r['Kategori - SAP']))   return false;
+    if (!c(f.katTeknik ||[], r['Kategori - Teknik']))return false;
+    if (!c(f.batch     ||[], r['Batch']))            return false;
+    if (!c(f.moving    ||[], r['Kategori - Moving']))return false;
     if (f.tglUpdate  && r['Tgl Update']       !== f.tglUpdate)  return false;
     if (f.cardKp     && r['Sloc - KP']        !== f.cardKp)     return false;
     if (f.cardGudang && r['Sloc - Gudang']    !== f.cardGudang) return false;
@@ -553,13 +670,16 @@ function renderGudangSection(filtered) {
     const g   = r['Sloc - Gudang'];
     const qty = parseFloat(r['Unrestricted'])||0;
     if (!g) return;
-    if (!byG[g]) byG[g]={ baik:0, dismantle:0 };
+    if (!byG[g]) byG[g]={ baik:0, dismantle:0, other:0, total:0 };
+    // Hitung semua batch aktif (non-rusak)
+    byG[g].total = (byG[g].total||0) + qty;
     if (r['Batch']==='BAIK')      byG[g].baik      += qty;
-    if (r['Batch']==='DISMANTLE') byG[g].dismantle += qty;
+    else if (r['Batch']==='DISMANTLE') byG[g].dismantle += qty;
+    else byG[g].other = (byG[g].other||0) + qty;
   });
 
   const sorted = Object.entries(byG)
-    .map(([g,d])=>({g, baik:d.baik, dismantle:d.dismantle, total:d.baik+d.dismantle}))
+    .map(([g,d])=>({g, baik:d.baik||0, dismantle:d.dismantle||0, other:d.other||0, total:d.total||0}))
     .sort((a,b)=>b.total-a.total);
 
   // ── Tabel ringkas ────────────────────────────────────────
