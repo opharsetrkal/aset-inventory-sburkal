@@ -6,217 +6,189 @@
 <title>Stok Material — Aset &amp; Inventory SBU Reg Kalimantan</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;vertical-align:middle}
-  .custom-scrollbar::-webkit-scrollbar{width:6px;height:6px}
+  .custom-scrollbar::-webkit-scrollbar{width:4px;height:4px}
   .custom-scrollbar::-webkit-scrollbar-track{background:#f1f1f1}
   .custom-scrollbar::-webkit-scrollbar-thumb{background:#c4c5d5;border-radius:10px}
-  .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:skeleton-loading 1.5s infinite}
-  @keyframes skeleton-loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:sk 1.5s infinite}
+  @keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
   @keyframes spin{to{transform:rotate(360deg)}}
   .spin{animation:spin .7s linear infinite}
-  .card-filter{cursor:pointer;transition:all 0.15s ease}
-  .card-filter:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-  .card-filter.active-filter{outline:2.5px solid #00288e;outline-offset:2px}
+  .cf{cursor:pointer;transition:all .15s}
+  .cf:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+  .cf.on{outline:2.5px solid #00288e;outline-offset:2px}
   /* Sidebar */
-  #sidebar{width:64px;transition:width .2s}
+  #sidebar{width:128px}
+  /* Topnav offset */
+  #maincontent{margin-left:128px}
+  #topnav{left:128px}
+  /* Mobile */
+  @media(max-width:768px){
+    #sidebar{width:100%;height:56px;flex-direction:row;position:fixed;top:auto;bottom:0;left:0;border-right:none;border-top:1px solid #e5e7eb;padding:0 8px;z-index:50;overflow-x:auto}
+    #maincontent{margin-left:0;margin-bottom:56px}
+    #topnav{left:0;right:0}
+    .sb-item{flex-direction:column;padding:4px 12px;min-width:64px}
+  }
   @media print{
-    #sidebar,.no-print,#filters-section{display:none!important}
-    main{padding-top:0!important;margin-left:0!important}
-    table{font-size:10px!important}
-    th,td{padding:4px!important}
+    #sidebar,#topnav,.no-print{display:none!important}
+    #maincontent{margin:0!important;padding-top:0!important}
+    table{font-size:9px!important}
+    th,td{padding:3px!important}
   }
 </style>
 </head>
 
-<body class="bg-[#f0f2f7] text-[#131b2e] font-sans min-h-screen flex">
+<body class="bg-[#f0f2f7] text-[#131b2e] font-sans min-h-screen">
 
-<!-- ── SIDEBAR ──────────────────────────────────────────── -->
-<aside id="sidebar" class="fixed top-0 left-0 h-full bg-white border-r border-[#c4c5d5]/40 flex flex-col items-center py-3 gap-1 z-50 shadow-sm">
-  <!-- Logo area -->
-  <div class="w-10 h-10 rounded-lg bg-[#f2f3ff] flex items-center justify-center mb-2 overflow-hidden">
-    <img src="logo-danantara.png" alt="Danantara" class="w-8 h-8 object-contain"
-      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-    <span class="text-[8px] font-bold text-[#00288e] text-center leading-tight hidden">Dan<br>ant</span>
+<!-- ── SIDEBAR ─────────────────────────────────────────── -->
+<aside id="sidebar" class="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col py-4 px-3 gap-1 z-50 shadow-sm">
+  <!-- Brand -->
+  <div class="px-2 mb-4">
+    <p class="text-xs font-bold text-[#00288e] leading-tight">Aset &amp; Inventory</p>
+    <p class="text-[10px] text-gray-400 leading-tight">SBU Reg Kalimantan</p>
   </div>
-
-  <!-- Menu: Administrasi Keuangan -->
-  <a href="index.html" class="w-14 py-2 px-1 rounded-lg flex flex-col items-center gap-1 hover:bg-[#f2f3ff] transition-colors group" title="Administrasi Keuangan">
-    <span class="material-symbols-outlined text-[20px] text-[#444653] group-hover:text-[#00288e]">account_balance</span>
-    <span class="text-[8px] text-[#444653] text-center leading-tight group-hover:text-[#00288e]">Adm.<br>Keu.</span>
+  <!-- Nav items -->
+  <a href="index.html"
+    class="sb-item flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-[#f2f3ff] transition-colors group">
+    <span class="material-symbols-outlined text-[20px] text-gray-400 group-hover:text-[#00288e] flex-shrink-0">account_balance</span>
+    <span class="text-[11px] font-medium text-gray-500 group-hover:text-[#00288e] leading-tight">Administrasi<br>Keuangan</span>
   </a>
-
-  <!-- Menu: Stok Material (aktif) -->
-  <a href="stok.html" class="w-14 py-2 px-1 rounded-lg flex flex-col items-center gap-1 bg-[#eaedff] transition-colors" title="Stok Material">
-    <span class="material-symbols-outlined text-[20px] text-[#00288e]">inventory_2</span>
-    <span class="text-[8px] text-[#00288e] font-semibold text-center leading-tight">Stok<br>Mat.</span>
+  <a href="stok.html"
+    class="sb-item flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-[#eaedff] transition-colors">
+    <span class="material-symbols-outlined text-[20px] text-[#00288e] flex-shrink-0">inventory_2</span>
+    <span class="text-[11px] font-semibold text-[#00288e] leading-tight">Stok<br>Material</span>
   </a>
 </aside>
 
-<!-- ── MAIN ──────────────────────────────────────────────── -->
-<div class="flex-1 flex flex-col min-h-screen" style="margin-left:64px">
+<!-- ── MAIN ─────────────────────────────────────────────── -->
+<div id="maincontent" class="flex flex-col min-h-screen">
 
   <!-- TOPNAV -->
-  <nav class="fixed top-0 right-0 z-40 bg-white border-b border-[#c4c5d5]/40 shadow-sm" style="left:64px">
+  <nav id="topnav" class="fixed top-0 right-0 z-40 bg-white border-b border-gray-200 shadow-sm">
     <!-- Baris 1: Logo kiri — Judul tengah — Logo kanan -->
-    <div class="flex items-center justify-between px-6 h-12 border-b border-[#c4c5d5]/20">
-      <div class="flex items-center gap-3">
-        <img src="logo-danantara.png" alt="Danantara Indonesia" class="h-8 object-contain"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <span class="text-xs font-bold text-[#00288e] hidden">Danantara Indonesia</span>
+    <div class="flex items-center justify-between px-4 md:px-6 h-12 border-b border-gray-100">
+      <img src="logo-danantara.png" alt="Danantara" class="h-7 object-contain"
+        onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>Danantara<br>Indonesia</span>'">
+      <div class="text-center flex-1 px-2">
+        <p class="text-xs md:text-sm font-bold text-[#131b2e] leading-tight">Aset &amp; Inventory SBU Regional Kalimantan</p>
+        <p class="text-[9px] md:text-[10px] text-gray-400 hidden sm:block">PLN Icon Plus · Dashboard Monitoring</p>
       </div>
-      <div class="text-center">
-        <p class="text-sm font-bold text-[#131b2e] leading-tight">Aset &amp; Inventory SBU Regional Kalimantan</p>
-        <p class="text-[10px] text-[#444653]">PLN Icon Plus · Dashboard Monitoring</p>
-      </div>
-      <div class="flex items-center gap-3">
-        <img src="logo-pln.png" alt="PLN Icon Plus" class="h-8 object-contain"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <span class="text-xs font-bold text-[#00288e] hidden">PLN Icon Plus</span>
-      </div>
+      <img src="logo-pln.png" alt="PLN Icon Plus" class="h-7 object-contain"
+        onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>PLN<br>Icon Plus</span>'">
     </div>
     <!-- Baris 2: Judul halaman + actions -->
-    <div class="flex items-center justify-between px-6 h-10">
-      <p class="text-sm font-bold text-[#131b2e]">Stok Material Gudang</p>
-      <div class="flex items-center gap-2 no-print">
-        <span class="text-[10px] text-[#757684]" id="lastUpdate"></span>
-        <button onclick="resetAllFilters()" class="flex items-center gap-1 px-3 py-1.5 border border-[#c4c5d5] rounded text-[11px] font-semibold text-[#444653] hover:bg-[#f2f3ff] transition-all">
-          <span class="material-symbols-outlined text-[14px]">filter_alt_off</span> Reset Filter
+    <div class="flex items-center justify-between px-4 md:px-6 h-10 gap-2">
+      <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">Stok Material</p>
+      <div class="flex items-center gap-1.5 no-print">
+        <!-- Tgl Update filter di topnav -->
+        <select id="topTglUpdate" onchange="onTglUpdateChange()"
+          class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 max-w-[120px]">
+          <option value="">Semua Tgl Update</option>
+        </select>
+        <button onclick="resetAllFilters()"
+          class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] transition-all whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">filter_alt_off</span>
+          <span class="hidden sm:inline">Reset Filter</span>
         </button>
-        <button onclick="window.print()" class="flex items-center gap-1 px-3 py-1.5 bg-[#00288e] text-white rounded text-[11px] font-semibold hover:bg-[#1e40af] transition-all">
-          <span class="material-symbols-outlined text-[14px]">print</span> Cetak PDF
+        <button onclick="window.print()"
+          class="flex items-center gap-1 px-2 py-1 bg-[#00288e] text-white rounded text-[10px] font-semibold hover:bg-[#1e40af] transition-all whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">print</span>
+          <span class="hidden sm:inline">Cetak PDF</span>
         </button>
-        <button onclick="loadData()" class="p-1.5 text-[#444653] hover:bg-[#f2f3ff] rounded-full" title="Refresh Data">
-          <span class="material-symbols-outlined text-[18px]" id="refreshIcon">sync</span>
+        <button onclick="loadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+          <span class="material-symbols-outlined text-[16px]" id="refreshIcon">sync</span>
         </button>
       </div>
     </div>
   </nav>
 
   <!-- CONTENT -->
-  <main class="pt-[88px] pb-12 px-6 max-w-[1600px] mx-auto w-full space-y-5">
+  <main class="pt-[88px] pb-16 md:pb-8 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-    <!-- ── KELOMPOK 1: RESUME ─────────────────────────────── -->
+    <!-- ── KPI RESUME ──────────────────────────────────── -->
     <section>
-      <p class="text-[10px] font-semibold text-[#444653] uppercase tracking-widest mb-2 flex items-center gap-1">
-        <span class="material-symbols-outlined text-[14px]">package_2</span> Resume stok material
+      <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+        <span class="material-symbols-outlined text-[12px]">package_2</span> Resume stok material
       </p>
-      <div class="grid grid-cols-3 gap-3" id="kpiResume">
-        <div class="skeleton rounded-xl h-24"></div>
-        <div class="skeleton rounded-xl h-24"></div>
-        <div class="skeleton rounded-xl h-24"></div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3" id="kpiResume">
+        <div class="skeleton rounded-xl h-20"></div>
+        <div class="skeleton rounded-xl h-20"></div>
+        <div class="skeleton rounded-xl h-20 col-span-2 md:col-span-1"></div>
       </div>
     </section>
 
-    <!-- ── KELOMPOK 2: KONDISI PER TIPE GUDANG ───────────── -->
+    <!-- ── KELOMPOK 2: KONDISI PER SLOC KP ────────────── -->
     <section>
-      <p class="text-[10px] font-semibold text-[#444653] uppercase tracking-widest mb-2 flex items-center gap-1">
-        <span class="material-symbols-outlined text-[14px]">warehouse</span> Kondisi stok per tipe gudang
+      <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+        <span class="material-symbols-outlined text-[12px]">warehouse</span> Stok aktif per wilayah KP
+        <span class="text-[9px] font-normal normal-case text-gray-400 ml-1">— klik card untuk filter</span>
       </p>
-      <div class="grid grid-cols-2 gap-3" id="kpiKondisi">
-        <div class="skeleton rounded-xl h-28"></div>
-        <div class="skeleton rounded-xl h-28"></div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 md:gap-3" id="kpiKondisi">
+        <div class="skeleton rounded-xl h-24 col-span-2 sm:col-span-3 lg:col-span-4"></div>
       </div>
     </section>
 
-    <!-- ── KELOMPOK 3: STOK PER GUDANG ───────────────────── -->
+    <!-- ── KELOMPOK 3: STOK PER GUDANG ────────────────── -->
     <section>
-      <div class="flex items-center gap-3 mb-2 flex-wrap">
-        <p class="text-[10px] font-semibold text-[#444653] uppercase tracking-widest flex items-center gap-1">
-          <span class="material-symbols-outlined text-[14px]">map</span> Stok per gudang
+      <div class="flex flex-wrap items-center gap-2 mb-2">
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">map</span> Stok per gudang
         </p>
-        <span class="text-[10px] text-[#444653]">Filter kategori teknik:</span>
-        <div class="flex gap-1.5 flex-wrap" id="katTeknikFilter"></div>
+        <select id="ddKatTeknik" onchange="onKatTeknikChange()"
+          class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-white text-gray-600">
+          <option value="">Semua Kategori Teknik</option>
+        </select>
       </div>
-      <div id="gudangCards" class="space-y-3">
-        <div class="skeleton rounded-xl h-28"></div>
-        <div class="skeleton rounded-xl h-28"></div>
-      </div>
-    </section>
-
-    <!-- ── CHARTS ─────────────────────────────────────────── -->
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <!-- Grouped bar chart -->
-      <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-        <div class="flex justify-between items-start mb-3 flex-wrap gap-2">
-          <div>
-            <p class="text-sm font-bold text-[#131b2e]">Persebaran stok per gudang</p>
-            <p class="text-[10px] text-[#444653]" id="chartToggleLabel">Gudang → Kategori Teknik</p>
-          </div>
-          <div class="flex gap-1.5">
-            <button id="togA" onclick="setChartMode('A')"
-              class="px-2 py-1 text-[10px] font-semibold rounded border border-[#c4c5d5] bg-[#00288e] text-white transition-all">
-              Gudang → Kategori
-            </button>
-            <button id="togB" onclick="setChartMode('B')"
-              class="px-2 py-1 text-[10px] font-semibold rounded border border-[#c4c5d5] bg-white text-[#444653] transition-all">
-              Kategori → Gudang
-            </button>
-          </div>
-        </div>
-        <!-- Legend batch -->
-        <div class="flex gap-4 mb-3">
-          <span class="flex items-center gap-1 text-[10px] text-[#444653]">
-            <span class="w-3 h-3 rounded-sm inline-block bg-[#378ADD]"></span>BAIK
-          </span>
-          <span class="flex items-center gap-1 text-[10px] text-[#444653]">
-            <span class="w-3 h-3 rounded-sm inline-block bg-[#EF9F27]"></span>DISMANTLE
-          </span>
-          <span class="flex items-center gap-1 text-[10px] text-[#444653]">
-            <span class="w-3 h-3 rounded-sm inline-block bg-[#E24B4A]"></span>RUSAK-TL
-          </span>
-        </div>
-        <div class="h-[240px]"><canvas id="barChart"></canvas></div>
-      </div>
-      <!-- Donut chart brand -->
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-        <p class="text-sm font-bold text-[#131b2e] mb-4">Brand material</p>
-        <div class="h-[240px] flex justify-center"><canvas id="brandChart"></canvas></div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2" id="gudangCards">
+        <div class="skeleton rounded-xl h-24"></div>
+        <div class="skeleton rounded-xl h-24"></div>
+        <div class="skeleton rounded-xl h-24"></div>
+        <div class="skeleton rounded-xl h-24"></div>
       </div>
     </section>
 
-    <!-- ── TABEL DATA DETAIL ──────────────────────────────── -->
-    <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" id="tableSection">
+    <!-- ── TABEL DATA DETAIL ───────────────────────────── -->
+    <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" id="tableSection">
       <!-- Header -->
-      <div class="p-4 border-b border-[#c4c5d5]/40 flex justify-between items-center flex-wrap gap-3" id="filters-section">
+      <div class="p-3 md:p-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
         <div>
           <p class="text-sm font-bold text-[#131b2e]">Data detail stok material</p>
-          <p class="text-[10px] text-[#444653]" id="activeFilterLabel">Menampilkan semua data</p>
+          <p class="text-[10px] text-gray-400" id="activeFilterLabel">Menampilkan semua data</p>
         </div>
-        <button onclick="exportCSV()" class="flex items-center gap-1 px-3 py-1.5 text-[11px] font-semibold border border-[#c4c5d5] rounded hover:bg-[#f2f3ff] no-print">
-          <span class="material-symbols-outlined text-[14px]">download</span> Ekspor CSV
+        <button onclick="exportCSV()"
+          class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-[#f2f3ff] no-print">
+          <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
         </button>
       </div>
-      <!-- Filter strip -->
-      <div class="px-4 py-2 border-b border-[#c4c5d5]/40 flex flex-wrap gap-2 items-center" id="filters-section">
-        <select class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653]" id="fSlocGudang" onchange="onFilterChange()"><option value="">Semua Sloc Gudang</option></select>
-        <select class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653]" id="fSlocKp" onchange="onFilterChange()"><option value="">Semua Sloc KP</option></select>
-        <select class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653]" id="fBrand" onchange="onFilterChange()"><option value="">Semua Brand</option></select>
-        <select class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653]" id="fKatSap" onchange="onFilterChange()"><option value="">Kat. SAP</option></select>
-        <select class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653]" id="fKatTeknik" onchange="onFilterChange()"><option value="">Kat. Teknik</option></select>
-        <select class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653]" id="fBatch" onchange="onFilterChange()"><option value="">Semua Batch</option></select>
-        <select class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653]" id="fMoving" onchange="onFilterChange()"><option value="">Fast/Slow</option></select>
-        <select class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653]" id="fTglUpdate" onchange="onFilterChange()"><option value="">Tgl Update</option></select>
-        <input type="text" id="searchInput" oninput="onFilterChange()" placeholder="Cari material…"
-          class="text-[11px] h-8 px-2 border border-[#c4c5d5] rounded-lg bg-[#f2f3ff] text-[#444653] w-36">
+      <!-- Filter strip — compact -->
+      <div class="px-3 py-2 border-b border-gray-100 flex flex-wrap gap-1.5 items-center" id="filters-section">
+        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fSlocGudang" onchange="onFilterChange()"><option value="">Sloc Gudang</option></select>
+        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fSlocKp" onchange="onFilterChange()"><option value="">Sloc KP</option></select>
+        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fBrand" onchange="onFilterChange()"><option value="">Brand</option></select>
+        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fKatSap" onchange="onFilterChange()"><option value="">Kat. SAP</option></select>
+        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fKatTeknik" onchange="onFilterChange()"><option value="">Kat. Teknik</option></select>
+        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fBatch" onchange="onFilterChange()"><option value="">Batch</option></select>
+        <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fMoving" onchange="onFilterChange()"><option value="">Moving</option></select>
+        <input type="text" id="searchInput" oninput="onFilterChange()" placeholder="Cari…"
+          class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-24 md:w-32">
       </div>
       <!-- Table -->
       <div class="overflow-x-auto custom-scrollbar">
-        <table class="w-full text-left border-collapse min-w-[1100px]">
+        <table class="w-full text-left border-collapse" style="min-width:900px">
           <thead class="bg-gray-50 sticky top-0" id="tblHead"></thead>
           <tbody id="tblBody">
             <tr><td colspan="10" class="p-10 text-center">
-              <div class="inline-block w-7 h-7 border-4 border-[#00288e]/20 border-t-[#00288e] rounded-full spin"></div>
-              <p class="mt-2 text-[#444653] text-sm">Memuat data…</p>
+              <div class="inline-block w-6 h-6 border-4 border-[#00288e]/20 border-t-[#00288e] rounded-full spin"></div>
+              <p class="mt-2 text-gray-400 text-xs">Memuat data…</p>
             </td></tr>
           </tbody>
         </table>
       </div>
       <!-- Pagination -->
-      <div class="p-3 border-t border-[#c4c5d5]/40 flex justify-between items-center flex-wrap gap-2">
-        <p class="text-[11px] text-[#444653]">
-          Menampilkan <span class="font-bold" id="rangeInfo">—</span> dari <span class="font-bold" id="totalInfo">—</span> data
+      <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
+        <p class="text-[10px] text-gray-400">
+          <span class="font-bold" id="rangeInfo">—</span> dari <span class="font-bold" id="totalInfo">—</span> data
         </p>
         <div class="flex gap-1" id="pgBtns"></div>
       </div>
@@ -227,44 +199,38 @@
 
 <script>
 // ══════════════════════════════════════════════════════════
-// KONFIGURASI
-// Ganti dengan URL Apps Script sheet Stok Material kamu
+// CONFIG
 // ══════════════════════════════════════════════════════════
 const API_URL   = 'https://script.google.com/macros/s/AKfycbyTT9el_nffM_e7wFryJe6f18TZILIC7X-HelG1iRv_GjGigrYnDrqKb9thFmeAYYTdRQ/exec';
 const PAGE_SIZE = 15;
 
-// ══════════════════════════════════════════════════════════
-// KOLOM TABEL — sesuai header di Sheets
-// ══════════════════════════════════════════════════════════
 const COLS = [
   'Material','Material Description','Batch','Base Unit of Measure',
   'Unrestricted','Value Unrestricted','Sloc - Gudang','Sloc - KP','Material - Brand'
 ];
 
-// Sloc yang masuk gudang regional vs lapangan
-const SLOC_REGIONAL = ['0001','0002','0003','0004','0007','0008','0009','0010','0011','0012'];
-const SLOC_RUSAK    = ['9999'];
-
-// Status batch yang dianggap aktif (stok bisa dipakai)
-const BATCH_AKTIF   = ['BAIK','DISMANTLE'];
+const SLOC_RUSAK  = ['9999'];
+const BATCH_AKTIF = ['BAIK','DISMANTLE'];
 
 // ══════════════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════════════
-let ALL_ROWS  = [];
-let FILTERED  = [];
+let ALL_ROWS    = [];
+let FILTERED    = [];
 let currentPage = 1;
-let chartMode   = 'A'; // 'A' = gudang→kategori, 'B' = kategori→gudang
-let activeKatTeknik = ''; // filter kategori teknik di kelompok 3
-let charts = {};
 
-const filters = {
+// Filter state — semua filter terpusat di sini
+const F = {
   slocGudang:'', slocKp:'', brand:'', katSap:'',
-  katTeknik:'', batch:'', moving:'', tglUpdate:'', search:''
+  katTeknik:'', batch:'', moving:'', tglUpdate:'',
+  search:'',
+  // card filter active keys
+  cardKp:'',    // card kelompok 2
+  cardGudang:'' // card kelompok 3
 };
 
 // ══════════════════════════════════════════════════════════
-// LOAD DATA
+// LOAD
 // ══════════════════════════════════════════════════════════
 async function loadData() {
   const icon = document.getElementById('refreshIcon');
@@ -272,410 +238,307 @@ async function loadData() {
   try {
     const res  = await fetch(API_URL);
     const json = await res.json();
-    if (!json.ok) throw new Error(json.error || 'Gagal memuat data');
-
+    if (!json.ok) throw new Error(json.error||'Gagal memuat data');
     ALL_ROWS = json.rows || [];
-
-    buildFilterOptions();
-    buildKatTeknikFilter();
+    buildAllDropdowns();
     applyFilters();
-    renderGudangCards('');
-
-    const now = new Date();
-    document.getElementById('lastUpdate').textContent =
-      'Update ' + now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-
   } catch(err) {
     document.getElementById('tblBody').innerHTML = `
       <tr><td colspan="10" class="p-8 text-center">
-        <div class="text-red-600 font-bold mb-2">⚠ ${err.message}</div>
-        <p class="text-[#444653] text-sm">Pastikan API_URL sudah diganti dengan URL Apps Script stok.</p>
+        <p class="text-red-600 font-bold text-sm mb-1">⚠ ${err.message}</p>
+        <p class="text-gray-400 text-xs">Pastikan API_URL sudah diganti dengan URL Apps Script stok.</p>
       </td></tr>`;
-    document.getElementById('kpiResume').innerHTML =
-      `<div class="col-span-3 p-4 text-center text-red-600 text-sm">Gagal memuat data</div>`;
+    ['kpiResume','kpiKondisi','gudangCards'].forEach(id=>{
+      document.getElementById(id).innerHTML=`<div class="col-span-4 text-center text-red-500 text-xs p-4">Gagal memuat data</div>`;
+    });
   } finally {
     icon.classList.remove('spin');
   }
 }
 
 // ══════════════════════════════════════════════════════════
-// BUILD FILTER OPTIONS — dari data aktual
+// BUILD DROPDOWNS — dari data aktual Sheets
 // ══════════════════════════════════════════════════════════
-function buildFilterOptions() {
-  const uniq = (col) => [...new Set(ALL_ROWS.map(r=>r[col]).filter(Boolean))].sort();
+function buildAllDropdowns() {
+  const uniq = col => [...new Set(ALL_ROWS.map(r=>r[col]).filter(Boolean))].sort();
 
-  const sets = {
-    fSlocGudang : { col:'Sloc - Gudang',    label:'Semua Sloc Gudang' },
-    fSlocKp     : { col:'Sloc - KP',        label:'Semua Sloc KP' },
-    fBrand      : { col:'Material - Brand', label:'Semua Brand' },
-    fKatSap     : { col:'Kategori - SAP',   label:'Kat. SAP' },
-    fKatTeknik  : { col:'Kategori - Teknik',label:'Kat. Teknik' },
-    fBatch      : { col:'Batch',            label:'Semua Batch' },
-    fMoving     : { col:'Moving',           label:'Fast/Slow' },
-    fTglUpdate  : { col:'Tgl Update',       label:'Tgl Update' },
+  // Tgl Update di topnav
+  const tglOpts = uniq('Tgl Update');
+  const topTgl = document.getElementById('topTglUpdate');
+  topTgl.innerHTML = '<option value="">Semua Tgl Update</option>' +
+    tglOpts.map(v=>`<option value="${v}">${v}</option>`).join('');
+
+  // Tabel filter dropdowns
+  const map = {
+    fSlocGudang:['Sloc - Gudang','Sloc Gudang'],
+    fSlocKp:    ['Sloc - KP','Sloc KP'],
+    fBrand:     ['Material - Brand','Brand'],
+    fKatSap:    ['Kategori - SAP','Kat. SAP'],
+    fKatTeknik: ['Kategori - Teknik','Kat. Teknik'],
+    fBatch:     ['Batch','Batch'],
+    fMoving:    ['Kategori - Moving','Moving'],
   };
-
-  Object.entries(sets).forEach(([id, {col, label}]) => {
+  Object.entries(map).forEach(([id,[col,label]])=>{
     const el = document.getElementById(id);
     if (!el) return;
     el.innerHTML = `<option value="">${label}</option>` +
-      uniq(col).map(v => `<option value="${v}">${v}</option>`).join('');
+      uniq(col).map(v=>`<option value="${v}">${v}</option>`).join('');
   });
+
+  // Dropdown kategori teknik kelompok 3
+  const katEl = document.getElementById('ddKatTeknik');
+  katEl.innerHTML = '<option value="">Semua Kategori Teknik</option>' +
+    uniq('Kategori - Teknik').map(v=>`<option value="${v}">${v}</option>`).join('');
 }
 
 // ══════════════════════════════════════════════════════════
-// BUILD KATEGORI TEKNIK FILTER (badge pills kelompok 3)
-// ══════════════════════════════════════════════════════════
-function buildKatTeknikFilter() {
-  const cats = [...new Set(ALL_ROWS.map(r=>r['Kategori - Teknik']).filter(Boolean))].sort();
-  const el = document.getElementById('katTeknikFilter');
-  el.innerHTML = ['', ...cats].map(c => `
-    <button onclick="setKatTeknikFilter('${c}')"
-      class="kat-badge px-2 py-0.5 text-[10px] border border-[#c4c5d5] rounded-full transition-colors
-        ${c===''?'bg-[#00288e] text-white border-transparent':'bg-white text-[#444653] hover:bg-[#f2f3ff]'}"
-      data-kat="${c}">${c===''?'Semua':c}</button>
-  `).join('');
-}
-
-function setKatTeknikFilter(kat) {
-  activeKatTeknik = kat;
-  document.querySelectorAll('.kat-badge').forEach(b => {
-    const isActive = b.dataset.kat === kat;
-    b.className = `kat-badge px-2 py-0.5 text-[10px] border rounded-full transition-colors ${
-      isActive ? 'bg-[#00288e] text-white border-transparent' : 'bg-white text-[#444653] border-[#c4c5d5] hover:bg-[#f2f3ff]'
-    }`;
-  });
-  renderGudangCards(kat);
-}
-
-// ══════════════════════════════════════════════════════════
-// APPLY FILTERS — filter ALL_ROWS → FILTERED
+// APPLY FILTERS — satu fungsi untuk semua filter
 // ══════════════════════════════════════════════════════════
 function applyFilters() {
-  const q = filters.search.toLowerCase();
+  const q = F.search.toLowerCase();
   FILTERED = ALL_ROWS.filter(r => {
-    if (filters.slocGudang && r['Sloc - Gudang']    !== filters.slocGudang)    return false;
-    if (filters.slocKp     && r['Sloc - KP']        !== filters.slocKp)        return false;
-    if (filters.brand      && r['Material - Brand'] !== filters.brand)         return false;
-    if (filters.katSap     && r['Kategori - SAP']   !== filters.katSap)        return false;
-    if (filters.katTeknik  && r['Kategori - Teknik']!== filters.katTeknik)     return false;
-    if (filters.batch      && r['Batch']            !== filters.batch)         return false;
-    if (filters.moving     && r['Moving']           !== filters.moving)        return false;
-    if (filters.tglUpdate  && r['Tgl Update']       !== filters.tglUpdate)     return false;
-    if (q && !JSON.stringify(r).toLowerCase().includes(q))                     return false;
+    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
+    if (SLOC_RUSAK.includes(sloc)) return false; // selalu exclude rusak dari tabel
+
+    if (F.slocGudang && r['Sloc - Gudang']    !== F.slocGudang) return false;
+    if (F.slocKp     && r['Sloc - KP']        !== F.slocKp)     return false;
+    if (F.brand      && r['Material - Brand'] !== F.brand)      return false;
+    if (F.katSap     && r['Kategori - SAP']   !== F.katSap)     return false;
+    if (F.katTeknik  && r['Kategori - Teknik']!== F.katTeknik)  return false;
+    if (F.batch      && r['Batch']            !== F.batch)      return false;
+    if (F.moving     && r['Kategori - Moving']!== F.moving)     return false;
+    if (F.tglUpdate  && r['Tgl Update']       !== F.tglUpdate)  return false;
+    // Card filter KP
+    if (F.cardKp     && r['Sloc - KP']        !== F.cardKp)     return false;
+    // Card filter Gudang
+    if (F.cardGudang && r['Sloc - Gudang']    !== F.cardGudang) return false;
+    if (q && !JSON.stringify(r).toLowerCase().includes(q)) return false;
     return true;
   });
 
   renderKpiResume();
   renderKpiKondisi();
-  renderBarChart();
-  renderBrandChart();
+  renderGudangCards();
   updateFilterLabel();
   currentPage = 1;
   renderTable();
 }
 
+// Sync dari dropdown tabel
 function onFilterChange() {
-  filters.slocGudang = document.getElementById('fSlocGudang').value;
-  filters.slocKp     = document.getElementById('fSlocKp').value;
-  filters.brand      = document.getElementById('fBrand').value;
-  filters.katSap     = document.getElementById('fKatSap').value;
-  filters.katTeknik  = document.getElementById('fKatTeknik').value;
-  filters.batch      = document.getElementById('fBatch').value;
-  filters.moving     = document.getElementById('fMoving').value;
-  filters.tglUpdate  = document.getElementById('fTglUpdate').value;
-  filters.search     = document.getElementById('searchInput').value;
+  F.slocGudang = document.getElementById('fSlocGudang').value;
+  F.slocKp     = document.getElementById('fSlocKp').value;
+  F.brand      = document.getElementById('fBrand').value;
+  F.katSap     = document.getElementById('fKatSap').value;
+  F.katTeknik  = document.getElementById('fKatTeknik').value;
+  F.batch      = document.getElementById('fBatch').value;
+  F.moving     = document.getElementById('fMoving').value;
+  F.search     = document.getElementById('searchInput').value;
+  // Reset card filters saat dropdown manual diubah
+  F.cardKp = ''; F.cardGudang = '';
   applyFilters();
 }
 
+// Tgl Update dari topnav
+function onTglUpdateChange() {
+  F.tglUpdate = document.getElementById('topTglUpdate').value;
+  applyFilters();
+}
+
+// Dropdown Kat Teknik kelompok 3
+function onKatTeknikChange() {
+  F.katTeknik = document.getElementById('ddKatTeknik').value;
+  // Sync ke filter tabel juga
+  document.getElementById('fKatTeknik').value = F.katTeknik;
+  F.cardGudang = '';
+  applyFilters();
+}
+
+// Reset semua
 function resetAllFilters() {
-  Object.keys(filters).forEach(k => filters[k] = '');
-  ['fSlocGudang','fSlocKp','fBrand','fKatSap','fKatTeknik','fBatch','fMoving','fTglUpdate'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
+  Object.keys(F).forEach(k => F[k] = '');
+  document.querySelectorAll('.fsel').forEach(el => el.value = '');
   document.getElementById('searchInput').value = '';
+  document.getElementById('topTglUpdate').value = '';
+  document.getElementById('ddKatTeknik').value = '';
   applyFilters();
 }
 
 function updateFilterLabel() {
   const parts = [];
-  if (filters.slocGudang) parts.push('Gudang: '+filters.slocGudang);
-  if (filters.slocKp)     parts.push('KP: '+filters.slocKp);
-  if (filters.brand)      parts.push('Brand: '+filters.brand);
-  if (filters.katSap)     parts.push('SAP: '+filters.katSap);
-  if (filters.katTeknik)  parts.push('Teknik: '+filters.katTeknik);
-  if (filters.batch)      parts.push('Batch: '+filters.batch);
-  if (filters.moving)     parts.push(filters.moving);
-  if (filters.search)     parts.push('Cari: '+filters.search);
+  if (F.slocGudang) parts.push(F.slocGudang);
+  if (F.slocKp)     parts.push(F.slocKp);
+  if (F.brand)      parts.push(F.brand);
+  if (F.katSap)     parts.push(F.katSap);
+  if (F.katTeknik)  parts.push(F.katTeknik);
+  if (F.batch)      parts.push(F.batch);
+  if (F.moving)     parts.push(F.moving);
+  if (F.tglUpdate)  parts.push('Tgl: '+F.tglUpdate);
+  if (F.cardKp)     parts.push('KP: '+F.cardKp);
+  if (F.cardGudang) parts.push('Gudang: '+F.cardGudang.split(' - ')[1]||F.cardGudang);
+  if (F.search)     parts.push('"'+F.search+'"');
   document.getElementById('activeFilterLabel').textContent =
-    parts.length ? 'Filter aktif: '+parts.join(' · ') : 'Menampilkan semua data';
+    parts.length ? 'Filter: '+parts.join(' · ') : 'Menampilkan semua data';
 }
 
 // ══════════════════════════════════════════════════════════
 // RENDER KPI RESUME (Kelompok 1)
 // ══════════════════════════════════════════════════════════
 function renderKpiResume() {
-  const aktif = FILTERED.filter(r => BATCH_AKTIF.includes(r['Batch']));
-  const totalVal = aktif.reduce((s,r) => s + (parseFloat(r['Value Unrestricted'])||0), 0);
-  const totalQty = aktif.reduce((s,r) => s + (parseFloat(r['Unrestricted'])||0), 0);
-  const totalItem = new Set(FILTERED.map(r=>r['Material']).filter(Boolean)).size;
+  // Exclude rusak dari semua KPI
+  const aktif = ALL_ROWS.filter(r => {
+    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
+    return !SLOC_RUSAK.includes(sloc) && BATCH_AKTIF.includes(r['Batch']);
+  });
+  const totalVal  = aktif.reduce((s,r)=>s+(parseFloat(r['Value Unrestricted'])||0),0);
+  const totalQty  = aktif.reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0);
+  const totalItem = new Set(aktif.map(r=>r['Material']).filter(Boolean)).size;
 
   document.getElementById('kpiResume').innerHTML = `
-    <div class="card-filter bg-blue-50 p-5 rounded-xl shadow-sm border border-blue-200"
-      onclick="resetAllFilters()" title="Reset filter">
-      <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-1">Total nilai stok aktif</p>
-      <p class="text-2xl font-black text-blue-800">${fmtRp(totalVal)}</p>
-      <p class="text-[10px] text-blue-600 mt-1">Unrestricted · BAIK + DISMANTLE</p>
+    <div class="cf bg-blue-50 p-4 rounded-xl border border-blue-200 ${!F.cardKp&&!F.cardGudang&&F.katTeknik===''?'on':''}"
+      onclick="resetAllFilters()">
+      <p class="text-[9px] font-bold text-blue-600 uppercase tracking-wider mb-1">Total nilai stok aktif</p>
+      <p class="text-xl font-black text-blue-800">${fmtRp(totalVal)}</p>
+      <p class="text-[9px] text-blue-500 mt-0.5">BAIK + DISMANTLE</p>
     </div>
-    <div class="card-filter bg-white p-5 rounded-xl shadow-sm border border-slate-200"
-      onclick="resetAllFilters()" title="Reset filter">
-      <p class="text-[10px] font-bold text-[#444653] uppercase tracking-wider mb-1">Total qty stok aktif</p>
-      <p class="text-2xl font-black text-[#131b2e]">${Math.round(totalQty).toLocaleString('id-ID')}</p>
-      <p class="text-[10px] text-[#444653] mt-1">Semua gudang · BAIK + DISMANTLE</p>
+    <div class="cf bg-white p-4 rounded-xl border border-gray-200"
+      onclick="resetAllFilters()">
+      <p class="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-1">Total qty stok aktif</p>
+      <p class="text-xl font-black text-[#131b2e]">${Math.round(totalQty).toLocaleString('id-ID')}</p>
+      <p class="text-[9px] text-gray-400 mt-0.5">Semua gudang aktif</p>
     </div>
-    <div class="card-filter bg-white p-5 rounded-xl shadow-sm border border-slate-200"
-      onclick="resetAllFilters()" title="Reset filter">
-      <p class="text-[10px] font-bold text-[#444653] uppercase tracking-wider mb-1">Total item material</p>
-      <p class="text-2xl font-black text-[#131b2e]">${totalItem.toLocaleString('id-ID')}</p>
-      <p class="text-[10px] text-[#444653] mt-1">Kode material unik</p>
+    <div class="cf bg-white p-4 rounded-xl border border-gray-200 col-span-2 md:col-span-1"
+      onclick="resetAllFilters()">
+      <p class="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-1">Total item material</p>
+      <p class="text-xl font-black text-[#131b2e]">${totalItem.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] text-gray-400 mt-0.5">Kode material unik</p>
     </div>
   `;
 }
 
 // ══════════════════════════════════════════════════════════
-// RENDER KPI KONDISI (Kelompok 2)
+// RENDER KPI KONDISI per Sloc KP (Kelompok 2)
+// Card per Sloc KP, breakdown BAIK & DISMANTLE
+// Exclude Sloc Rusak
 // ══════════════════════════════════════════════════════════
 function renderKpiKondisi() {
-  const regional = FILTERED.filter(r => {
+  // Data stok aktif, exclude rusak
+  const src = ALL_ROWS.filter(r => {
     const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
-    return SLOC_REGIONAL.includes(sloc);
-  });
-  const lapangan = FILTERED.filter(r => {
-    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
-    return !SLOC_REGIONAL.includes(sloc) && !SLOC_RUSAK.includes(sloc);
+    return !SLOC_RUSAK.includes(sloc) && BATCH_AKTIF.includes(r['Batch'])
+      && r['Sloc - KP'] && r['Sloc - KP'].toLowerCase() !== 'rusak';
   });
 
-  const calc = (rows) => ({
-    total:    rows.filter(r=>BATCH_AKTIF.includes(r['Batch'])).reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0),
-    baik:     rows.filter(r=>r['Batch']==='BAIK').reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0),
-    dismantle:rows.filter(r=>r['Batch']==='DISMANTLE').reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0),
+  // Kelompokkan per Sloc KP
+  const byKp = {};
+  src.forEach(r => {
+    const kp = r['Sloc - KP'];
+    if (!kp) return;
+    if (!byKp[kp]) byKp[kp] = { baik:0, dismantle:0 };
+    const qty = parseFloat(r['Unrestricted'])||0;
+    if (r['Batch']==='BAIK')      byKp[kp].baik      += qty;
+    if (r['Batch']==='DISMANTLE') byKp[kp].dismantle += qty;
   });
 
-  const reg = calc(regional);
-  const lap = calc(lapangan);
-  const regPct = reg.total ? Math.round(reg.baik/reg.total*100) : 0;
-  const lapPct = lap.total ? Math.round(lap.baik/lap.total*100) : 0;
+  // Urutkan dari total terbanyak
+  const sorted = Object.entries(byKp)
+    .map(([kp,d])=>({ kp, baik:d.baik, dismantle:d.dismantle, total:d.baik+d.dismantle }))
+    .sort((a,b)=>b.total-a.total);
 
-  document.getElementById('kpiKondisi').innerHTML = `
-    <!-- Gudang Regional -->
-    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-      <div class="flex items-center gap-2 mb-3">
-        <span class="material-symbols-outlined text-[16px] text-blue-600">home_work</span>
-        <p class="text-[11px] font-bold text-[#131b2e]">Gudang Regional</p>
-        <span class="text-[10px] text-[#444653]">(Sloc 0001–0012)</span>
-      </div>
-      <p class="text-2xl font-black text-[#131b2e] mb-1">${Math.round(reg.total).toLocaleString('id-ID')}</p>
-      <div class="w-full h-2 bg-[#f2f3ff] rounded-full overflow-hidden mb-3">
-        <div class="h-full bg-green-500 rounded-full" style="width:${regPct}%"></div>
-      </div>
-      <div class="flex gap-6">
-        <div>
-          <p class="text-[10px] text-[#444653]">BAIK</p>
-          <p class="text-base font-bold text-green-700">${Math.round(reg.baik).toLocaleString('id-ID')}</p>
+  document.getElementById('kpiKondisi').innerHTML = sorted.map(d => {
+    const pct   = d.total ? Math.round(d.baik/d.total*100) : 0;
+    const isOn  = F.cardKp === d.kp;
+    return `
+      <div class="cf bg-white p-3 rounded-xl border ${isOn?'border-[#00288e] on':'border-gray-200'}"
+        onclick="toggleCardKp('${d.kp.replace(/'/g,"\\'")}')">
+        <p class="text-[10px] font-bold text-[#131b2e] mb-1 truncate" title="${d.kp}">${d.kp}</p>
+        <p class="text-lg font-black text-[#131b2e] leading-none mb-1">${Math.round(d.total).toLocaleString('id-ID')}</p>
+        <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden mb-1.5">
+          <div class="h-full bg-green-500 rounded-full" style="width:${pct}%"></div>
         </div>
-        <div>
-          <p class="text-[10px] text-[#444653]">DISMANTLE</p>
-          <p class="text-base font-bold text-orange-600">${Math.round(reg.dismantle).toLocaleString('id-ID')}</p>
+        <div class="flex gap-3">
+          <div>
+            <p class="text-[9px] text-gray-400">BAIK</p>
+            <p class="text-[11px] font-bold text-green-700">${Math.round(d.baik).toLocaleString('id-ID')}</p>
+          </div>
+          <div>
+            <p class="text-[9px] text-gray-400">DISMANTLE</p>
+            <p class="text-[11px] font-bold text-orange-600">${Math.round(d.dismantle).toLocaleString('id-ID')}</p>
+          </div>
         </div>
-      </div>
-    </div>
-    <!-- Gudang Lapangan -->
-    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-      <div class="flex items-center gap-2 mb-3">
-        <span class="material-symbols-outlined text-[16px] text-orange-500">location_on</span>
-        <p class="text-[11px] font-bold text-[#131b2e]">Gudang Lapangan</p>
-        <span class="text-[10px] text-[#444653]">(Sloc 8xxx)</span>
-      </div>
-      <p class="text-2xl font-black text-[#131b2e] mb-1">${Math.round(lap.total).toLocaleString('id-ID')}</p>
-      <div class="w-full h-2 bg-[#f2f3ff] rounded-full overflow-hidden mb-3">
-        <div class="h-full bg-green-500 rounded-full" style="width:${lapPct}%"></div>
-      </div>
-      <div class="flex gap-6">
-        <div>
-          <p class="text-[10px] text-[#444653]">BAIK</p>
-          <p class="text-base font-bold text-green-700">${Math.round(lap.baik).toLocaleString('id-ID')}</p>
-        </div>
-        <div>
-          <p class="text-[10px] text-[#444653]">DISMANTLE</p>
-          <p class="text-base font-bold text-orange-600">${Math.round(lap.dismantle).toLocaleString('id-ID')}</p>
-        </div>
-      </div>
-    </div>
-  `;
+      </div>`;
+  }).join('');
+}
+
+function toggleCardKp(kp) {
+  // Toggle: klik sama → lepas filter
+  F.cardKp     = F.cardKp === kp ? '' : kp;
+  F.cardGudang = '';
+  applyFilters();
 }
 
 // ══════════════════════════════════════════════════════════
 // RENDER GUDANG CARDS (Kelompok 3)
+// Per Sloc Gudang, exclude rusak, sort by qty DESC
+// Filter kategori teknik dari dropdown ddKatTeknik
 // ══════════════════════════════════════════════════════════
-function renderGudangCards(katFilter) {
-  // Kelompokkan data per Sloc - Gudang, filter kategori teknik jika ada
-  const source = katFilter
-    ? ALL_ROWS.filter(r => r['Kategori - Teknik'] === katFilter && BATCH_AKTIF.includes(r['Batch']))
-    : ALL_ROWS.filter(r => BATCH_AKTIF.includes(r['Batch']));
+function renderGudangCards() {
+  const katFilter = F.katTeknik;
 
+  const src = ALL_ROWS.filter(r => {
+    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
+    if (SLOC_RUSAK.includes(sloc)) return false;
+    if (!BATCH_AKTIF.includes(r['Batch'])) return false;
+    if (katFilter && r['Kategori - Teknik'] !== katFilter) return false;
+    return true;
+  });
+
+  // Kelompokkan per Sloc Gudang
   const byGudang = {};
-  source.forEach(r => {
-    const g = r['Sloc - Gudang'];
-    if (!g) return;
-    if (!byGudang[g]) byGudang[g] = { qty:0, byKat:{} };
+  src.forEach(r => {
+    const g   = r['Sloc - Gudang'];
     const qty = parseFloat(r['Unrestricted'])||0;
-    byGudang[g].qty += qty;
-    const kat = r['Kategori - Teknik'] || 'Lainnya';
-    byGudang[g].byKat[kat] = (byGudang[g].byKat[kat]||0) + qty;
+    if (!g) return;
+    if (!byGudang[g]) byGudang[g] = { total:0, baik:0, dismantle:0 };
+    byGudang[g].total     += qty;
+    if (r['Batch']==='BAIK')      byGudang[g].baik      += qty;
+    if (r['Batch']==='DISMANTLE') byGudang[g].dismantle += qty;
   });
 
-  // Pisah regional vs lapangan vs rusak
-  const regional = {}, lapangan = {};
-  Object.entries(byGudang).forEach(([g, d]) => {
-    const code = g.split(' - ')[0].trim();
-    if (SLOC_RUSAK.includes(code)) return;
-    if (SLOC_REGIONAL.includes(code)) regional[g] = d;
-    else lapangan[g] = d;
-  });
+  // Sort dari terbanyak
+  const sorted = Object.entries(byGudang)
+    .sort((a,b)=>b[1].total-a[1].total);
 
-  const makeCards = (data) => Object.entries(data)
-    .sort((a,b) => b[1].qty - a[1].qty)
-    .map(([g, d]) => {
-      const topKats = Object.entries(d.byKat).sort((a,b)=>b[1]-a[1]).slice(0,4);
-      return `
-        <div class="flex-shrink-0 w-[140px] bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
-          <p class="text-[10px] font-bold text-[#131b2e] mb-1 leading-tight truncate" title="${g}">${g.split(' - ')[1]||g}</p>
-          <p class="text-lg font-black text-blue-700 mb-2">${Math.round(d.qty).toLocaleString('id-ID')}</p>
-          <div class="space-y-0.5">
-            ${topKats.map(([k,v])=>`
-              <div class="flex justify-between items-center">
-                <span class="text-[9px] text-[#444653] truncate max-w-[80px]">${k}</span>
-                <span class="text-[9px] font-semibold text-[#131b2e]">${Math.round(v).toLocaleString('id-ID')}</span>
-              </div>`).join('')}
-            ${Object.keys(d.byKat).length > 4 ? `<p class="text-[8px] text-[#757684] mt-1">+${Object.keys(d.byKat).length-4} lainnya</p>` : ''}
-          </div>
-        </div>`;
-    }).join('');
-
-  document.getElementById('gudangCards').innerHTML = `
-    <div>
-      <p class="text-[9px] font-semibold text-[#444653] uppercase tracking-widest mb-2">Gudang regional</p>
-      <div class="flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
-        ${makeCards(regional) || '<p class="text-[11px] text-[#444653]">Tidak ada data</p>'}
-      </div>
-    </div>
-    <div>
-      <p class="text-[9px] font-semibold text-[#444653] uppercase tracking-widest mb-2">Gudang lapangan</p>
-      <div class="flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
-        ${makeCards(lapangan) || '<p class="text-[11px] text-[#444653]">Tidak ada data</p>'}
-      </div>
-    </div>
-  `;
-}
-
-// ══════════════════════════════════════════════════════════
-// RENDER BAR CHART (toggle A/B)
-// ══════════════════════════════════════════════════════════
-function setChartMode(mode) {
-  chartMode = mode;
-  document.getElementById('togA').className = `px-2 py-1 text-[10px] font-semibold rounded border transition-all ${mode==='A'?'bg-[#00288e] text-white border-transparent':'bg-white text-[#444653] border-[#c4c5d5]'}`;
-  document.getElementById('togB').className = `px-2 py-1 text-[10px] font-semibold rounded border transition-all ${mode==='B'?'bg-[#00288e] text-white border-transparent':'bg-white text-[#444653] border-[#c4c5d5]'}`;
-  document.getElementById('chartToggleLabel').textContent = mode==='A'?'Gudang → Kategori Teknik':'Kategori Teknik → Gudang';
-  renderBarChart();
-}
-
-function renderBarChart() {
-  // Hanya stok aktif, exclude rusak
-  const src = FILTERED.filter(r =>
-    BATCH_AKTIF.includes(r['Batch']) &&
-    !SLOC_RUSAK.includes((r['Sloc - Gudang']||'').split(' - ')[0].trim())
-  );
-
-  const batchColors = { 'BAIK':'#378ADD', 'DISMANTLE':'#EF9F27', 'RUSAK-TL':'#E24B4A' };
-
-  let labels, datasets;
-
-  if (chartMode === 'A') {
-    // X = gudang, dataset per batch
-    const gudangs = [...new Set(src.map(r=>r['Sloc - Gudang']).filter(Boolean))];
-    labels = gudangs.map(g => g.split(' - ')[1] || g);
-    datasets = ['BAIK','DISMANTLE'].map(batch => ({
-      label: batch,
-      backgroundColor: batchColors[batch],
-      borderRadius: 3,
-      data: gudangs.map(g =>
-        src.filter(r=>r['Sloc - Gudang']===g && r['Batch']===batch)
-           .reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0)
-      )
-    }));
-  } else {
-    // X = kategori teknik, dataset per gudang (top 5 gudang)
-    const kats = [...new Set(src.map(r=>r['Kategori - Teknik']).filter(Boolean))].slice(0,10);
-    labels = kats;
-    const topGudangs = Object.entries(
-      src.reduce((acc,r)=>{ const g=r['Sloc - Gudang']||''; acc[g]=(acc[g]||0)+(parseFloat(r['Unrestricted'])||0); return acc; },{})
-    ).sort((a,b)=>b[1]-a[1]).slice(0,5).map(e=>e[0]);
-    const colors = ['#378ADD','#EF9F27','#1D9E75','#7F77DD','#E24B4A'];
-    datasets = topGudangs.map((g,i) => ({
-      label: g.split(' - ')[1]||g,
-      backgroundColor: colors[i],
-      borderRadius: 3,
-      data: kats.map(k =>
-        src.filter(r=>r['Sloc - Gudang']===g && r['Kategori - Teknik']===k)
-           .reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0)
-      )
-    }));
+  if (!sorted.length) {
+    document.getElementById('gudangCards').innerHTML =
+      '<p class="col-span-4 text-xs text-gray-400 py-4">Tidak ada data</p>';
+    return;
   }
 
-  rebuildChart('barChart', {
-    type: 'bar',
-    data: { labels, datasets },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { stacked: false, grid: { display: false }, ticks: { font: { size: 10 } } },
-        y: { beginAtZero: true, ticks: { font: { size: 10 } } }
-      }
-    }
-  });
+  document.getElementById('gudangCards').innerHTML = sorted.map(([g, d]) => {
+    const name  = g.split(' - ')[1] || g;
+    const pct   = d.total ? Math.round(d.baik/d.total*100) : 0;
+    const isOn  = F.cardGudang === g;
+    return `
+      <div class="cf bg-white p-3 rounded-xl border ${isOn?'border-[#00288e] on':'border-gray-200'}"
+        onclick="toggleCardGudang('${g.replace(/'/g,"\\'")}')">
+        <p class="text-[10px] font-bold text-[#131b2e] mb-1 truncate leading-tight" title="${g}">${name}</p>
+        <p class="text-base font-black text-blue-700 leading-none mb-1">${Math.round(d.total).toLocaleString('id-ID')}</p>
+        <div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden mb-1.5">
+          <div class="h-full bg-green-500 rounded-full" style="width:${pct}%"></div>
+        </div>
+        <div class="flex gap-2">
+          <div><p class="text-[8px] text-gray-400">BAIK</p><p class="text-[10px] font-bold text-green-700">${Math.round(d.baik).toLocaleString('id-ID')}</p></div>
+          <div><p class="text-[8px] text-gray-400">DISMTL</p><p class="text-[10px] font-bold text-orange-600">${Math.round(d.dismantle).toLocaleString('id-ID')}</p></div>
+        </div>
+      </div>`;
+  }).join('');
 }
 
-// ══════════════════════════════════════════════════════════
-// RENDER BRAND CHART (donut)
-// ══════════════════════════════════════════════════════════
-function renderBrandChart() {
-  const byBrand = {};
-  FILTERED.filter(r=>BATCH_AKTIF.includes(r['Batch'])).forEach(r => {
-    const b = r['Material - Brand'];
-    if (b) byBrand[b] = (byBrand[b]||0) + (parseFloat(r['Unrestricted'])||0);
-  });
-  const sorted = Object.entries(byBrand).sort((a,b)=>b[1]-a[1]);
-  const top5   = sorted.slice(0,5);
-  const others = sorted.slice(5).reduce((s,e)=>s+e[1],0);
-  const labels = [...top5.map(e=>e[0]), ...(others>0?['Lainnya']:[])];
-  const data   = [...top5.map(e=>e[1]), ...(others>0?[others]:[])];
-  const colors = ['#378ADD','#EF9F27','#1D9E75','#E24B4A','#7F77DD','#c4c5d5'];
-
-  rebuildChart('brandChart', {
-    type: 'doughnut',
-    data: { labels, datasets: [{ data, backgroundColor: colors.slice(0,labels.length), borderWidth: 0 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '65%',
-      plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 6, font: { size: 10 } } } }
-    }
-  });
-}
-
-function rebuildChart(id, config) {
-  if (charts[id]) charts[id].destroy();
-  charts[id] = new Chart(document.getElementById(id), config);
+function toggleCardGudang(g) {
+  F.cardGudang = F.cardGudang === g ? '' : g;
+  F.cardKp     = '';
+  applyFilters();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -683,8 +546,8 @@ function rebuildChart(id, config) {
 // ══════════════════════════════════════════════════════════
 function renderTable() {
   document.getElementById('tblHead').innerHTML = '<tr>' +
-    '<th class="p-3 text-[10px] font-bold text-[#444653] border-b border-[#c4c5d5]/40">#</th>' +
-    COLS.map(h => `<th class="p-3 text-[10px] font-bold text-[#444653] border-b border-[#c4c5d5]/40 whitespace-nowrap">${h}</th>`).join('') +
+    '<th class="p-3 text-[10px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">#</th>' +
+    COLS.map(h=>`<th class="p-3 text-[10px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${h}</th>`).join('') +
     '</tr>';
 
   const start = (currentPage-1)*PAGE_SIZE;
@@ -692,31 +555,27 @@ function renderTable() {
   const tbody = document.getElementById('tblBody');
 
   if (!paged.length) {
-    tbody.innerHTML = `<tr><td colspan="${COLS.length+1}" class="p-8 text-center text-[#444653] text-sm">Tidak ada data sesuai filter</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="${COLS.length+1}" class="p-8 text-center text-gray-400 text-xs">Tidak ada data sesuai filter</td></tr>`;
     renderPagination(); return;
   }
 
   tbody.innerHTML = paged.map((r,i) => {
     const batch = r['Batch']||'';
-    const batchBadge =
-      batch==='BAIK'     ? `<span class="px-2 py-0.5 rounded-full bg-green-100 text-green-800 text-[10px] font-bold">BAIK</span>` :
-      batch==='DISMANTLE'? `<span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 text-[10px] font-bold">DISMANTLE</span>` :
-      batch==='RUSAK-TL' ? `<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-800 text-[10px] font-bold">RUSAK-TL</span>` :
-                           `<span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-bold">${batch}</span>`;
-
+    const bBadge =
+      batch==='BAIK'      ? `<span class="px-1.5 py-0.5 rounded-full bg-green-100 text-green-800 text-[9px] font-bold">BAIK</span>` :
+      batch==='DISMANTLE' ? `<span class="px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-800 text-[9px] font-bold">DISMANTLE</span>` :
+      batch==='RUSAK-TL'  ? `<span class="px-1.5 py-0.5 rounded-full bg-red-100 text-red-800 text-[9px] font-bold">RUSAK-TL</span>` :
+                            `<span class="px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[9px] font-bold">${batch}</span>`;
     const cells = COLS.map(col => {
       const v = r[col];
-      if (col==='Batch') return `<td class="p-3">${batchBadge}</td>`;
-      if (col==='Value Unrestricted') return `<td class="p-3 font-mono text-right text-sm whitespace-nowrap">${v?fmtRpFull(+v):'-'}</td>`;
-      if (col==='Unrestricted') return `<td class="p-3 text-right text-sm">${v?Math.round(+v).toLocaleString('id-ID'):'-'}</td>`;
-      if (col==='Material Description') return `<td class="p-3 text-sm max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v}">${v||'-'}</td>`;
-      return `<td class="p-3 text-sm whitespace-nowrap">${v||'-'}</td>`;
+      if (col==='Batch')               return `<td class="p-3">${bBadge}</td>`;
+      if (col==='Value Unrestricted')  return `<td class="p-3 font-mono text-right text-xs whitespace-nowrap">${v?fmtRpFull(+v):'-'}</td>`;
+      if (col==='Unrestricted')        return `<td class="p-3 text-right text-xs">${v?Math.round(+v).toLocaleString('id-ID'):'-'}</td>`;
+      if (col==='Material Description')return `<td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v||''}">${v||'-'}</td>`;
+      return `<td class="p-3 text-xs whitespace-nowrap">${v||'-'}</td>`;
     }).join('');
-
     return `<tr class="hover:bg-[#f2f3ff] transition-colors">
-      <td class="p-3 text-[11px] text-[#757684]">${start+i+1}</td>
-      ${cells}
-    </tr>`;
+      <td class="p-3 text-[10px] text-gray-300">${start+i+1}</td>${cells}</tr>`;
   }).join('');
 
   renderPagination();
@@ -727,22 +586,22 @@ function renderTable() {
 // ══════════════════════════════════════════════════════════
 function renderPagination() {
   const total = FILTERED.length, pages = Math.ceil(total/PAGE_SIZE)||1;
-  const s = (currentPage-1)*PAGE_SIZE+1, e = Math.min(currentPage*PAGE_SIZE,total);
-  document.getElementById('rangeInfo').textContent = total ? `${s}–${e}` : '0';
+  const s=(currentPage-1)*PAGE_SIZE+1, e=Math.min(currentPage*PAGE_SIZE,total);
+  document.getElementById('rangeInfo').textContent = total?`${s}–${e}`:'0';
   document.getElementById('totalInfo').textContent = total.toLocaleString('id-ID');
 
-  let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''} class="p-1.5 border border-[#c4c5d5] rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>`;
-  let lo = Math.max(1,currentPage-2), hi = Math.min(pages,lo+4);
-  if (hi-lo<4) lo=Math.max(1,hi-4);
-  if (lo>1) html+=`<button onclick="goPage(1)" class="w-7 h-7 flex items-center justify-center text-[11px] font-bold hover:bg-[#f2f3ff] rounded">1</button><span class="px-1 text-[#757684]">…</span>`;
-  for (let i=lo;i<=hi;i++) html+=`<button onclick="goPage(${i})" class="w-7 h-7 flex items-center justify-center text-[11px] font-bold rounded ${i===currentPage?'bg-[#00288e] text-white':'hover:bg-[#f2f3ff]'}">${i}</button>`;
-  if (hi<pages) html+=`<span class="px-1 text-[#757684]">…</span><button onclick="goPage(${pages})" class="w-7 h-7 flex items-center justify-center text-[11px] font-bold hover:bg-[#f2f3ff] rounded">${pages}</button>`;
-  html+=`<button onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''} class="p-1.5 border border-[#c4c5d5] rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>`;
-  document.getElementById('pgBtns').innerHTML = html;
+  let h=`<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''} class="p-1 border border-gray-200 rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[14px]">chevron_left</span></button>`;
+  let lo=Math.max(1,currentPage-2), hi=Math.min(pages,lo+4);
+  if(hi-lo<4) lo=Math.max(1,hi-4);
+  if(lo>1) h+=`<button onclick="goPage(1)" class="w-6 h-6 text-[10px] font-bold hover:bg-[#f2f3ff] rounded flex items-center justify-center">1</button><span class="text-gray-300 px-0.5">…</span>`;
+  for(let i=lo;i<=hi;i++) h+=`<button onclick="goPage(${i})" class="w-6 h-6 text-[10px] font-bold rounded flex items-center justify-center ${i===currentPage?'bg-[#00288e] text-white':'hover:bg-[#f2f3ff]'}">${i}</button>`;
+  if(hi<pages) h+=`<span class="text-gray-300 px-0.5">…</span><button onclick="goPage(${pages})" class="w-6 h-6 text-[10px] font-bold hover:bg-[#f2f3ff] rounded flex items-center justify-center">${pages}</button>`;
+  h+=`<button onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''} class="p-1 border border-gray-200 rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[14px]">chevron_right</span></button>`;
+  document.getElementById('pgBtns').innerHTML = h;
 }
 
 function goPage(p) {
-  currentPage = Math.max(1, Math.min(p, Math.ceil(FILTERED.length/PAGE_SIZE)||1));
+  currentPage = Math.max(1,Math.min(p,Math.ceil(FILTERED.length/PAGE_SIZE)||1));
   renderTable();
 }
 
@@ -750,35 +609,30 @@ function goPage(p) {
 // EXPORT CSV
 // ══════════════════════════════════════════════════════════
 function exportCSV() {
-  const rows = [COLS.join(',')];
-  FILTERED.forEach(r => {
-    rows.push(COLS.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(','));
-  });
-  const blob = new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'stok_material_'+new Date().toISOString().slice(0,10)+'.csv';
+  const rows=[COLS.join(',')];
+  FILTERED.forEach(r=>rows.push(COLS.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
+  const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='stok_material_'+new Date().toISOString().slice(0,10)+'.csv';
   a.click();
 }
 
 // ══════════════════════════════════════════════════════════
 // HELPERS
 // ══════════════════════════════════════════════════════════
-function fmtRp(n) {
-  if (n>=1e12) return 'Rp '+(n/1e12).toFixed(2)+'T';
-  if (n>=1e9)  return 'Rp '+(n/1e9).toFixed(2)+'M';
-  if (n>=1e6)  return 'Rp '+(n/1e6).toFixed(2)+'jt';
-  if (n>=1e3)  return 'Rp '+(n/1e3).toFixed(0)+'rb';
-  return 'Rp '+n;
+function fmtRp(n){
+  if(n>=1e12)return'Rp '+(n/1e12).toFixed(2)+'T';
+  if(n>=1e9) return'Rp '+(n/1e9).toFixed(2)+'M';
+  if(n>=1e6) return'Rp '+(n/1e6).toFixed(2)+'jt';
+  if(n>=1e3) return'Rp '+(n/1e3).toFixed(0)+'rb';
+  return'Rp '+n;
 }
-function fmtRpFull(n) {
-  return 'Rp '+n.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
+function fmtRpFull(n){
+  return'Rp '+n.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
-// ══════════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => { loadData(); });
+document.addEventListener('DOMContentLoaded',()=>loadData());
 </script>
 </body>
 </html>
