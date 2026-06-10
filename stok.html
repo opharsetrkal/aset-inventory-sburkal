@@ -417,10 +417,7 @@ async function loadData() {
 function buildAllDropdowns() {
   const uniq = col => [...new Set(ALL_ROWS.map(r=>r[col]).filter(Boolean))].sort();
 
-  // Tgl Update topnav
-  const tglEl = document.getElementById('topTglUpdate');
-  tglEl.innerHTML = '<option value="">Semua Tgl Update</option>' +
-    uniq('Tgl Update').map(v=>`<option value="${v}">${v}</option>`).join('');
+  // Tgl Update — dihandle via MS_CONFIG loop di bawah (ms-tglUpdate)
 
   // ddKatTeknik sudah diganti ms-katTeknik — build via MS_CONFIG loop di bawah
 
