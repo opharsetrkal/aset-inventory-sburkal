@@ -83,10 +83,17 @@
     <div class="flex items-center justify-between px-4 md:px-6 h-10 gap-2">
       <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">Stok Material</p>
       <div class="flex items-center gap-1.5 no-print">
-        <select id="topTglUpdate" onchange="onTglUpdateChange()"
-          class="text-[9px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600">
-          <option value="">Semua Tgl Update</option>
-        </select>
+        <!-- Tgl Update — custom dropdown sama style dengan filter lain -->
+        <div class="ms-wrap relative" id="ms-tglUpdate">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors whitespace-nowrap"
+            onclick="toggleMs('tglUpdate')">
+            <span class="material-symbols-outlined text-[12px]">calendar_month</span>
+            <span id="ms-tglUpdate-label">Tgl Update</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+          <div class="ms-menu hidden absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto"
+            id="ms-tglUpdate-menu"></div>
+        </div>
         <button onclick="resetAllFilters()"
           class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] transition-all whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">filter_alt_off</span>
@@ -153,10 +160,13 @@
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">map</span> Stok per gudang
         </p>
-        <select id="ddKatTeknik" onchange="onKatTeknikChange()"
-          class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-white text-gray-600">
-          <option value="">Semua Kategori Teknik</option>
-        </select>
+        <div class="ms-wrap relative" id="ms-katTeknik-k3">
+          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-white text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors"
+            onclick="toggleMs('katTeknik')">
+            <span id="ms-katTeknik-label-k3">Semua Kategori Teknik</span>
+            <span class="material-symbols-outlined text-[12px]">expand_more</span>
+          </button>
+        </div>
         <span class="text-[9px] font-normal text-gray-300">— klik baris/bar untuk filter</span>
       </div>
       <!-- Kombinasi A+B: tabel kiri + bar chart kanan -->
@@ -312,10 +322,10 @@ let gudangChart = null;
   cardKp     : filter dari klik card kelompok 2
   cardGudang : filter dari klik baris/bar kelompok 3
 */
-// Filter state — array untuk multi-select, string untuk card/search/tglUpdate
+// Filter state — array untuk multi-select, string untuk card/search
 const F = {
   slocGudang:[], slocKp:[], brand:[], katSap:[],
-  katTeknik:[], batch:[], moving:[], tglUpdate:'',
+  katTeknik:[], batch:[], moving:[], tglUpdate:[],
   search:'', cardKp:'', cardGudang:''
 };
 
@@ -328,6 +338,7 @@ const MS_CONFIG = {
   katTeknik:  { col:'Kategori - Teknik', label:'Kat. Teknik' },
   batch:      { col:'Batch',             label:'Batch'       },
   moving:     { col:'Kategori - Moving', label:'Moving'      },
+  tglUpdate:  { col:'Tgl Update',        label:'Tgl Update'  },
 };
 
 // ══════════════════════════════════════════════════════════
@@ -357,7 +368,7 @@ const applyF = (rows) => {
     if (!chk(F.katTeknik,  r['Kategori - Teknik']))return false;
     if (!chk(F.batch,      r['Batch']))            return false;
     if (!chk(F.moving,     r['Kategori - Moving']))return false;
-    if (F.tglUpdate  && r['Tgl Update']       !== F.tglUpdate)  return false;
+    if (!chk(F.tglUpdate, r['Tgl Update']))                     return false;
     if (F.cardKp     && r['Sloc - KP']        !== F.cardKp)     return false;
     if (F.cardGudang && r['Sloc - Gudang']    !== F.cardGudang) return false;
     if (q && !JSON.stringify(r).toLowerCase().includes(q))      return false;
@@ -408,13 +419,10 @@ function buildAllDropdowns() {
 
   // Tgl Update topnav
   const tglEl = document.getElementById('topTglUpdate');
-  tglEl.innerHTML = '<option value="">Pilih Tgl Update</option>' +
+  tglEl.innerHTML = '<option value="">Semua Tgl Update</option>' +
     uniq('Tgl Update').map(v=>`<option value="${v}">${v}</option>`).join('');
 
-  // Dropdown kat teknik kelompok 3
-  const katEl = document.getElementById('ddKatTeknik');
-  katEl.innerHTML = '<option value="">Semua Kategori Teknik</option>' +
-    uniq('Kategori - Teknik').map(v=>`<option value="${v}">${v}</option>`).join('');
+  // ddKatTeknik sudah diganti ms-katTeknik — build via MS_CONFIG loop di bawah
 
   // Build multi-select menus
   Object.entries(MS_CONFIG).forEach(([key, {col, label}]) => {
@@ -444,14 +452,25 @@ function onMsChange(key) {
 }
 
 // Update label tombol multi-select
+// Juga sync label di kelompok 3 jika key === katTeknik
 function updateMsLabel(key) {
   const label  = document.getElementById('ms-'+key+'-label');
   const wrap   = document.getElementById('ms-'+key);
   const cfg    = MS_CONFIG[key];
   const sel    = F[key]||[];
-  if (!label || !wrap || !cfg) return;
-  label.textContent = sel.length ? cfg.label+' ('+sel.length+')' : cfg.label;
-  wrap.classList.toggle('ms-active', sel.length > 0);
+  if (label && wrap && cfg) {
+    label.textContent = sel.length ? cfg.label+' ('+sel.length+')' : cfg.label;
+    wrap.classList.toggle('ms-active', sel.length > 0);
+  }
+  // Sync label di kelompok 3 untuk katTeknik
+  if (key === 'katTeknik') {
+    const labelK3 = document.getElementById('ms-katTeknik-label-k3');
+    const wrapK3  = document.getElementById('ms-katTeknik-k3');
+    if (labelK3) labelK3.textContent = sel.length
+      ? 'Kat. Teknik ('+sel.length+')'
+      : 'Semua Kategori Teknik';
+    if (wrapK3) wrapK3.classList.toggle('ms-active', sel.length > 0);
+  }
 }
 
 // Toggle buka/tutup dropdown multi-select
@@ -480,26 +499,9 @@ function onSearchChange() {
 // Legacy — tidak dipakai lagi tapi dijaga agar tidak error
 function onFilterChange() { applyAll(); }
 
-function onTglUpdateChange() {
-  F.tglUpdate = document.getElementById('topTglUpdate').value;
-  applyAll();
-}
+// onTglUpdateChange digantikan oleh onMsChange('tglUpdate')
 
-function onKatTeknikChange() {
-  const val = document.getElementById('ddKatTeknik').value;
-  // Set array filter katTeknik dari dropdown kelompok 3
-  F.katTeknik = val ? [val] : [];
-  F.cardGudang='';
-  // Sync ke checkbox multi-select di tabel
-  const menu = document.getElementById('ms-katTeknik-menu');
-  if (menu) {
-    menu.querySelectorAll('input[type=checkbox]').forEach(cb => {
-      cb.checked = F.katTeknik.includes(cb.value);
-    });
-  }
-  updateMsLabel('katTeknik');
-  applyAll();
-}
+// onKatTeknikChange dihapus — filter katTeknik via ms-katTeknik (toggleMs)
 
 // Toggle card KP — klik sama → lepas filter
 function toggleCardKp(kp) {
@@ -517,13 +519,13 @@ function toggleCardGudang(g) {
 
 function resetAllFilters() {
   // Reset array filters
-  ['slocGudang','slocKp','brand','katSap','katTeknik','batch','moving'].forEach(k => F[k]=[]);
+  ['slocGudang','slocKp','brand','katSap','katTeknik','batch','moving','tglUpdate'].forEach(k => F[k]=[]);
   // Reset string filters
-  F.tglUpdate=''; F.search=''; F.cardKp=''; F.cardGudang='';
+  F.search=''; F.cardKp=''; F.cardGudang='';
   // Reset UI
   document.getElementById('searchInput').value='';
-  document.getElementById('topTglUpdate').value='';
-  document.getElementById('ddKatTeknik').value='';
+  // topTglUpdate sudah diganti custom dropdown
+  // ddKatTeknik sudah diganti custom dropdown
   // Uncheck semua checkbox
   document.querySelectorAll('.ms-menu input[type=checkbox]').forEach(cb=>cb.checked=false);
   // Reset semua label button
@@ -542,7 +544,7 @@ function updateFilterLabel() {
   if(F.katTeknik.length)  parts.push('Teknik('+F.katTeknik.length+')');
   if(F.batch.length)      parts.push('Batch('+F.batch.length+')');
   if(F.moving.length)     parts.push('Moving('+F.moving.length+')');
-  if(F.tglUpdate)         parts.push('Tgl: '+F.tglUpdate);
+  if(F.tglUpdate.length)  parts.push('Tgl('+F.tglUpdate.length+')');
   if(F.cardKp)            parts.push('KP: '+F.cardKp);
   if(F.cardGudang)        parts.push('Gudang: '+(F.cardGudang.split(' - ')[1]||F.cardGudang));
   if(F.search)            parts.push('"'+F.search+'"');
@@ -646,7 +648,7 @@ function applyF2(rows, f) {
     if (!c(f.katTeknik ||[], r['Kategori - Teknik']))return false;
     if (!c(f.batch     ||[], r['Batch']))            return false;
     if (!c(f.moving    ||[], r['Kategori - Moving']))return false;
-    if (f.tglUpdate  && r['Tgl Update']       !== f.tglUpdate)  return false;
+    if (!c(f.tglUpdate||[], r['Tgl Update']))                   return false;
     if (f.cardKp     && r['Sloc - KP']        !== f.cardKp)     return false;
     if (f.cardGudang && r['Sloc - Gudang']    !== f.cardGudang) return false;
     if (q && !JSON.stringify(r).toLowerCase().includes(q))      return false;
