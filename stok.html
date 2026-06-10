@@ -6,6 +6,7 @@
 <title>Stok Material — Aset &amp; Inventory SBU Reg Kalimantan</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;vertical-align:middle}
   .custom-scrollbar::-webkit-scrollbar{width:4px;height:4px}
@@ -15,17 +16,19 @@
   @keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
   @keyframes spin{to{transform:rotate(360deg)}}
   .spin{animation:spin .7s linear infinite}
+  /* card interaktif */
   .cf{cursor:pointer;transition:all .15s}
-  .cf:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+  .cf:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.08)}
   .cf.on{outline:2.5px solid #00288e;outline-offset:2px}
-  /* Sidebar */
+  /* sidebar */
   #sidebar{width:128px}
-  /* Topnav offset */
   #maincontent{margin-left:128px}
   #topnav{left:128px}
-  /* Mobile */
+  /* mobile */
   @media(max-width:768px){
-    #sidebar{width:100%;height:56px;flex-direction:row;position:fixed;top:auto;bottom:0;left:0;border-right:none;border-top:1px solid #e5e7eb;padding:0 8px;z-index:50;overflow-x:auto}
+    #sidebar{width:100%!important;height:56px;flex-direction:row;position:fixed;top:auto;bottom:0;left:0;
+      border-right:none;border-top:1px solid #e5e7eb;padding:0 8px;z-index:50;overflow-x:auto}
+    #sidebar .brand-text{display:none}
     #maincontent{margin-left:0;margin-bottom:56px}
     #topnav{left:0;right:0}
     .sb-item{flex-direction:column;padding:4px 12px;min-width:64px}
@@ -33,29 +36,23 @@
   @media print{
     #sidebar,#topnav,.no-print{display:none!important}
     #maincontent{margin:0!important;padding-top:0!important}
-    table{font-size:9px!important}
-    th,td{padding:3px!important}
+    table{font-size:9px!important}th,td{padding:3px!important}
   }
 </style>
 </head>
-
 <body class="bg-[#f0f2f7] text-[#131b2e] font-sans min-h-screen">
 
 <!-- ── SIDEBAR ─────────────────────────────────────────── -->
 <aside id="sidebar" class="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col py-4 px-3 gap-1 z-50 shadow-sm">
-  <!-- Brand -->
-  <div class="px-2 mb-4">
+  <div class="brand-text px-2 mb-4">
     <p class="text-xs font-bold text-[#00288e] leading-tight">Aset &amp; Inventory</p>
     <p class="text-[10px] text-gray-400 leading-tight">SBU Reg Kalimantan</p>
   </div>
-  <!-- Nav items -->
-  <a href="index.html"
-    class="sb-item flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-[#f2f3ff] transition-colors group">
+  <a href="index.html" class="sb-item flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-[#f2f3ff] transition-colors group">
     <span class="material-symbols-outlined text-[20px] text-gray-400 group-hover:text-[#00288e] flex-shrink-0">account_balance</span>
     <span class="text-[11px] font-medium text-gray-500 group-hover:text-[#00288e] leading-tight">Administrasi<br>Keuangan</span>
   </a>
-  <a href="stok.html"
-    class="sb-item flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-[#eaedff] transition-colors">
+  <a href="stok.html" class="sb-item flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-[#eaedff] transition-colors">
     <span class="material-symbols-outlined text-[20px] text-[#00288e] flex-shrink-0">inventory_2</span>
     <span class="text-[11px] font-semibold text-[#00288e] leading-tight">Stok<br>Material</span>
   </a>
@@ -66,24 +63,21 @@
 
   <!-- TOPNAV -->
   <nav id="topnav" class="fixed top-0 right-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-    <!-- Baris 1: Logo kiri — Judul tengah — Logo kanan -->
     <div class="flex items-center justify-between px-4 md:px-6 h-12 border-b border-gray-100">
       <img src="logo-danantara.png" alt="Danantara" class="h-7 object-contain"
-        onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>Danantara<br>Indonesia</span>'">
+        onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>Danantara</span>'">
       <div class="text-center flex-1 px-2">
         <p class="text-xs md:text-sm font-bold text-[#131b2e] leading-tight">Aset &amp; Inventory SBU Regional Kalimantan</p>
-        <p class="text-[9px] md:text-[10px] text-gray-400 hidden sm:block">PLN Icon Plus · Dashboard Monitoring</p>
+        <p class="text-[9px] text-gray-400 hidden sm:block">PLN Icon Plus · Dashboard Monitoring</p>
       </div>
       <img src="logo-pln.png" alt="PLN Icon Plus" class="h-7 object-contain"
-        onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>PLN<br>Icon Plus</span>'">
+        onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>PLN IP</span>'">
     </div>
-    <!-- Baris 2: Judul halaman + actions -->
     <div class="flex items-center justify-between px-4 md:px-6 h-10 gap-2">
       <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">Stok Material</p>
       <div class="flex items-center gap-1.5 no-print">
-        <!-- Tgl Update filter di topnav -->
         <select id="topTglUpdate" onchange="onTglUpdateChange()"
-          class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 max-w-[120px]">
+          class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 max-w-[130px]">
           <option value="">Semua Tgl Update</option>
         </select>
         <button onclick="resetAllFilters()"
@@ -106,10 +100,16 @@
   <!-- CONTENT -->
   <main class="pt-[88px] pb-16 md:pb-8 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-    <!-- ── KPI RESUME ──────────────────────────────────── -->
+    <!-- ── KELOMPOK 1: RESUME ──────────────────────────── -->
+    <!--
+      Card resume ikut filter aktif (cardKp / cardGudang / katTeknik dll).
+      Klik card resume = resetAllFilters().
+    -->
     <section>
       <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-        <span class="material-symbols-outlined text-[12px]">package_2</span> Resume stok material
+        <span class="material-symbols-outlined text-[12px]">package_2</span>
+        Resume stok material
+        <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— klik untuk reset filter</span>
       </p>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3" id="kpiResume">
         <div class="skeleton rounded-xl h-20"></div>
@@ -118,18 +118,29 @@
       </div>
     </section>
 
-    <!-- ── KELOMPOK 2: KONDISI PER SLOC KP ────────────── -->
+    <!-- ── KELOMPOK 2: STOK AKTIF PER WILAYAH KP ──────── -->
+    <!--
+      Card per Sloc KP. Klik card → filter semua kelompok + tabel.
+      Ikut filter dari kelompok 3 (cardGudang / katTeknik).
+    -->
     <section>
       <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-        <span class="material-symbols-outlined text-[12px]">warehouse</span> Stok aktif per wilayah KP
-        <span class="text-[9px] font-normal normal-case text-gray-400 ml-1">— klik card untuk filter</span>
+        <span class="material-symbols-outlined text-[12px]">warehouse</span>
+        Stok aktif per wilayah KP
+        <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— klik card untuk filter</span>
       </p>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 md:gap-3" id="kpiKondisi">
-        <div class="skeleton rounded-xl h-24 col-span-2 sm:col-span-3 lg:col-span-4"></div>
+        <div class="skeleton rounded-xl h-24 col-span-2"></div>
       </div>
     </section>
 
     <!-- ── KELOMPOK 3: STOK PER GUDANG ────────────────── -->
+    <!--
+      Kombinasi tabel ringkas (kiri) + horizontal bar chart (kanan).
+      Filter kategori teknik via dropdown.
+      Klik baris tabel atau bar → filter semua kelompok + tabel detail.
+      Ikut filter dari kelompok 2 (cardKp).
+    -->
     <section>
       <div class="flex flex-wrap items-center gap-2 mb-2">
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
@@ -139,18 +150,44 @@
           class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-white text-gray-600">
           <option value="">Semua Kategori Teknik</option>
         </select>
+        <span class="text-[9px] font-normal text-gray-300">— klik baris/bar untuk filter</span>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2" id="gudangCards">
-        <div class="skeleton rounded-xl h-24"></div>
-        <div class="skeleton rounded-xl h-24"></div>
-        <div class="skeleton rounded-xl h-24"></div>
-        <div class="skeleton rounded-xl h-24"></div>
+      <!-- Kombinasi A+B: tabel kiri + bar chart kanan -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <!-- Tabel ringkas -->
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+          <div class="overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse" id="gudangTable">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="px-3 py-2 text-[9px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">Gudang</th>
+                  <th class="px-3 py-2 text-[9px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 text-right">Total</th>
+                  <th class="px-3 py-2 text-[9px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 text-right">BAIK</th>
+                  <th class="px-3 py-2 text-[9px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 text-right">DISMANTLE</th>
+                  <th class="px-3 py-2 text-[9px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 text-right">% BAIK</th>
+                </tr>
+              </thead>
+              <tbody id="gudangTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Horizontal bar chart -->
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <div class="flex items-center gap-4 mb-3">
+            <span class="flex items-center gap-1 text-[10px] text-gray-500">
+              <span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>BAIK
+            </span>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500">
+              <span class="w-3 h-2.5 rounded-sm inline-block bg-[#EF9F27]"></span>DISMANTLE
+            </span>
+          </div>
+          <div style="position:relative;height:280px"><canvas id="gudangChart"></canvas></div>
+        </div>
       </div>
     </section>
 
     <!-- ── TABEL DATA DETAIL ───────────────────────────── -->
     <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" id="tableSection">
-      <!-- Header -->
       <div class="p-3 md:p-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
         <div>
           <p class="text-sm font-bold text-[#131b2e]">Data detail stok material</p>
@@ -161,7 +198,6 @@
           <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
         </button>
       </div>
-      <!-- Filter strip — compact -->
       <div class="px-3 py-2 border-b border-gray-100 flex flex-wrap gap-1.5 items-center" id="filters-section">
         <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fSlocGudang" onchange="onFilterChange()"><option value="">Sloc Gudang</option></select>
         <select class="fsel text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="fSlocKp" onchange="onFilterChange()"><option value="">Sloc KP</option></select>
@@ -173,7 +209,6 @@
         <input type="text" id="searchInput" oninput="onFilterChange()" placeholder="Cari…"
           class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-24 md:w-32">
       </div>
-      <!-- Table -->
       <div class="overflow-x-auto custom-scrollbar">
         <table class="w-full text-left border-collapse" style="min-width:900px">
           <thead class="bg-gray-50 sticky top-0" id="tblHead"></thead>
@@ -185,7 +220,6 @@
           </tbody>
         </table>
       </div>
-      <!-- Pagination -->
       <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
         <p class="text-[10px] text-gray-400">
           <span class="font-bold" id="rangeInfo">—</span> dari <span class="font-bold" id="totalInfo">—</span> data
@@ -213,24 +247,73 @@ const SLOC_RUSAK  = ['9999'];
 const BATCH_AKTIF = ['BAIK','DISMANTLE'];
 
 // ══════════════════════════════════════════════════════════
-// STATE
+// STATE — semua filter terpusat
 // ══════════════════════════════════════════════════════════
 let ALL_ROWS    = [];
-let FILTERED    = [];
 let currentPage = 1;
+let gudangChart = null;
 
-// Filter state — semua filter terpusat di sini
+/*
+  F = objek filter utama.
+  Setiap perubahan filter → applyAll() dipanggil.
+  applyAll() memfilter ALL_ROWS dan render ulang SEMUA kelompok.
+
+  cardKp     : filter dari klik card kelompok 2
+  cardGudang : filter dari klik baris/bar kelompok 3
+*/
 const F = {
   slocGudang:'', slocKp:'', brand:'', katSap:'',
   katTeknik:'', batch:'', moving:'', tglUpdate:'',
-  search:'',
-  // card filter active keys
-  cardKp:'',    // card kelompok 2
-  cardGudang:'' // card kelompok 3
+  search:'', cardKp:'', cardGudang:''
 };
 
 // ══════════════════════════════════════════════════════════
-// LOAD
+// HELPERS FILTER
+// ══════════════════════════════════════════════════════════
+
+// Exclude rusak dari semua perhitungan stok aktif
+const isAktif = r => {
+  const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
+  return !SLOC_RUSAK.includes(sloc) && BATCH_AKTIF.includes(r['Batch'])
+    && (r['Sloc - KP']||'').toLowerCase() !== 'rusak';
+};
+
+// Terapkan semua filter ke array rows
+const applyF = (rows) => {
+  const q = F.search.toLowerCase();
+  return rows.filter(r => {
+    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
+    if (SLOC_RUSAK.includes(sloc)) return false;
+    if (F.slocGudang && r['Sloc - Gudang']    !== F.slocGudang) return false;
+    if (F.slocKp     && r['Sloc - KP']        !== F.slocKp)     return false;
+    if (F.brand      && r['Material - Brand'] !== F.brand)      return false;
+    if (F.katSap     && r['Kategori - SAP']   !== F.katSap)     return false;
+    if (F.katTeknik  && r['Kategori - Teknik']!== F.katTeknik)  return false;
+    if (F.batch      && r['Batch']            !== F.batch)      return false;
+    if (F.moving     && r['Kategori - Moving']!== F.moving)     return false;
+    if (F.tglUpdate  && r['Tgl Update']       !== F.tglUpdate)  return false;
+    if (F.cardKp     && r['Sloc - KP']        !== F.cardKp)     return false;
+    if (F.cardGudang && r['Sloc - Gudang']    !== F.cardGudang) return false;
+    if (q && !JSON.stringify(r).toLowerCase().includes(q))      return false;
+    return true;
+  });
+};
+
+// ══════════════════════════════════════════════════════════
+// APPLY ALL — render ulang SEMUA kelompok saat filter berubah
+// ══════════════════════════════════════════════════════════
+function applyAll() {
+  const filtered = applyF(ALL_ROWS);
+  renderKpiResume(filtered);
+  renderKpiKondisi(filtered);
+  renderGudangSection(filtered);
+  updateFilterLabel();
+  currentPage = 1;
+  renderTable(filtered);
+}
+
+// ══════════════════════════════════════════════════════════
+// LOAD DATA
 // ══════════════════════════════════════════════════════════
 async function loadData() {
   const icon = document.getElementById('refreshIcon');
@@ -241,32 +324,31 @@ async function loadData() {
     if (!json.ok) throw new Error(json.error||'Gagal memuat data');
     ALL_ROWS = json.rows || [];
     buildAllDropdowns();
-    applyFilters();
+    applyAll();
   } catch(err) {
     document.getElementById('tblBody').innerHTML = `
       <tr><td colspan="10" class="p-8 text-center">
         <p class="text-red-600 font-bold text-sm mb-1">⚠ ${err.message}</p>
         <p class="text-gray-400 text-xs">Pastikan API_URL sudah diganti dengan URL Apps Script stok.</p>
       </td></tr>`;
-    ['kpiResume','kpiKondisi','gudangCards'].forEach(id=>{
-      document.getElementById(id).innerHTML=`<div class="col-span-4 text-center text-red-500 text-xs p-4">Gagal memuat data</div>`;
-    });
-  } finally {
-    icon.classList.remove('spin');
-  }
+  } finally { icon.classList.remove('spin'); }
 }
 
 // ══════════════════════════════════════════════════════════
-// BUILD DROPDOWNS — dari data aktual Sheets
+// BUILD DROPDOWNS
 // ══════════════════════════════════════════════════════════
 function buildAllDropdowns() {
   const uniq = col => [...new Set(ALL_ROWS.map(r=>r[col]).filter(Boolean))].sort();
 
-  // Tgl Update di topnav
-  const tglOpts = uniq('Tgl Update');
-  const topTgl = document.getElementById('topTglUpdate');
-  topTgl.innerHTML = '<option value="">Semua Tgl Update</option>' +
-    tglOpts.map(v=>`<option value="${v}">${v}</option>`).join('');
+  // Tgl Update topnav
+  const tglEl = document.getElementById('topTglUpdate');
+  tglEl.innerHTML = '<option value="">Semua Tgl Update</option>' +
+    uniq('Tgl Update').map(v=>`<option value="${v}">${v}</option>`).join('');
+
+  // Dropdown kat teknik kelompok 3
+  const katEl = document.getElementById('ddKatTeknik');
+  katEl.innerHTML = '<option value="">Semua Kategori Teknik</option>' +
+    uniq('Kategori - Teknik').map(v=>`<option value="${v}">${v}</option>`).join('');
 
   // Tabel filter dropdowns
   const map = {
@@ -278,53 +360,17 @@ function buildAllDropdowns() {
     fBatch:     ['Batch','Batch'],
     fMoving:    ['Kategori - Moving','Moving'],
   };
-  Object.entries(map).forEach(([id,[col,label]])=>{
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = `<option value="">${label}</option>` +
+  Object.entries(map).forEach(([id,[col,lbl]])=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.innerHTML=`<option value="">${lbl}</option>`+
       uniq(col).map(v=>`<option value="${v}">${v}</option>`).join('');
   });
-
-  // Dropdown kategori teknik kelompok 3
-  const katEl = document.getElementById('ddKatTeknik');
-  katEl.innerHTML = '<option value="">Semua Kategori Teknik</option>' +
-    uniq('Kategori - Teknik').map(v=>`<option value="${v}">${v}</option>`).join('');
 }
 
 // ══════════════════════════════════════════════════════════
-// APPLY FILTERS — satu fungsi untuk semua filter
+// FILTER CHANGE HANDLERS
 // ══════════════════════════════════════════════════════════
-function applyFilters() {
-  const q = F.search.toLowerCase();
-  FILTERED = ALL_ROWS.filter(r => {
-    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
-    if (SLOC_RUSAK.includes(sloc)) return false; // selalu exclude rusak dari tabel
-
-    if (F.slocGudang && r['Sloc - Gudang']    !== F.slocGudang) return false;
-    if (F.slocKp     && r['Sloc - KP']        !== F.slocKp)     return false;
-    if (F.brand      && r['Material - Brand'] !== F.brand)      return false;
-    if (F.katSap     && r['Kategori - SAP']   !== F.katSap)     return false;
-    if (F.katTeknik  && r['Kategori - Teknik']!== F.katTeknik)  return false;
-    if (F.batch      && r['Batch']            !== F.batch)      return false;
-    if (F.moving     && r['Kategori - Moving']!== F.moving)     return false;
-    if (F.tglUpdate  && r['Tgl Update']       !== F.tglUpdate)  return false;
-    // Card filter KP
-    if (F.cardKp     && r['Sloc - KP']        !== F.cardKp)     return false;
-    // Card filter Gudang
-    if (F.cardGudang && r['Sloc - Gudang']    !== F.cardGudang) return false;
-    if (q && !JSON.stringify(r).toLowerCase().includes(q)) return false;
-    return true;
-  });
-
-  renderKpiResume();
-  renderKpiKondisi();
-  renderGudangCards();
-  updateFilterLabel();
-  currentPage = 1;
-  renderTable();
-}
-
-// Sync dari dropdown tabel
 function onFilterChange() {
   F.slocGudang = document.getElementById('fSlocGudang').value;
   F.slocKp     = document.getElementById('fSlocKp').value;
@@ -334,81 +380,89 @@ function onFilterChange() {
   F.batch      = document.getElementById('fBatch').value;
   F.moving     = document.getElementById('fMoving').value;
   F.search     = document.getElementById('searchInput').value;
-  // Reset card filters saat dropdown manual diubah
-  F.cardKp = ''; F.cardGudang = '';
-  applyFilters();
+  // Reset card filter saat dropdown manual diubah
+  F.cardKp=''; F.cardGudang='';
+  applyAll();
 }
 
-// Tgl Update dari topnav
 function onTglUpdateChange() {
   F.tglUpdate = document.getElementById('topTglUpdate').value;
-  applyFilters();
+  applyAll();
 }
 
-// Dropdown Kat Teknik kelompok 3
 function onKatTeknikChange() {
   F.katTeknik = document.getElementById('ddKatTeknik').value;
-  // Sync ke filter tabel juga
   document.getElementById('fKatTeknik').value = F.katTeknik;
-  F.cardGudang = '';
-  applyFilters();
+  F.cardGudang='';
+  applyAll();
 }
 
-// Reset semua
+// Toggle card KP — klik sama → lepas filter
+function toggleCardKp(kp) {
+  F.cardKp     = F.cardKp===kp ? '' : kp;
+  F.cardGudang = '';
+  applyAll();
+}
+
+// Toggle card/baris gudang — klik sama → lepas filter
+function toggleCardGudang(g) {
+  F.cardGudang = F.cardGudang===g ? '' : g;
+  F.cardKp     = '';
+  applyAll();
+}
+
 function resetAllFilters() {
-  Object.keys(F).forEach(k => F[k] = '');
-  document.querySelectorAll('.fsel').forEach(el => el.value = '');
-  document.getElementById('searchInput').value = '';
-  document.getElementById('topTglUpdate').value = '';
-  document.getElementById('ddKatTeknik').value = '';
-  applyFilters();
+  Object.keys(F).forEach(k=>F[k]='');
+  document.querySelectorAll('.fsel').forEach(el=>el.value='');
+  document.getElementById('searchInput').value='';
+  document.getElementById('topTglUpdate').value='';
+  document.getElementById('ddKatTeknik').value='';
+  applyAll();
 }
 
 function updateFilterLabel() {
-  const parts = [];
-  if (F.slocGudang) parts.push(F.slocGudang);
-  if (F.slocKp)     parts.push(F.slocKp);
-  if (F.brand)      parts.push(F.brand);
-  if (F.katSap)     parts.push(F.katSap);
-  if (F.katTeknik)  parts.push(F.katTeknik);
-  if (F.batch)      parts.push(F.batch);
-  if (F.moving)     parts.push(F.moving);
-  if (F.tglUpdate)  parts.push('Tgl: '+F.tglUpdate);
-  if (F.cardKp)     parts.push('KP: '+F.cardKp);
-  if (F.cardGudang) parts.push('Gudang: '+F.cardGudang.split(' - ')[1]||F.cardGudang);
-  if (F.search)     parts.push('"'+F.search+'"');
+  const parts=[];
+  if(F.slocGudang) parts.push(F.slocGudang.split(' - ')[1]||F.slocGudang);
+  if(F.slocKp)     parts.push(F.slocKp);
+  if(F.brand)      parts.push(F.brand);
+  if(F.katSap)     parts.push(F.katSap);
+  if(F.katTeknik)  parts.push(F.katTeknik);
+  if(F.batch)      parts.push(F.batch);
+  if(F.moving)     parts.push(F.moving);
+  if(F.tglUpdate)  parts.push('Tgl: '+F.tglUpdate);
+  if(F.cardKp)     parts.push('KP: '+F.cardKp);
+  if(F.cardGudang) parts.push('Gudang: '+(F.cardGudang.split(' - ')[1]||F.cardGudang));
+  if(F.search)     parts.push('"'+F.search+'"');
   document.getElementById('activeFilterLabel').textContent =
     parts.length ? 'Filter: '+parts.join(' · ') : 'Menampilkan semua data';
 }
 
 // ══════════════════════════════════════════════════════════
-// RENDER KPI RESUME (Kelompok 1)
+// RENDER KELOMPOK 1: RESUME
+// Ikut semua filter aktif. Klik = resetAllFilters.
 // ══════════════════════════════════════════════════════════
-function renderKpiResume() {
-  // Exclude rusak dari semua KPI
-  const aktif = ALL_ROWS.filter(r => {
-    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
-    return !SLOC_RUSAK.includes(sloc) && BATCH_AKTIF.includes(r['Batch']);
-  });
-  const totalVal  = aktif.reduce((s,r)=>s+(parseFloat(r['Value Unrestricted'])||0),0);
-  const totalQty  = aktif.reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0);
-  const totalItem = new Set(aktif.map(r=>r['Material']).filter(Boolean)).size;
+function renderKpiResume(filtered) {
+  const aktif    = filtered.filter(isAktif);
+  const totalVal = aktif.reduce((s,r)=>s+(parseFloat(r['Value Unrestricted'])||0),0);
+  const totalQty = aktif.reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0);
+  const totalItem= new Set(aktif.map(r=>r['Material']).filter(Boolean)).size;
+  const hasFilter= Object.values(F).some(v=>v!=='');
 
   document.getElementById('kpiResume').innerHTML = `
-    <div class="cf bg-blue-50 p-4 rounded-xl border border-blue-200 ${!F.cardKp&&!F.cardGudang&&F.katTeknik===''?'on':''}"
-      onclick="resetAllFilters()">
+    <div class="cf bg-blue-50 p-4 rounded-xl border ${hasFilter?'border-[#00288e] on':'border-blue-200'}"
+      onclick="resetAllFilters()" title="Klik untuk reset semua filter">
       <p class="text-[9px] font-bold text-blue-600 uppercase tracking-wider mb-1">Total nilai stok aktif</p>
       <p class="text-xl font-black text-blue-800">${fmtRp(totalVal)}</p>
-      <p class="text-[9px] text-blue-500 mt-0.5">BAIK + DISMANTLE</p>
+      <p class="text-[9px] text-blue-400 mt-0.5">BAIK + DISMANTLE · sesuai filter</p>
     </div>
-    <div class="cf bg-white p-4 rounded-xl border border-gray-200"
-      onclick="resetAllFilters()">
+    <div class="cf bg-white p-4 rounded-xl border ${hasFilter?'border-[#00288e] on':'border-gray-200'}"
+      onclick="resetAllFilters()" title="Klik untuk reset semua filter">
       <p class="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-1">Total qty stok aktif</p>
       <p class="text-xl font-black text-[#131b2e]">${Math.round(totalQty).toLocaleString('id-ID')}</p>
-      <p class="text-[9px] text-gray-400 mt-0.5">Semua gudang aktif</p>
+      <p class="text-[9px] text-gray-400 mt-0.5">Sesuai filter aktif</p>
     </div>
-    <div class="cf bg-white p-4 rounded-xl border border-gray-200 col-span-2 md:col-span-1"
-      onclick="resetAllFilters()">
+    <div class="cf bg-white p-4 rounded-xl border col-span-2 md:col-span-1 ${hasFilter?'border-[#00288e] on':'border-gray-200'}"
+      onclick="resetAllFilters()" title="Klik untuk reset semua filter">
       <p class="text-[9px] font-bold text-gray-500 uppercase tracking-wider mb-1">Total item material</p>
       <p class="text-xl font-black text-[#131b2e]">${totalItem.toLocaleString('id-ID')}</p>
       <p class="text-[9px] text-gray-400 mt-0.5">Kode material unik</p>
@@ -417,39 +471,35 @@ function renderKpiResume() {
 }
 
 // ══════════════════════════════════════════════════════════
-// RENDER KPI KONDISI per Sloc KP (Kelompok 2)
-// Card per Sloc KP, breakdown BAIK & DISMANTLE
-// Exclude Sloc Rusak
+// RENDER KELOMPOK 2: STOK PER SLOC KP
+// Ikut filter kelompok 3 (cardGudang/katTeknik) + filter tabel.
+// Klik card → filter semua.
 // ══════════════════════════════════════════════════════════
-function renderKpiKondisi() {
-  // Data stok aktif, exclude rusak
-  const src = ALL_ROWS.filter(r => {
-    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
-    return !SLOC_RUSAK.includes(sloc) && BATCH_AKTIF.includes(r['Batch'])
-      && r['Sloc - KP'] && r['Sloc - KP'].toLowerCase() !== 'rusak';
-  });
+function renderKpiKondisi(filtered) {
+  // Untuk kelompok 2, exclude filter cardKp sendiri agar semua card tetap tampil
+  // tapi ikut filter lain (cardGudang, katTeknik, dll)
+  const srcFilter = { ...F, cardKp:'' };
+  const src = applyF2(ALL_ROWS, srcFilter).filter(isAktif);
 
-  // Kelompokkan per Sloc KP
   const byKp = {};
   src.forEach(r => {
     const kp = r['Sloc - KP'];
-    if (!kp) return;
-    if (!byKp[kp]) byKp[kp] = { baik:0, dismantle:0 };
+    if (!kp || kp.toLowerCase()==='rusak') return;
+    if (!byKp[kp]) byKp[kp]={ baik:0, dismantle:0 };
     const qty = parseFloat(r['Unrestricted'])||0;
     if (r['Batch']==='BAIK')      byKp[kp].baik      += qty;
     if (r['Batch']==='DISMANTLE') byKp[kp].dismantle += qty;
   });
 
-  // Urutkan dari total terbanyak
   const sorted = Object.entries(byKp)
-    .map(([kp,d])=>({ kp, baik:d.baik, dismantle:d.dismantle, total:d.baik+d.dismantle }))
+    .map(([kp,d])=>({kp,baik:d.baik,dismantle:d.dismantle,total:d.baik+d.dismantle}))
     .sort((a,b)=>b.total-a.total);
 
-  document.getElementById('kpiKondisi').innerHTML = sorted.map(d => {
-    const pct   = d.total ? Math.round(d.baik/d.total*100) : 0;
-    const isOn  = F.cardKp === d.kp;
+  document.getElementById('kpiKondisi').innerHTML = sorted.map(d=>{
+    const pct  = d.total ? Math.round(d.baik/d.total*100) : 0;
+    const isOn = F.cardKp===d.kp;
     return `
-      <div class="cf bg-white p-3 rounded-xl border ${isOn?'border-[#00288e] on':'border-gray-200'}"
+      <div class="cf bg-white p-3 rounded-xl border ${isOn?'border-[#00288e] on':'border-gray-200'} shadow-sm"
         onclick="toggleCardKp('${d.kp.replace(/'/g,"\\'")}')">
         <p class="text-[10px] font-bold text-[#131b2e] mb-1 truncate" title="${d.kp}">${d.kp}</p>
         <p class="text-lg font-black text-[#131b2e] leading-none mb-1">${Math.round(d.total).toLocaleString('id-ID')}</p>
@@ -457,160 +507,185 @@ function renderKpiKondisi() {
           <div class="h-full bg-green-500 rounded-full" style="width:${pct}%"></div>
         </div>
         <div class="flex gap-3">
-          <div>
-            <p class="text-[9px] text-gray-400">BAIK</p>
-            <p class="text-[11px] font-bold text-green-700">${Math.round(d.baik).toLocaleString('id-ID')}</p>
-          </div>
-          <div>
-            <p class="text-[9px] text-gray-400">DISMANTLE</p>
-            <p class="text-[11px] font-bold text-orange-600">${Math.round(d.dismantle).toLocaleString('id-ID')}</p>
-          </div>
+          <div><p class="text-[9px] text-gray-400">BAIK</p>
+            <p class="text-[11px] font-bold text-green-700">${Math.round(d.baik).toLocaleString('id-ID')}</p></div>
+          <div><p class="text-[9px] text-gray-400">DISMANTLE</p>
+            <p class="text-[11px] font-bold text-orange-600">${Math.round(d.dismantle).toLocaleString('id-ID')}</p></div>
         </div>
       </div>`;
   }).join('');
 }
 
-function toggleCardKp(kp) {
-  // Toggle: klik sama → lepas filter
-  F.cardKp     = F.cardKp === kp ? '' : kp;
-  F.cardGudang = '';
-  applyFilters();
+// applyF2: sama dengan applyF tapi pakai custom filter object
+function applyF2(rows, f) {
+  const q = (f.search||'').toLowerCase();
+  return rows.filter(r => {
+    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
+    if (SLOC_RUSAK.includes(sloc)) return false;
+    if (f.slocGudang && r['Sloc - Gudang']    !== f.slocGudang) return false;
+    if (f.slocKp     && r['Sloc - KP']        !== f.slocKp)     return false;
+    if (f.brand      && r['Material - Brand'] !== f.brand)      return false;
+    if (f.katSap     && r['Kategori - SAP']   !== f.katSap)     return false;
+    if (f.katTeknik  && r['Kategori - Teknik']!== f.katTeknik)  return false;
+    if (f.batch      && r['Batch']            !== f.batch)      return false;
+    if (f.moving     && r['Kategori - Moving']!== f.moving)     return false;
+    if (f.tglUpdate  && r['Tgl Update']       !== f.tglUpdate)  return false;
+    if (f.cardKp     && r['Sloc - KP']        !== f.cardKp)     return false;
+    if (f.cardGudang && r['Sloc - Gudang']    !== f.cardGudang) return false;
+    if (q && !JSON.stringify(r).toLowerCase().includes(q))      return false;
+    return true;
+  });
 }
 
 // ══════════════════════════════════════════════════════════
-// RENDER GUDANG CARDS (Kelompok 3)
-// Per Sloc Gudang, exclude rusak, sort by qty DESC
-// Filter kategori teknik dari dropdown ddKatTeknik
+// RENDER KELOMPOK 3: TABEL + BAR CHART PER GUDANG
+// Ikut filter kelompok 2 (cardKp) + filter lain.
+// Klik baris tabel / bar chart → filter semua.
 // ══════════════════════════════════════════════════════════
-function renderGudangCards() {
-  const katFilter = F.katTeknik;
-
-  const src = ALL_ROWS.filter(r => {
-    const sloc = (r['Sloc - Gudang']||'').split(' - ')[0].trim();
-    if (SLOC_RUSAK.includes(sloc)) return false;
-    if (!BATCH_AKTIF.includes(r['Batch'])) return false;
-    if (katFilter && r['Kategori - Teknik'] !== katFilter) return false;
-    return true;
-  });
+function renderGudangSection(filtered) {
+  // Untuk kelompok 3, exclude filter cardGudang sendiri
+  const srcFilter = { ...F, cardGudang:'' };
+  const src = applyF2(ALL_ROWS, srcFilter).filter(isAktif);
 
   // Kelompokkan per Sloc Gudang
-  const byGudang = {};
+  const byG = {};
   src.forEach(r => {
     const g   = r['Sloc - Gudang'];
     const qty = parseFloat(r['Unrestricted'])||0;
     if (!g) return;
-    if (!byGudang[g]) byGudang[g] = { total:0, baik:0, dismantle:0 };
-    byGudang[g].total     += qty;
-    if (r['Batch']==='BAIK')      byGudang[g].baik      += qty;
-    if (r['Batch']==='DISMANTLE') byGudang[g].dismantle += qty;
+    if (!byG[g]) byG[g]={ baik:0, dismantle:0 };
+    if (r['Batch']==='BAIK')      byG[g].baik      += qty;
+    if (r['Batch']==='DISMANTLE') byG[g].dismantle += qty;
   });
 
-  // Sort dari terbanyak
-  const sorted = Object.entries(byGudang)
-    .sort((a,b)=>b[1].total-a[1].total);
+  const sorted = Object.entries(byG)
+    .map(([g,d])=>({g, baik:d.baik, dismantle:d.dismantle, total:d.baik+d.dismantle}))
+    .sort((a,b)=>b.total-a.total);
 
+  // ── Tabel ringkas ────────────────────────────────────────
+  const tbody = document.getElementById('gudangTbody');
   if (!sorted.length) {
-    document.getElementById('gudangCards').innerHTML =
-      '<p class="col-span-4 text-xs text-gray-400 py-4">Tidak ada data</p>';
-    return;
+    tbody.innerHTML = `<tr><td colspan="5" class="px-3 py-4 text-center text-xs text-gray-400">Tidak ada data</td></tr>`;
+  } else {
+    tbody.innerHTML = sorted.map(d => {
+      const pct  = d.total ? Math.round(d.baik/d.total*100) : 0;
+      const name = d.g.split(' - ')[1] || d.g;
+      const isOn = F.cardGudang===d.g;
+      return `
+        <tr class="cf hover:bg-[#f2f3ff] transition-colors border-b border-gray-50 ${isOn?'bg-blue-50':''}"
+          onclick="toggleCardGudang('${d.g.replace(/'/g,"\\'")}')">
+          <td class="px-3 py-2 text-xs font-medium text-[#131b2e] whitespace-nowrap">${name}</td>
+          <td class="px-3 py-2 text-xs font-bold text-[#131b2e] text-right">${Math.round(d.total).toLocaleString('id-ID')}</td>
+          <td class="px-3 py-2 text-xs font-semibold text-green-700 text-right">${Math.round(d.baik).toLocaleString('id-ID')}</td>
+          <td class="px-3 py-2 text-xs font-semibold text-orange-600 text-right">${Math.round(d.dismantle).toLocaleString('id-ID')}</td>
+          <td class="px-3 py-2 text-right">
+            <span class="text-[10px] font-bold ${pct>=80?'text-green-600':pct>=50?'text-orange-500':'text-red-500'}">${pct}%</span>
+          </td>
+        </tr>`;
+    }).join('');
   }
 
-  document.getElementById('gudangCards').innerHTML = sorted.map(([g, d]) => {
-    const name  = g.split(' - ')[1] || g;
-    const pct   = d.total ? Math.round(d.baik/d.total*100) : 0;
-    const isOn  = F.cardGudang === g;
-    return `
-      <div class="cf bg-white p-3 rounded-xl border ${isOn?'border-[#00288e] on':'border-gray-200'}"
-        onclick="toggleCardGudang('${g.replace(/'/g,"\\'")}')">
-        <p class="text-[10px] font-bold text-[#131b2e] mb-1 truncate leading-tight" title="${g}">${name}</p>
-        <p class="text-base font-black text-blue-700 leading-none mb-1">${Math.round(d.total).toLocaleString('id-ID')}</p>
-        <div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden mb-1.5">
-          <div class="h-full bg-green-500 rounded-full" style="width:${pct}%"></div>
-        </div>
-        <div class="flex gap-2">
-          <div><p class="text-[8px] text-gray-400">BAIK</p><p class="text-[10px] font-bold text-green-700">${Math.round(d.baik).toLocaleString('id-ID')}</p></div>
-          <div><p class="text-[8px] text-gray-400">DISMTL</p><p class="text-[10px] font-bold text-orange-600">${Math.round(d.dismantle).toLocaleString('id-ID')}</p></div>
-        </div>
-      </div>`;
-  }).join('');
-}
+  // ── Horizontal bar chart ─────────────────────────────────
+  if (gudangChart) gudangChart.destroy();
+  const labels = sorted.map(d=>d.g.split(' - ')[1]||d.g);
+  const chartH = Math.max(180, sorted.length * 28);
+  document.getElementById('gudangChart').parentElement.style.height = chartH+'px';
 
-function toggleCardGudang(g) {
-  F.cardGudang = F.cardGudang === g ? '' : g;
-  F.cardKp     = '';
-  applyFilters();
+  gudangChart = new Chart(document.getElementById('gudangChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'BAIK',      data:sorted.map(d=>d.baik),      backgroundColor:'#378ADD', borderRadius:3, stack:'s' },
+        { label:'DISMANTLE', data:sorted.map(d=>d.dismantle), backgroundColor:'#EF9F27', borderRadius:3, stack:'s' },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{display:false} },
+      scales:{
+        x:{ stacked:true, beginAtZero:true, ticks:{font:{size:9}} },
+        y:{ stacked:true, grid:{display:false}, ticks:{font:{size:9}} }
+      },
+      onClick(evt, els) {
+        if (!els.length) return;
+        const idx = els[0].index;
+        if (sorted[idx]) toggleCardGudang(sorted[idx].g);
+      }
+    }
+  });
 }
 
 // ══════════════════════════════════════════════════════════
-// RENDER TABLE
+// RENDER TABEL DETAIL
 // ══════════════════════════════════════════════════════════
-function renderTable() {
+function renderTable(filtered) {
   document.getElementById('tblHead').innerHTML = '<tr>' +
-    '<th class="p-3 text-[10px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">#</th>' +
-    COLS.map(h=>`<th class="p-3 text-[10px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${h}</th>`).join('') +
+    '<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">#</th>' +
+    COLS.map(h=>`<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${h}</th>`).join('') +
     '</tr>';
 
   const start = (currentPage-1)*PAGE_SIZE;
-  const paged = FILTERED.slice(start, start+PAGE_SIZE);
+  const paged = filtered.slice(start, start+PAGE_SIZE);
   const tbody = document.getElementById('tblBody');
 
   if (!paged.length) {
-    tbody.innerHTML = `<tr><td colspan="${COLS.length+1}" class="p-8 text-center text-gray-400 text-xs">Tidak ada data sesuai filter</td></tr>`;
-    renderPagination(); return;
+    tbody.innerHTML=`<tr><td colspan="${COLS.length+1}" class="p-8 text-center text-gray-400 text-xs">Tidak ada data sesuai filter</td></tr>`;
+    renderPagination(filtered.length); return;
   }
 
-  tbody.innerHTML = paged.map((r,i) => {
-    const batch = r['Batch']||'';
-    const bBadge =
-      batch==='BAIK'      ? `<span class="px-1.5 py-0.5 rounded-full bg-green-100 text-green-800 text-[9px] font-bold">BAIK</span>` :
-      batch==='DISMANTLE' ? `<span class="px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-800 text-[9px] font-bold">DISMANTLE</span>` :
-      batch==='RUSAK-TL'  ? `<span class="px-1.5 py-0.5 rounded-full bg-red-100 text-red-800 text-[9px] font-bold">RUSAK-TL</span>` :
-                            `<span class="px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[9px] font-bold">${batch}</span>`;
-    const cells = COLS.map(col => {
-      const v = r[col];
-      if (col==='Batch')               return `<td class="p-3">${bBadge}</td>`;
-      if (col==='Value Unrestricted')  return `<td class="p-3 font-mono text-right text-xs whitespace-nowrap">${v?fmtRpFull(+v):'-'}</td>`;
-      if (col==='Unrestricted')        return `<td class="p-3 text-right text-xs">${v?Math.round(+v).toLocaleString('id-ID'):'-'}</td>`;
-      if (col==='Material Description')return `<td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v||''}">${v||'-'}</td>`;
-      return `<td class="p-3 text-xs whitespace-nowrap">${v||'-'}</td>`;
+  tbody.innerHTML = paged.map((r,i)=>{
+    const batch=r['Batch']||'';
+    const bBadge=
+      batch==='BAIK'      ?`<span class="px-1.5 py-0.5 rounded-full bg-green-100 text-green-800 text-[9px] font-bold">BAIK</span>`:
+      batch==='DISMANTLE' ?`<span class="px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-800 text-[9px] font-bold">DISMANTLE</span>`:
+      batch==='RUSAK-TL'  ?`<span class="px-1.5 py-0.5 rounded-full bg-red-100 text-red-800 text-[9px] font-bold">RUSAK-TL</span>`:
+                           `<span class="px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[9px] font-bold">${batch}</span>`;
+    const cells=COLS.map(col=>{
+      const v=r[col];
+      if(col==='Batch')              return`<td class="p-3">${bBadge}</td>`;
+      if(col==='Value Unrestricted') return`<td class="p-3 font-mono text-right text-xs whitespace-nowrap">${v?fmtRpFull(+v):'-'}</td>`;
+      if(col==='Unrestricted')       return`<td class="p-3 text-right text-xs">${v?Math.round(+v).toLocaleString('id-ID'):'-'}</td>`;
+      if(col==='Material Description')return`<td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v||''}">${v||'-'}</td>`;
+      return`<td class="p-3 text-xs whitespace-nowrap">${v||'-'}</td>`;
     }).join('');
-    return `<tr class="hover:bg-[#f2f3ff] transition-colors">
-      <td class="p-3 text-[10px] text-gray-300">${start+i+1}</td>${cells}</tr>`;
+    return`<tr class="hover:bg-[#f2f3ff] transition-colors">
+      <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>${cells}</tr>`;
   }).join('');
 
-  renderPagination();
+  renderPagination(filtered.length);
 }
 
 // ══════════════════════════════════════════════════════════
 // PAGINATION
 // ══════════════════════════════════════════════════════════
-function renderPagination() {
-  const total = FILTERED.length, pages = Math.ceil(total/PAGE_SIZE)||1;
+function renderPagination(total) {
+  const pages=Math.ceil(total/PAGE_SIZE)||1;
   const s=(currentPage-1)*PAGE_SIZE+1, e=Math.min(currentPage*PAGE_SIZE,total);
-  document.getElementById('rangeInfo').textContent = total?`${s}–${e}`:'0';
-  document.getElementById('totalInfo').textContent = total.toLocaleString('id-ID');
-
+  document.getElementById('rangeInfo').textContent=total?`${s}–${e}`:'0';
+  document.getElementById('totalInfo').textContent=total.toLocaleString('id-ID');
   let h=`<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''} class="p-1 border border-gray-200 rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[14px]">chevron_left</span></button>`;
-  let lo=Math.max(1,currentPage-2), hi=Math.min(pages,lo+4);
-  if(hi-lo<4) lo=Math.max(1,hi-4);
-  if(lo>1) h+=`<button onclick="goPage(1)" class="w-6 h-6 text-[10px] font-bold hover:bg-[#f2f3ff] rounded flex items-center justify-center">1</button><span class="text-gray-300 px-0.5">…</span>`;
-  for(let i=lo;i<=hi;i++) h+=`<button onclick="goPage(${i})" class="w-6 h-6 text-[10px] font-bold rounded flex items-center justify-center ${i===currentPage?'bg-[#00288e] text-white':'hover:bg-[#f2f3ff]'}">${i}</button>`;
-  if(hi<pages) h+=`<span class="text-gray-300 px-0.5">…</span><button onclick="goPage(${pages})" class="w-6 h-6 text-[10px] font-bold hover:bg-[#f2f3ff] rounded flex items-center justify-center">${pages}</button>`;
+  let lo=Math.max(1,currentPage-2),hi=Math.min(pages,lo+4);
+  if(hi-lo<4)lo=Math.max(1,hi-4);
+  if(lo>1)h+=`<button onclick="goPage(1)" class="w-6 h-6 text-[10px] font-bold hover:bg-[#f2f3ff] rounded flex items-center justify-center">1</button><span class="text-gray-300 text-xs px-0.5">…</span>`;
+  for(let i=lo;i<=hi;i++)h+=`<button onclick="goPage(${i})" class="w-6 h-6 text-[10px] font-bold rounded flex items-center justify-center ${i===currentPage?'bg-[#00288e] text-white':'hover:bg-[#f2f3ff]'}">${i}</button>`;
+  if(hi<pages)h+=`<span class="text-gray-300 text-xs px-0.5">…</span><button onclick="goPage(${pages})" class="w-6 h-6 text-[10px] font-bold hover:bg-[#f2f3ff] rounded flex items-center justify-center">${pages}</button>`;
   h+=`<button onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''} class="p-1 border border-gray-200 rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[14px]">chevron_right</span></button>`;
-  document.getElementById('pgBtns').innerHTML = h;
+  document.getElementById('pgBtns').innerHTML=h;
 }
 
 function goPage(p) {
-  currentPage = Math.max(1,Math.min(p,Math.ceil(FILTERED.length/PAGE_SIZE)||1));
-  renderTable();
+  currentPage=Math.max(1,Math.min(p,Math.ceil(applyF(ALL_ROWS).length/PAGE_SIZE)||1));
+  renderTable(applyF(ALL_ROWS));
 }
 
 // ══════════════════════════════════════════════════════════
 // EXPORT CSV
 // ══════════════════════════════════════════════════════════
 function exportCSV() {
+  const filtered=applyF(ALL_ROWS);
   const rows=[COLS.join(',')];
-  FILTERED.forEach(r=>rows.push(COLS.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
+  filtered.forEach(r=>rows.push(COLS.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
   const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
@@ -619,7 +694,7 @@ function exportCSV() {
 }
 
 // ══════════════════════════════════════════════════════════
-// HELPERS
+// HELPERS FORMAT
 // ══════════════════════════════════════════════════════════
 function fmtRp(n){
   if(n>=1e12)return'Rp '+(n/1e12).toFixed(2)+'T';
