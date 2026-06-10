@@ -38,6 +38,12 @@
     .card-filter { cursor:pointer; transition:all 0.15s ease; }
     .card-filter:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.12); }
     .card-filter.active-filter { outline:2.5px solid #00288e; outline-offset:2px; }
+  @media(max-width:768px){
+    #sidebar{width:100%!important;height:56px;flex-direction:row;position:fixed;top:auto;bottom:0;left:0;border-right:none;border-top:1px solid #e5e7eb;padding:4px 8px;z-index:50;overflow-x:auto}
+    #sidebar .px-2.mb-4{display:none}
+    #maincontent{margin-left:0!important;margin-bottom:56px}
+    #topnav{left:0!important;right:0}
+  }
     @media print {
       nav,.no-print,#filters-section { display:none!important; }
       main { padding-top:0!important; }
@@ -89,7 +95,7 @@
 </aside>
 <div class="flex-1 flex flex-col min-h-screen" style="margin-left:64px">
 <!-- NAVIGASI ATAS -->
-<nav class="fixed top-0 right-0 z-40 bg-surface border-b border-outline-variant shadow-sm" style="left:64px">
+<nav id="topnav" class="fixed top-0 right-0 z-40 bg-white border-b border-gray-200 shadow-sm" style="left:128px">
   <div class="flex items-center gap-6">
     <span class="text-base font-bold text-primary leading-tight">Aset &amp; Inventory<br>
       <span class="text-xs font-semibold text-on-surface-variant">SBU Reg Kalimantan</span>
