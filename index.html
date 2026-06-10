@@ -47,7 +47,7 @@
   </style>
 </head>
 
-<body class="bg-background text-on-surface font-sans min-h-screen">
+<body class="bg-background text-on-surface font-sans min-h-screen flex">
 
 <!-- MODAL DETAIL -->
 <div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm" id="detailModal">
@@ -70,16 +70,30 @@
   </div>
 </div>
 
+
+<!-- ── SIDEBAR ──────────────────────────────────────────── -->
+<aside style="width:64px" class="fixed top-0 left-0 h-full bg-white border-r border-[#c4c5d5]/40 flex flex-col items-center py-3 gap-1 z-50 shadow-sm">
+  <div class="w-10 h-10 rounded-lg bg-[#f2f3ff] flex items-center justify-center mb-2 overflow-hidden">
+    <img src="logo-danantara.png" alt="Danantara" class="w-8 h-8 object-contain"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <span class="text-[8px] font-bold text-[#00288e] text-center leading-tight hidden">Dan<br>ant</span>
+  </div>
+  <a href="index.html" class="w-14 py-2 px-1 rounded-lg flex flex-col items-center gap-1 bg-[#eaedff] transition-colors" title="Administrasi Keuangan">
+    <span class="material-symbols-outlined text-[20px] text-[#00288e]">account_balance</span>
+    <span class="text-[8px] text-[#00288e] font-semibold text-center leading-tight">Adm.<br>Keu.</span>
+  </a>
+  <a href="stok.html" class="w-14 py-2 px-1 rounded-lg flex flex-col items-center gap-1 hover:bg-[#f2f3ff] transition-colors group" title="Stok Material">
+    <span class="material-symbols-outlined text-[20px] text-[#444653] group-hover:text-[#00288e]">inventory_2</span>
+    <span class="text-[8px] text-[#444653] text-center leading-tight group-hover:text-[#00288e]">Stok<br>Mat.</span>
+  </a>
+</aside>
+<div class="flex-1 flex flex-col min-h-screen" style="margin-left:64px">
 <!-- NAVIGASI ATAS -->
-<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 h-16 bg-surface border-b border-outline-variant shadow-sm">
+<nav class="fixed top-0 right-0 z-40 bg-surface border-b border-outline-variant shadow-sm" style="left:64px">
   <div class="flex items-center gap-6">
     <span class="text-base font-bold text-primary leading-tight">Aset &amp; Inventory<br>
       <span class="text-xs font-semibold text-on-surface-variant">SBU Reg Kalimantan</span>
     </span>
-    <div class="hidden md:flex gap-6 items-center">
-      <!-- Dashboard diganti Administrasi Keuangan -->
-      <a class="text-xs font-bold text-primary border-b-2 border-primary pb-1" href="#">Administrasi Keuangan</a>
-    </div>
   </div>
   <div class="flex items-center gap-2">
     <div class="relative hidden lg:block">
@@ -105,7 +119,7 @@
 </nav>
 
 <!-- KONTEN UTAMA -->
-<main class="pt-24 pb-12 px-8 max-w-[1600px] mx-auto space-y-6">
+<main class="pt-[88px] pb-12 px-8 max-w-[1600px] mx-auto space-y-6">
 
   <!-- KELOMPOK 1: RESUME -->
   <section>
@@ -149,7 +163,12 @@
       4 card → tiap card ~25% lebar. 9 card → lebih rapat otomatis.
       Tidak hardcode jumlah kolom — menyesuaikan jumlah status dari Sheets.
     -->
-    <div class="grid gap-3" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))" id="statusCards">
+    <!--
+      auto-fit: kolom mengembang mengisi sisa ruang.
+      4 card → tiap card ~25%. 9 card → tiap card ~11%.
+      Berbeda dengan auto-fill yang biarkan kolom kosong.
+    -->
+    <div class="grid gap-3" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))" id="statusCards">
       <div class="skeleton rounded-xl h-24"></div>
       <div class="skeleton rounded-xl h-24"></div>
       <div class="skeleton rounded-xl h-24"></div>
@@ -936,5 +955,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 </script>
+</div>
 </body>
 </html>
