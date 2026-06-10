@@ -84,7 +84,7 @@
       <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">Stok Material</p>
       <div class="flex items-center gap-1.5 no-print">
         <select id="topTglUpdate" onchange="onTglUpdateChange()"
-          class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 max-w-[130px]">
+          class="text-[9px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600">
           <option value="">Semua Tgl Update</option>
         </select>
         <button onclick="resetAllFilters()"
@@ -408,7 +408,7 @@ function buildAllDropdowns() {
 
   // Tgl Update topnav
   const tglEl = document.getElementById('topTglUpdate');
-  tglEl.innerHTML = '<option value="">Semua Tgl Update</option>' +
+  tglEl.innerHTML = '<option value="">Pilih Tgl Update</option>' +
     uniq('Tgl Update').map(v=>`<option value="${v}">${v}</option>`).join('');
 
   // Dropdown kat teknik kelompok 3
