@@ -32,7 +32,7 @@
 #main::before{
   content:'';
   position:fixed;
-  top:88px;
+  top:88px; /* Tepat di bawah batas bawah topnav h-22 (48px + 40px) */
   right:0;
   left:var(--sidebar-w);
   bottom:0;
@@ -63,8 +63,8 @@
     top:auto;bottom:0;left:0;border-right:none;border-top:1px solid #e5e7eb;
     padding:0 8px;z-index:50;overflow-x:auto}
   #sidebar .brand-text{display:none}
-  #main{margin-left:0!important;margin-bottom:56px}
-  #main::before{left:0}
+  #main{margin-left:0!important;padding-top:88px!important;margin-bottom:56px}
+  #main::before{left:0;top:88px}
   .sb-item{flex-direction:column;padding:4px 12px;min-width:64px}
 }
 
@@ -79,12 +79,7 @@
 </head>
 <body class="bg-[#f0f2f7] text-[#131b2e] font-sans min-h-screen flex flex-col">
 
-<!-- ══════════════════════════════════════════════════════
-  SIDEBAR — ditulis sekali, berlaku semua modul
-  Tambah modul baru: cukup tambah <a> baru di sini
-══════════════════════════════════════════════════════ -->
 <aside id="sidebar" class="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col py-4 px-3 gap-1 z-50 shadow-sm">
-  <!-- Brand -->
   <div class="brand-text px-2 mb-4 flex justify-center">
     <img src="borneo-2.png" alt="SBU Kalimantan" class="w-20 object-contain"
       onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
@@ -94,39 +89,27 @@
     </div>
   </div>
 
-  <!-- Menu: Administrasi Keuangan -->
   <button onclick="navigateTo('keuangan')" id="nav-keuangan"
     class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
     <span class="material-symbols-outlined text-[20px] flex-shrink-0">account_balance</span>
     <span class="text-[11px] font-medium leading-tight">Administrasi<br>Keuangan</span>
   </button>
 
-  <!-- Menu: Stok Material -->
   <button onclick="navigateTo('stok')" id="nav-stok"
     class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
     <span class="material-symbols-outlined text-[20px] flex-shrink-0">inventory_2</span>
     <span class="text-[11px] font-medium leading-tight">Stok<br>Material</span>
   </button>
 
-  <!-- Menu: Penyerapan Material — coming soon, disabled -->
   <div class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg opacity-40 cursor-not-allowed" title="Coming soon">
     <span class="material-symbols-outlined text-[20px] flex-shrink-0 text-gray-400">moving</span>
     <span class="text-[11px] font-medium leading-tight text-gray-400">Penyerapan<br>Material</span>
   </div>
 </aside>
 
-<!-- ══════════════════════════════════════════════════════
-  MAIN WRAPPER
-══════════════════════════════════════════════════════ -->
-<div id="main" class="flex flex-col min-h-screen" style="margin-left:var(--sidebar-w)">
+<div id="main" class="flex flex-col min-h-screen pt-24" style="margin-left:var(--sidebar-w)">
 
-  <!-- ══════════════════════════════════════════════════
-    TOPNAV — ditulis sekali
-    Baris 1: logo + judul (tetap)
-    Baris 2: judul halaman + actions (dinamis per modul)
-  ══════════════════════════════════════════════════ -->
   <nav id="topnav" class="fixed top-0 right-0 md:left-[128px] left-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-    <!-- Baris 1: Logo kiri — Judul tengah — Logo kanan -->
     <div class="flex items-center justify-between px-4 md:px-6 h-12 border-b border-gray-100">
       <img src="logo-danantara.png" alt="Danantara" class="h-7 object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>Danantara</span>'">
@@ -137,17 +120,12 @@
       <img src="logo-pln.png" alt="PLN Icon Plus" class="h-7 object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>PLN IP</span>'">
     </div>
-    <!-- Baris 2: dinamis — diisi oleh updateTopnav() -->
     <div id="topnav-bar2" class="flex items-center justify-between px-4 md:px-6 h-10 gap-2"></div>
   </nav>
 
-  <!-- ══════════════════════════════════════════════════
-    PAGE: ADMINISTRASI KEUANGAN
-  ══════════════════════════════════════════════════ -->
   <div id="page-keuangan" class="page">
-    <main class="pt-28 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+    <main class="pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- KPI Resume -->
       <section>
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">payments</span> Resume
@@ -158,7 +136,6 @@
         </div>
       </section>
 
-      <!-- Aging & Reminder -->
       <section>
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">schedule</span>
@@ -171,7 +148,6 @@
         </div>
       </section>
 
-      <!-- Distribusi Status -->
       <section>
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">account_tree</span> Distribusi Status Pengiriman
@@ -182,7 +158,6 @@
         </div>
       </section>
 
-      <!-- Charts -->
       <section class="grid grid-cols-1 lg:grid-cols-3 gap-3">
         <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <div class="flex flex-wrap justify-between items-start gap-3 mb-3">
@@ -215,13 +190,11 @@
         </div>
       </section>
 
-      <!-- Nominal per Mitra -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <p class="text-xs font-bold mb-4">Nominal per Mitra</p>
         <div class="h-[220px]"><canvas id="k-mitraChart"></canvas></div>
       </section>
 
-      <!-- Tabel -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" id="k-tableSection">
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
@@ -233,10 +206,8 @@
           </button>
         </div>
         <div class="px-3 py-2 border-b border-gray-100 flex flex-wrap gap-1.5 items-center relative">
-          <!-- Status chips tetap di atas -->
           <div class="flex items-center gap-1.5 flex-wrap" id="k-statusChips"></div>
           <div class="h-5 w-px bg-gray-200"></div>
-          <!-- Bulan -->
           <div class="ms-wrap relative" id="ms-k-bulan">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('bulan')">
               <span id="ms-k-bulan-label">Bulan</span>
@@ -244,7 +215,6 @@
             </button>
             <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px] max-h-48 overflow-y-auto" id="ms-k-bulan-menu"></div>
           </div>
-          <!-- Mitra -->
           <div class="ms-wrap relative" id="ms-k-mitra">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('mitra')">
               <span id="ms-k-mitra-label">Mitra</span>
@@ -252,11 +222,9 @@
             </button>
             <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-k-mitra-menu"></div>
           </div>
-          <!-- Jenis IO/PRK — tetap select karena hanya 3 opsi -->
           <select class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="k-jenisFilter" onchange="kOnDropdownChange()">
             <option value="">IO &amp; PRK</option><option value="IO">IO</option><option value="PRK">PRK</option>
           </select>
-          <!-- Reminder -->
           <div class="ms-wrap relative" id="ms-k-reminder">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('reminder')">
               <span id="ms-k-reminder-label">Reminder</span>
@@ -264,7 +232,6 @@
             </button>
             <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-k-reminder-menu"></div>
           </div>
-          <!-- Search -->
           <input type="text" id="k-search" oninput="kOnDropdownChange()" placeholder="Cari…"
             class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-24 md:w-32">
         </div>
@@ -282,13 +249,9 @@
     </main>
   </div>
 
-  <!-- ══════════════════════════════════════════════════
-    PAGE: STOK MATERIAL
-  ══════════════════════════════════════════════════ -->
   <div id="page-stok" class="page">
-    <main class="pt-28 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+    <main class="pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- KPI Resume -->
       <section>
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">package_2</span> Resume stok material
@@ -300,7 +263,6 @@
         </div>
       </section>
 
-      <!-- Stok per KP -->
       <section>
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">warehouse</span> Stok aktif per wilayah KP
@@ -311,7 +273,6 @@
         </div>
       </section>
 
-      <!-- Stok per Gudang -->
       <section>
         <div class="flex flex-wrap items-center gap-2 mb-2">
           <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
@@ -336,7 +297,6 @@
         </div>
       </section>
 
-      <!-- Tabel Stok -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
@@ -417,11 +377,8 @@
     </main>
   </div>
 
-  <!-- ══════════════════════════════════════════════════
-    PAGE: PENYERAPAN MATERIAL (coming soon)
-  ══════════════════════════════════════════════════ -->
   <div id="page-penyerapan" class="page">
-    <main class="pt-28 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto">
+    <main class="pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto">
       <div class="flex flex-col items-center justify-center h-64 text-gray-300">
         <span class="material-symbols-outlined text-[64px] mb-4">moving</span>
         <p class="text-lg font-bold">Penyerapan Material</p>
@@ -430,17 +387,11 @@
     </main>
   </div>
 
-  <!-- FOOTER -->
   <footer class="mt-auto py-3 px-6 text-center border-t border-gray-100 bg-white" style="margin-left:0">
     <p class="text-[9px] text-gray-300">Developed &amp; maintained by bin.muji 8614018ICP · 2026</p>
   </footer>
 
-</div><!-- end #main -->
-
-<!-- ══════════════════════════════════════════════════════
-  MODAL DETAIL KEUANGAN
-══════════════════════════════════════════════════════ -->
-<div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50" id="k-detailModal">
+</div><div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50" id="k-detailModal">
   <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-xl shadow-2xl overflow-hidden flex flex-col">
     <div class="p-5 border-b flex justify-between items-center bg-[#00288e] text-white">
       <h2 class="text-sm font-bold">Detail Pengiriman Material</h2>
@@ -461,32 +412,25 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════
-// API CONFIGURATION — update di sini jika URL berubah
-// ══════════════════════════════════════════════════════════
+// API CONFIGURATION
 const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vbmk6bDp-7obfoCuyyUtYSMnv41X7b212F3fFezjiu8O2ukfaVb/exec';
 const API_STOK     = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 
-// ══════════════════════════════════════════════════════════
-// NAVIGATION — SPA core
-// ══════════════════════════════════════════════════════════
+// NAVIGATION
 const PAGE_CONFIG = {
   keuangan:   { title:'Administrasi Keuangan', icon:'account_balance' },
   stok:       { title:'Stok Material',          icon:'inventory_2'     },
   penyerapan: { title:'Penyerapan Material',     icon:'moving'          },
 };
 
-// Lazy load state — data hanya di-fetch saat pertama kali modul dibuka
 const loaded  = { keuangan:false, stok:false };
 const loading = { keuangan:false, stok:false };
 let currentPage = 'keuangan';
 
 function navigateTo(page) {
-  // Sembunyikan semua page
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
 
-  // Update sidebar active state
   document.querySelectorAll('.nav-btn').forEach(b => {
     b.classList.remove('bg-[#eaedff]','text-[#00288e]');
     b.classList.add('text-gray-500','hover:bg-[#f2f3ff]');
@@ -502,10 +446,8 @@ function navigateTo(page) {
     activeBtn.querySelector('span.material-symbols-outlined').classList.remove('text-gray-400');
   }
 
-  // Update topnav baris 2
   updateTopnav(page);
 
-  // Lazy load
   if (page === 'keuangan' && !loaded.keuangan) kLoadData();
   if (page === 'stok'     && !loaded.stok)     sLoadData();
 
@@ -533,9 +475,6 @@ function updateTopnav(page) {
     bar2.innerHTML = `
       <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
       <div class="flex items-center gap-1.5 no-print">
-        <button onclick="sResetAllFilters()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
-          <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
-        </button>
         <button onclick="window.print()" class="flex items-center gap-1 px-2 py-1 bg-[#00288e] text-white rounded text-[10px] font-semibold whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">print</span><span class="hidden md:inline">Cetak PDF</span>
         </button>
@@ -544,795 +483,13 @@ function updateTopnav(page) {
         </button>
       </div>`;
   } else {
-    bar2.innerHTML = `<p class="text-xs md:text-sm font-bold text-[#131b2e]">${cfg.title}</p>`;
+    bar2.innerHTML = `<p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>`;
   }
 }
 
-// ══════════════════════════════════════════════════════════
-// SHARED CONSTANTS
-// ══════════════════════════════════════════════════════════
-const NAMA_BULAN    = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-const SLOC_RUSAK    = ['9999'];
-const SLOC_REGIONAL = ['0001','0002','0003','0004','0007','0008','0009','0010','0011','0012'];
-const BATCH_RUSAK   = ['RUSAK-TL','RUSAK-L'];
-const PAGE_SIZE_K   = 10;
-const PAGE_SIZE_S   = 15;
-
-// Shared chart instances
-const CHARTS = {};
-function rebuildChart(id, config) {
-  if (CHARTS[id]) CHARTS[id].destroy();
-  CHARTS[id] = new Chart(document.getElementById(id), config);
-}
-
-// Shared helpers
-function fmtRp(n) {
-  if(n>=1e12)return'Rp '+(n/1e12).toFixed(2)+'T';
-  if(n>=1e9) return'Rp '+(n/1e9).toFixed(2)+'M';
-  if(n>=1e6) return'Rp '+(n/1e6).toFixed(2)+'jt';
-  if(n>=1e3) return'Rp '+(n/1e3).toFixed(0)+'rb';
-  return'Rp '+n;
-}
-function fmtRpFull(n) {
-  return 'Rp '+n.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-function fmtDate(d) {
-  if(!d)return'-';
-  const p=String(d).split('-');
-  return p.length<3?d:`${p[2]}/${p[1]}/${p[0]}`;
-}
-function monthKey(tgl) {
-  if(!tgl)return null;
-  const d=new Date(tgl);
-  return isNaN(d)?null:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-}
-function monthLabel(k) {
-  if(!k)return k;
-  const p=k.split('-');
-  return NAMA_BULAN[parseInt(p[1])-1]+' '+p[0];
-}
-function calcAging(tgl,status) {
-  if(!tgl||status==='Paid')return 0;
-  const d=new Date(tgl);
-  return isNaN(d)?0:Math.ceil(Math.abs(new Date()-d)/864e5);
-}
-function getReminderLevel(days,status) {
-  if(status==='Paid')return'-';
-  if(days>14)return'R2';
-  if(days>=8)return'R1';
-  return'-';
-}
-function buildPagination(containerId, currentPg, total, pageSize, goFn) {
-  const pages=Math.ceil(total/pageSize)||1;
-  const s=(currentPg-1)*pageSize+1, e=Math.min(currentPg*pageSize,total);
-  let h=`<button onclick="${goFn}(${currentPg-1})" ${currentPg===1?'disabled':''} class="p-1 border border-gray-200 rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[14px]">chevron_left</span></button>`;
-  let lo=Math.max(1,currentPg-2),hi=Math.min(pages,lo+4);
-  if(hi-lo<4)lo=Math.max(1,hi-4);
-  if(lo>1)h+=`<button onclick="${goFn}(1)" class="w-6 h-6 text-[10px] font-bold hover:bg-[#f2f3ff] rounded flex items-center justify-center">1</button><span class="text-gray-300 text-xs">…</span>`;
-  for(let i=lo;i<=hi;i++)h+=`<button onclick="${goFn}(${i})" class="w-6 h-6 text-[10px] font-bold rounded flex items-center justify-center ${i===currentPg?'bg-[#00288e] text-white':'hover:bg-[#f2f3ff]'}">${i}</button>`;
-  if(hi<pages)h+=`<span class="text-gray-300 text-xs">…</span><button onclick="${goFn}(${pages})" class="w-6 h-6 text-[10px] font-bold hover:bg-[#f2f3ff] rounded flex items-center justify-center">${pages}</button>`;
-  h+=`<button onclick="${goFn}(${currentPg+1})" ${currentPg===pages?'disabled':''} class="p-1 border border-gray-200 rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[14px]">chevron_right</span></button>`;
-  document.getElementById(containerId).innerHTML=h;
-  return {s, e};
-}
-
-// ══════════════════════════════════════════════════════════
-// ██████████████████████████████████████████████████████████
-// MODULE: KEUANGAN (prefix: k)
-// ██████████████████████████████████████████████████████████
-// ══════════════════════════════════════════════════════════
-let K_ROWS=[], K_FILTERED=[], K_SUMMARY={}, K_TOP_ROUTES=[], K_YEARS=[];
-let kPage=1;
-
-const K_STATUS_COLORS = {
-  'Penawaran Mitra':  {card:'#f3e8ff',border:'#d8b4fe',text:'#4c1d95',bg:'bg-purple-100',tx:'text-purple-800'},
-  'Pengiriman':       {card:'#dbeafe',border:'#93c5fd',text:'#1e3a8a',bg:'bg-blue-100',  tx:'text-blue-800'},
-  'Submitted Inv':    {card:'#fef9c3',border:'#fde047',text:'#713f12',bg:'bg-yellow-100',tx:'text-yellow-800'},
-  'Under Review Inv': {card:'#ffedd5',border:'#fdba74',text:'#7c2d12',bg:'bg-orange-100',tx:'text-orange-800'},
-  'Revisi inv':       {card:'#fee2e2',border:'#fca5a5',text:'#7f1d1d',bg:'bg-red-100',   tx:'text-red-800'},
-  'Submitted Nodin':  {card:'#cffafe',border:'#67e8f9',text:'#164e63',bg:'bg-cyan-100',  tx:'text-cyan-800'},
-  'Revisi Nodin':     {card:'#fce7f3',border:'#f9a8d4',text:'#831843',bg:'bg-pink-100',  tx:'text-pink-800'},
-  'Waiting Payment':  {card:'#e0e7ff',border:'#a5b4fc',text:'#312e81',bg:'bg-indigo-100',tx:'text-indigo-800'},
-  'Paid':             {card:'#dcfce7',border:'#86efac',text:'#14532d',bg:'bg-green-100', tx:'text-green-800'},
-};
-const K_COLOR_FALLBACK = [
-  {card:'#dbeafe',border:'#93c5fd',text:'#1e3a8a',bg:'bg-blue-100',tx:'text-blue-800'},
-  {card:'#fef9c3',border:'#fde047',text:'#713f12',bg:'bg-yellow-100',tx:'text-yellow-800'},
-  {card:'#dcfce7',border:'#86efac',text:'#14532d',bg:'bg-green-100',tx:'text-green-800'},
-];
-const K_STATUS_COLOR_MAP = {};
-const K_HEADERS = ['No','Deskripsi Material','IO/PRK','No. Nodin','Tgl Nodin','Dari','Tujuan','Tgl AWB','AWB','Berat (Kg)','No INV','Service Billing','Mitra','Nominal (Rp)','Status','Keterangan'];
-
-const KF = { search:'', status:'SEMUA', bulan:'', mitra:'', jenis:'', reminder:'', activeCardFilter:'', bulanArr:[], mitraArr:[], reminderArr:[] };
-
-async function kLoadData() {
-  if (loading.keuangan) return;
-  loading.keuangan = true;
-  const icon = document.getElementById('k-refreshIcon');
-  if (icon) icon.classList.add('spin');
-  try {
-    const res  = await fetch(API_KEUANGAN);
-    const json = await res.json();
-    if (!json.ok) throw new Error(json.error||'Gagal memuat data');
-    K_ROWS      = json.allRows || json.rows || [];
-    K_SUMMARY   = json.summary || {};
-    K_TOP_ROUTES= json.topRoutes || [];
-    K_YEARS     = json.yearOptions || [];
-    const statuses = json.statusOptions && json.statusOptions.length
-      ? json.statusOptions
-      : [...new Set(K_ROWS.map(r=>r['Status']).filter(Boolean))];
-    statuses.forEach((s,i)=>{ K_STATUS_COLOR_MAP[s]=K_STATUS_COLORS[s]||K_COLOR_FALLBACK[i%K_COLOR_FALLBACK.length]; });
-    kBuildFilters(json.mitraOptions||[], json.monthOptions||[], statuses);
-    kBuildTrendOptions();
-    kApplyFilters();
-    kRenderTopRoutes();
-    loaded.keuangan = true;
-  } catch(err) {
-    document.getElementById('k-tblBody').innerHTML=`<tr><td colspan="20" class="p-8 text-center text-red-500 text-sm">⚠ ${err.message}</td></tr>`;
-  } finally {
-    loading.keuangan=false;
-    if(icon)icon.classList.remove('spin');
-  }
-}
-
-function kBuildFilters(mitras, months, statuses) {
-  // Status chips
-  const chips = document.getElementById('k-statusChips');
-  chips.innerHTML = ['SEMUA',...statuses].map((s,i)=>`
-    <button class="k-chip px-2 py-0.5 text-[10px] font-bold rounded transition-colors
-      ${i===0?'bg-[#00288e] text-white':'bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]'}"
-      data-s="${s}">${s==='SEMUA'?'Semua':s}</button>`).join('');
-  chips.querySelectorAll('.k-chip').forEach(c=>c.addEventListener('click',()=>{
-    kSetChip(c.dataset.s); KF.status=c.dataset.s; KF.activeCardFilter=''; kApplyFilters();
-  }));
-  // Bulan ms-dropdown
-  const bulanMenu = document.getElementById('ms-k-bulan-menu');
-  if(bulanMenu) bulanMenu.innerHTML = months.map(k=>`
-    <label class="ms-item"><input type="checkbox" value="${k}" onchange="kMsChange('bulan')">${monthLabel(k)}</label>`).join('');
-  // Mitra ms-dropdown
-  const mitraMenu = document.getElementById('ms-k-mitra-menu');
-  if(mitraMenu) mitraMenu.innerHTML = mitras.map(m=>`
-    <label class="ms-item"><input type="checkbox" value="${m.replace(/"/g,'&quot;')}" onchange="kMsChange('mitra')">${m}</label>`).join('');
-  // Reminder ms-dropdown — opsi hardcode
-  const remMenu = document.getElementById('ms-k-reminder-menu');
-  if(remMenu) remMenu.innerHTML = [
-    {v:'R1',l:'Perhatian (8–14 hari)'},
-    {v:'R2',l:'Kritis (>14 hari)'}
-  ].map(o=>`<label class="ms-item"><input type="checkbox" value="${o.v}" onchange="kMsChange('reminder')">${o.l}</label>`).join('');
-}
-
-// Toggle ms-dropdown keuangan
-function kToggleMs(key) {
-  const menu = document.getElementById('ms-k-'+key+'-menu');
-  if(!menu) return;
-  const isHidden = menu.classList.contains('hidden');
-  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
-  if(isHidden) menu.classList.remove('hidden');
-}
-
-// Perubahan checkbox ms keuangan
-function kMsChange(key) {
-  const menu = document.getElementById('ms-k-'+key+'-menu');
-  if(!menu) return;
-  const checked = [...menu.querySelectorAll('input:checked')].map(el=>el.value);
-  // Update KF
-  if(key==='bulan')    KF.bulanArr    = checked;
-  if(key==='mitra')    KF.mitraArr    = checked;
-  if(key==='reminder') KF.reminderArr = checked;
-  // Update label
-  const label = document.getElementById('ms-k-'+key+'-label');
-  const wrap  = document.getElementById('ms-k-'+key);
-  const labels = {bulan:'Bulan', mitra:'Mitra', reminder:'Reminder'};
-  if(label) label.textContent = checked.length ? labels[key]+' ('+checked.length+')' : labels[key];
-  if(wrap)  wrap.classList.toggle('ms-active', checked.length>0);
-  kApplyFilters();
-}
-
-function kBuildTrendOptions() {
-  const bOpts=NAMA_BULAN.map((n,i)=>`<option value="${String(i+1).padStart(2,'0')}">${n}</option>`).join('');
-  const yOpts=K_YEARS.map(y=>`<option value="${y}">${y}</option>`).join('');
-  ['k-trendBulanAwal','k-trendBulanAkhir'].forEach(id=>{ document.getElementById(id).innerHTML='<option value="">Bulan</option>'+bOpts; });
-  ['k-trendTahunAwal','k-trendTahunAkhir'].forEach(id=>{ document.getElementById(id).innerHTML='<option value="">Tahun</option>'+yOpts; });
-}
-
-function kSetChip(status) {
-  document.querySelectorAll('.k-chip').forEach(c=>{
-    const a=c.dataset.s===status;
-    c.className=`k-chip px-2 py-0.5 text-[10px] font-bold rounded transition-colors ${a?'bg-[#00288e] text-white':'bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]'}`;
-  });
-}
-
-function kApplyFilters() {
-  const q=KF.search.toLowerCase();
-  K_FILTERED=K_ROWS.filter(r=>{
-    const aging=calcAging(r['Tgl AWB'],r['Status']);
-    const rem=getReminderLevel(aging,r['Status']);
-    if(KF.activeCardFilter==='outstanding:belum-dibayar'&&r['Status']==='Paid')return false;
-    if(KF.activeCardFilter==='aging:normal'&&(r['Status']==='Paid'||aging>=8))return false;
-    if(KF.status!=='SEMUA'&&r['Status']!==KF.status)return false;
-    // Array filters (ms-dropdown)
-    if(KF.bulanArr&&KF.bulanArr.length&&!KF.bulanArr.includes(monthKey(r['Tgl AWB'])))return false;
-    if(KF.mitraArr&&KF.mitraArr.length&&!KF.mitraArr.includes(r['Mitra']))return false;
-    if(KF.reminderArr&&KF.reminderArr.length&&!KF.reminderArr.includes(rem))return false;
-    if(KF.jenis&&!String(r['IO/PRK']||'').startsWith(KF.jenis))return false;
-    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
-    return true;
-  });
-  const nom=K_FILTERED.reduce((s,r)=>s+(parseFloat(r['Nominal (Rp)'])||0),0);
-  kRenderResume(nom);
-  kRenderAging();
-  kRenderStatusCards();
-  kRenderTrendChart();
-  kRenderMitraChart();
-  kRenderAgingChart();
-  kUpdateLabel();
-  kPage=1; kRenderTable();
-}
-
-function kOnDropdownChange() {
-  KF.bulan   =document.getElementById('k-bulanFilter').value;
-  KF.mitra   =document.getElementById('k-mitraFilter').value;
-  KF.jenis   =document.getElementById('k-jenisFilter').value;
-  KF.reminder=document.getElementById('k-reminderFilter').value;
-  KF.search  =document.getElementById('k-search').value;
-  KF.activeCardFilter='';
-  kApplyFilters();
-}
-
-function kOnCardClick(type, val) {
-  const key=type+':'+val;
-  if(KF.activeCardFilter===key||(type==='status'&&KF.status===val)||(type==='paid'&&KF.status==='Paid')){kResetAllFilters();return;}
-  KF.status='SEMUA';KF.reminder='';KF.activeCardFilter=key;
-  if(type==='reset'){kResetAllFilters();return;}
-  else if(type==='status'){KF.status=val;kSetChip(val);}
-  else if(type==='paid'){KF.status='Paid';kSetChip('Paid');}
-  else if(type==='outstanding'){KF.status='SEMUA';kSetChip('SEMUA');}
-  else if(type==='aging'){
-    if(val==='normal'){KF.activeCardFilter='aging:normal';}
-    else{KF.reminder=val;}
-    kSetChip('SEMUA');
-  }
-  kApplyFilters();
-  document.getElementById('k-tableSection').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function kResetAllFilters() {
-  KF.search='';KF.status='SEMUA';KF.bulan='';KF.mitra='';KF.jenis='';KF.reminder='';KF.activeCardFilter='';
-  KF.bulanArr=[];KF.mitraArr=[];KF.reminderArr=[];
-  document.querySelectorAll('[id^="ms-k-"] input[type=checkbox]').forEach(cb=>cb.checked=false);
-  document.querySelectorAll('[id^="ms-k-"]').forEach(w=>w.classList.remove('ms-active'));
-  ['ms-k-bulan-label','ms-k-mitra-label','ms-k-reminder-label'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=['Bulan','Mitra','Reminder'][i];});
-  const je=document.getElementById('k-jenisFilter');if(je)je.value='';
-  const s=document.getElementById('k-search');if(s)s.value='';
-  kSetChip('SEMUA');kApplyFilters();
-}
-
-function kUpdateLabel() {
-  const parts=[];
-  if(KF.status!=='SEMUA')parts.push('Status: '+KF.status);
-  if(KF.bulan)parts.push(monthLabel(KF.bulan));
-  if(KF.mitra)parts.push(KF.mitra);
-  if(KF.reminder)parts.push(KF.reminder);
-  if(KF.search)parts.push('"'+KF.search+'"');
-  document.getElementById('k-activeFilterLabel').textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
-}
-
-function kRenderResume(nom) {
-  const s=K_SUMMARY; const has=Object.values(KF).some(v=>v&&v!=='SEMUA');
-  document.getElementById('k-kpiFinansial').innerHTML=`
-    <div class="cf bg-white p-4 rounded-xl border ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('reset','all')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Record</p>
-      <p class="text-2xl font-black text-[#00288e]">${K_FILTERED.length.toLocaleString('id-ID')}</p>
-    </div>
-    <div class="cf bg-white p-4 rounded-xl border ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('reset','all')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Nominal</p>
-      <p class="text-xl font-black text-[#00288e]">${fmtRp(nom)}</p>
-    </div>
-    <div class="cf bg-orange-50 p-4 rounded-xl border ${KF.activeCardFilter==='outstanding:belum-dibayar'?'border-[#00288e] on':'border-orange-200'} shadow-sm" onclick="kOnCardClick('outstanding','belum-dibayar')">
-      <p class="text-[9px] font-bold text-orange-600 uppercase mb-1">Belum Dibayar</p>
-      <p class="text-xl font-black text-orange-700">${fmtRp(s.globalOutstanding||0)}</p>
-    </div>
-    <div class="cf bg-green-50 p-4 rounded-xl border ${KF.status==='Paid'?'border-[#00288e] on':'border-green-200'} shadow-sm" onclick="kOnCardClick('paid','Paid')">
-      <p class="text-[9px] font-bold text-green-600 uppercase mb-1">Sudah Dibayar</p>
-      <p class="text-xl font-black text-green-700">${fmtRp(s.globalPaid||0)}</p>
-    </div>`;
-}
-
-function kRenderAging() {
-  const s=K_SUMMARY;
-  const r1=s.agingBuckets?.r1||0, r2=s.agingBuckets?.r2||0, norm=s.agingBuckets?.normal||0;
-  const belum=K_ROWS.filter(r=>r['Status']!=='Paid').length;
-  document.getElementById('k-kpiAging').innerHTML=`
-    <div class="cf bg-gray-50 p-4 rounded-xl border ${KF.activeCardFilter==='outstanding:belum-dibayar'?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('outstanding','belum-dibayar')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Belum Dibayar</p>
-      <p class="text-2xl font-black text-gray-700">${belum}</p>
-      <p class="text-[9px] text-gray-400 mt-1">Semua status aktif</p>
-    </div>
-    <div class="cf bg-blue-50 p-4 rounded-xl border ${KF.activeCardFilter==='aging:normal'?'border-[#00288e] on':'border-blue-200'} shadow-sm" onclick="kOnCardClick('aging','normal')">
-      <p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Normal</p>
-      <p class="text-2xl font-black text-blue-700">${norm}</p>
-      <p class="text-[9px] text-blue-500 mt-1">0–7 hari</p>
-    </div>
-    <div class="cf bg-orange-50 p-4 rounded-xl border ${KF.reminder==='R1'?'border-[#00288e] on':'border-orange-200'} shadow-sm" onclick="kOnCardClick('aging','R1')">
-      <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-orange-500 text-[14px]">warning</span><p class="text-[9px] font-bold text-orange-600 uppercase">Perhatian</p></div>
-      <p class="text-2xl font-black text-orange-600">${r1}</p>
-      <p class="text-[9px] text-orange-400 mt-1">8–14 hari</p>
-    </div>
-    <div class="cf p-4 rounded-xl border ${r2>0?'bg-red-100 border-red-400':'bg-red-50 border-red-200'} ${KF.reminder==='R2'?'on':''} shadow-sm" onclick="kOnCardClick('aging','R2')">
-      <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-red-600 text-[14px]">error</span><p class="text-[9px] font-bold text-red-700 uppercase">Kritis</p></div>
-      <p class="text-2xl font-black text-red-700">${r2}</p>
-      <p class="text-[9px] text-red-500 mt-1">&gt;14 hari</p>
-    </div>`;
-}
-
-function kRenderStatusCards() {
-  const byStatus=K_SUMMARY.byStatus||{};
-  const statuses=Object.keys(K_STATUS_COLOR_MAP);
-  document.getElementById('k-statusCards').innerHTML=statuses.map((s,i)=>{
-    const clr=K_STATUS_COLOR_MAP[s]||K_COLOR_FALLBACK[i%K_COLOR_FALLBACK.length];
-    return `<div class="cf p-3 rounded-xl border-2 ${KF.status===s?'on':''}" style="background:${clr.card};border-color:${clr.border}" onclick="kOnCardClick('status','${s.replace(/'/g,"\\'")}')">
-      <p class="text-[10px] font-bold mb-1 leading-tight" style="color:${clr.text}">${s}</p>
-      <p class="text-2xl font-black" style="color:${clr.text}">${byStatus[s]||0}</p>
-    </div>`;
-  }).join('');
-}
-
-function kRenderTrendChart() {
-  const bA=document.getElementById('k-trendBulanAwal')?.value;
-  const tA=document.getElementById('k-trendTahunAwal')?.value;
-  const bK=document.getElementById('k-trendBulanAkhir')?.value;
-  const tK=document.getElementById('k-trendTahunAkhir')?.value;
-  const byM={};
-  K_FILTERED.forEach(r=>{ const k=monthKey(r['Tgl AWB']); if(k)byM[k]=(byM[k]||0)+(parseFloat(r['Nominal (Rp)'])||0); });
-  let keys=Object.keys(byM).sort();
-  const kA=(tA&&bA)?`${tA}-${bA}`:null, kK=(tK&&bK)?`${tK}-${bK}`:null;
-  if(kA)keys=keys.filter(k=>k>=kA);
-  if(kK)keys=keys.filter(k=>k<=kK);
-  const lbl=document.getElementById('k-trendLabel');
-  if(lbl)lbl.textContent=kA||kK?`${kA?monthLabel(kA):'Awal'} s/d ${kK?monthLabel(kK):'Akhir'}`:'Semua data';
-  rebuildChart('k-trendChart',{type:'line',data:{labels:keys.map(monthLabel),datasets:[{label:'Nominal',data:keys.map(k=>byM[k]),borderColor:'#00288e',backgroundColor:'rgba(0,40,142,0.06)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:9}}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
-}
-
-function kResetTrend() {
-  ['k-trendBulanAwal','k-trendBulanAkhir','k-trendTahunAwal','k-trendTahunAkhir'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  kRenderTrendChart();
-}
-
-function kRenderMitraChart() {
-  const byM={};
-  K_FILTERED.forEach(r=>{ const m=r['Mitra']; if(m)byM[m]=(byM[m]||0)+(parseFloat(r['Nominal (Rp)'])||0); });
-  const sorted=Object.entries(byM).sort((a,b)=>b[1]-a[1]);
-  rebuildChart('k-mitraChart',{type:'bar',data:{labels:sorted.map(e=>e[0]),datasets:[{label:'Nominal',data:sorted.map(e=>e[1]),backgroundColor:'#1e40af',borderRadius:3,maxBarThickness:24}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:9},crossAlign:'far'}},x:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:9}}}}}});
-}
-
-function kRenderAgingChart() {
-  const ag={normal:0,r1:0,r2:0};
-  K_FILTERED.forEach(r=>{ if(r['Status']==='Paid')return; const d=calcAging(r['Tgl AWB'],r['Status']); if(d>14)ag.r2++;else if(d>=8)ag.r1++;else ag.normal++; });
-  rebuildChart('k-agingChart',{type:'bar',data:{labels:['Normal','Perhatian','Kritis'],datasets:[{data:[ag.normal,ag.r1,ag.r2],backgroundColor:['#3b82f6','#f97316','#ef4444'],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,font:{size:9}}}}}});
-}
-
-function kRenderTopRoutes() {
-  const el=document.getElementById('k-topRoutes');
-  if(!el)return;
-  if(!K_TOP_ROUTES.length){el.innerHTML='<p class="text-xs text-gray-400">Belum ada data</p>';return;}
-  const max=K_TOP_ROUTES[0]?.count||1;
-  const medals=['🥇','🥈','🥉'];
-  el.innerHTML=K_TOP_ROUTES.map((r,i)=>`<div>
-    <div class="flex justify-between mb-1"><span class="text-xs font-bold">${medals[i]} ${r.route}</span><span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${r.count}x</span></div>
-    <div class="w-full bg-gray-100 rounded-full h-1.5"><div class="bg-[#00288e] h-1.5 rounded-full" style="width:${Math.round(r.count/max*100)}%"></div></div>
-  </div>`).join('');
-}
-
-function kRenderTable() {
-  const el=document.getElementById('k-tblHead');
-  if(el)el.innerHTML='<tr><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>'+K_HEADERS.map(h=>`<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${h}</th>`).join('')+'<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Aging</th><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Reminder</th></tr>';
-  const start=(kPage-1)*PAGE_SIZE_K;
-  const paged=K_FILTERED.slice(start,start+PAGE_SIZE_K);
-  const tbody=document.getElementById('k-tblBody');
-  if(!paged.length){tbody.innerHTML=`<tr><td colspan="${K_HEADERS.length+3}" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>`;
-    buildPagination('k-pgBtns',kPage,K_FILTERED.length,PAGE_SIZE_K,'kGoPage');
-    document.getElementById('k-rangeInfo').textContent='0';document.getElementById('k-totalInfo').textContent='0';return;}
-  tbody.innerHTML=paged.map((r,i)=>{
-    const aging=calcAging(r['Tgl AWB'],r['Status']),rem=getReminderLevel(aging,r['Status']);
-    const rowBg=rem==='R2'?'bg-red-50':rem==='R1'?'bg-orange-50':'';
-    const remBadge=rem==='R2'?'<span class="px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold">Kritis</span>':rem==='R1'?'<span class="px-1.5 py-0.5 rounded-full bg-orange-500 text-white text-[9px] font-bold">Perhatian</span>':'<span class="text-[9px] text-gray-300">—</span>';
-    const cells=K_HEADERS.map(h=>{
-      const v=r[h];
-      if(h==='Status'){const clr=K_STATUS_COLOR_MAP[v];return`<td class="p-3"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap ${clr?clr.bg+' '+clr.tx:'bg-gray-100 text-gray-600'}">${v||'—'}</span></td>`;}
-      if(h==='Nominal (Rp)')return`<td class="p-3 font-mono text-right text-xs whitespace-nowrap">${v?fmtRpFull(+v):'-'}</td>`;
-      if(h==='Tgl AWB'||h==='Tgl Nodin')return`<td class="p-3 text-xs whitespace-nowrap">${fmtDate(v)}</td>`;
-      if(h==='Deskripsi Material')return`<td class="p-3 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v||''}">${v||'-'}</td>`;
-      return`<td class="p-3 text-xs whitespace-nowrap">${v||'-'}</td>`;
-    }).join('');
-    return`<tr class="hover:bg-[#f2f3ff] cursor-pointer transition-colors ${rowBg}" onclick='kOpenModal(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
-      <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>${cells}
-      <td class="p-3 text-xs font-bold whitespace-nowrap ${rem==='R2'?'text-red-600':rem==='R1'?'text-orange-500':'text-gray-300'}">${aging>0?aging+' hari':'—'}</td>
-      <td class="p-3">${remBadge}</td>
-    </tr>`;
-  }).join('');
-  const {s,e}=buildPagination('k-pgBtns',kPage,K_FILTERED.length,PAGE_SIZE_K,'kGoPage');
-  document.getElementById('k-rangeInfo').textContent=`${s}–${e}`;
-  document.getElementById('k-totalInfo').textContent=K_FILTERED.length.toLocaleString('id-ID');
-}
-
-function kGoPage(p){kPage=Math.max(1,Math.min(p,Math.ceil(K_FILTERED.length/PAGE_SIZE_K)||1));kRenderTable();}
-
-function kOpenModal(row) {
-  const aging=calcAging(row['Tgl AWB'],row['Status']),rem=getReminderLevel(aging,row['Status']);
-  document.getElementById('k-modalContent').innerHTML=K_HEADERS.map(h=>`
-    <div class="space-y-0.5"><p class="text-[9px] font-bold text-gray-400 uppercase">${h}</p>
-    <p class="text-sm font-semibold">${h==='Nominal (Rp)'&&row[h]?fmtRpFull(+row[h]):row[h]||'—'}</p></div>`).join('')+
-    `<div class="space-y-0.5"><p class="text-[9px] font-bold text-gray-400 uppercase">Aging</p><p class="text-sm font-semibold ${aging>14?'text-red-600':aging>=8?'text-orange-500':'text-green-600'}">${aging>0?aging+' hari':'—'}</p></div>
-    <div class="space-y-0.5"><p class="text-[9px] font-bold text-gray-400 uppercase">Reminder</p><p class="text-sm font-semibold">${rem==='R2'?'Kritis':rem==='R1'?'Perhatian':'Normal'}</p></div>`;
-  document.getElementById('k-copyAwbBtn').onclick=()=>{
-    navigator.clipboard.writeText(row['AWB']||'');
-    const btn=document.getElementById('k-copyAwbBtn');
-    btn.innerHTML='<span class="material-symbols-outlined text-[16px]">check</span> Berhasil!';
-    setTimeout(()=>{btn.innerHTML='<span class="material-symbols-outlined text-[16px]">content_copy</span> Salin No. AWB';},2000);
-  };
-  const m=document.getElementById('k-detailModal');m.classList.remove('hidden');m.classList.add('flex');
-}
-function kCloseModal(){const m=document.getElementById('k-detailModal');m.classList.add('hidden');m.classList.remove('flex');}
-
-function kExportCSV() {
-  const rows=[K_HEADERS.join(',')];
-  K_FILTERED.forEach(r=>{
-    const aging=calcAging(r['Tgl AWB'],r['Status']),rem=getReminderLevel(aging,r['Status']);
-    const cells=K_HEADERS.map(h=>`"${String(r[h]||'').replace(/"/g,'""')}"`);
-    cells.push(aging>0?aging:'—',rem==='R2'?'Kritis':rem==='R1'?'Perhatian':'Normal');
-    rows.push(cells.join(','));
-  });
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
-  a.download='rekap_inv_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
-}
-
-// ══════════════════════════════════════════════════════════
-// ██████████████████████████████████████████████████████████
-// MODULE: STOK (prefix: s)
-// ██████████████████████████████████████████████████████████
-// ══════════════════════════════════════════════════════════
-let S_ROWS=[], sPage=1, S_DEFAULT_TGL='';
-
-const S_COLS=['Material','Material Description','Batch','Base Unit of Measure','Unrestricted','Value Unrestricted','Sloc - Gudang','Sloc - KP','Material - Brand'];
-
-const SF={slocGudang:[],slocKp:[],brand:[],katSap:[],katTeknik:[],batch:[],moving:[],tglUpdate:[],search:'',cardKp:'',cardGudang:''};
-
-const S_MS_CONFIG={
-  slocGudang:{col:'Sloc - Gudang',    label:'Sloc Gudang'},
-  slocKp:    {col:'Sloc - KP',        label:'Sloc KP'},
-  brand:     {col:'Material - Brand', label:'Brand'},
-  katSap:    {col:'Kategori - SAP',   label:'Kat. SAP'},
-  katTeknik: {col:'Kategori - Teknik',label:'Kat. Teknik'},
-  batch:     {col:'Batch',            label:'Batch'},
-  moving:    {col:'Kategori - Moving',label:'Moving'},
-  tglUpdate: {col:'Tgl Update',       label:'Tgl Update'},
-};
-
-const sIsAktif=r=>{
-  const sloc=(r['Sloc - Gudang']||'').split(' - ')[0].trim();
-  return !SLOC_RUSAK.includes(sloc)&&!BATCH_RUSAK.includes(r['Batch'])&&(r['Sloc - KP']||'').toLowerCase()!=='rusak';
-};
-
-const sChk=(arr,val)=>!arr.length||arr.includes(val);
-
-const sApplyF=(rows,f)=>{
-  const q=(f.search||'').toLowerCase();
-  return rows.filter(r=>{
-    const sloc=(r['Sloc - Gudang']||'').split(' - ')[0].trim();
-    if(SLOC_RUSAK.includes(sloc))return false;
-    if(!sChk(f.slocGudang||[],r['Sloc - Gudang']))return false;
-    if(!sChk(f.slocKp    ||[],r['Sloc - KP']))return false;
-    if(!sChk(f.brand     ||[],r['Material - Brand']))return false;
-    if(!sChk(f.katSap    ||[],r['Kategori - SAP']))return false;
-    if(!sChk(f.katTeknik ||[],r['Kategori - Teknik']))return false;
-    if(!sChk(f.batch     ||[],r['Batch']))return false;
-    if(!sChk(f.moving    ||[],r['Kategori - Moving']))return false;
-    if(!sChk(f.tglUpdate ||[],r['Tgl Update']))return false;
-    if(f.cardKp    &&r['Sloc - KP']     !==f.cardKp)return false;
-    if(f.cardGudang&&r['Sloc - Gudang'] !==f.cardGudang)return false;
-    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
-    return true;
-  });
-};
-
-async function sLoadData() {
-  if(loading.stok)return;
-  loading.stok=true;
-  const icon=document.getElementById('s-refreshIcon');
-  if(icon)icon.classList.add('spin');
-  try {
-    const res=await fetch(API_STOK);
-    const json=await res.json();
-    if(!json.ok)throw new Error(json.error||'Gagal memuat data');
-    S_ROWS=json.rows||[];
-    sNormalizeTgl();
-    const allTgl=[...new Set(S_ROWS.map(r=>r['Tgl Update']).filter(Boolean))].sort();
-    S_DEFAULT_TGL=allTgl[allTgl.length-1]||'';
-    SF.tglUpdate=S_DEFAULT_TGL?[S_DEFAULT_TGL]:[];
-    sBuildDropdowns();
-    sApplyAll();
-    loaded.stok=true;
-  } catch(err) {
-    document.getElementById('s-tblBody').innerHTML=`<tr><td colspan="10" class="p-8 text-center text-red-500 text-sm">⚠ ${err.message}</td></tr>`;
-  } finally {
-    loading.stok=false;
-    if(icon)icon.classList.remove('spin');
-  }
-}
-
-function sNormalizeTgl() {
-  const months={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
-  S_ROWS.forEach(r=>{
-    const v=r['Tgl Update'];
-    if(!v||String(v).length<=10)return;
-    try {
-      const d=new Date(v);
-      if(!isNaN(d)){r['Tgl Update']=d.toISOString().slice(0,10);return;}
-      const parts=String(v).split(' ');
-      if(parts.length>=4){
-        const mon=months[parts[1]],day=parseInt(parts[2]),yr=parseInt(parts[3]);
-        if(mon&&day&&yr)r['Tgl Update']=`${yr}-${String(mon).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-      }
-    } catch(e){}
-  });
-}
-
-function sBuildDropdowns() {
-  const uniq=col=>[...new Set(S_ROWS.map(r=>r[col]).filter(v=>v!==null&&v!==undefined&&v!=='').map(v=>String(v)))].sort();
-  Object.entries(S_MS_CONFIG).forEach(([key,{col,label}])=>{
-    const menu=document.getElementById('ms-s-'+key+'-menu');
-    if(!menu)return;
-    const vals=uniq(col);
-    menu.innerHTML=vals.map(v=>{
-      const sv=String(v);
-      return`<label class="ms-item"><input type="checkbox" value="${sv.replace(/"/g,'&quot;')}" onchange="sMsChange('${key}')" ${SF[key]&&SF[key].includes(sv)?'checked':''}>${sv}</label>`;
-    }).join('');
-  });
-  // Centang tgl default
-  if(S_DEFAULT_TGL){
-    const m=document.getElementById('ms-s-tglUpdate-menu');
-    if(m)m.querySelectorAll('input').forEach(cb=>{cb.checked=cb.value===S_DEFAULT_TGL;});
-    sUpdateMsLabel('tglUpdate');
-  }
-}
-
-function sToggleMs(key) {
-  const menu=document.getElementById('ms-s-'+key+'-menu');
-  if(!menu)return;
-  const isHidden=menu.classList.contains('hidden');
-  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
-  if(isHidden)menu.classList.remove('hidden');
-}
-
-function sMsChange(key) {
-  const menu=document.getElementById('ms-s-'+key+'-menu');
-  if(!menu)return;
-  SF[key]=[...menu.querySelectorAll('input:checked')].map(el=>el.value);
-  SF.cardKp='';SF.cardGudang='';
-  sUpdateMsLabel(key);
-  sApplyAll();
-}
-
-function sUpdateMsLabel(key) {
-  const label=document.getElementById('ms-s-'+key+'-label');
-  const wrap =document.getElementById('ms-s-'+key);
-  const cfg  =S_MS_CONFIG[key];
-  if(!label||!wrap||!cfg)return;
-  const sel=SF[key]||[];
-  label.textContent=sel.length?cfg.label+' ('+sel.length+')':cfg.label;
-  wrap.classList.toggle('ms-active',sel.length>0);
-  // Sync label topnav jika tglUpdate
-
-}
-
-function sOnFilterChange() {
-  SF.search=document.getElementById('s-search').value;
-  SF.cardKp='';SF.cardGudang='';
-  sApplyAll();
-}
-
-function sToggleCardKp(kp){SF.cardKp=SF.cardKp===kp?'':kp;SF.cardGudang='';sApplyAll();}
-function sToggleCardGudang(g){SF.cardGudang=SF.cardGudang===g?'':g;SF.cardKp='';sApplyAll();}
-
-function sResetAllFilters() {
-  ['slocGudang','slocKp','brand','katSap','katTeknik','batch','moving'].forEach(k=>SF[k]=[]);
-  SF.tglUpdate=S_DEFAULT_TGL?[S_DEFAULT_TGL]:[];
-  SF.search='';SF.cardKp='';SF.cardGudang='';
-  const s=document.getElementById('s-search');if(s)s.value='';
-  document.querySelectorAll('[id^="ms-s-"][id$="-menu"] input[type=checkbox]').forEach(cb=>cb.checked=false);
-  if(S_DEFAULT_TGL){
-    const m=document.getElementById('ms-s-tglUpdate-menu');
-    if(m)m.querySelectorAll('input').forEach(cb=>{cb.checked=cb.value===S_DEFAULT_TGL;});
-  }
-  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
-  Object.keys(S_MS_CONFIG).forEach(k=>sUpdateMsLabel(k));
-  sApplyAll();
-}
-
-function sApplyAll() {
-  const filtered=sApplyF(S_ROWS,SF);
-  sRenderResume(filtered);
-  sRenderKpiKondisi(filtered);
-  sRenderGudangChart(filtered);
-  sRenderBrandChart(filtered);
-  sUpdateLabel(filtered);
-  sPage=1;sRenderTable(filtered);
-}
-
-function sUpdateLabel(filtered) {
-  const parts=[];
-  if(SF.slocGudang.length)parts.push('Gudang('+SF.slocGudang.length+')');
-  if(SF.slocKp.length)parts.push('KP('+SF.slocKp.length+')');
-  if(SF.brand.length)parts.push('Brand('+SF.brand.length+')');
-  if(SF.katSap.length)parts.push('SAP('+SF.katSap.length+')');
-  if(SF.katTeknik.length)parts.push('Teknik('+SF.katTeknik.length+')');
-  if(SF.batch.length)parts.push('Batch('+SF.batch.length+')');
-  if(SF.tglUpdate.length&&SF.tglUpdate[0]!==S_DEFAULT_TGL)parts.push('Tgl: '+SF.tglUpdate.join(','));
-  if(SF.cardKp)parts.push('KP: '+SF.cardKp);
-  if(SF.cardGudang)parts.push((SF.cardGudang.split(' - ')[1]||SF.cardGudang));
-  if(SF.search)parts.push('"'+SF.search+'"');
-  const el=document.getElementById('s-activeFilterLabel');
-  if(el)el.textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
-}
-
-function sRenderResume(filtered) {
-  const aktif=filtered.filter(sIsAktif);
-  const totalVal=aktif.reduce((s,r)=>s+(parseFloat(r['Value Unrestricted'])||0),0);
-  const totalQty=aktif.reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0);
-  const totalItem=new Set(aktif.map(r=>r['Material']).filter(Boolean)).size;
-  const has=Object.entries(SF).some(([k,v])=>Array.isArray(v)?v.length&&!(k==='tglUpdate'&&v[0]===S_DEFAULT_TGL):v!=='');
-  document.getElementById('s-kpiResume').innerHTML=`
-    <div class="cf bg-blue-50 p-4 rounded-xl border ${has?'border-[#00288e] on':'border-blue-200'} shadow-sm" onclick="sResetAllFilters()">
-      <p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Total nilai stok aktif</p>
-      <p class="text-xl font-black text-blue-800">${fmtRp(totalVal)}</p>
-      <p class="text-[9px] text-blue-400 mt-0.5">BAIK + non-RUSAK</p>
-    </div>
-    <div class="cf bg-white p-4 rounded-xl border ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="sResetAllFilters()">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total qty stok aktif</p>
-      <p class="text-xl font-black text-[#131b2e]">${Math.round(totalQty).toLocaleString('id-ID')}</p>
-    </div>
-    <div class="cf bg-white p-4 rounded-xl border col-span-2 md:col-span-1 ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="sResetAllFilters()">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total item material</p>
-      <p class="text-xl font-black text-[#131b2e]">${totalItem.toLocaleString('id-ID')}</p>
-    </div>`;
-}
-
-function sRenderKpiKondisi(filtered) {
-  const srcF={...SF,cardKp:''};
-  const src=sApplyF(S_ROWS,srcF).filter(sIsAktif);
-  const byKp={};
-  src.forEach(r=>{
-    const kp=r['Sloc - KP'],sloc=(r['Sloc - Gudang']||'').split(' - ')[0].trim();
-    if(!kp||kp.toLowerCase()==='rusak')return;
-    if(!byKp[kp])byKp[kp]={total:0,regional:0,lapangan:0};
-    const qty=parseFloat(r['Unrestricted'])||0;
-    byKp[kp].total+=qty;
-    if(SLOC_REGIONAL.includes(sloc))byKp[kp].regional+=qty;
-    else byKp[kp].lapangan+=qty;
-  });
-  const sorted=Object.entries(byKp).map(([kp,d])=>({kp,...d})).sort((a,b)=>b.total-a.total).filter(d=>d.total>0);
-  document.getElementById('s-kpiKondisi').innerHTML=sorted.map(d=>{
-    const isOn=SF.cardKp===d.kp;
-    return`<div class="cf bg-white p-3 rounded-xl border ${isOn?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="sToggleCardKp('${d.kp.replace(/'/g,"\\'")}')">
-      <p class="text-[10px] font-bold truncate mb-1" title="${d.kp}">${d.kp}</p>
-      <p class="text-lg font-black text-[#131b2e] leading-none mb-2">${Math.round(d.total).toLocaleString('id-ID')}</p>
-      <div class="flex gap-3">
-        <div><p class="text-[9px] text-gray-400">Regional</p><p class="text-[11px] font-bold text-blue-700">${Math.round(d.regional).toLocaleString('id-ID')}</p></div>
-        <div><p class="text-[9px] text-gray-400">Lapangan</p><p class="text-[11px] font-bold text-orange-600">${Math.round(d.lapangan).toLocaleString('id-ID')}</p></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function sRenderGudangChart(filtered) {
-  const srcF={...SF,cardGudang:''};
-  const src=sApplyF(S_ROWS,srcF).filter(sIsAktif);
-  const byG={};
-  src.forEach(r=>{
-    const g=r['Sloc - Gudang'],sloc=(g||'').split(' - ')[0].trim(),qty=parseFloat(r['Unrestricted'])||0;
-    if(!g)return;
-    if(!byG[g])byG[g]={regional:0,lapangan:0};
-    if(SLOC_REGIONAL.includes(sloc))byG[g].regional+=qty;
-    else byG[g].lapangan+=qty;
-  });
-  const sorted=Object.entries(byG).map(([g,d])=>({g,...d,total:d.regional+d.lapangan})).sort((a,b)=>b.total-a.total);
-  const chartH=Math.max(200,sorted.length*26);
-  const el=document.getElementById('s-gudangChart');
-  if(el)el.parentElement.style.height=chartH+'px';
-  rebuildChart('s-gudangChart',{
-    type:'bar',
-    data:{labels:sorted.map(d=>d.g.split(' - ')[1]||d.g),datasets:[
-      {label:'Regional',data:sorted.map(d=>d.regional),backgroundColor:'#378ADD',borderRadius:3,stack:'s'},
-      {label:'Lapangan',data:sorted.map(d=>d.lapangan),backgroundColor:'#EF9F27',borderRadius:3,stack:'s'},
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-      plugins:{legend:{display:false}},
-      scales:{x:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}},y:{stacked:true,grid:{display:false},ticks:{font:{size:9}}}},
-      onClick(evt,els){if(els.length&&sorted[els[0].index])sToggleCardGudang(sorted[els[0].index].g);}
-    }
-  });
-}
-
-function sRenderBrandChart(filtered) {
-  const src=filtered.filter(sIsAktif);
-  const totalQty=src.reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0);
-  const byB={};
-  src.forEach(r=>{const b=r['Material - Brand'];if(b)byB[b]=(byB[b]||0)+(parseFloat(r['Unrestricted'])||0);});
-  const sorted=Object.entries(byB).sort((a,b)=>b[1]-a[1]);
-  const top9=sorted.slice(0,9),others=sorted.slice(9).reduce((s,e)=>s+e[1],0);
-  const labels=[...top9.map(e=>e[0]),...(others>0?['Lainnya']:[])];
-  const data=[...top9.map(e=>e[1]),...(others>0?[others]:[])];
-  const colors=['#378ADD','#EF9F27','#1D9E75','#E24B4A','#7F77DD','#F472B6','#34D399','#FB923C','#60A5FA','#94A3B8'];
-  rebuildChart('s-brandChart',{
-    type:'doughnut',
-    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length),borderWidth:1,borderColor:'#fff',hoverOffset:8}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
-      plugins:{
-        legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:6,
-          generateLabels:chart=>chart.data.labels.map((l,i)=>({text:l.length>14?l.slice(0,14)+'…':l,fillStyle:chart.data.datasets[0].backgroundColor[i],hidden:false,index:i}))
-        }},
-        tooltip:{callbacks:{label:ctx=>{const qty=ctx.parsed;const pct=totalQty>0?((qty/totalQty)*100).toFixed(1):0;return` ${ctx.label}: ${Math.round(qty).toLocaleString('id-ID')} unit (${pct}%)`;}}}
-      }
-    }
-  });
-}
-
-function sRenderTable(filtered) {
-  const thead=document.getElementById('s-tblHead');
-  if(thead)thead.innerHTML='<tr><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>'+S_COLS.map(h=>`<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${h}</th>`).join('')+'</tr>';
-  const start=(sPage-1)*PAGE_SIZE_S;
-  const paged=filtered.slice(start,start+PAGE_SIZE_S);
-  const tbody=document.getElementById('s-tblBody');
-  if(!paged.length){tbody.innerHTML=`<tr><td colspan="${S_COLS.length+1}" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>`;
-    buildPagination('s-pgBtns',sPage,filtered.length,PAGE_SIZE_S,'sGoPage');
-    document.getElementById('s-rangeInfo').textContent='0';document.getElementById('s-totalInfo').textContent='0';return;}
-  tbody.innerHTML=paged.map((r,i)=>{
-    const batch=r['Batch']||'';
-    const bBadge=batch==='BAIK'?'<span class="px-1.5 py-0.5 rounded-full bg-green-100 text-green-800 text-[9px] font-bold">BAIK</span>':
-      batch==='DISMANTLE'?'<span class="px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-800 text-[9px] font-bold">DISMANTLE</span>':
-      batch==='RUSAK-TL'||batch==='RUSAK-L'?`<span class="px-1.5 py-0.5 rounded-full bg-red-100 text-red-800 text-[9px] font-bold">${batch}</span>`:
-      `<span class="px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[9px] font-bold">${batch}</span>`;
-    const cells=S_COLS.map(col=>{
-      const v=r[col];
-      if(col==='Batch')return`<td class="p-3">${bBadge}</td>`;
-      if(col==='Value Unrestricted')return`<td class="p-3 font-mono text-right text-xs whitespace-nowrap">${v?fmtRpFull(+v):'-'}</td>`;
-      if(col==='Unrestricted')return`<td class="p-3 text-right text-xs">${v?Math.round(+v).toLocaleString('id-ID'):'-'}</td>`;
-      if(col==='Material Description')return`<td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v||''}">${v||'-'}</td>`;
-      return`<td class="p-3 text-xs whitespace-nowrap">${v||'-'}</td>`;
-    }).join('');
-    return`<tr class="hover:bg-[#f2f3ff] transition-colors"><td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>${cells}</tr>`;
-  }).join('');
-  const {s,e}=buildPagination('s-pgBtns',sPage,filtered.length,PAGE_SIZE_S,'sGoPage');
-  document.getElementById('s-rangeInfo').textContent=`${s}–${e}`;
-  document.getElementById('s-totalInfo').textContent=filtered.length.toLocaleString('id-ID');
-}
-
-function sGoPage(p){sPage=Math.max(1,Math.min(p,Math.ceil(sApplyF(S_ROWS,SF).length/PAGE_SIZE_S)||1));sRenderTable(sApplyF(S_ROWS,SF));}
-
-function sExportCSV(){
-  const filtered=sApplyF(S_ROWS,SF);
-  const rows=[S_COLS.join(',')];
-  filtered.forEach(r=>rows.push(S_COLS.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
-  a.download='stok_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
-}
-
-// ══════════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded',()=>{
-  // Buka halaman keuangan secara default
+// Inisialisasi awal aplikasi SPA
+document.addEventListener("DOMContentLoaded", function() {
   navigateTo('keuangan');
-
-  // Tutup dropdown saat klik di luar
-  document.addEventListener('click',e=>{
-    if(!e.target.closest('.ms-wrap'))document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
-  });
-
-  // Tutup modal keuangan dengan Escape
-  window.addEventListener('keydown',e=>{if(e.key==='Escape')kCloseModal();});
 });
 </script>
 </body>
