@@ -291,6 +291,7 @@ const BATCH_RUSAK   = ['RUSAK-TL','RUSAK-L'];
 let ALL_ROWS    = [];
 let currentPage = 1;
 let gudangChart = null;
+let DEFAULT_TGL = ''; // tgl update terbaru — diset saat data pertama kali dimuat
 
 /*
   F = objek filter utama.
@@ -379,7 +380,26 @@ async function loadData() {
     if (!json.ok) throw new Error(json.error||'Gagal memuat data');
     ALL_ROWS = json.rows || [];
     normalizeTglUpdate(); // normalkan format tanggal
+
+    // Tentukan tanggal terbaru dari data
+    const allTgl = [...new Set(ALL_ROWS.map(r=>r['Tgl Update']).filter(Boolean))].sort();
+    DEFAULT_TGL = allTgl[allTgl.length - 1] || ''; // ambil yang terbesar (terbaru)
+
+    // Set filter default ke tgl terbaru
+    F.tglUpdate = DEFAULT_TGL ? [DEFAULT_TGL] : [];
+
     buildAllDropdowns();
+
+    // Setelah dropdown dibangun, centang tgl terbaru di menu
+    if (DEFAULT_TGL) {
+      const menu = document.getElementById('ms-tglUpdate-menu');
+      if (menu) {
+        menu.querySelectorAll('input[type=checkbox]').forEach(cb => {
+          cb.checked = cb.value === DEFAULT_TGL;
+        });
+      }
+      updateMsLabel('tglUpdate');
+    }
     applyAll();
   } catch(err) {
     document.getElementById('tblBody').innerHTML = `
