@@ -407,7 +407,12 @@ function normalizeTglUpdate() {
 }
 
 function buildAllDropdowns() {
-  const uniq = col => [...new Set(ALL_ROWS.map(r=>r[col]).filter(Boolean))].sort();
+  // Paksa semua nilai jadi string, filter yang kosong
+  const uniq = col => [...new Set(
+    ALL_ROWS.map(r=>r[col])
+      .filter(v => v !== null && v !== undefined && v !== '')
+      .map(v => String(v))
+  )].sort();
 
   // Tgl Update — dihandle via MS_CONFIG loop di bawah (ms-tglUpdate)
 
@@ -417,10 +422,14 @@ function buildAllDropdowns() {
     const vals = uniq(col);
     const menu = document.getElementById('ms-'+key+'-menu');
     if (!menu) return;
-    menu.innerHTML = vals.map(v => `
+    menu.innerHTML = vals.map(v => {
+      const sv = String(v); // paksa jadi string, apapun tipenya
+      return `
       <label class="ms-item">
-        <input type="checkbox" value="${v.replace(/"/g,'&quot;')}"
-          onchange="onMsChange('${key}')" ${F[key]&&F[key].includes(v)?'checked':''}>
+        <input type="checkbox" value="${sv.replace(/"/g,'&quot;')}"
+          onchange="onMsChange('${key}')" ${F[key]&&F[key].includes(sv)?'checked':''}>
+        ${sv}
+      </label>`}).join('');
         ${v}
       </label>`).join('');
   });
