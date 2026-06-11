@@ -8,6 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
+/* ── CSS VARIABLES ───────────────────────────────────── */
+:root { --sidebar-w: 128px; }
+
 /* ── BASE ─────────────────────────────────────────────── */
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;vertical-align:middle}
 .custom-scrollbar::-webkit-scrollbar{width:4px;height:4px}
@@ -22,15 +25,16 @@
 .cf.on{outline:2.5px solid #00288e;outline-offset:2px}
 
 /* ── LAYOUT ───────────────────────────────────────────── */
-#sidebar{width:128px;flex-shrink:0}
+#sidebar{width:var(--sidebar-w);flex-shrink:0}
 
 /* ── PETA WATERMARK ───────────────────────────────────── */
 /* Peta Kalimantan sebagai background tipis di area konten */
 #main::before{
   content:'';
   position:fixed;
-  top:92px; /* di bawah topnav */
+  top:0;
   right:0;
+  left:var(--sidebar-w);
   bottom:0;
   background:url('peta-kalimantan.png') no-repeat center center;
   background-size:55%;
@@ -54,12 +58,13 @@
 
 /* ── MOBILE — hanya layar HP kecil (<480px) ───────────── */
 @media(max-width:480px){
+  :root{--sidebar-w:0px}
   #sidebar{width:100%!important;height:56px;flex-direction:row;position:fixed;
     top:auto;bottom:0;left:0;border-right:none;border-top:1px solid #e5e7eb;
     padding:0 8px;z-index:50;overflow-x:auto}
   #sidebar .brand-text{display:none}
   #main{margin-left:0!important;margin-bottom:56px}
-  #main::before{left:0;width:100%}
+  #main::before{left:0}
   .sb-item{flex-direction:column;padding:4px 12px;min-width:64px}
 }
 
@@ -113,14 +118,14 @@
 <!-- ══════════════════════════════════════════════════════
   MAIN WRAPPER
 ══════════════════════════════════════════════════════ -->
-<div id="main" class="flex flex-col min-h-screen" style="margin-left:128px">
+<div id="main" class="flex flex-col min-h-screen" style="margin-left:var(--sidebar-w)">
 
   <!-- ══════════════════════════════════════════════════
     TOPNAV — ditulis sekali
     Baris 1: logo + judul (tetap)
     Baris 2: judul halaman + actions (dinamis per modul)
   ══════════════════════════════════════════════════ -->
-  <nav id="topnav" class="fixed top-0 left-0 md:left-[128px] right-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+  <nav id="topnav" class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
     <!-- Baris 1: Logo kiri — Judul tengah — Logo kanan -->
     <div class="flex items-center justify-between px-4 md:px-6 h-12 border-b border-gray-100">
       <img src="logo-danantara.png" alt="Danantara" class="h-7 object-contain"
@@ -140,7 +145,7 @@
     PAGE: ADMINISTRASI KEUANGAN
   ══════════════════════════════════════════════════ -->
   <div id="page-keuangan" class="page">
-    <main class="pt-[92px] pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
       <!-- KPI Resume -->
       <section>
@@ -261,7 +266,7 @@
     PAGE: STOK MATERIAL
   ══════════════════════════════════════════════════ -->
   <div id="page-stok" class="page">
-    <main class="pt-[92px] pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
       <!-- KPI Resume -->
       <section>
@@ -396,7 +401,7 @@
     PAGE: PENYERAPAN MATERIAL (coming soon)
   ══════════════════════════════════════════════════ -->
   <div id="page-penyerapan" class="page">
-    <main class="pt-[92px] pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto">
       <div class="flex flex-col items-center justify-center h-64 text-gray-300">
         <span class="material-symbols-outlined text-[64px] mb-4">moving</span>
         <p class="text-lg font-bold">Penyerapan Material</p>
