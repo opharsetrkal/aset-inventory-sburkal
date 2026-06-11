@@ -162,10 +162,13 @@
         </p>
         <div class="ms-wrap relative" id="ms-katTeknik-k3">
           <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-white text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors"
-            onclick="toggleMs('katTeknik')">
+            onclick="toggleMsK3()">
             <span id="ms-katTeknik-label-k3">Semua Kategori Teknik</span>
             <span class="material-symbols-outlined text-[12px]">expand_more</span>
           </button>
+          <!-- Menu sendiri di posisi yang benar, isi di-clone dari ms-katTeknik -->
+          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-56 overflow-y-auto"
+            id="ms-katTeknik-k3-menu"></div>
         </div>
         <span class="text-[9px] font-normal text-gray-300">— klik baris/bar untuk filter</span>
       </div>
@@ -400,6 +403,7 @@ async function loadData() {
     const json = await res.json();
     if (!json.ok) throw new Error(json.error||'Gagal memuat data');
     ALL_ROWS = json.rows || [];
+    normalizeTglUpdate(); // normalkan format tanggal
     buildAllDropdowns();
     applyAll();
   } catch(err) {
@@ -414,6 +418,19 @@ async function loadData() {
 // ══════════════════════════════════════════════════════════
 // BUILD DROPDOWNS
 // ══════════════════════════════════════════════════════════
+// Format tanggal: potong jadi YYYY-MM-DD saja
+function fmtTgl(v) {
+  if (!v) return '';
+  return String(v).slice(0, 10); // ambil 10 karakter pertama: YYYY-MM-DD
+}
+
+// Normalisasi semua nilai Tgl Update di ALL_ROWS menjadi YYYY-MM-DD
+function normalizeTglUpdate() {
+  ALL_ROWS.forEach(r => {
+    if (r['Tgl Update']) r['Tgl Update'] = fmtTgl(r['Tgl Update']);
+  });
+}
+
 function buildAllDropdowns() {
   const uniq = col => [...new Set(ALL_ROWS.map(r=>r[col]).filter(Boolean))].sort();
 
@@ -459,7 +476,7 @@ function updateMsLabel(key) {
     label.textContent = sel.length ? cfg.label+' ('+sel.length+')' : cfg.label;
     wrap.classList.toggle('ms-active', sel.length > 0);
   }
-  // Sync label di kelompok 3 untuk katTeknik
+  // Sync label dan checkbox di kelompok 3 untuk katTeknik
   if (key === 'katTeknik') {
     const labelK3 = document.getElementById('ms-katTeknik-label-k3');
     const wrapK3  = document.getElementById('ms-katTeknik-k3');
@@ -467,6 +484,13 @@ function updateMsLabel(key) {
       ? 'Kat. Teknik ('+sel.length+')'
       : 'Semua Kategori Teknik';
     if (wrapK3) wrapK3.classList.toggle('ms-active', sel.length > 0);
+    // Sync checkbox di menu k3 jika sudah ter-render
+    const menuK3 = document.getElementById('ms-katTeknik-k3-menu');
+    if (menuK3) {
+      menuK3.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        cb.checked = sel.includes(cb.value);
+      });
+    }
   }
 }
 
@@ -478,6 +502,27 @@ function toggleMs(key) {
   // Tutup semua menu lain dulu
   document.querySelectorAll('.ms-menu').forEach(m => m.classList.add('hidden'));
   if (isHidden) menu.classList.remove('hidden');
+}
+
+// Toggle menu katTeknik khusus untuk kelompok 3
+// Isi menu di-sync dari MS_CONFIG katTeknik (data sama, posisi berbeda)
+function toggleMsK3() {
+  const menuK3  = document.getElementById('ms-katTeknik-k3-menu');
+  const isHidden = menuK3.classList.contains('hidden');
+  // Tutup semua menu dulu
+  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
+  if (!isHidden) return;
+
+  // Rebuild isi menu k3 dari data aktual (sync dengan state F.katTeknik)
+  const uniq = col => [...new Set(ALL_ROWS.map(r=>r[col]).filter(Boolean))].sort();
+  const vals  = uniq('Kategori - Teknik');
+  menuK3.innerHTML = vals.map(v => `
+    <label class="ms-item">
+      <input type="checkbox" value="${v.replace(/"/g,'&quot;')}"
+        onchange="onMsChange('katTeknik')" ${F.katTeknik.includes(v)?'checked':''}>
+      ${v}
+    </label>`).join('');
+  menuK3.classList.remove('hidden');
 }
 
 // Tutup semua dropdown jika klik di luar
@@ -527,8 +572,10 @@ function resetAllFilters() {
   document.querySelectorAll('.ms-menu input[type=checkbox]').forEach(cb=>cb.checked=false);
   // Reset semua label button
   Object.keys(MS_CONFIG).forEach(k=>updateMsLabel(k));
-  // Tutup semua dropdown
+  // Tutup semua dropdown termasuk k3
   document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
+  const menuK3=document.getElementById('ms-katTeknik-k3-menu');
+  if(menuK3) menuK3.innerHTML='';
   applyAll();
 }
 
