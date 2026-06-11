@@ -32,7 +32,7 @@
 #main::before{
   content:'';
   position:fixed;
-  top:0;
+  top:88px;
   right:0;
   left:var(--sidebar-w);
   bottom:0;
@@ -125,7 +125,7 @@
     Baris 1: logo + judul (tetap)
     Baris 2: judul halaman + actions (dinamis per modul)
   ══════════════════════════════════════════════════ -->
-  <nav id="topnav" class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+  <nav id="topnav" class="fixed top-0 right-0 md:left-[128px] left-0 z-40 bg-white border-b border-gray-200 shadow-sm">
     <!-- Baris 1: Logo kiri — Judul tengah — Logo kanan -->
     <div class="flex items-center justify-between px-4 md:px-6 h-12 border-b border-gray-100">
       <img src="logo-danantara.png" alt="Danantara" class="h-7 object-contain"
@@ -145,7 +145,7 @@
     PAGE: ADMINISTRASI KEUANGAN
   ══════════════════════════════════════════════════ -->
   <div id="page-keuangan" class="page">
-    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+    <main class="pt-28 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
       <!-- KPI Resume -->
       <section>
@@ -232,21 +232,41 @@
             <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
           </button>
         </div>
-        <div class="px-3 py-2 border-b border-gray-100 flex flex-wrap gap-1.5 items-center">
+        <div class="px-3 py-2 border-b border-gray-100 flex flex-wrap gap-1.5 items-center relative">
+          <!-- Status chips tetap di atas -->
           <div class="flex items-center gap-1.5 flex-wrap" id="k-statusChips"></div>
           <div class="h-5 w-px bg-gray-200"></div>
-          <select class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff]" id="k-bulanFilter" onchange="kOnDropdownChange()"><option value="">Semua Bulan</option></select>
-          <select class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] min-w-[130px]" id="k-mitraFilter" onchange="kOnDropdownChange()"><option value="">Semua Mitra</option></select>
-          <select class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff]" id="k-jenisFilter" onchange="kOnDropdownChange()">
+          <!-- Bulan -->
+          <div class="ms-wrap relative" id="ms-k-bulan">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('bulan')">
+              <span id="ms-k-bulan-label">Bulan</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px] max-h-48 overflow-y-auto" id="ms-k-bulan-menu"></div>
+          </div>
+          <!-- Mitra -->
+          <div class="ms-wrap relative" id="ms-k-mitra">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('mitra')">
+              <span id="ms-k-mitra-label">Mitra</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-k-mitra-menu"></div>
+          </div>
+          <!-- Jenis IO/PRK — tetap select karena hanya 3 opsi -->
+          <select class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="k-jenisFilter" onchange="kOnDropdownChange()">
             <option value="">IO &amp; PRK</option><option value="IO">IO</option><option value="PRK">PRK</option>
           </select>
-          <select class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff]" id="k-reminderFilter" onchange="kOnDropdownChange()">
-            <option value="">Semua Reminder</option>
-            <option value="R1">Perhatian (8–14 hari)</option>
-            <option value="R2">Kritis (&gt;14 hari)</option>
-          </select>
+          <!-- Reminder -->
+          <div class="ms-wrap relative" id="ms-k-reminder">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('reminder')">
+              <span id="ms-k-reminder-label">Reminder</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-k-reminder-menu"></div>
+          </div>
+          <!-- Search -->
           <input type="text" id="k-search" oninput="kOnDropdownChange()" placeholder="Cari…"
-            class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] w-24 md:w-32">
+            class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-24 md:w-32">
         </div>
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left border-collapse" style="min-width:1100px">
@@ -266,7 +286,7 @@
     PAGE: STOK MATERIAL
   ══════════════════════════════════════════════════ -->
   <div id="page-stok" class="page">
-    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+    <main class="pt-28 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
       <!-- KPI Resume -->
       <section>
@@ -401,7 +421,7 @@
     PAGE: PENYERAPAN MATERIAL (coming soon)
   ══════════════════════════════════════════════════ -->
   <div id="page-penyerapan" class="page">
-    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto">
+    <main class="pt-28 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto">
       <div class="flex flex-col items-center justify-center h-64 text-gray-300">
         <span class="material-symbols-outlined text-[64px] mb-4">moving</span>
         <p class="text-lg font-bold">Penyerapan Material</p>
@@ -513,13 +533,6 @@ function updateTopnav(page) {
     bar2.innerHTML = `
       <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
       <div class="flex items-center gap-1.5 no-print">
-        <div class="ms-wrap relative" id="ms-s-tglUpdate-top">
-          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1" onclick="sToggleMs('tglUpdate')">
-            <span class="material-symbols-outlined text-[12px]">calendar_month</span>
-            <span id="ms-s-tglUpdate-label-top">Tgl Update</span>
-            <span class="material-symbols-outlined text-[12px]">expand_more</span>
-          </button>
-        </div>
         <button onclick="sResetAllFilters()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
         </button>
@@ -630,7 +643,7 @@ const K_COLOR_FALLBACK = [
 const K_STATUS_COLOR_MAP = {};
 const K_HEADERS = ['No','Deskripsi Material','IO/PRK','No. Nodin','Tgl Nodin','Dari','Tujuan','Tgl AWB','AWB','Berat (Kg)','No INV','Service Billing','Mitra','Nominal (Rp)','Status','Keterangan'];
 
-const KF = { search:'', status:'SEMUA', bulan:'', mitra:'', jenis:'', reminder:'', activeCardFilter:'' };
+const KF = { search:'', status:'SEMUA', bulan:'', mitra:'', jenis:'', reminder:'', activeCardFilter:'', bulanArr:[], mitraArr:[], reminderArr:[] };
 
 async function kLoadData() {
   if (loading.keuangan) return;
@@ -663,6 +676,7 @@ async function kLoadData() {
 }
 
 function kBuildFilters(mitras, months, statuses) {
+  // Status chips
   const chips = document.getElementById('k-statusChips');
   chips.innerHTML = ['SEMUA',...statuses].map((s,i)=>`
     <button class="k-chip px-2 py-0.5 text-[10px] font-bold rounded transition-colors
@@ -671,8 +685,47 @@ function kBuildFilters(mitras, months, statuses) {
   chips.querySelectorAll('.k-chip').forEach(c=>c.addEventListener('click',()=>{
     kSetChip(c.dataset.s); KF.status=c.dataset.s; KF.activeCardFilter=''; kApplyFilters();
   }));
-  document.getElementById('k-mitraFilter').innerHTML='<option value="">Semua Mitra</option>'+mitras.map(m=>`<option value="${m}">${m}</option>`).join('');
-  document.getElementById('k-bulanFilter').innerHTML='<option value="">Semua Bulan</option>'+months.map(k=>`<option value="${k}">${monthLabel(k)}</option>`).join('');
+  // Bulan ms-dropdown
+  const bulanMenu = document.getElementById('ms-k-bulan-menu');
+  if(bulanMenu) bulanMenu.innerHTML = months.map(k=>`
+    <label class="ms-item"><input type="checkbox" value="${k}" onchange="kMsChange('bulan')">${monthLabel(k)}</label>`).join('');
+  // Mitra ms-dropdown
+  const mitraMenu = document.getElementById('ms-k-mitra-menu');
+  if(mitraMenu) mitraMenu.innerHTML = mitras.map(m=>`
+    <label class="ms-item"><input type="checkbox" value="${m.replace(/"/g,'&quot;')}" onchange="kMsChange('mitra')">${m}</label>`).join('');
+  // Reminder ms-dropdown — opsi hardcode
+  const remMenu = document.getElementById('ms-k-reminder-menu');
+  if(remMenu) remMenu.innerHTML = [
+    {v:'R1',l:'Perhatian (8–14 hari)'},
+    {v:'R2',l:'Kritis (>14 hari)'}
+  ].map(o=>`<label class="ms-item"><input type="checkbox" value="${o.v}" onchange="kMsChange('reminder')">${o.l}</label>`).join('');
+}
+
+// Toggle ms-dropdown keuangan
+function kToggleMs(key) {
+  const menu = document.getElementById('ms-k-'+key+'-menu');
+  if(!menu) return;
+  const isHidden = menu.classList.contains('hidden');
+  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
+  if(isHidden) menu.classList.remove('hidden');
+}
+
+// Perubahan checkbox ms keuangan
+function kMsChange(key) {
+  const menu = document.getElementById('ms-k-'+key+'-menu');
+  if(!menu) return;
+  const checked = [...menu.querySelectorAll('input:checked')].map(el=>el.value);
+  // Update KF
+  if(key==='bulan')    KF.bulanArr    = checked;
+  if(key==='mitra')    KF.mitraArr    = checked;
+  if(key==='reminder') KF.reminderArr = checked;
+  // Update label
+  const label = document.getElementById('ms-k-'+key+'-label');
+  const wrap  = document.getElementById('ms-k-'+key);
+  const labels = {bulan:'Bulan', mitra:'Mitra', reminder:'Reminder'};
+  if(label) label.textContent = checked.length ? labels[key]+' ('+checked.length+')' : labels[key];
+  if(wrap)  wrap.classList.toggle('ms-active', checked.length>0);
+  kApplyFilters();
 }
 
 function kBuildTrendOptions() {
@@ -697,10 +750,11 @@ function kApplyFilters() {
     if(KF.activeCardFilter==='outstanding:belum-dibayar'&&r['Status']==='Paid')return false;
     if(KF.activeCardFilter==='aging:normal'&&(r['Status']==='Paid'||aging>=8))return false;
     if(KF.status!=='SEMUA'&&r['Status']!==KF.status)return false;
-    if(KF.bulan&&monthKey(r['Tgl AWB'])!==KF.bulan)return false;
-    if(KF.mitra&&r['Mitra']!==KF.mitra)return false;
+    // Array filters (ms-dropdown)
+    if(KF.bulanArr&&KF.bulanArr.length&&!KF.bulanArr.includes(monthKey(r['Tgl AWB'])))return false;
+    if(KF.mitraArr&&KF.mitraArr.length&&!KF.mitraArr.includes(r['Mitra']))return false;
+    if(KF.reminderArr&&KF.reminderArr.length&&!KF.reminderArr.includes(rem))return false;
     if(KF.jenis&&!String(r['IO/PRK']||'').startsWith(KF.jenis))return false;
-    if(KF.reminder&&rem!==KF.reminder)return false;
     if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
     return true;
   });
@@ -744,7 +798,11 @@ function kOnCardClick(type, val) {
 
 function kResetAllFilters() {
   KF.search='';KF.status='SEMUA';KF.bulan='';KF.mitra='';KF.jenis='';KF.reminder='';KF.activeCardFilter='';
-  ['k-bulanFilter','k-mitraFilter','k-jenisFilter','k-reminderFilter'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  KF.bulanArr=[];KF.mitraArr=[];KF.reminderArr=[];
+  document.querySelectorAll('[id^="ms-k-"] input[type=checkbox]').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('[id^="ms-k-"]').forEach(w=>w.classList.remove('ms-active'));
+  ['ms-k-bulan-label','ms-k-mitra-label','ms-k-reminder-label'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=['Bulan','Mitra','Reminder'][i];});
+  const je=document.getElementById('k-jenisFilter');if(je)je.value='';
   const s=document.getElementById('k-search');if(s)s.value='';
   kSetChip('SEMUA');kApplyFilters();
 }
@@ -1065,10 +1123,7 @@ function sUpdateMsLabel(key) {
   label.textContent=sel.length?cfg.label+' ('+sel.length+')':cfg.label;
   wrap.classList.toggle('ms-active',sel.length>0);
   // Sync label topnav jika tglUpdate
-  if(key==='tglUpdate'){
-    const topLbl=document.getElementById('ms-s-tglUpdate-label-top');
-    if(topLbl)topLbl.textContent=sel.length?'Tgl Update ('+sel.length+')':'Tgl Update';
-  }
+
 }
 
 function sOnFilterChange() {
