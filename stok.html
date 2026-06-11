@@ -164,17 +164,7 @@
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">map</span> Stok per gudang
         </p>
-        <div class="ms-wrap relative" id="ms-katTeknik-k3">
-          <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-white text-gray-600 flex items-center gap-1 hover:border-[#00288e] transition-colors"
-            onclick="toggleMsK3()">
-            <span id="ms-katTeknik-label-k3">Semua Kategori Teknik</span>
-            <span class="material-symbols-outlined text-[12px]">expand_more</span>
-          </button>
-          <!-- Menu sendiri di posisi yang benar, isi di-clone dari ms-katTeknik -->
-          <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-56 overflow-y-auto"
-            id="ms-katTeknik-k3-menu"></div>
-        </div>
-        <span class="text-[9px] font-normal text-gray-300">— klik baris/bar untuk filter</span>
+        <span class="text-[9px] font-normal text-gray-300">— klik bar untuk filter</span>
       </div>
       <!-- Bar chart saja -->
       <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
@@ -421,7 +411,6 @@ function buildAllDropdowns() {
 
   // Tgl Update — dihandle via MS_CONFIG loop di bawah (ms-tglUpdate)
 
-  // ddKatTeknik sudah diganti ms-katTeknik — build via MS_CONFIG loop di bawah
 
   // Build multi-select menus
   Object.entries(MS_CONFIG).forEach(([key, {col, label}]) => {
@@ -444,7 +433,6 @@ function buildAllDropdowns() {
 function onMsChange(key) {
   // Kumpulkan semua id menu untuk key ini
   const menuIds = ['ms-'+key+'-menu'];
-  if (key === 'katTeknik') menuIds.push('ms-katTeknik-k3-menu');
 
   const checked = new Set();
   menuIds.forEach(id => {
@@ -475,22 +463,7 @@ function updateMsLabel(key) {
     label.textContent = sel.length ? cfg.label+' ('+sel.length+')' : cfg.label;
     wrap.classList.toggle('ms-active', sel.length > 0);
   }
-  // Sync label dan checkbox di kelompok 3 untuk katTeknik
-  if (key === 'katTeknik') {
-    const labelK3 = document.getElementById('ms-katTeknik-label-k3');
-    const wrapK3  = document.getElementById('ms-katTeknik-k3');
-    if (labelK3) labelK3.textContent = sel.length
-      ? 'Kat. Teknik ('+sel.length+')'
-      : 'Semua Kategori Teknik';
-    if (wrapK3) wrapK3.classList.toggle('ms-active', sel.length > 0);
-    // Sync checkbox di menu k3 jika sudah ter-render
-    const menuK3 = document.getElementById('ms-katTeknik-k3-menu');
-    if (menuK3) {
-      menuK3.querySelectorAll('input[type=checkbox]').forEach(cb => {
-        cb.checked = sel.includes(cb.value);
-      });
-    }
-  }
+
 }
 
 // Toggle buka/tutup dropdown multi-select
@@ -503,26 +476,6 @@ function toggleMs(key) {
   if (isHidden) menu.classList.remove('hidden');
 }
 
-// Toggle menu katTeknik khusus untuk kelompok 3
-// Isi menu di-sync dari MS_CONFIG katTeknik (data sama, posisi berbeda)
-function toggleMsK3() {
-  const menuK3  = document.getElementById('ms-katTeknik-k3-menu');
-  const isHidden = menuK3.classList.contains('hidden');
-  // Tutup semua menu dulu
-  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
-  if (!isHidden) return;
-
-  // Rebuild isi menu k3 dari data aktual (sync dengan state F.katTeknik)
-  const uniq = col => [...new Set(ALL_ROWS.map(r=>r[col]).filter(Boolean))].sort();
-  const vals  = uniq('Kategori - Teknik');
-  menuK3.innerHTML = vals.map(v => `
-    <label class="ms-item">
-      <input type="checkbox" value="${v.replace(/"/g,'&quot;')}"
-        onchange="onMsChange('katTeknik')" ${F.katTeknik.includes(v)?'checked':''}>
-      ${v}
-    </label>`).join('');
-  menuK3.classList.remove('hidden');
-}
 
 // Tutup semua dropdown jika klik di luar
 document.addEventListener('click', e => {
@@ -566,15 +519,13 @@ function resetAllFilters() {
   // Reset UI
   document.getElementById('searchInput').value='';
   // topTglUpdate sudah diganti custom dropdown
-  // ddKatTeknik sudah diganti custom dropdown
   // Uncheck semua checkbox
   document.querySelectorAll('.ms-menu input[type=checkbox]').forEach(cb=>cb.checked=false);
   // Reset semua label button
   Object.keys(MS_CONFIG).forEach(k=>updateMsLabel(k));
   // Tutup semua dropdown termasuk k3
   document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
-  const menuK3=document.getElementById('ms-katTeknik-k3-menu');
-  if(menuK3) menuK3.innerHTML='';
+
   applyAll();
 }
 
