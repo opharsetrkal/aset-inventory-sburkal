@@ -23,7 +23,7 @@
 
 /* ── LAYOUT ───────────────────────────────────────────── */
 #sidebar{width:128px;flex-shrink:0}
-#topnav{left:128px!important}
+#topnav{left:128px}
 
 /* ── PETA WATERMARK ───────────────────────────────────── */
 /* Peta Kalimantan sebagai background tipis di area konten */
@@ -32,7 +32,6 @@
   position:fixed;
   top:92px; /* di bawah topnav */
   right:0;
-  width:calc(100% - 128px);
   bottom:0;
   background:url('peta-kalimantan.png') no-repeat center center;
   background-size:55%;
@@ -61,7 +60,7 @@
     padding:0 8px;z-index:50;overflow-x:auto}
   #sidebar .brand-text{display:none}
   #main{margin-left:0!important;margin-bottom:56px}
-  #topnav{left:0!important}
+  #topnav{left:0;right:0}
   #main::before{left:0;width:100%}
   .sb-item{flex-direction:column;padding:4px 12px;min-width:64px}
 }
