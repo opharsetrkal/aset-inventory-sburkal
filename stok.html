@@ -166,17 +166,27 @@
         </p>
         <span class="text-[9px] font-normal text-gray-300">— klik bar untuk filter</span>
       </div>
-      <!-- Bar chart saja -->
-      <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-        <div class="flex items-center gap-4 mb-3">
-          <span class="flex items-center gap-1 text-[10px] text-gray-500">
-            <span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Regional
-          </span>
-          <span class="flex items-center gap-1 text-[10px] text-gray-500">
-            <span class="w-3 h-2.5 rounded-sm inline-block bg-[#EF9F27]"></span>Lapangan
-          </span>
+      <!-- Grid: bar chart kiri + donut brand kanan -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <!-- Bar chart stok per gudang -->
+        <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <div class="flex items-center gap-4 mb-3">
+            <p class="text-xs font-bold text-[#131b2e] flex-1">Stok per Gudang</p>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500">
+              <span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Regional
+            </span>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500">
+              <span class="w-3 h-2.5 rounded-sm inline-block bg-[#EF9F27]"></span>Lapangan
+            </span>
+          </div>
+          <div style="position:relative;height:320px"><canvas id="gudangChart"></canvas></div>
         </div>
-        <div style="position:relative;height:320px"><canvas id="gudangChart"></canvas></div>
+        <!-- Donut chart brand material -->
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs font-bold text-[#131b2e] mb-1">Brand Material</p>
+          <p class="text-[9px] text-gray-400 mb-3">Sesuai filter aktif · hover untuk detail</p>
+          <div style="position:relative;height:280px"><canvas id="brandChart"></canvas></div>
+        </div>
       </div>
     </section>
 
@@ -291,6 +301,7 @@ const BATCH_RUSAK   = ['RUSAK-TL','RUSAK-L'];
 let ALL_ROWS    = [];
 let currentPage = 1;
 let gudangChart = null;
+let brandChart  = null;
 let DEFAULT_TGL = ''; // tgl update terbaru — diset saat data pertama kali dimuat
 
 /*
@@ -363,6 +374,7 @@ function applyAll() {
   renderKpiResume(filtered);
   renderKpiKondisi(filtered);
   renderGudangSection(filtered);
+  renderBrandChart(filtered);
   updateFilterLabel();
   currentPage = 1;
   renderTable(filtered);
@@ -732,6 +744,88 @@ function renderGudangSection(filtered) {
         if (!els.length) return;
         const idx = els[0].index;
         if (sorted[idx]) toggleCardGudang(sorted[idx].g);
+      }
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// RENDER DONUT CHART BRAND
+// Ikut semua filter aktif — % adaptive sesuai data filtered
+// Hover: muncul nama brand, qty, dan persentase
+// ══════════════════════════════════════════════════════════
+function renderBrandChart(filtered) {
+  // Hanya stok aktif (non-rusak)
+  const src = filtered.filter(isAktif);
+  const totalQty = src.reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0);
+
+  // Kelompokkan per brand, sort terbanyak, top 9 + Lainnya
+  const byBrand = {};
+  src.forEach(r => {
+    const b = r['Material - Brand'];
+    if (b) byBrand[b] = (byBrand[b]||0) + (parseFloat(r['Unrestricted'])||0);
+  });
+
+  const sorted = Object.entries(byBrand).sort((a,b)=>b[1]-a[1]);
+  const top9   = sorted.slice(0,9);
+  const others = sorted.slice(9).reduce((s,e)=>s+e[1],0);
+
+  const labels = [...top9.map(e=>e[0]), ...(others>0?['Lainnya']:[])];
+  const data   = [...top9.map(e=>e[1]), ...(others>0?[others]:[])];
+  const colors = [
+    '#378ADD','#EF9F27','#1D9E75','#E24B4A','#7F77DD',
+    '#F472B6','#34D399','#FB923C','#60A5FA','#94A3B8'
+  ];
+
+  if (brandChart) brandChart.destroy();
+  const ctx = document.getElementById('brandChart');
+  if (!ctx) return;
+
+  brandChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors.slice(0, labels.length),
+        borderWidth: 1,
+        borderColor: '#fff',
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'circle',
+            boxWidth: 8,
+            font: { size: 9 },
+            padding: 8,
+            // Potong label panjang
+            generateLabels: chart => {
+              return chart.data.labels.map((label, i) => ({
+                text: label.length > 14 ? label.slice(0,14)+'…' : label,
+                fillStyle: chart.data.datasets[0].backgroundColor[i],
+                hidden: false,
+                index: i
+              }));
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const qty = ctx.parsed;
+              const pct = totalQty > 0 ? ((qty/totalQty)*100).toFixed(1) : 0;
+              return ` ${ctx.label}: ${Math.round(qty).toLocaleString('id-ID')} unit (${pct}%)`;
+            }
+          }
+        }
       }
     }
   });
