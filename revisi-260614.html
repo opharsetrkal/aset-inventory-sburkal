@@ -111,11 +111,12 @@ html,body   { height:100%; overflow:hidden; }
     <span class="text-[11px] font-medium leading-tight">Stok<br>Material</span>
   </button>
 
-  <!-- Menu: Penyerapan Material — coming soon, disabled -->
-  <div class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg opacity-40 cursor-not-allowed" title="Coming soon">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0 text-gray-400">moving</span>
-    <span class="text-[11px] font-medium leading-tight text-gray-400">Penyerapan<br>Material</span>
-  </div>
+  <!-- Menu: Penyerapan Material -->
+  <button onclick="navigateTo('penyerapan')" id="nav-penyerapan"
+    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[20px] flex-shrink-0">moving</span>
+    <span class="text-[11px] font-medium leading-tight">Penyerapan<br>Material</span>
+  </button>
 </aside>
 
 <!-- ══════════════════════════════════════════════════════
@@ -452,15 +453,212 @@ html,body   { height:100%; overflow:hidden; }
   </div>
 
   <!-- ══════════════════════════════════════════════════
-    PAGE: PENYERAPAN MATERIAL (coming soon)
+    PAGE: PENYERAPAN MATERIAL
   ══════════════════════════════════════════════════ -->
   <div id="page-penyerapan" class="page">
-    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto">
-      <div class="flex flex-col items-center justify-center h-64 text-gray-300">
-        <span class="material-symbols-outlined text-[64px] mb-4">moving</span>
-        <p class="text-lg font-bold">Penyerapan Material</p>
-        <p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p>
-      </div>
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+
+      <!-- Kelompok 1: Resume -->
+      <section>
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">moving</span> Resume Penyerapan Material
+        </p>
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-2 md:gap-3" id="p-kpiResume">
+          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
+          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
+          <div class="skeleton rounded-xl h-24"></div>
+        </div>
+      </section>
+
+      <!-- Filter Strip -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+        </p>
+        <div class="flex flex-wrap gap-1.5 items-center relative">
+          <!-- Posting Date range -->
+          <div class="flex items-center gap-1 text-[10px] text-gray-500">
+            <span>Dari:</span>
+            <input type="date" id="p-dateFrom" onchange="pOnFilterChange()"
+              class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600">
+            <span>s/d:</span>
+            <input type="date" id="p-dateTo" onchange="pOnFilterChange()"
+              class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600">
+          </div>
+          <!-- Movement Type -->
+          <div class="ms-wrap relative" id="ms-p-mvt">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pToggleMs('mvt')">
+              <span id="ms-p-mvt-label">Movement Type</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-48 overflow-y-auto" id="ms-p-mvt-menu"></div>
+          </div>
+          <!-- Sloc KP -->
+          <div class="ms-wrap relative" id="ms-p-slocKp">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pToggleMs('slocKp')">
+              <span id="ms-p-slocKp-label">Sloc KP</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-p-slocKp-menu"></div>
+          </div>
+          <!-- Sloc Gudang -->
+          <div class="ms-wrap relative" id="ms-p-slocGudang">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pToggleMs('slocGudang')">
+              <span id="ms-p-slocGudang-label">Sloc Gudang</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-p-slocGudang-menu"></div>
+          </div>
+          <!-- Brand -->
+          <div class="ms-wrap relative" id="ms-p-brand">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pToggleMs('brand')">
+              <span id="ms-p-brand-label">Brand</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-p-brand-menu"></div>
+          </div>
+          <!-- Kat. Teknik -->
+          <div class="ms-wrap relative" id="ms-p-katTeknik">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pToggleMs('katTeknik')">
+              <span id="ms-p-katTeknik-label">Kat. Teknik</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-48 overflow-y-auto" id="ms-p-katTeknik-menu"></div>
+          </div>
+          <!-- Kat. SAP -->
+          <div class="ms-wrap relative" id="ms-p-katSap">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pToggleMs('katSap')">
+              <span id="ms-p-katSap-label">Kat. SAP</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-p-katSap-menu"></div>
+          </div>
+          <!-- Search -->
+          <input type="text" id="p-search" oninput="pOnFilterChange()" placeholder="Cari…"
+            class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-24 md:w-32">
+        </div>
+      </section>
+
+      <!-- Kelompok 2: Tabel Rasio Pengembalian -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-3 border-b border-gray-100">
+          <p class="text-sm font-bold">Rasio Pengembalian per Kat. Teknik × Sloc KP</p>
+          <p class="text-[10px] text-gray-400">Sort by % kembali baik tertinggi · <span class="text-red-500 font-semibold">merah = &gt;50%</span></p>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar max-h-64 overflow-y-auto">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr>
+                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kat. Teknik</th>
+                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Sloc KP</th>
+                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Serap</th>
+                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Kembali Baik</th>
+                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Kembali Rusak</th>
+                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">% Baik</th>
+                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">% Rusak</th>
+              </tr>
+            </thead>
+            <tbody id="p-rasioTbody">
+              <tr><td colspan="7" class="p-8 text-center text-gray-400 text-xs">Memuat data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Kelompok 3: Chart Multi-Dimensi -->
+      <section>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+            <span class="material-symbols-outlined text-[12px]">bar_chart</span> Analisis Penyerapan
+          </p>
+          <!-- Toggle dimensi bar chart -->
+          <div class="flex gap-1" id="p-dimToggle">
+            <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-[#00288e] text-white" data-dim="katTeknik">Kat. Teknik</button>
+            <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]" data-dim="slocKp">Sloc KP</button>
+            <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]" data-dim="slocGudang">Gudang</button>
+            <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]" data-dim="mvt">Movement</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          <!-- Bar chart penyerapan vs pengembalian -->
+          <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <div class="flex items-center gap-4 mb-3">
+              <p class="text-xs font-bold text-[#131b2e] flex-1" id="p-barTitle">Penyerapan vs Pengembalian per Kat. Teknik</p>
+              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Penyerapan</span>
+              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#1D9E75]"></span>Kembali Baik</span>
+              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#E24B4A]"></span>Kembali Rusak</span>
+            </div>
+            <div style="position:relative;height:300px"><canvas id="p-barChart"></canvas></div>
+          </div>
+          <!-- Donut brand -->
+          <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-bold text-[#131b2e] mb-1">Brand Material</p>
+            <p class="text-[9px] text-gray-400 mb-3">Berdasarkan qty penyerapan · hover untuk detail</p>
+            <div style="position:relative;height:280px"><canvas id="p-brandChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Kelompok 4: Top 5 Kat. Teknik -->
+      <section>
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">trophy</span> Top 5 Kategori Teknik Terbanyak Diserap
+          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— klik untuk filter tabel</span>
+        </p>
+        <div class="space-y-2" id="p-top5"></div>
+      </section>
+
+      <!-- Kelompok 5: Tren Penyerapan -->
+      <section class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div>
+            <p class="text-xs font-bold text-[#131b2e]">Tren Penyerapan</p>
+            <p class="text-[9px] text-gray-400" id="p-trendLabel">Semua periode</p>
+          </div>
+          <div class="flex gap-1 no-print">
+            <!-- Toggle periode -->
+            <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50">
+              <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white" data-period="daily">Harian</button>
+              <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-period="weekly">Mingguan</button>
+              <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-period="monthly">Bulanan</button>
+            </div>
+            <!-- Toggle metric -->
+            <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50">
+              <button class="p-metric-btn px-2 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white" data-metric="qty">Qty</button>
+              <button class="p-metric-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-metric="nilai">Nilai Rp</button>
+              <button class="p-metric-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-metric="trx">Transaksi</button>
+            </div>
+          </div>
+        </div>
+        <div style="position:relative;height:250px"><canvas id="p-trendChart"></canvas></div>
+      </section>
+
+      <!-- Tabel Detail -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" id="p-tableSection">
+        <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <p class="text-sm font-bold">Data Detail Penyerapan Material</p>
+            <p class="text-[10px] text-gray-400" id="p-activeFilterLabel">Menampilkan semua data</p>
+          </div>
+          <button onclick="pExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print">
+            <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
+          </button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:1100px">
+            <thead class="bg-gray-50 sticky top-0" id="p-tblHead"></thead>
+            <tbody id="p-tblBody">
+              <tr><td colspan="15" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <p class="text-[10px] text-gray-400">
+            <span class="font-bold" id="p-rangeInfo">—</span> dari <span class="font-bold" id="p-totalInfo">—</span> data
+          </p>
+          <div class="flex gap-1" id="p-pgBtns"></div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -501,7 +699,8 @@ html,body   { height:100%; overflow:hidden; }
 // API CONFIGURATION — update di sini jika URL berubah
 // ══════════════════════════════════════════════════════════
 const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vbmk6bDp-7obfoCuyyUtYSMnv41X7b212F3fFezjiu8O2ukfaVb/exec';
-const API_STOK     = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
+const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
+const API_PENYERAPAN = 'PASTE_PENYERAPAN_URL_HERE'; // ganti setelah deploy CodePenyerapan.gs
 
 // ══════════════════════════════════════════════════════════
 // NAVIGATION — SPA core
@@ -509,12 +708,12 @@ const API_STOK     = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0
 const PAGE_CONFIG = {
   keuangan:   { title:'Administrasi Keuangan', icon:'account_balance' },
   stok:       { title:'Stok Material',          icon:'inventory_2'     },
-  penyerapan: { title:'Penyerapan Material',     icon:'moving'          },
+  penyerapan: { title:'Penyerapan Material',      icon:'moving'          },
 };
 
 // Lazy load state — data hanya di-fetch saat pertama kali modul dibuka
-const loaded  = { keuangan:false, stok:false };
-const loading = { keuangan:false, stok:false };
+const loaded  = { keuangan:false, stok:false, penyerapan:false };
+const loading = { keuangan:false, stok:false, penyerapan:false };
 let currentPage = 'keuangan';
 
 function navigateTo(page) {
@@ -544,6 +743,7 @@ function navigateTo(page) {
   // Lazy load
   if (page === 'keuangan' && !loaded.keuangan) kLoadData();
   if (page === 'stok'     && !loaded.stok)     sLoadData();
+  if (page === 'penyerapan' && !loaded.penyerapan) pLoadData();
 
   currentPage = page;
 }
@@ -582,6 +782,24 @@ function updateTopnav(page) {
         </button>
         <button onclick="sLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="s-refreshIcon">sync</span>
+        </button>
+      </div>`;
+  } else if (page === 'penyerapan') {
+    bar2.innerHTML = `
+      <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
+      <div class="flex items-center gap-1.5 no-print">
+        <div class="flex items-center gap-1 px-2 py-1 bg-[#f2f3ff] rounded-lg border border-gray-200">
+          <span class="material-symbols-outlined text-[12px] text-gray-400">calendar_month</span>
+          <span id="p-dateRange" class="text-[10px] text-gray-600 font-medium">Semua Periode</span>
+        </div>
+        <button onclick="pResetAllFilters()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
+        </button>
+        <button onclick="window.print()" class="flex items-center gap-1 px-2 py-1 bg-[#00288e] text-white rounded text-[10px] font-semibold whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">print</span><span class="hidden md:inline">Cetak PDF</span>
+        </button>
+        <button onclick="pLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+          <span class="material-symbols-outlined text-[16px]" id="p-refreshIcon">sync</span>
         </button>
       </div>`;
   } else {
@@ -1492,6 +1710,484 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Tutup modal keuangan dengan Escape
   window.addEventListener('keydown',e=>{if(e.key==='Escape')kCloseModal();});
 });
+
+// ══════════════════════════════════════════════════════════
+// ██████████████████████████████████████████████████████████
+// MODULE: PENYERAPAN MATERIAL (prefix: p)
+// ██████████████████████████████████████████████████████████
+// ══════════════════════════════════════════════════════════
+
+let P_ROWS=[], P_FILTERED=[], P_RASIO_TABLE=[], pPage=1;
+let P_ACTIVE_DIM='katTeknik', P_PERIOD='daily', P_METRIC='qty';
+let P_TOP5_FILTER='';
+
+const P_PAGE_SIZE=15;
+const P_COLS=['Material Document','Item','Material','Material Description','Batch',
+  'Quantity','Amount in LC','Sloc - Gudang','Sloc - KP','Material - Brand',
+  'Kategori - Teknik','Movement Type Text','Posting Date','_type'];
+
+const P_MS_CONFIG={
+  mvt:       {col:'Movement Type Text', label:'Movement Type'},
+  slocKp:    {col:'Sloc - KP',          label:'Sloc KP'},
+  slocGudang:{col:'Sloc - Gudang',      label:'Sloc Gudang'},
+  brand:     {col:'Material - Brand',   label:'Brand'},
+  katTeknik: {col:'Kategori - Teknik',  label:'Kat. Teknik'},
+  katSap:    {col:'Kategori - SAP',     label:'Kat. SAP'},
+};
+
+const PF={
+  dateFrom:'', dateTo:'',
+  mvt:[], slocKp:[], slocGudang:[], brand:[], katTeknik:[], katSap:[],
+  search:'', top5KatTeknik:''
+};
+
+// ── LOAD ─────────────────────────────────────────────────
+async function pLoadData() {
+  if(loading.penyerapan) return;
+  loading.penyerapan=true;
+  const icon=document.getElementById('p-refreshIcon');
+  if(icon)icon.classList.add('spin');
+  try {
+    const res=await fetch(API_PENYERAPAN);
+    const json=await res.json();
+    if(!json.ok)throw new Error(json.error||'Gagal memuat data');
+    P_ROWS=json.rows||[];
+    P_RASIO_TABLE=json.rasioTable||[];
+    pBuildDropdowns(json);
+    pApplyAll();
+    loaded.penyerapan=true;
+  } catch(err) {
+    document.getElementById('p-tblBody').innerHTML=`<tr><td colspan="15" class="p-8 text-center text-red-500 text-sm">⚠ ${err.message}</td></tr>`;
+  } finally {
+    loading.penyerapan=false;
+    if(icon)icon.classList.remove('spin');
+  }
+}
+
+// ── BUILD DROPDOWNS ───────────────────────────────────────
+function pBuildDropdowns(json) {
+  Object.entries(P_MS_CONFIG).forEach(([key,{col,label}])=>{
+    const menu=document.getElementById('ms-p-'+key+'-menu');
+    if(!menu)return;
+    const vals=[...new Set(P_ROWS.map(r=>r[col]).filter(v=>v&&v!=='').map(v=>String(v)))].sort();
+    menu.innerHTML=vals.map(v=>`
+      <label class="ms-item"><input type="checkbox" value="${v.replace(/"/g,'&quot;')}" onchange="pMsChange('${key}')">${v}</label>`).join('');
+  });
+}
+
+// ── TOGGLE MS ─────────────────────────────────────────────
+function pToggleMs(key) {
+  const menu=document.getElementById('ms-p-'+key+'-menu');
+  if(!menu)return;
+  const isHidden=menu.classList.contains('hidden');
+  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
+  if(isHidden)menu.classList.remove('hidden');
+}
+
+function pMsChange(key) {
+  const menu=document.getElementById('ms-p-'+key+'-menu');
+  if(!menu)return;
+  PF[key]=[...menu.querySelectorAll('input:checked')].map(el=>el.value);
+  const label=document.getElementById('ms-p-'+key+'-label');
+  const wrap =document.getElementById('ms-p-'+key);
+  const cfg  =P_MS_CONFIG[key];
+  if(label)label.textContent=PF[key].length?cfg.label+' ('+PF[key].length+')':cfg.label;
+  if(wrap) wrap.classList.toggle('ms-active',PF[key].length>0);
+  PF.top5KatTeknik='';
+  pApplyAll();
+}
+
+function pOnFilterChange() {
+  PF.dateFrom=document.getElementById('p-dateFrom').value;
+  PF.dateTo  =document.getElementById('p-dateTo').value;
+  PF.search  =document.getElementById('p-search').value;
+  PF.top5KatTeknik='';
+  // Update topbar date range display
+  const dr=document.getElementById('p-dateRange');
+  if(dr){
+    if(PF.dateFrom||PF.dateTo)
+      dr.textContent=(PF.dateFrom||'—')+' s/d '+(PF.dateTo||'—');
+    else
+      dr.textContent='Semua Periode';
+  }
+  pApplyAll();
+}
+
+// ── APPLY FILTER ──────────────────────────────────────────
+const pChk=(arr,val)=>!arr.length||arr.includes(val);
+
+function pApplyFilter(rows) {
+  const q=(PF.search||'').toLowerCase();
+  return rows.filter(r=>{
+    const d=r['Posting Date']||'';
+    if(PF.dateFrom&&d<PF.dateFrom)return false;
+    if(PF.dateTo  &&d>PF.dateTo)  return false;
+    if(!pChk(PF.mvt,       r['Movement Type Text']))return false;
+    if(!pChk(PF.slocKp,    r['Sloc - KP']))         return false;
+    if(!pChk(PF.slocGudang,r['Sloc - Gudang']))      return false;
+    if(!pChk(PF.brand,     r['Material - Brand']))   return false;
+    if(!pChk(PF.katTeknik, r['Kategori - Teknik']))  return false;
+    if(!pChk(PF.katSap,    r['Kategori - SAP']))     return false;
+    if(PF.top5KatTeknik&&r['Kategori - Teknik']!==PF.top5KatTeknik)return false;
+    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
+    return true;
+  });
+}
+
+function pApplyAll() {
+  P_FILTERED=pApplyFilter(P_ROWS);
+  pRenderResume();
+  pRenderRasioTable();
+  pRenderBarChart();
+  pRenderBrandChart();
+  pRenderTop5();
+  pRenderTrendChart();
+  pUpdateLabel();
+  pPage=1;pRenderTable();
+}
+
+// ── RESET ─────────────────────────────────────────────────
+function pResetAllFilters() {
+  Object.keys(PF).forEach(k=>{ PF[k]=Array.isArray(PF[k])?[]:'' });
+  document.getElementById('p-dateFrom').value='';
+  document.getElementById('p-dateTo').value='';
+  document.getElementById('p-search').value='';
+  document.querySelectorAll('[id^="ms-p-"] input[type=checkbox]').forEach(cb=>cb.checked=false);
+  Object.keys(P_MS_CONFIG).forEach(k=>{
+    const lbl=document.getElementById('ms-p-'+k+'-label');
+    const wrap=document.getElementById('ms-p-'+k);
+    if(lbl)lbl.textContent=P_MS_CONFIG[k].label;
+    if(wrap)wrap.classList.remove('ms-active');
+  });
+  const dr=document.getElementById('p-dateRange');
+  if(dr)dr.textContent='Semua Periode';
+  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
+  pApplyAll();
+}
+
+// ── RENDER RESUME ─────────────────────────────────────────
+function pRenderResume() {
+  const serap  =P_FILTERED.filter(r=>r['_type']==='penyerapan');
+  const kemBaik=P_FILTERED.filter(r=>r['_type']==='kembali_baik');
+  const kemRusak=P_FILTERED.filter(r=>r['_type']==='kembali_rusak');
+  const totalQtySerap  =serap.reduce((s,r)=>s+(r['_qty_abs']||0),0);
+  const totalNilaiSerap=serap.reduce((s,r)=>s+Math.abs(parseFloat(r['Amount in LC'])||0),0);
+  const totalQtyBaik   =kemBaik.reduce((s,r)=>s+(r['_qty_abs']||0),0);
+  const totalQtyRusak  =kemRusak.reduce((s,r)=>s+(r['_qty_abs']||0),0);
+  const rasio=totalQtySerap>0?Math.round((totalQtyBaik/totalQtySerap)*100):0;
+  const rasioColor=rasio>50?'text-red-600 font-black':'text-green-600 font-black';
+
+  document.getElementById('p-kpiResume').innerHTML=`
+    <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm">
+      <p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Total Qty Penyerapan</p>
+      <p class="text-xl font-black text-blue-800">${Math.round(totalQtySerap).toLocaleString('id-ID')}</p>
+      <p class="text-[9px] text-blue-400 mt-0.5">${serap.length.toLocaleString('id-ID')} transaksi</p>
+    </div>
+    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Nilai Penyerapan</p>
+      <p class="text-xl font-black text-[#131b2e]">${fmtRp(totalNilaiSerap)}</p>
+      <p class="text-[9px] text-gray-400 mt-0.5">Nilai material keluar</p>
+    </div>
+    <div class="bg-green-50 p-4 rounded-xl border border-green-200 shadow-sm">
+      <p class="text-[9px] font-bold text-green-600 uppercase mb-1">Pengembalian Baik</p>
+      <p class="text-xl font-black text-green-700">${Math.round(totalQtyBaik).toLocaleString('id-ID')}</p>
+      <p class="text-[9px] text-green-500 mt-0.5">${kemBaik.length} transaksi</p>
+    </div>
+    <div class="bg-red-50 p-4 rounded-xl border border-red-200 shadow-sm">
+      <p class="text-[9px] font-bold text-red-600 uppercase mb-1">Pengembalian Rusak</p>
+      <p class="text-xl font-black text-red-700">${Math.round(totalQtyRusak).toLocaleString('id-ID')}</p>
+      <p class="text-[9px] text-red-400 mt-0.5">${kemRusak.length} transaksi</p>
+    </div>
+    <div class="bg-white p-4 rounded-xl border ${rasio>50?'border-red-400':'border-gray-200'} shadow-sm">
+      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Rasio Kembali Baik</p>
+      <p class="text-xl ${rasioColor}">${rasio}%</p>
+      <p class="text-[9px] ${rasio>50?'text-red-500':'text-gray-400'} mt-0.5">${rasio>50?'⚠ Perlu perhatian':'Normal'}</p>
+    </div>`;
+}
+
+// ── RENDER RASIO TABLE ────────────────────────────────────
+function pRenderRasioTable() {
+  // Hitung rasio dari P_FILTERED
+  const map={};
+  P_FILTERED.forEach(r=>{
+    const kt=r['Kategori - Teknik']||'—';
+    const kp=r['Sloc - KP']||'—';
+    const key=kt+'||'+kp;
+    if(!map[key])map[key]={katTeknik:kt,slocKp:kp,serap:0,kembaliBaik:0,kembaliRusak:0};
+    if(r['_type']==='penyerapan')   map[key].serap       +=(r['_qty_abs']||0);
+    if(r['_type']==='kembali_baik') map[key].kembaliBaik +=(r['_qty_abs']||0);
+    if(r['_type']==='kembali_rusak')map[key].kembaliRusak+=(r['_qty_abs']||0);
+  });
+  const rows=Object.values(map).map(d=>({
+    ...d,
+    rasioB:d.serap>0?Math.round(d.kembaliBaik /d.serap*100):0,
+    rasioR:d.serap>0?Math.round(d.kembaliRusak/d.serap*100):0,
+  })).sort((a,b)=>b.rasioB-a.rasioB);
+
+  const tbody=document.getElementById('p-rasioTbody');
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="7" class="p-4 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
+  tbody.innerHTML=rows.map(d=>{
+    const rowCls=d.rasioB>50?'bg-red-50':'hover:bg-gray-50';
+    return`<tr class="${rowCls} border-b border-gray-50 transition-colors">
+      <td class="px-3 py-2 text-xs font-medium">${d.katTeknik}</td>
+      <td class="px-3 py-2 text-xs">${d.slocKp}</td>
+      <td class="px-3 py-2 text-xs text-right">${Math.round(d.serap).toLocaleString('id-ID')}</td>
+      <td class="px-3 py-2 text-xs text-right text-green-700 font-semibold">${Math.round(d.kembaliBaik).toLocaleString('id-ID')}</td>
+      <td class="px-3 py-2 text-xs text-right text-red-600 font-semibold">${Math.round(d.kembaliRusak).toLocaleString('id-ID')}</td>
+      <td class="px-3 py-2 text-xs text-right font-bold ${d.rasioB>50?'text-red-600':'text-green-600'}">${d.rasioB}%</td>
+      <td class="px-3 py-2 text-xs text-right font-bold text-orange-500">${d.rasioR}%</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── RENDER BAR CHART ──────────────────────────────────────
+function pRenderBarChart() {
+  const dimMap={
+    katTeknik:'Kategori - Teknik',
+    slocKp:'Sloc - KP',
+    slocGudang:'Sloc - Gudang',
+    mvt:'Movement Type Text',
+  };
+  const col=dimMap[P_ACTIVE_DIM]||'Kategori - Teknik';
+  const map={};
+  P_FILTERED.forEach(r=>{
+    const key=r[col]||'—';
+    if(!map[key])map[key]={serap:0,kembaliBaik:0,kembaliRusak:0};
+    if(r['_type']==='penyerapan')   map[key].serap       +=(r['_qty_abs']||0);
+    if(r['_type']==='kembali_baik') map[key].kembaliBaik +=(r['_qty_abs']||0);
+    if(r['_type']==='kembali_rusak')map[key].kembaliRusak+=(r['_qty_abs']||0);
+  });
+  const sorted=Object.entries(map).sort((a,b)=>b[1].serap-a[1].serap).slice(0,15);
+  const labels=sorted.map(e=>e[0]);
+  const chartH=Math.max(200,sorted.length*28);
+  const el=document.getElementById('p-barChart');
+  if(el)el.parentElement.style.height=chartH+'px';
+  rebuildChart('p-barChart',{type:'bar',
+    data:{labels,datasets:[
+      {label:'Penyerapan',data:sorted.map(e=>e[1].serap),backgroundColor:'#378ADD',borderRadius:3,stack:'s'},
+      {label:'Kembali Baik',data:sorted.map(e=>e[1].kembaliBaik),backgroundColor:'#1D9E75',borderRadius:3,stack:'s'},
+      {label:'Kembali Rusak',data:sorted.map(e=>e[1].kembaliRusak),backgroundColor:'#E24B4A',borderRadius:3,stack:'s'},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}},
+        y:{stacked:true,grid:{display:false},ticks:{font:{size:9}}}
+      }
+    }
+  });
+  // Update title
+  const titles={katTeknik:'per Kat. Teknik',slocKp:'per Sloc KP',slocGudang:'per Gudang',mvt:'per Movement Type'};
+  const t=document.getElementById('p-barTitle');
+  if(t)t.textContent='Penyerapan vs Pengembalian '+( titles[P_ACTIVE_DIM]||'');
+}
+
+// ── RENDER BRAND DONUT ────────────────────────────────────
+function pRenderBrandChart() {
+  const src=P_FILTERED.filter(r=>r['_type']==='penyerapan');
+  const totalQty=src.reduce((s,r)=>s+(r['_qty_abs']||0),0);
+  const byB={};
+  src.forEach(r=>{const b=r['Material - Brand'];if(b)byB[b]=(byB[b]||0)+(r['_qty_abs']||0);});
+  const sorted=Object.entries(byB).sort((a,b)=>b[1]-a[1]);
+  const top9=sorted.slice(0,9), others=sorted.slice(9).reduce((s,e)=>s+e[1],0);
+  const labels=[...top9.map(e=>e[0]),...(others>0?['Lainnya']:[])];
+  const data  =[...top9.map(e=>e[1]),...(others>0?[others]:[])];
+  const colors=['#378ADD','#EF9F27','#1D9E75','#E24B4A','#7F77DD','#F472B6','#34D399','#FB923C','#60A5FA','#94A3B8'];
+  rebuildChart('p-brandChart',{type:'doughnut',
+    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length),borderWidth:1,borderColor:'#fff',hoverOffset:8}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{
+        legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:6,
+          generateLabels:chart=>chart.data.labels.map((l,i)=>({text:l.length>14?l.slice(0,14)+'…':l,fillStyle:chart.data.datasets[0].backgroundColor[i],hidden:false,index:i}))
+        }},
+        tooltip:{callbacks:{label:ctx=>{const qty=ctx.parsed;const pct=totalQty>0?((qty/totalQty)*100).toFixed(1):0;return` ${ctx.label}: ${Math.round(qty).toLocaleString('id-ID')} unit (${pct}%)`;}}}
+      }
+    }
+  });
+}
+
+// ── RENDER TOP 5 ──────────────────────────────────────────
+function pRenderTop5() {
+  const byKt={};
+  P_FILTERED.filter(r=>r['_type']==='penyerapan').forEach(r=>{
+    const kt=r['Kategori - Teknik']||'—';
+    byKt[kt]=(byKt[kt]||0)+(r['_qty_abs']||0);
+  });
+  const sorted=Object.entries(byKt).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const max=sorted[0]?.[1]||1;
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const el=document.getElementById('p-top5');
+  if(!el)return;
+  if(!sorted.length){el.innerHTML='<p class="text-xs text-gray-400">Belum ada data</p>';return;}
+  el.innerHTML=sorted.map(([kt,qty],i)=>{
+    const isOn=PF.top5KatTeknik===kt;
+    return`<div class="cf rounded-lg p-2.5 ${isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e]':'bg-white hover:bg-gray-50 border border-gray-200'} transition-all shadow-sm"
+      onclick="pToggleTop5('${kt.replace(/'/g,"\'")}')" >
+      <div class="flex justify-between mb-1">
+        <span class="text-xs font-bold">${medals[i]} ${kt}</span>
+        <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${Math.round(qty).toLocaleString('id-ID')} unit</span>
+      </div>
+      <div class="w-full bg-gray-100 rounded-full h-1.5">
+        <div class="h-1.5 rounded-full ${isOn?'bg-[#00288e]':'bg-[#378ADD]'}" style="width:${Math.round(qty/max*100)}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function pToggleTop5(kt) {
+  PF.top5KatTeknik=PF.top5KatTeknik===kt?'':kt;
+  pApplyAll();
+}
+
+// ── RENDER TREND CHART ────────────────────────────────────
+function pRenderTrendChart() {
+  const src=P_FILTERED.filter(r=>r['_type']==='penyerapan');
+  const getKey=d=>{
+    if(!d)return null;
+    if(P_PERIOD==='monthly')return d.slice(0,7);
+    if(P_PERIOD==='weekly'){
+      const dt=new Date(d); if(isNaN(dt))return null;
+      const day=dt.getDay(), diff=dt.getDate()-day+(day===0?-6:1);
+      const mon=new Date(dt.setDate(diff));
+      return mon.toISOString().slice(0,10);
+    }
+    return d; // daily
+  };
+  const byKey={};
+  src.forEach(r=>{
+    const k=getKey(r['Posting Date']);
+    if(!k)return;
+    if(!byKey[k])byKey[k]={qty:0,nilai:0,trx:0};
+    byKey[k].qty +=r['_qty_abs']||0;
+    byKey[k].nilai+=Math.abs(parseFloat(r['Amount in LC'])||0);
+    byKey[k].trx +=1;
+  });
+  const keys=Object.keys(byKey).sort();
+  const metricMap={qty:'qty',nilai:'nilai',trx:'trx'};
+  const labelMap={qty:'Qty Penyerapan',nilai:'Nilai (Rp)',trx:'Jumlah Transaksi'};
+  const cbMap={qty:v=>Math.round(v).toLocaleString('id-ID'),nilai:v=>fmtRp(v),trx:v=>v};
+  const m=metricMap[P_METRIC];
+  const periodLabel={daily:'Harian',weekly:'Mingguan',monthly:'Bulanan'};
+  const lbl=document.getElementById('p-trendLabel');
+  if(lbl)lbl.textContent=periodLabel[P_PERIOD]+' · '+labelMap[P_METRIC];
+  rebuildChart('p-trendChart',{type:'line',
+    data:{labels:keys,datasets:[{
+      label:labelMap[P_METRIC],
+      data:keys.map(k=>byKey[k][m]||0),
+      borderColor:'#00288e',backgroundColor:'rgba(0,40,142,0.06)',
+      fill:true,tension:0.4,pointRadius:2
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:cbMap[P_METRIC],font:{size:9}}},
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:12}}
+      }
+    }
+  });
+}
+
+// ── RENDER TABLE ──────────────────────────────────────────
+const P_COL_LABELS={'Material Document':'Mat.Doc','Item':'Item','Material':'Material',
+  'Material Description':'Deskripsi','Batch':'Batch','Quantity':'Qty',
+  'Amount in LC':'Nilai (Rp)','Sloc - Gudang':'Gudang','Sloc - KP':'KP',
+  'Material - Brand':'Brand','Kategori - Teknik':'Kat. Teknik',
+  'Movement Type Text':'Movement','Posting Date':'Tgl','_type':'Tipe'};
+
+function pRenderTable() {
+  const thead=document.getElementById('p-tblHead');
+  if(thead)thead.innerHTML='<tr><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>'+
+    P_COLS.map(h=>`<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${P_COL_LABELS[h]||h}</th>`).join('')+'</tr>';
+  const start=(pPage-1)*P_PAGE_SIZE;
+  const paged=P_FILTERED.slice(start,start+P_PAGE_SIZE);
+  const tbody=document.getElementById('p-tblBody');
+  if(!paged.length){
+    tbody.innerHTML=`<tr><td colspan="${P_COLS.length+1}" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>`;
+    buildPagination('p-pgBtns',pPage,P_FILTERED.length,P_PAGE_SIZE,'pGoPage');
+    document.getElementById('p-rangeInfo').textContent='0';
+    document.getElementById('p-totalInfo').textContent='0';
+    return;
+  }
+  tbody.innerHTML=paged.map((r,i)=>{
+    const typeBadge=r['_type']==='penyerapan'
+      ?'<span class="px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[9px] font-bold">Serap</span>'
+      :r['_type']==='kembali_baik'
+      ?'<span class="px-1.5 py-0.5 rounded-full bg-green-100 text-green-800 text-[9px] font-bold">Kembali Baik</span>'
+      :r['_type']==='kembali_rusak'
+      ?'<span class="px-1.5 py-0.5 rounded-full bg-red-100 text-red-800 text-[9px] font-bold">Kembali Rusak</span>'
+      :'<span class="px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 text-[9px]">—</span>';
+    const rowBg=r['_type']==='kembali_baik'?'bg-green-50/30':r['_type']==='kembali_rusak'?'bg-red-50/30':'';
+    const cells=P_COLS.map(col=>{
+      const v=r[col];
+      if(col==='_type')return`<td class="p-3">${typeBadge}</td>`;
+      if(col==='Quantity')return`<td class="p-3 text-xs text-right font-mono ${parseFloat(v)<0?'text-blue-700':'text-green-700'}">${v}</td>`;
+      if(col==='Amount in LC')return`<td class="p-3 text-xs text-right font-mono whitespace-nowrap">${v?fmtRpFull(Math.abs(+v)):'-'}</td>`;
+      if(col==='Material Description')return`<td class="p-3 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v||''}">${v||'-'}</td>`;
+      return`<td class="p-3 text-xs whitespace-nowrap">${v||'-'}</td>`;
+    }).join('');
+    return`<tr class="hover:bg-[#f2f3ff] transition-colors ${rowBg}">
+      <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>${cells}</tr>`;
+  }).join('');
+  const {s,e}=buildPagination('p-pgBtns',pPage,P_FILTERED.length,P_PAGE_SIZE,'pGoPage');
+  document.getElementById('p-rangeInfo').textContent=`${s}–${e}`;
+  document.getElementById('p-totalInfo').textContent=P_FILTERED.length.toLocaleString('id-ID');
+}
+
+function pGoPage(p){pPage=Math.max(1,Math.min(p,Math.ceil(P_FILTERED.length/P_PAGE_SIZE)||1));pRenderTable();}
+
+function pUpdateLabel() {
+  const parts=[];
+  if(PF.dateFrom||PF.dateTo)parts.push((PF.dateFrom||'—')+' s/d '+(PF.dateTo||'—'));
+  Object.keys(P_MS_CONFIG).forEach(k=>{if(PF[k]&&PF[k].length)parts.push(P_MS_CONFIG[k].label+'('+PF[k].length+')');});
+  if(PF.top5KatTeknik)parts.push('Top5: '+PF.top5KatTeknik);
+  if(PF.search)parts.push('"'+PF.search+'"');
+  const el=document.getElementById('p-activeFilterLabel');
+  if(el)el.textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
+}
+
+function pExportCSV() {
+  const rows=[P_COLS.map(c=>P_COL_LABELS[c]||c).join(',')];
+  P_FILTERED.forEach(r=>rows.push(P_COLS.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('
+')],{type:'text/csv;charset=utf-8;'}));
+  a.download='penyerapan_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+// ── TOGGLE DIM & PERIOD & METRIC ─────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  // Bar chart dimension toggle
+  document.querySelectorAll('.p-dim-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      P_ACTIVE_DIM=btn.dataset.dim;
+      document.querySelectorAll('.p-dim-btn').forEach(b=>{
+        b.className='p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded '+(b===btn?'bg-[#00288e] text-white':'bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]');
+      });
+      pRenderBarChart();
+    });
+  });
+  // Period toggle
+  document.querySelectorAll('.p-period-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      P_PERIOD=btn.dataset.period;
+      document.querySelectorAll('.p-period-btn').forEach(b=>{
+        b.className='p-period-btn px-2 py-1 text-[10px] font-bold rounded '+(b===btn?'bg-[#00288e] text-white':'text-gray-500 hover:bg-white');
+      });
+      pRenderTrendChart();
+    });
+  });
+  // Metric toggle
+  document.querySelectorAll('.p-metric-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      P_METRIC=btn.dataset.metric;
+      document.querySelectorAll('.p-metric-btn').forEach(b=>{
+        b.className='p-metric-btn px-2 py-1 text-[10px] font-bold rounded '+(b===btn?'bg-[#00288e] text-white':'text-gray-500 hover:bg-white');
+      });
+      pRenderTrendChart();
+    });
+  });
+});
+
 </script>
 </body>
 </html>
