@@ -739,7 +739,30 @@ function kBuildTrendOptions() {
   ['k-trendTahunAwal','k-trendTahunAkhir'].forEach(id=>{ document.getElementById(id).innerHTML='<option value="">Tahun</option>'+yOpts; });
 }
 
-// kSetChip dihapus — status filter kini via ms-dropdown
+// kSetChip — sync status ke statusArr dan update ms-dropdown
+function kSetChip(status) {
+  if(status==='SEMUA') {
+    KF.statusArr=[];
+    // Uncheck semua checkbox status
+    const menu=document.getElementById('ms-k-status-menu');
+    if(menu)menu.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.checked=false);
+    const lbl=document.getElementById('ms-k-status-label');
+    const wrap=document.getElementById('ms-k-status');
+    if(lbl)lbl.textContent='Status';
+    if(wrap)wrap.classList.remove('ms-active');
+  } else {
+    // Set statusArr ke status tunggal, centang checkbox yang sesuai
+    KF.statusArr=[status];
+    const menu=document.getElementById('ms-k-status-menu');
+    if(menu)menu.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+      cb.checked=cb.value===status;
+    });
+    const lbl=document.getElementById('ms-k-status-label');
+    const wrap=document.getElementById('ms-k-status');
+    if(lbl)lbl.textContent='Status (1)';
+    if(wrap)wrap.classList.add('ms-active');
+  }
+}
 
 function kApplyFilters() {
   const q=KF.search.toLowerCase();
@@ -806,11 +829,11 @@ function kMsChange(key) {
 function kOnCardClick(type, val) {
   const key=type+':'+val;
   if(KF.activeCardFilter===key||(type==='status'&&KF.status===val)||(type==='paid'&&KF.status==='Paid')){kResetAllFilters();return;}
-  KF.status='SEMUA';KF.reminder='';KF.activeCardFilter=key;
+  KF.statusArr=[];KF.reminder='';KF.activeCardFilter=key;
   if(type==='reset'){kResetAllFilters();return;}
-  else if(type==='status'){KF.status=val;kSetChip(val);}
-  else if(type==='paid'){KF.status='Paid';kSetChip('Paid');}
-  else if(type==='outstanding'){KF.status='SEMUA';kSetChip('SEMUA');}
+  else if(type==='status'){KF.statusArr=[val];kSetChip(val);}
+  else if(type==='paid'){KF.statusArr=['Paid'];kSetChip('Paid');}
+  else if(type==='outstanding'){KF.statusArr=[];kSetChip('SEMUA');}
   else if(type==='aging'){
     if(val==='normal'){KF.activeCardFilter='aging:normal';}
     else{KF.reminder=val;}
@@ -833,7 +856,7 @@ function kResetAllFilters() {
   const je=document.getElementById('k-jenisFilter');if(je)je.value='';
   const se=document.getElementById('k-search');if(se)se.value='';
   document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
-  kSetChip('SEMUA');kApplyFilters();kRenderTopRoutes();
+  kApplyFilters();kRenderTopRoutes();
 }
 
 function kUpdateLabel() {
@@ -849,7 +872,7 @@ function kUpdateLabel() {
 }
 
 function kRenderResume(nom) {
-  const s=K_SUMMARY; const has=Object.values(KF).some(v=>v&&v!=='SEMUA');
+  const s=K_SUMMARY; const has=Object.values(KF).some(v=>Array.isArray(v)?v.length>0:(v&&v!=='SEMUA'&&v!==''));
   document.getElementById('k-kpiFinansial').innerHTML=`
     <div class="cf bg-white p-4 rounded-xl border ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('reset','all')">
       <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Transaksi</p>
@@ -903,7 +926,7 @@ function kRenderStatusCards() {
   const statuses=Object.keys(K_STATUS_COLOR_MAP);
   document.getElementById('k-statusCards').innerHTML=statuses.map((s,i)=>{
     const clr=K_STATUS_COLOR_MAP[s]||K_COLOR_FALLBACK[i%K_COLOR_FALLBACK.length];
-    return `<div class="cf p-3 rounded-xl border-2 ${KF.status===s?'on':''}" style="background:${clr.card};border-color:${clr.border}" onclick="kOnCardClick('status','${s.replace(/'/g,"\\'")}')">
+    return `<div class="cf p-3 rounded-xl border-2 ${KF.statusArr&&KF.statusArr.includes(s)?'on':''}" style="background:${clr.card};border-color:${clr.border}" onclick="kOnCardClick('status','${s.replace(/'/g,"\\'")}')">
       <p class="text-[10px] font-bold mb-1 leading-tight" style="color:${clr.text}">${s}</p>
       <p class="text-2xl font-black" style="color:${clr.text}">${byStatus[s]||0}</p>
     </div>`;
