@@ -196,8 +196,14 @@ html,body   { height:100%; overflow:hidden; }
           <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
         </p>
         <div class="flex flex-wrap gap-1.5 items-center relative">
-          <!-- Status chips -->
-          <div class="flex items-center gap-1.5 flex-wrap" id="k-statusChips"></div>
+          <!-- Status ms-dropdown -->
+          <div class="ms-wrap relative" id="ms-k-status">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('status')">
+              <span id="ms-k-status-label">Status</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-56 overflow-y-auto" id="ms-k-status-menu"></div>
+          </div>
           <div class="h-5 w-px bg-gray-200 mx-1"></div>
           <!-- Bulan -->
           <div class="ms-wrap relative" id="ms-k-bulan">
@@ -668,7 +674,7 @@ const K_COLOR_FALLBACK = [
 const K_STATUS_COLOR_MAP = {};
 const K_HEADERS = ['No','Deskripsi Material','IO/PRK','No. Nodin','Tgl Nodin','Dari','Tujuan','Tgl AWB','AWB','Berat (Kg)','No INV','Service Billing','Mitra','Nominal (Rp)','Status','Keterangan'];
 
-const KF = { search:'', status:'SEMUA', bulan:'', mitra:'', jenis:'', reminder:'', activeCardFilter:'', bulanArr:[], mitraArr:[], reminderArr:[], rute:'' };
+const KF = { search:'', status:'SEMUA', bulan:'', mitra:'', jenis:'', reminder:'', activeCardFilter:'', bulanArr:[], mitraArr:[], reminderArr:[], statusArr:[], rute:'' };
 
 async function kLoadData() {
   if (loading.keuangan) return;
@@ -701,15 +707,15 @@ async function kLoadData() {
 }
 
 function kBuildFilters(mitras, months, statuses) {
-  // Status chips
-  const chips=document.getElementById('k-statusChips');
-  chips.innerHTML=['SEMUA',...statuses].map((s,i)=>`
-    <button class="k-chip px-2 py-0.5 text-[10px] font-bold rounded transition-colors
-      ${i===0?'bg-[#00288e] text-white':'bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]'}"
-      data-s="${s}">${s==='SEMUA'?'Semua':s}</button>`).join('');
-  chips.querySelectorAll('.k-chip').forEach(c=>c.addEventListener('click',()=>{
-    kSetChip(c.dataset.s);KF.status=c.dataset.s;KF.activeCardFilter='';kApplyFilters();
-  }));
+  // Status ms-dropdown
+  const statusMenu=document.getElementById('ms-k-status-menu');
+  if(statusMenu)statusMenu.innerHTML=statuses.map(s=>{
+    const clr=K_STATUS_COLOR_MAP[s]||{bg:'bg-gray-100',tx:'text-gray-600'};
+    return`<label class="ms-item">
+      <input type="checkbox" value="${s.replace(/"/g,'&quot;')}" onchange="kMsChange('status')">
+      <span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${clr.bg} ${clr.tx}">${s}</span>
+    </label>`;
+  }).join('');
   // Bulan ms-dropdown
   const bulanMenu=document.getElementById('ms-k-bulan-menu');
   if(bulanMenu)bulanMenu.innerHTML=months.map(k=>`
@@ -733,22 +739,17 @@ function kBuildTrendOptions() {
   ['k-trendTahunAwal','k-trendTahunAkhir'].forEach(id=>{ document.getElementById(id).innerHTML='<option value="">Tahun</option>'+yOpts; });
 }
 
-function kSetChip(status) {
-  document.querySelectorAll('.k-chip').forEach(c=>{
-    const a=c.dataset.s===status;
-    c.className=`k-chip px-2 py-0.5 text-[10px] font-bold rounded transition-colors ${a?'bg-[#00288e] text-white':'bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]'}`;
-  });
-}
+// kSetChip dihapus — status filter kini via ms-dropdown
 
 function kApplyFilters() {
   const q=KF.search.toLowerCase();
   K_FILTERED=K_ROWS.filter(r=>{
     const aging=calcAging(r['Tgl AWB'],r['Status']);
     const rem=getReminderLevel(aging,r['Status']);
-    const rute=(r['Dari']||'')+'→'+(r['Tujuan']||'');
+    const rute=kNormRute(r);
     if(KF.activeCardFilter==='outstanding:belum-dibayar'&&r['Status']==='Paid')return false;
     if(KF.activeCardFilter==='aging:normal'&&(r['Status']==='Paid'||aging>=8))return false;
-    if(KF.status!=='SEMUA'&&r['Status']!==KF.status)return false;
+    if(KF.statusArr&&KF.statusArr.length&&!KF.statusArr.includes(r['Status']))return false;
     if(KF.bulanArr&&KF.bulanArr.length&&!KF.bulanArr.includes(monthKey(r['Tgl AWB'])))return false;
     if(KF.mitraArr&&KF.mitraArr.length&&!KF.mitraArr.includes(r['Mitra']))return false;
     if(KF.reminderArr&&KF.reminderArr.length&&!KF.reminderArr.includes(rem))return false;
@@ -792,9 +793,10 @@ function kMsChange(key) {
   if(key==='bulan')    KF.bulanArr=checked;
   if(key==='mitra')    KF.mitraArr=checked;
   if(key==='reminder') KF.reminderArr=checked;
+  if(key==='status')   KF.statusArr=checked;
   const label=document.getElementById('ms-k-'+key+'-label');
   const wrap =document.getElementById('ms-k-'+key);
-  const labels={bulan:'Bulan',mitra:'Mitra',reminder:'Reminder'};
+  const labels={bulan:'Bulan',mitra:'Mitra',reminder:'Reminder',status:'Status'};
   if(label)label.textContent=checked.length?labels[key]+' ('+checked.length+')':labels[key];
   if(wrap) wrap.classList.toggle('ms-active',checked.length>0);
   KF.activeCardFilter='';
@@ -820,13 +822,13 @@ function kOnCardClick(type, val) {
 
 function kResetAllFilters() {
   KF.search='';KF.status='SEMUA';KF.bulan='';KF.mitra='';KF.jenis='';KF.reminder='';
-  KF.activeCardFilter='';KF.bulanArr=[];KF.mitraArr=[];KF.reminderArr=[];KF.rute='';
+  KF.activeCardFilter='';KF.bulanArr=[];KF.mitraArr=[];KF.reminderArr=[];KF.statusArr=[];KF.rute='';
   // Reset ms-dropdown
   document.querySelectorAll('[id^="ms-k-"] input[type=checkbox]').forEach(cb=>cb.checked=false);
   document.querySelectorAll('[id^="ms-k-"]').forEach(w=>w.classList.remove('ms-active'));
-  ['ms-k-bulan-label','ms-k-mitra-label','ms-k-reminder-label'].forEach((id,i)=>{
+  ['ms-k-status-label','ms-k-bulan-label','ms-k-mitra-label','ms-k-reminder-label'].forEach((id,i)=>{
     const el=document.getElementById(id);
-    if(el)el.textContent=['Bulan','Mitra','Reminder'][i];
+    if(el)el.textContent=['Status','Bulan','Mitra','Reminder'][i];
   });
   const je=document.getElementById('k-jenisFilter');if(je)je.value='';
   const se=document.getElementById('k-search');if(se)se.value='';
@@ -836,7 +838,7 @@ function kResetAllFilters() {
 
 function kUpdateLabel() {
   const parts=[];
-  if(KF.status!=='SEMUA')parts.push('Status: '+KF.status);
+  if(KF.statusArr&&KF.statusArr.length)parts.push('Status('+KF.statusArr.length+')');
   if(KF.bulanArr&&KF.bulanArr.length)parts.push('Bulan('+KF.bulanArr.length+')');
   if(KF.mitraArr&&KF.mitraArr.length)parts.push('Mitra('+KF.mitraArr.length+')');
   if(KF.reminderArr&&KF.reminderArr.length)parts.push('Reminder('+KF.reminderArr.length+')');
@@ -1000,9 +1002,18 @@ function kToggleRute(rute) {
   KF.rute = KF.rute===rute ? '' : rute;
   KF.activeCardFilter='';
   kApplyFilters();
-  // Re-render top routes agar highlight update
   kRenderTopRoutes();
   if(KF.rute) document.getElementById('k-tableSection').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// Normalisasi format rute dari row data agar cocok dengan format K_TOP_ROUTES
+function kNormRute(r) {
+  // Coba berbagai kolom yang mungkin ada
+  const dari = r['Dari']||r['Dari Kota']||r['Origin']||'';
+  const tujuan = r['Tujuan']||r['Tujuan Kota']||r['Destination']||'';
+  if (dari && tujuan) return (dari+' → '+tujuan).trim();
+  // Fallback: cari kolom Rute langsung
+  return r['Rute']||r['Route']||'';
 }
 
 function kOpenModal(row) {
