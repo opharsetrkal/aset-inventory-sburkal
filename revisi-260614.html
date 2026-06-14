@@ -227,10 +227,7 @@ html,body   { height:100%; overflow:hidden; }
               <span id="ms-k-jenis-label">IO/PRK</span>
               <span class="material-symbols-outlined text-[12px]">expand_more</span>
             </button>
-            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[120px] max-h-48 overflow-y-auto" id="ms-k-jenis-menu">
-              <label class="ms-item"><input type="checkbox" value="IO" onchange="kMsChange('jenis')">IO</label>
-              <label class="ms-item"><input type="checkbox" value="PRK" onchange="kMsChange('jenis')">PRK</label>
-            </div>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[120px] max-h-48 overflow-y-auto" id="ms-k-jenis-menu"></div>
           </div>
           <!-- Reminder -->
           <div class="ms-wrap relative" id="ms-k-reminder">
@@ -737,6 +734,11 @@ function kBuildFilters(mitras, months, statuses) {
     {v:'R1',l:'Perhatian (8–14 hari)'},
     {v:'R2',l:'Kritis (>14 hari)'}
   ].map(o=>`<label class="ms-item"><input type="checkbox" value="${o.v}" onchange="kMsChange('reminder')">${o.l}</label>`).join('');
+  // IO/PRK dari data aktual
+  const jenisVals=[...new Set(K_ROWS.map(r=>r['IO/PRK']).filter(Boolean).map(v=>String(v).trim()))].sort();
+  const jenisMenu=document.getElementById('ms-k-jenis-menu');
+  if(jenisMenu)jenisMenu.innerHTML=jenisVals.map(v=>`
+    <label class="ms-item"><input type="checkbox" value="${v.replace(/"/g,'&quot;')}" onchange="kMsChange('jenis')">${v}</label>`).join('');
 }
 
 function kBuildTrendOptions() {
@@ -787,7 +789,7 @@ function kApplyFilters() {
     if(KF.reminder&&rem!==KF.reminder)return false;
     if(KF.reminderArr&&KF.reminderArr.length&&!KF.reminderArr.includes(rem))return false;
     if(KF.rute&&rute!==KF.rute)return false;
-    if(KF.jenisArr&&KF.jenisArr.length&&!KF.jenisArr.some(j=>String(r['IO/PRK']||'').startsWith(j)))return false;
+    if(KF.jenisArr&&KF.jenisArr.length&&!KF.jenisArr.includes(String(r['IO/PRK']||'').trim()))return false;
     if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
     return true;
   });
