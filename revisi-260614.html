@@ -222,9 +222,16 @@ html,body   { height:100%; overflow:hidden; }
             <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-k-mitra-menu"></div>
           </div>
           <!-- IO/PRK -->
-          <select class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600" id="k-jenisFilter" onchange="kOnDropdownChange()">
-            <option value="">IO &amp; PRK</option><option value="IO">IO</option><option value="PRK">PRK</option>
-          </select>
+          <div class="ms-wrap relative" id="ms-k-jenis">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('jenis')">
+              <span id="ms-k-jenis-label">IO/PRK</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[120px] max-h-48 overflow-y-auto" id="ms-k-jenis-menu">
+              <label class="ms-item"><input type="checkbox" value="IO" onchange="kMsChange('jenis')">IO</label>
+              <label class="ms-item"><input type="checkbox" value="PRK" onchange="kMsChange('jenis')">PRK</label>
+            </div>
+          </div>
           <!-- Reminder -->
           <div class="ms-wrap relative" id="ms-k-reminder">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="kToggleMs('reminder')">
@@ -674,7 +681,7 @@ const K_COLOR_FALLBACK = [
 const K_STATUS_COLOR_MAP = {};
 const K_HEADERS = ['No','Deskripsi Material','IO/PRK','No. Nodin','Tgl Nodin','Dari','Tujuan','Tgl AWB','AWB','Berat (Kg)','No INV','Service Billing','Mitra','Nominal (Rp)','Status','Keterangan'];
 
-const KF = { search:'', status:'SEMUA', bulan:'', mitra:'', jenis:'', reminder:'', activeCardFilter:'', bulanArr:[], mitraArr:[], reminderArr:[], statusArr:[], rute:'' };
+const KF = { search:'', status:'SEMUA', bulan:'', mitra:'', jenis:'', reminder:'', activeCardFilter:'', bulanArr:[], mitraArr:[], reminderArr:[], statusArr:[], jenisArr:[], rute:'' };
 
 async function kLoadData() {
   if (loading.keuangan) return;
@@ -780,7 +787,7 @@ function kApplyFilters() {
     if(KF.reminder&&rem!==KF.reminder)return false;
     if(KF.reminderArr&&KF.reminderArr.length&&!KF.reminderArr.includes(rem))return false;
     if(KF.rute&&rute!==KF.rute)return false;
-    if(KF.jenis&&!String(r['IO/PRK']||'').startsWith(KF.jenis))return false;
+    if(KF.jenisArr&&KF.jenisArr.length&&!KF.jenisArr.some(j=>String(r['IO/PRK']||'').startsWith(j)))return false;
     if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
     return true;
   });
@@ -796,7 +803,6 @@ function kApplyFilters() {
 }
 
 function kOnDropdownChange() {
-  KF.jenis  =document.getElementById('k-jenisFilter').value;
   KF.search =document.getElementById('k-search').value;
   KF.activeCardFilter='';
   kApplyFilters();
@@ -820,9 +826,10 @@ function kMsChange(key) {
   if(key==='mitra')    KF.mitraArr=checked;
   if(key==='reminder') KF.reminderArr=checked;
   if(key==='status')   KF.statusArr=checked;
+  if(key==='jenis')    KF.jenisArr=checked;
   const label=document.getElementById('ms-k-'+key+'-label');
   const wrap =document.getElementById('ms-k-'+key);
-  const labels={bulan:'Bulan',mitra:'Mitra',reminder:'Reminder',status:'Status'};
+  const labels={bulan:'Bulan',mitra:'Mitra',reminder:'Reminder',status:'Status',jenis:'IO/PRK'};
   if(label)label.textContent=checked.length?labels[key]+' ('+checked.length+')':labels[key];
   if(wrap) wrap.classList.toggle('ms-active',checked.length>0);
   KF.activeCardFilter='';
@@ -849,15 +856,15 @@ function kOnCardClick(type, val) {
 
 function kResetAllFilters() {
   KF.search='';KF.status='SEMUA';KF.bulan='';KF.mitra='';KF.jenis='';KF.reminder='';
-  KF.activeCardFilter='';KF.bulanArr=[];KF.mitraArr=[];KF.reminderArr=[];KF.statusArr=[];KF.rute='';
+  KF.activeCardFilter='';KF.bulanArr=[];KF.mitraArr=[];KF.reminderArr=[];KF.statusArr=[];KF.jenisArr=[];KF.rute='';
   // Reset ms-dropdown
   document.querySelectorAll('[id^="ms-k-"] input[type=checkbox]').forEach(cb=>cb.checked=false);
   document.querySelectorAll('[id^="ms-k-"]').forEach(w=>w.classList.remove('ms-active'));
-  ['ms-k-status-label','ms-k-bulan-label','ms-k-mitra-label','ms-k-reminder-label'].forEach((id,i)=>{
+  ['ms-k-status-label','ms-k-bulan-label','ms-k-mitra-label','ms-k-reminder-label','ms-k-jenis-label'].forEach((id,i)=>{
     const el=document.getElementById(id);
-    if(el)el.textContent=['Status','Bulan','Mitra','Reminder'][i];
+    if(el)el.textContent=['Status','Bulan','Mitra','Reminder','IO/PRK'][i];
   });
-  const je=document.getElementById('k-jenisFilter');if(je)je.value='';
+  // IO/PRK sudah via ms-dropdown jenisArr
   const se=document.getElementById('k-search');if(se)se.value='';
   document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
   kApplyFilters();kRenderTopRoutes();
@@ -870,7 +877,7 @@ function kUpdateLabel() {
   if(KF.mitraArr&&KF.mitraArr.length)parts.push('Mitra('+KF.mitraArr.length+')');
   if(KF.reminderArr&&KF.reminderArr.length)parts.push('Reminder('+KF.reminderArr.length+')');
   if(KF.rute)parts.push('Rute: '+KF.rute);
-  if(KF.jenis)parts.push(KF.jenis);
+  if(KF.jenisArr&&KF.jenisArr.length)parts.push('IO/PRK('+KF.jenisArr.join(',')+')' );
   if(KF.search)parts.push('"'+KF.search+'"');
   document.getElementById('k-activeFilterLabel').textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
 }
