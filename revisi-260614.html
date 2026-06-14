@@ -455,7 +455,7 @@ html,body   { height:100%; overflow:hidden; }
   </div><!-- end #content -->
 
   <!-- FOOTER -->
-  <footer class="flex-shrink-0 py-3 px-6 text-center border-t border-gray-100 bg-white">
+  <footer class="flex-shrink-0 py-2 px-6 text-center border-t border-gray-100 bg-white">
     <p class="text-[9px] text-gray-300">Developed &amp; maintained by bin.muji 8614018ICP · 2026</p>
   </footer>
 
@@ -840,7 +840,6 @@ function kOnCardClick(type, val) {
     kSetChip('SEMUA');
   }
   kApplyFilters();
-  document.getElementById('k-tableSection').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function kResetAllFilters() {
@@ -946,7 +945,23 @@ function kRenderTrendChart() {
   if(kK)keys=keys.filter(k=>k<=kK);
   const lbl=document.getElementById('k-trendLabel');
   if(lbl)lbl.textContent=kA||kK?`${kA?monthLabel(kA):'Awal'} s/d ${kK?monthLabel(kK):'Akhir'}`:'Semua data';
-  rebuildChart('k-trendChart',{type:'line',data:{labels:keys.map(monthLabel),datasets:[{label:'Nominal',data:keys.map(k=>byM[k]),borderColor:'#00288e',backgroundColor:'rgba(0,40,142,0.06)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:9}}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+  // Hitung juga count per bulan
+  const byMCount={};
+  K_FILTERED.forEach(r=>{const k=monthKey(r['Tgl AWB']);if(k)byMCount[k]=(byMCount[k]||0)+1;});
+  rebuildChart('k-trendChart',{type:'line',
+    data:{labels:keys.map(monthLabel),datasets:[
+      {label:'Nominal',data:keys.map(k=>byM[k]),borderColor:'#00288e',backgroundColor:'rgba(0,40,142,0.06)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y'},
+      {label:'Transaksi',data:keys.map(k=>byMCount[k]||0),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,0.06)',fill:false,tension:0.4,pointRadius:3,borderDash:[4,2],yAxisID:'y2'},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:9}}},
+        y2:{beginAtZero:true,position:'right',grid:{drawOnChartArea:false},ticks:{stepSize:1,font:{size:9}}},
+        x:{grid:{display:false},ticks:{font:{size:9}}}
+      }
+    }
+  });
 }
 
 function kResetTrend() {
@@ -955,10 +970,29 @@ function kResetTrend() {
 }
 
 function kRenderMitraChart() {
-  const byM={};
-  K_FILTERED.forEach(r=>{ const m=r['Mitra']; if(m)byM[m]=(byM[m]||0)+(parseFloat(r['Nominal (Rp)'])||0); });
+  const byM={},byMCount={};
+  K_FILTERED.forEach(r=>{
+    const m=r['Mitra'];
+    if(m){
+      byM[m]=(byM[m]||0)+(parseFloat(r['Nominal (Rp)'])||0);
+      byMCount[m]=(byMCount[m]||0)+1;
+    }
+  });
   const sorted=Object.entries(byM).sort((a,b)=>b[1]-a[1]);
-  rebuildChart('k-mitraChart',{type:'bar',data:{labels:sorted.map(e=>e[0]),datasets:[{label:'Nominal',data:sorted.map(e=>e[1]),backgroundColor:'#1e40af',borderRadius:3,maxBarThickness:24}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:9},crossAlign:'far'}},x:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:9}}}}}});
+  rebuildChart('k-mitraChart',{type:'bar',
+    data:{labels:sorted.map(e=>e[0]),datasets:[
+      {label:'Nominal',data:sorted.map(e=>e[1]),backgroundColor:'#1e40af',borderRadius:3,maxBarThickness:20,yAxisID:'x'},
+      {label:'Transaksi',data:sorted.map(e=>byMCount[e[0]]||0),backgroundColor:'#f97316',borderRadius:3,maxBarThickness:20,yAxisID:'x2'},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:true,position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},
+      scales:{
+        x:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:9}}},
+        x2:{beginAtZero:true,position:'top',grid:{drawOnChartArea:false},ticks:{stepSize:1,font:{size:9}}},
+        y:{ticks:{font:{size:9},crossAlign:'far'}}
+      }
+    }
+  });
 }
 
 function kRenderAgingChart() {
@@ -1026,7 +1060,7 @@ function kToggleRute(rute) {
   KF.activeCardFilter='';
   kApplyFilters();
   kRenderTopRoutes();
-  if(KF.rute) document.getElementById('k-tableSection').scrollIntoView({behavior:'smooth',block:'start'});
+
 }
 
 // Normalisasi format rute dari row data agar cocok dengan format K_TOP_ROUTES
