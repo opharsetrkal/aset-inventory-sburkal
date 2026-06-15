@@ -2152,11 +2152,31 @@ function pRenderTrendChart() {
     const k=getKey(r['Posting Date']);
     if(!k)return;
     if(!byKey[k])byKey[k]={qty:0,nilai:0,trx:0};
-    byKey[k].qty +=r['_qty_abs']||0;
+    byKey[k].qty  +=(r['_qty_abs']||0);
     byKey[k].nilai+=Math.abs(parseFloat(r['Amount in LC'])||0);
-    byKey[k].trx +=1;
+    byKey[k].trx  +=1;
   });
-
+  const keys=Object.keys(byKey).sort();
+  const periodLabel={daily:'Harian',weekly:'Mingguan',monthly:'Bulanan'};
+  const lbl=document.getElementById('p-trendLabel');
+  if(lbl)lbl.textContent=(periodLabel[P_PERIOD]||'') + ' · Qty | Nilai Rp | Transaksi';
+  rebuildChart('p-trendChart',{type:'line',
+    data:{labels:keys,datasets:[
+      {label:'Qty',data:keys.map(k=>byKey[k].qty||0),borderColor:'#00288e',backgroundColor:'rgba(0,40,142,0.05)',fill:true,tension:0.4,pointRadius:2,yAxisID:'y'},
+      {label:'Nilai (Rp)',data:keys.map(k=>byKey[k].nilai||0),borderColor:'#1D9E75',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:2,borderDash:[4,2],yAxisID:'y2'},
+      {label:'Transaksi',data:keys.map(k=>byKey[k].trx||0),borderColor:'#EF9F27',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:2,borderDash:[2,3],yAxisID:'y3'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'top',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:8}}},
+      scales:{
+        y:{type:'linear',position:'left',beginAtZero:true,ticks:{callback:v=>Math.round(v).toLocaleString('id-ID'),font:{size:9}},title:{display:true,text:'Qty',font:{size:8},color:'#00288e'}},
+        y2:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:v=>fmtRp(v),font:{size:9}},title:{display:true,text:'Nilai',font:{size:8},color:'#1D9E75'}},
+        y3:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{stepSize:1,callback:v=>Number.isInteger(v)?v:'',font:{size:9}},title:{display:true,text:'Trx',font:{size:8},color:'#EF9F27'}},
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:12}}
+      }
+    }
+  });
+}
 
 // ── RENDER TABLE ──────────────────────────────────────────
 const P_COL_LABELS={'Material Document':'Mat.Doc','Item':'Item','Material':'Material',
