@@ -421,7 +421,11 @@ html,body   { height:100%; overflow:hidden; }
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Regional</span>
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#EF9F27]"></span>Lapangan</span>
             </div>
-            <div style="position:relative;height:320px"><canvas id="s-gudangChart"></canvas></div>
+            <div class="overflow-y-auto custom-scrollbar" style="max-height:400px">
+              <div id="s-gudangChartWrap" style="position:relative;height:320px">
+                <canvas id="s-gudangChart"></canvas>
+              </div>
+            </div>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
             <p class="text-xs font-bold text-[#131b2e] mb-1">Brand Material</p>
@@ -892,6 +896,9 @@ function updateTopnav(page) {
           <span class="material-symbols-outlined text-[12px] text-gray-400">calendar_month</span>
           <span id="wig-periode" class="text-[10px] text-gray-600 font-medium">Semester 1 · 2026</span>
         </div>
+        <button onclick="wigCloseDetail()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
+        </button>
         <button onclick="wigLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="wig-refreshIcon">sync</span>
         </button>
@@ -1707,9 +1714,9 @@ function sRenderGudangChart(filtered) {
     else byG[g].lapangan+=qty;
   });
   const sorted=Object.entries(byG).map(([g,d])=>({g,...d,total:d.regional+d.lapangan})).sort((a,b)=>b.total-a.total);
-  const chartH=Math.max(200,sorted.length*26);
-  const el=document.getElementById('s-gudangChart');
-  if(el)el.parentElement.style.height=chartH+'px';
+  const chartH=Math.max(320,sorted.length*30);
+  const wrap=document.getElementById('s-gudangChartWrap');
+  if(wrap)wrap.style.height=chartH+'px';
   rebuildChart('s-gudangChart',{
     type:'bar',
     data:{labels:sorted.map(d=>d.g.split(' - ')[1]||d.g),datasets:[
