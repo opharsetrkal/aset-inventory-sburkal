@@ -794,8 +794,7 @@ html,body   { height:100%; overflow:hidden; }
 const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vbmk6bDp-7obfoCuyyUtYSMnv41X7b212F3fFezjiu8O2ukfaVb/exec';
 const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0wA26kn60vlyZbkh8ypwhoacB1QyhLhBGcyl9XnxIPs45_ThfhOI/exec';
-const API_WIG        = 'https://script.google.com/macros/s/AKfycby9diP7COXJkSgMReFWacpC-QrlhuQur-q2wDRzdJPGC3QrGi3kP781QRS7f-fpjnYm/exec'; 
-
+const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUyjYCqkRn194DfpoLkWf7Qzo9gCbn8ELAtOnRjtmIo_EawWLx0Q3G/exec';
 // ══════════════════════════════════════════════════════════
 // NAVIGATION — SPA core
 // ══════════════════════════════════════════════════════════
@@ -2294,6 +2293,142 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   });
 });
+
+// ══════════════════════════════════════════════════════════
+// MODULE: WIG PENGUATAN ASET (prefix: wig) - v2 lazy load
+// ══════════════════════════════════════════════════════════
+let WIG_DATA=null,WIG_ACTIVE_KEY=null,WIG_DETAIL_CACHE={};
+
+async function wigLoadData(){
+  if(loading.wig)return;loading.wig=true;
+  const icon=document.getElementById('wig-refreshIcon');
+  if(icon)icon.classList.add('spin');
+  try{
+    const res=await fetch(API_WIG+'?mode=summary');
+    const json=await res.json();
+    if(!json.ok)throw new Error(json.error||'Gagal memuat data WIG');
+    WIG_DATA=json;wigRenderSummary();loaded.wig=true;
+  }catch(err){
+    document.getElementById('wig-cards').innerHTML=`<div class="col-span-3 p-8 text-center text-red-500 text-sm bg-white rounded-xl border border-gray-200">&#9888; ${err.message}</div>`;
+  }finally{loading.wig=false;if(icon)icon.classList.remove('spin');}
+}
+
+async function wigLoadDetail(wigNo,lmNo){
+  const key=`${wigNo}-${lmNo}`;
+  if(WIG_DETAIL_CACHE[key])return WIG_DETAIL_CACHE[key];
+  document.getElementById('wig-kp-tbody').innerHTML='<tr><td colspan="5" class="p-6 text-center text-gray-400 text-xs"><span class="material-symbols-outlined text-[16px] spin">sync</span> Memuat detail&hellip;</td></tr>';
+  document.getElementById('wig-kontributor').innerHTML='<p class="text-[10px] text-gray-400">Memuat&hellip;</p>';
+  try{
+    const res=await fetch(`${API_WIG}?mode=detail&wig=${wigNo}&lm=${lmNo}`);
+    const json=await res.json();
+    if(!json.ok)throw new Error(json.error);
+    WIG_DETAIL_CACHE[key]=json;return json;
+  }catch(err){
+    document.getElementById('wig-kp-tbody').innerHTML=`<tr><td colspan="5" class="p-4 text-center text-red-500 text-xs">&#9888; ${err.message}</td></tr>`;
+    return null;
+  }
+}
+
+function wigRenderSummary(){
+  if(!WIG_DATA)return;
+  document.getElementById('wig-cards').innerHTML=WIG_DATA.wigs.map(w=>{
+    const onT=w.lms.filter(l=>l.status==='\u2705').length;
+    const offT=w.lms.filter(l=>l.status==='\u274c').length;
+    const lmRows=w.lms.map(l=>{
+      const key=`${w.wig}-${l.lm}`,isOn=WIG_ACTIVE_KEY===key;
+      const pct=Math.round((l.pctSbu||0)*100),barW=Math.min(100,pct);
+      const barC=l.status==='\u2705'?'bg-green-500':l.status==='\u274c'?'bg-red-400':'bg-gray-300';
+      const stC=l.status==='\u2705'?'text-green-600':l.status==='\u274c'?'text-red-600':'text-gray-400';
+      return `<div class="cf rounded-lg px-2 py-1.5 ${isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e]':'hover:bg-[#f2f3ff]'} cursor-pointer" onclick="wigSelectLm(${w.wig},${l.lm})">
+        <div class="flex items-center justify-between mb-0.5">
+          <span class="text-[10px] font-medium text-[#131b2e]">${l.nama}</span>
+          <div class="flex items-center gap-1"><span class="text-[9px] font-bold ${stC}">${pct}%</span><span class="text-[10px]">${l.status}</span></div>
+        </div>
+        <div class="w-full bg-gray-100 rounded-full h-1"><div class="${barC} h-1 rounded-full" style="width:${barW}%"></div></div>
+      </div>`;
+    }).join('');
+    return `<div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+        <p class="text-[10px] font-bold text-[#131b2e] leading-tight flex-1">${w.nama}</p>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[9px] bg-green-50 text-green-700 border border-green-200 px-1.5 py-0.5 rounded-full font-bold">\u2705 ${onT}</span>
+          <span class="text-[9px] bg-red-50 text-red-700 border border-red-200 px-1.5 py-0.5 rounded-full font-bold">\u274c ${offT}</span>
+        </div>
+      </div>
+      <div class="p-3 space-y-1">${lmRows}</div>
+    </div>`;
+  }).join('');
+}
+
+async function wigSelectLm(wigNo,lmNo){
+  const key=`${wigNo}-${lmNo}`;
+  if(WIG_ACTIVE_KEY===key){WIG_ACTIVE_KEY=null;wigCloseDetail();wigRenderSummary();return;}
+  WIG_ACTIVE_KEY=key;wigRenderSummary();
+  const detailEl=document.getElementById('wig-detail');
+  detailEl.classList.remove('hidden');
+  // Header instant dari summary
+  const wig=WIG_DATA.wigs.find(w=>w.wig===wigNo);
+  const lm=wig?wig.lms.find(l=>l.lm===lmNo):null;
+  if(lm&&wig){
+    const pct=Math.round((lm.pctSbu||0)*100);
+    document.getElementById('wig-detail-title').textContent=lm.nama+' \u2014 '+wig.nama.replace(/WIG \d+ \u2014 /,'');
+    document.getElementById('wig-detail-sub').textContent='Memuat detail KP\u2026';
+    document.getElementById('wig-detail-pct').textContent=pct+'%';
+    const stEl=document.getElementById('wig-detail-status');
+    stEl.textContent=lm.status==='\u2705'?'\u2705 On Track':lm.status==='\u274c'?'\u274c Off Track':'\u2014';
+    stEl.className='text-[10px] font-bold '+(lm.status==='\u2705'?'text-green-600':lm.status==='\u274c'?'text-red-600':'text-gray-400');
+    const semC=lm.status==='\u2705'?'bg-[#00288e]':'bg-red-500';
+    document.getElementById('wig-prog-sem').style.width=Math.min(100,pct)+'%';
+    document.getElementById('wig-prog-sem').className=`h-2 rounded-full transition-all ${semC}`;
+    document.getElementById('wig-prog-sem-label').textContent=pct+'%';
+    const pctW=Math.round((lm.pctMinggu||0)*100);
+    const weekC=lm.statusMinggu==='\u2705'?'bg-green-500':'bg-orange-400';
+    document.getElementById('wig-prog-week').style.width=Math.min(100,pctW)+'%';
+    document.getElementById('wig-prog-week').className=`h-2 rounded-full transition-all ${weekC}`;
+    document.getElementById('wig-prog-week-label').textContent=pctW+'% '+(lm.statusMinggu||'');
+    document.getElementById('wig-prog-week-label').className='text-[9px] font-bold '+(lm.statusMinggu==='\u2705'?'text-green-600':'text-orange-500');
+  }
+  detailEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+  // Lazy fetch detail
+  const detail=await wigLoadDetail(wigNo,lmNo);
+  if(!detail)return;
+  document.getElementById('wig-detail-sub').textContent=`Total Realisasi: ${Math.round(detail.totalReal||0).toLocaleString('id-ID')} \u00b7 Target: ${Math.round(detail.totalTarget||0).toLocaleString('id-ID')}`;
+  // KP table
+  const tbody=document.getElementById('wig-kp-tbody');
+  if(detail.kpData&&detail.kpData.length){
+    tbody.innerHTML=detail.kpData.map(kp=>{
+      const p=Math.round((kp.pct||0)*100);
+      const c=p>=100?'text-green-600':p>=80?'text-orange-500':'text-red-600';
+      const label=kp.kp.toLowerCase().split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+      return `<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">
+        <td class="px-3 py-2 text-xs">${label}</td>
+        <td class="px-3 py-2 text-xs text-right">${Math.round(kp.target).toLocaleString('id-ID')}</td>
+        <td class="px-3 py-2 text-xs text-right font-semibold">${Math.round(kp.real).toLocaleString('id-ID')}</td>
+        <td class="px-3 py-2 text-xs text-right font-bold ${c}">${p}%</td>
+        <td class="px-3 py-2 text-xs text-right text-gray-400">${Math.round(kp.targetMinggu).toLocaleString('id-ID')}</td>
+      </tr>`;
+    }).join('');
+  }else{tbody.innerHTML='<tr><td colspan="5" class="px-3 py-4 text-center text-gray-400 text-xs">Data KP tidak tersedia</td></tr>';}
+  // Kontributor
+  const kontEl=document.getElementById('wig-kontributor');
+  if(detail.kontributor&&detail.kontributor.length){
+    const maxK=detail.kontributor[0].jumlah||1;
+    const medals=['\ud83e\udd47','\ud83e\udd48','\ud83e\udd49'];
+    kontEl.innerHTML=detail.kontributor.map((k,i)=>`<div>
+      <div class="flex justify-between items-center mb-0.5">
+        <span class="text-[10px] font-medium">${medals[i]||''} ${k.nama}</span>
+        <span class="text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${k.jumlah.toLocaleString('id-ID')}</span>
+      </div>
+      <div class="w-full bg-gray-100 rounded-full h-1"><div class="bg-[#00288e] h-1 rounded-full" style="width:${Math.round(k.jumlah/maxK*100)}%"></div></div>
+    </div>`).join('');
+  }else{kontEl.innerHTML='<p class="text-[10px] text-gray-400">Tidak ada kontributor</p>';}
+}
+
+function wigCloseDetail(){
+  WIG_ACTIVE_KEY=null;
+  document.getElementById('wig-detail').classList.add('hidden');
+  wigRenderSummary();
+}
 
 </script>
 </body>
