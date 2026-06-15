@@ -629,12 +629,7 @@ html,body   { height:100%; overflow:hidden; }
               <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-period="weekly">Mingguan</button>
               <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-period="monthly">Bulanan</button>
             </div>
-            <!-- Toggle metric -->
-            <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50">
-              <button class="p-metric-btn px-2 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white" data-metric="qty">Qty</button>
-              <button class="p-metric-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-metric="nilai">Nilai Rp</button>
-              <button class="p-metric-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-metric="trx">Transaksi</button>
-            </div>
+
           </div>
         </div>
         <div style="position:relative;height:250px"><canvas id="p-trendChart"></canvas></div>
@@ -795,6 +790,7 @@ const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vb
 const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0wA26kn60vlyZbkh8ypwhoacB1QyhLhBGcyl9XnxIPs45_ThfhOI/exec';
 const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUyjYCqkRn194DfpoLkWf7Qzo9gCbn8ELAtOnRjtmIo_EawWLx0Q3G/exec';
+
 // ══════════════════════════════════════════════════════════
 // NAVIGATION — SPA core
 // ══════════════════════════════════════════════════════════
@@ -853,9 +849,6 @@ function updateTopnav(page) {
         <button onclick="kResetAllFilters()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
         </button>
-        <button onclick="window.print()" class="flex items-center gap-1 px-2 py-1 bg-[#00288e] text-white rounded text-[10px] font-semibold whitespace-nowrap">
-          <span class="material-symbols-outlined text-[13px]">print</span><span class="hidden md:inline">Cetak PDF</span>
-        </button>
         <button onclick="kLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="k-refreshIcon">sync</span>
         </button>
@@ -872,9 +865,6 @@ function updateTopnav(page) {
         <button onclick="sResetAllFilters()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
         </button>
-        <button onclick="window.print()" class="flex items-center gap-1 px-2 py-1 bg-[#00288e] text-white rounded text-[10px] font-semibold whitespace-nowrap">
-          <span class="material-symbols-outlined text-[13px]">print</span><span class="hidden md:inline">Cetak PDF</span>
-        </button>
         <button onclick="sLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="s-refreshIcon">sync</span>
         </button>
@@ -889,9 +879,6 @@ function updateTopnav(page) {
         </div>
         <button onclick="pResetAllFilters()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
-        </button>
-        <button onclick="window.print()" class="flex items-center gap-1 px-2 py-1 bg-[#00288e] text-white rounded text-[10px] font-semibold whitespace-nowrap">
-          <span class="material-symbols-outlined text-[13px]">print</span><span class="hidden md:inline">Cetak PDF</span>
         </button>
         <button onclick="pLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="p-refreshIcon">sync</span>
@@ -1825,7 +1812,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 // ══════════════════════════════════════════════════════════
 
 let P_ROWS=[], P_FILTERED=[], P_RASIO_TABLE=[], pPage=1;
-let P_ACTIVE_DIM='katTeknik', P_PERIOD='daily', P_METRIC='qty';
+let P_ACTIVE_DIM='katTeknik', P_PERIOD='daily';
 let P_TOP5_FILTER='';
 
 const P_PAGE_SIZE=15;
@@ -2169,30 +2156,7 @@ function pRenderTrendChart() {
     byKey[k].nilai+=Math.abs(parseFloat(r['Amount in LC'])||0);
     byKey[k].trx +=1;
   });
-  const keys=Object.keys(byKey).sort();
-  const metricMap={qty:'qty',nilai:'nilai',trx:'trx'};
-  const labelMap={qty:'Qty Penyerapan',nilai:'Nilai (Rp)',trx:'Jumlah Transaksi'};
-  const cbMap={qty:v=>Math.round(v).toLocaleString('id-ID'),nilai:v=>fmtRp(v),trx:v=>v};
-  const m=metricMap[P_METRIC];
-  const periodLabel={daily:'Harian',weekly:'Mingguan',monthly:'Bulanan'};
-  const lbl=document.getElementById('p-trendLabel');
-  if(lbl)lbl.textContent=periodLabel[P_PERIOD]+' · '+labelMap[P_METRIC];
-  rebuildChart('p-trendChart',{type:'line',
-    data:{labels:keys,datasets:[{
-      label:labelMap[P_METRIC],
-      data:keys.map(k=>byKey[k][m]||0),
-      borderColor:'#00288e',backgroundColor:'rgba(0,40,142,0.06)',
-      fill:true,tension:0.4,pointRadius:2
-    }]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        y:{beginAtZero:true,ticks:{callback:cbMap[P_METRIC],font:{size:9}}},
-        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:12}}
-      }
-    }
-  });
-}
+
 
 // ── RENDER TABLE ──────────────────────────────────────────
 const P_COL_LABELS={'Material Document':'Mat.Doc','Item':'Item','Material':'Material',
@@ -2283,15 +2247,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   });
   // Metric toggle
-  document.querySelectorAll('.p-metric-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      P_METRIC=btn.dataset.metric;
-      document.querySelectorAll('.p-metric-btn').forEach(b=>{
-        b.className='p-metric-btn px-2 py-1 text-[10px] font-bold rounded '+(b===btn?'bg-[#00288e] text-white':'text-gray-500 hover:bg-white');
-      });
-      pRenderTrendChart();
-    });
-  });
+
 });
 
 // ══════════════════════════════════════════════════════════
