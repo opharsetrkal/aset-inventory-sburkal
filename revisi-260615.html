@@ -50,6 +50,15 @@ html,body   { height:100%; overflow:hidden; }
 .page{display:none}
 .page.active{display:block}
 
+/* ── SIDEBAR GROUPED ──────────────────────────────────── */
+.sb-group-label{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:#9ca3af;padding:8px 8px 3px;margin-top:4px}
+.sb-group-label:first-child{margin-top:0}
+.sb-divider{height:1px;background:#f3f4f6;margin:4px 0}
+.sb-sub{padding-left:8px}
+.sb-sub .sb-item{font-size:10px;padding:5px 8px;gap:2px}
+.sb-sub .sb-item span.material-symbols-outlined{font-size:15px}
+
 /* ── MULTI-SELECT DROPDOWN ────────────────────────────── */
 .ms-menu::-webkit-scrollbar{width:4px}
 .ms-menu::-webkit-scrollbar-thumb{background:#c4c5d5;border-radius:4px}
@@ -86,43 +95,79 @@ html,body   { height:100%; overflow:hidden; }
   SIDEBAR — ditulis sekali, berlaku semua modul
   Tambah modul baru: cukup tambah <a> baru di sini
 ══════════════════════════════════════════════════════ -->
-<aside id="sidebar" class="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col py-4 px-3 gap-1 z-50 shadow-sm">
+<aside id="sidebar" class="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col py-3 px-2 z-50 shadow-sm overflow-y-auto">
   <!-- Brand -->
-  <div class="brand-text px-2 mb-4 flex justify-center">
-    <img src="borneo-2.png" alt="SBU Kalimantan" class="w-20 object-contain"
+  <div class="brand-text px-1 mb-3 flex justify-center">
+    <img src="borneo-2.png" alt="SBU Kalimantan" class="w-16 object-contain"
       onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
     <div class="hidden text-center">
-      <p class="text-xs font-bold text-[#00288e]">Aset &amp; Inventory</p>
-      <p class="text-[10px] text-gray-400">SBU Reg Kalimantan</p>
+      <p class="text-[10px] font-bold text-[#00288e]">Aset &amp; Inv</p>
+      <p class="text-[9px] text-gray-400">SBU Kal</p>
     </div>
   </div>
 
-  <!-- Menu: WIG Penguatan Aset -->
+  <!-- Home -->
+  <button onclick="navigateTo('home')" id="nav-home"
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">home</span>
+    <span class="text-[10px] font-medium">Home</span>
+  </button>
+
+  <div class="sb-divider"></div>
+
+  <!-- ASET GROUP -->
+  <div class="sb-group-label">Aset</div>
   <button onclick="navigateTo('wig')" id="nav-wig"
-    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0">military_tech</span>
-    <span class="text-[11px] font-medium leading-tight">WIG<br>Penguatan Aset</span>
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">military_tech</span>
+    <span class="text-[10px] font-medium leading-tight">WIG Aset</span>
   </button>
+  <div class="sb-sub">
+    <button onclick="navigateTo('pm_isp')" id="nav-pm_isp"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">construction</span>
+      <span class="text-[9px] font-medium leading-tight">PM ISP</span>
+    </button>
+    <button onclick="navigateTo('pm_osp')" id="nav-pm_osp"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">cable</span>
+      <span class="text-[9px] font-medium leading-tight">PM OSP</span>
+    </button>
+    <button onclick="navigateTo('doktek')" id="nav-doktek"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">folder_open</span>
+      <span class="text-[9px] font-medium leading-tight">Doktek</span>
+    </button>
+    <button onclick="navigateTo('sid_bb')" id="nav-sid_bb"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">hub</span>
+      <span class="text-[9px] font-medium leading-tight">SID Backbone</span>
+    </button>
+    <button onclick="navigateTo('uplink_olt')" id="nav-uplink_olt"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">router</span>
+      <span class="text-[9px] font-medium leading-tight">Uplink OLT</span>
+    </button>
+  </div>
 
-  <!-- Menu: Administrasi Keuangan -->
+  <div class="sb-divider"></div>
+
+  <!-- INVENTORY GROUP -->
+  <div class="sb-group-label">Inventory</div>
   <button onclick="navigateTo('keuangan')" id="nav-keuangan"
-    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0">account_balance</span>
-    <span class="text-[11px] font-medium leading-tight">Administrasi<br>Keuangan</span>
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">account_balance</span>
+    <span class="text-[10px] font-medium leading-tight">Administrasi<br>Keuangan</span>
   </button>
-
-  <!-- Menu: Stok Material -->
   <button onclick="navigateTo('stok')" id="nav-stok"
-    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0">inventory_2</span>
-    <span class="text-[11px] font-medium leading-tight">Stok<br>Material</span>
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">inventory_2</span>
+    <span class="text-[10px] font-medium leading-tight">Stok<br>Material</span>
   </button>
-
-  <!-- Menu: Penyerapan Material -->
   <button onclick="navigateTo('penyerapan')" id="nav-penyerapan"
-    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0">moving</span>
-    <span class="text-[11px] font-medium leading-tight">Penyerapan<br>Material</span>
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">moving</span>
+    <span class="text-[10px] font-medium leading-tight">Penyerapan<br>Material</span>
   </button>
 </aside>
 
@@ -156,6 +201,117 @@ html,body   { height:100%; overflow:hidden; }
     CONTENT SCROLL AREA — hanya bagian ini yang scroll
   ══════════════════════════════════════════════════ -->
   <div id="content">
+
+  <!-- ══════════════════════════════════════════════════
+    PAGE: HOME
+  ══════════════════════════════════════════════════ -->
+  <div id="page-home" class="page">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        <!-- ASET PANEL -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-[#00288e]">construction</span>
+            <p class="text-sm font-bold text-[#00288e]">ASET</p>
+          </div>
+          <div class="p-4 space-y-3">
+            <!-- WIG card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('wig')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">military_tech</span>
+                  <p class="text-[10px] font-bold">WIG Penguatan Aset</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-wig-content">
+                <div class="flex gap-3">
+                  <div class="skeleton h-8 rounded-lg flex-1"></div>
+                  <div class="skeleton h-8 rounded-lg flex-1"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Coming soon cards -->
+            ${['PM ISP','PM OSP','Doktek Backlog','SID Backbone','Uplink OLT'].map((n,i)=>`
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed">
+              <div class="flex items-center justify-between">
+                <p class="text-[10px] font-medium text-gray-400">${n}</p>
+                <span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span>
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- INVENTORY PANEL -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-[#00288e]">inventory</span>
+            <p class="text-sm font-bold text-[#00288e]">INVENTORY</p>
+          </div>
+          <div class="p-4 space-y-3">
+            <!-- Stok card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('stok')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">inventory_2</span>
+                  <p class="text-[10px] font-bold">Stok Material</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-stok-content">
+                <div class="flex gap-3">
+                  <div class="skeleton h-8 rounded-lg flex-1"></div>
+                  <div class="skeleton h-8 rounded-lg flex-1"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Penyerapan card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('penyerapan')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">moving</span>
+                  <p class="text-[10px] font-bold">Penyerapan Material</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-penyerapan-content">
+                <div class="flex gap-3">
+                  <div class="skeleton h-8 rounded-lg flex-1"></div>
+                  <div class="skeleton h-8 rounded-lg flex-1"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Keuangan card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('keuangan')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">account_balance</span>
+                  <p class="text-[10px] font-bold">Administrasi Keuangan</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-keuangan-content">
+                <div class="flex gap-3">
+                  <div class="skeleton h-8 rounded-lg flex-1"></div>
+                  <div class="skeleton h-8 rounded-lg flex-1"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+    PAGES: COMING SOON (PM ISP, PM OSP, Doktek, SID BB, Uplink OLT)
+  ══════════════════════════════════════════════════ -->
+  <div id="page-pm_isp" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">construction</span><p class="text-lg font-bold">PM ISP</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+  <div id="page-pm_osp" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">cable</span><p class="text-lg font-bold">PM OSP</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+  <div id="page-doktek" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">folder_open</span><p class="text-lg font-bold">Doktek Backlog</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+  <div id="page-sid_bb" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">hub</span><p class="text-lg font-bold">SID Backbone</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+  <div id="page-uplink_olt" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">router</span><p class="text-lg font-bold">Uplink OLT</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
 
   <!-- ══════════════════════════════════════════════════
     PAGE: ADMINISTRASI KEUANGAN
@@ -799,15 +955,23 @@ const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUy
 // NAVIGATION — SPA core
 // ══════════════════════════════════════════════════════════
 const PAGE_CONFIG = {
-  keuangan:   { title:'Administrasi Keuangan', icon:'account_balance' },
-  stok:       { title:'Stok Material',          icon:'inventory_2'     },
-  penyerapan: { title:'Penyerapan Material',      icon:'moving'          },
-  wig:        { title:'WIG Penguatan Aset',         icon:'military_tech'   },
+  home:       { title:'Dashboard',              icon:'home'            },
+  // ASET
+  wig:        { title:'WIG Penguatan Aset',     icon:'military_tech'   },
+  pm_isp:     { title:'PM ISP',                 icon:'construction'    },
+  pm_osp:     { title:'PM OSP',                 icon:'cable'           },
+  doktek:     { title:'Doktek Backlog',          icon:'folder_open'     },
+  sid_bb:     { title:'SID Backbone',            icon:'hub'             },
+  uplink_olt: { title:'Uplink OLT',              icon:'router'          },
+  // INVENTORY
+  keuangan:   { title:'Administrasi Keuangan',  icon:'account_balance' },
+  stok:       { title:'Stok Material',           icon:'inventory_2'     },
+  penyerapan: { title:'Penyerapan Material',     icon:'moving'          },
 };
 
 // Lazy load state — data hanya di-fetch saat pertama kali modul dibuka
-const loaded  = { keuangan:false, stok:false, penyerapan:false, wig:false };
-const loading = { keuangan:false, stok:false, penyerapan:false, wig:false };
+const loaded  = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false };
+const loading = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false };
 let currentPage = 'keuangan';
 
 function navigateTo(page) {
@@ -819,26 +983,26 @@ function navigateTo(page) {
   document.querySelectorAll('.nav-btn').forEach(b => {
     b.classList.remove('bg-[#eaedff]','text-[#00288e]');
     b.classList.add('text-gray-500','hover:bg-[#f2f3ff]');
-    b.querySelector('span.material-symbols-outlined').classList.remove('text-[#00288e]');
-    b.querySelector('span.material-symbols-outlined').classList.add('text-gray-400');
-    b.querySelector('span.text-\\[11px\\]')?.classList.remove('text-[#00288e]','font-semibold');
+    const ico = b.querySelector('span.material-symbols-outlined');
+    if(ico){ico.classList.remove('text-[#00288e]');ico.classList.add('text-gray-400');}
   });
   const activeBtn = document.getElementById('nav-'+page);
   if (activeBtn) {
     activeBtn.classList.add('bg-[#eaedff]','text-[#00288e]');
     activeBtn.classList.remove('text-gray-500','hover:bg-[#f2f3ff]');
-    activeBtn.querySelector('span.material-symbols-outlined').classList.add('text-[#00288e]');
-    activeBtn.querySelector('span.material-symbols-outlined').classList.remove('text-gray-400');
+    const ico = activeBtn.querySelector('span.material-symbols-outlined');
+    if(ico){ico.classList.add('text-[#00288e]');ico.classList.remove('text-gray-400');}
   }
 
   // Update topnav baris 2
   updateTopnav(page);
 
   // Lazy load
-  if (page === 'keuangan' && !loaded.keuangan) kLoadData();
-  if (page === 'stok'     && !loaded.stok)     sLoadData();
+  if (page === 'home'       && !loaded.home)       homeLoadData();
+  if (page === 'keuangan'   && !loaded.keuangan)   kLoadData();
+  if (page === 'stok'       && !loaded.stok)       sLoadData();
   if (page === 'penyerapan' && !loaded.penyerapan) pLoadData();
-  if (page === 'wig'         && !loaded.wig)         wigLoadData();
+  if (page === 'wig'        && !loaded.wig)        wigLoadData();
 
   currentPage = page;
 }
@@ -901,6 +1065,14 @@ function updateTopnav(page) {
         </button>
         <button onclick="wigLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="wig-refreshIcon">sync</span>
+        </button>
+      </div>`;
+  } else if (page === 'home') {
+    bar2.innerHTML = `
+      <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
+      <div class="flex items-center gap-1.5 no-print">
+        <button onclick="homeRefresh()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+          <span class="material-symbols-outlined text-[16px]" id="home-refreshIcon">sync</span>
         </button>
       </div>`;
   } else {
@@ -974,6 +1146,169 @@ function buildPagination(containerId, currentPg, total, pageSize, goFn) {
   h+=`<button onclick="${goFn}(${currentPg+1})" ${currentPg===pages?'disabled':''} class="p-1 border border-gray-200 rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[14px]">chevron_right</span></button>`;
   document.getElementById(containerId).innerHTML=h;
   return {s, e};
+}
+
+
+// ══════════════════════════════════════════════════════════
+// MODULE: HOME (prefix: home)
+// Cache-based summary dari semua modul
+// ══════════════════════════════════════════════════════════
+
+const HOME_CACHE_KEY = 'asus_home_cache';
+const HOME_CACHE_TTL = 30 * 60 * 1000; // 30 menit
+
+async function homeLoadData() {
+  if(loading.home) return;
+  // Cek cache sessionStorage
+  try {
+    const cached = sessionStorage.getItem(HOME_CACHE_KEY);
+    if(cached) {
+      const { data, ts } = JSON.parse(cached);
+      if(Date.now() - ts < HOME_CACHE_TTL) {
+        homeRender(data);
+        loaded.home = true;
+        return;
+      }
+    }
+  } catch(e) {}
+
+  loading.home = true;
+  const icon = document.getElementById('home-refreshIcon');
+  if(icon) icon.classList.add('spin');
+
+  try {
+    // Fetch paralel semua API
+    const [rWig, rStok, rSerap, rKeu] = await Promise.allSettled([
+      fetch(API_WIG + '?mode=summary').then(r=>r.json()).catch(()=>null),
+      fetch(API_STOK).then(r=>r.json()).catch(()=>null),
+      fetch(API_PENYERAPAN).then(r=>r.json()).catch(()=>null),
+      fetch(API_KEUANGAN).then(r=>r.json()).catch(()=>null),
+    ]);
+
+    const data = {
+      wig:       rWig.value,
+      stok:      rStok.value,
+      serap:     rSerap.value,
+      keuangan:  rKeu.value,
+    };
+
+    // Simpan ke cache
+    try { sessionStorage.setItem(HOME_CACHE_KEY, JSON.stringify({data, ts:Date.now()})); } catch(e){}
+
+    homeRender(data);
+    loaded.home = true;
+
+    // Simpan ke modul state supaya tidak re-fetch saat pindah modul
+    if(data.wig?.ok)      { WIG_DATA = data.wig; wigRenderSummary && wigRenderSummary(); loaded.wig = true; }
+    if(data.stok?.ok)     { S_ROWS = data.stok.rows||[]; }
+    if(data.serap?.ok)    { P_ROWS = data.serap.rows||[]; }
+    if(data.keuangan?.ok) { K_ROWS = data.keuangan.allRows||data.keuangan.rows||[]; K_SUMMARY = data.keuangan.summary||{}; }
+
+  } catch(err) {
+    console.error('Home load error:', err);
+  } finally {
+    loading.home = false;
+    if(icon) icon.classList.remove('spin');
+  }
+}
+
+function homeRefresh() {
+  try { sessionStorage.removeItem(HOME_CACHE_KEY); } catch(e){}
+  loaded.home = false;
+  homeLoadData();
+}
+
+function homeRender(data) {
+  // WIG summary
+  const wigEl = document.getElementById('home-wig-content');
+  if(wigEl && data.wig?.ok) {
+    const { onTrack, offTrack, totalLm } = data.wig;
+    wigEl.innerHTML = `
+      <div class="grid grid-cols-3 gap-2">
+        <div class="bg-green-50 rounded-lg p-2 text-center">
+          <p class="text-[9px] text-green-600 font-bold">On Track</p>
+          <p class="text-lg font-black text-green-700">${onTrack}</p>
+        </div>
+        <div class="bg-red-50 rounded-lg p-2 text-center">
+          <p class="text-[9px] text-red-600 font-bold">Off Track</p>
+          <p class="text-lg font-black text-red-700">${offTrack}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-2 text-center">
+          <p class="text-[9px] text-gray-500 font-bold">Total LM</p>
+          <p class="text-lg font-black text-gray-700">${totalLm}</p>
+        </div>
+      </div>`;
+  } else if(wigEl) {
+    wigEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+  }
+
+  // Stok summary
+  const stokEl = document.getElementById('home-stok-content');
+  if(stokEl && data.stok?.ok) {
+    const rows = data.stok.rows||[];
+    const aktif = rows.filter(r=>{
+      const sloc=(r['Sloc - Gudang']||'').split(' - ')[0].trim();
+      return !['9999'].includes(sloc)&&!['RUSAK-TL','RUSAK-L'].includes(r['Batch'])&&(r['Sloc - KP']||'').toLowerCase()!=='rusak';
+    });
+    const totalVal = aktif.reduce((s,r)=>s+(parseFloat(r['Value Unrestricted'])||0),0);
+    const totalKode = new Set(aktif.map(r=>r['Material']).filter(Boolean)).size;
+    stokEl.innerHTML = `
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-blue-50 rounded-lg p-2">
+          <p class="text-[9px] text-blue-600 font-bold">Nilai Stok</p>
+          <p class="text-sm font-black text-blue-800">${fmtRp(totalVal)}</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-100 p-2">
+          <p class="text-[9px] text-gray-500 font-bold">Kode Material</p>
+          <p class="text-sm font-black text-gray-700">${totalKode.toLocaleString('id-ID')}</p>
+        </div>
+      </div>`;
+  } else if(stokEl) {
+    stokEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+  }
+
+  // Penyerapan summary
+  const seEl = document.getElementById('home-penyerapan-content');
+  if(seEl && data.serap?.ok) {
+    const rows = data.serap.rows||[];
+    const serap = rows.filter(r=>r['_type']==='penyerapan');
+    const kemBaik = rows.filter(r=>r['_type']==='kembali_baik');
+    const totalQty = serap.reduce((s,r)=>s+(r['_qty_abs']||0),0);
+    const rasio = totalQty>0 ? Math.round(kemBaik.reduce((s,r)=>s+(r['_qty_abs']||0),0)/totalQty*100) : 0;
+    seEl.innerHTML = `
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-blue-50 rounded-lg p-2">
+          <p class="text-[9px] text-blue-600 font-bold">Total Serap</p>
+          <p class="text-sm font-black text-blue-800">${Math.round(totalQty).toLocaleString('id-ID')} unit</p>
+        </div>
+        <div class="bg-${rasio>50?'red':'green'}-50 rounded-lg p-2">
+          <p class="text-[9px] text-${rasio>50?'red':'green'}-600 font-bold">Rasio Kembali</p>
+          <p class="text-sm font-black text-${rasio>50?'red':'green'}-700">${rasio}%</p>
+        </div>
+      </div>`;
+  } else if(seEl) {
+    seEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+  }
+
+  // Keuangan summary
+  const keuEl = document.getElementById('home-keuangan-content');
+  if(keuEl && data.keuangan?.ok) {
+    const s = data.keuangan.summary||{};
+    const rows = data.keuangan.allRows||data.keuangan.rows||[];
+    keuEl.innerHTML = `
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-orange-50 rounded-lg p-2">
+          <p class="text-[9px] text-orange-600 font-bold">Outstanding</p>
+          <p class="text-sm font-black text-orange-700">${fmtRp(s.globalOutstanding||0)}</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-100 p-2">
+          <p class="text-[9px] text-gray-500 font-bold">Transaksi</p>
+          <p class="text-sm font-black text-gray-700">${rows.length.toLocaleString('id-ID')}</p>
+        </div>
+      </div>`;
+  } else if(keuEl) {
+    keuEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1800,8 +2135,8 @@ function sExportCSV(){
 // INIT
 // ══════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
-  // Buka halaman keuangan secara default
-  navigateTo('wig');
+  // Buka home secara default
+  navigateTo('home');
 
   // Tutup dropdown saat klik di luar
   document.addEventListener('click',e=>{
