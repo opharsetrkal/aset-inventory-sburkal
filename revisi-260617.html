@@ -1189,7 +1189,7 @@ function updateTopnav(page) {
         <button onclick="doktekResetFilter()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
         </button>
-        <button onclick="doktekLoadData(DOKTEK_TAB)" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+        <button onclick="doktekClearCacheAndReload()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="doktek-refreshIcon">sync</span>
         </button>
       </div>`;
@@ -2891,6 +2891,7 @@ function wigCloseDetail(){
 
 let DOKTEK_ROWS = [], DOKTEK_FILTERED = [], doktekPage = 1;
 let DOKTEK_TAB = 'backlog';
+const DOKTEK_CACHE = {}; // cache per tab: { backlog: {rows, json}, berjalan: {...} }
 const DOKTEK_PAGE_SIZE = 15;
 const DF = { kp:[], keterangan:[], sla:[], tahun:[], search:'' };
 const SLA_COLOR = {
@@ -2904,6 +2905,24 @@ async function doktekLoadData(tab) {
   tab = tab || DOKTEK_TAB;
   DOKTEK_TAB = tab;
   if(loading.doktek) return;
+
+  // Pakai cache jika sudah ada — langsung render tanpa fetch
+  if(DOKTEK_CACHE[tab]) {
+    const { rows, json } = DOKTEK_CACHE[tab];
+    DOKTEK_ROWS = rows;
+    doktekBuildFilters(json);
+    const info = document.getElementById('doktek-tab-info');
+    if(info) info.textContent = `Total PA: ${json.totalPA} · Terinput: ${json.sudahTerinput} · Belum Doktek: ${json.belumDoktek}`;
+    doktekRenderResume(json);
+    // Reset filter saat ganti tab
+    Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
+    document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
+    const si = document.getElementById('doktek-search'); if(si) si.value = '';
+    doktekApplyFilter();
+    return;
+  }
+
   loading.doktek = true;
   const icon = document.getElementById('doktek-refreshIcon');
   if(icon) icon.classList.add('spin');
@@ -2915,6 +2934,8 @@ async function doktekLoadData(tab) {
     const res  = await fetch(API_DOKTEK + '?tab=' + tab);
     const json = await res.json();
     if(!json.ok) throw new Error(json.error || 'Gagal memuat data');
+    // Simpan ke cache
+    DOKTEK_CACHE[tab] = { rows: json.rows || [], json };
     DOKTEK_ROWS = json.rows || [];
     doktekBuildFilters(json);
     const info = document.getElementById('doktek-tab-info');
@@ -3141,6 +3162,12 @@ function doktekUpdateLabel() {
   if(el) el.textContent = parts.length ? 'Filter: '+parts.join(' · ') : 'Scope: belum ada doktek';
 }
 
+function doktekClearCacheAndReload() {
+  // Clear cache tab aktif → paksa fetch ulang
+  delete DOKTEK_CACHE[DOKTEK_TAB];
+  doktekLoadData(DOKTEK_TAB);
+}
+
 function doktekExportCSV() {
   const cols = ['service_id','pa_number','customer','namaKP','created_at','aging','acluan','slaStatus'];
   const hdrs = ['Service ID','PA Number','Customer','KP','Created At','Aging (hari)','Keterangan','SLA'];
@@ -3157,7 +3184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
       DOKTEK_TAB = tab;
-      loaded.doktek = false;
+      // Tidak reset loaded — cache per tab yang handle
       document.querySelectorAll('.doktek-tab-btn').forEach(b => {
         b.className = 'doktek-tab-btn px-3 py-1.5 text-[10px] font-bold rounded ' +
           (b===btn ? 'bg-[#00288e] text-white' : 'text-gray-500 hover:bg-white');
