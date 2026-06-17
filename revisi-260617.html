@@ -226,20 +226,15 @@ html,body   { height:100%; overflow:hidden; }
                 <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
               </div>
               <div id="home-wig-content">
-                <div class="flex gap-3">
-                  <div class="skeleton h-8 rounded-lg flex-1"></div>
-                  <div class="skeleton h-8 rounded-lg flex-1"></div>
-                </div>
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
               </div>
             </div>
-            <!-- Coming soon cards -->
-            ${['PM ISP','PM OSP','Doktek Backlog','SID Backbone','Uplink OLT'].map((n,i)=>`
-            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed">
-              <div class="flex items-center justify-between">
-                <p class="text-[10px] font-medium text-gray-400">${n}</p>
-                <span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span>
-              </div>
-            </div>`).join('')}
+            <!-- Coming soon -->
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">PM ISP</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">PM OSP</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">Doktek Backlog</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">SID Backbone</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">Uplink OLT</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
           </div>
         </div>
 
@@ -260,10 +255,7 @@ html,body   { height:100%; overflow:hidden; }
                 <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
               </div>
               <div id="home-stok-content">
-                <div class="flex gap-3">
-                  <div class="skeleton h-8 rounded-lg flex-1"></div>
-                  <div class="skeleton h-8 rounded-lg flex-1"></div>
-                </div>
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
               </div>
             </div>
             <!-- Penyerapan card -->
@@ -276,10 +268,7 @@ html,body   { height:100%; overflow:hidden; }
                 <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
               </div>
               <div id="home-penyerapan-content">
-                <div class="flex gap-3">
-                  <div class="skeleton h-8 rounded-lg flex-1"></div>
-                  <div class="skeleton h-8 rounded-lg flex-1"></div>
-                </div>
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
               </div>
             </div>
             <!-- Keuangan card -->
@@ -292,20 +281,18 @@ html,body   { height:100%; overflow:hidden; }
                 <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
               </div>
               <div id="home-keuangan-content">
-                <div class="flex gap-3">
-                  <div class="skeleton h-8 rounded-lg flex-1"></div>
-                  <div class="skeleton h-8 rounded-lg flex-1"></div>
-                </div>
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </main>
   </div>
 
   <!-- ══════════════════════════════════════════════════
-    PAGES: COMING SOON (PM ISP, PM OSP, Doktek, SID BB, Uplink OLT)
+    PAGES: COMING SOON
   ══════════════════════════════════════════════════ -->
   <div id="page-pm_isp" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">construction</span><p class="text-lg font-bold">PM ISP</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
   <div id="page-pm_osp" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">cable</span><p class="text-lg font-bold">PM OSP</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
@@ -975,6 +962,8 @@ const loading = { home:false, keuangan:false, stok:false, penyerapan:false, wig:
 let currentPage = 'keuangan';
 
 function navigateTo(page) {
+  // Update URL hash
+  if(location.hash !== '#'+page) history.pushState(null, '', '#'+page);
   // Sembunyikan semua page
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
@@ -2135,8 +2124,18 @@ function sExportCSV(){
 // INIT
 // ══════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
-  // Buka home secara default
-  navigateTo('home');
+  // Restore page dari hash atau default ke home
+  const validPages = Object.keys(PAGE_CONFIG);
+  const hash = location.hash.replace('#','');
+  const initPage = validPages.includes(hash) ? hash : 'home';
+  navigateTo(initPage);
+
+  // Handle browser back/forward
+  window.addEventListener('popstate', ()=>{
+    const h = location.hash.replace('#','');
+    const p = validPages.includes(h) ? h : 'home';
+    navigateTo(p);
+  });
 
   // Tutup dropdown saat klik di luar
   document.addEventListener('click',e=>{
