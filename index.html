@@ -50,6 +50,15 @@ html,body   { height:100%; overflow:hidden; }
 .page{display:none}
 .page.active{display:block}
 
+/* ── SIDEBAR GROUPED ──────────────────────────────────── */
+.sb-group-label{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:#9ca3af;padding:8px 8px 3px;margin-top:4px}
+.sb-group-label:first-child{margin-top:0}
+.sb-divider{height:1px;background:#f3f4f6;margin:4px 0}
+.sb-sub{padding-left:8px}
+.sb-sub .sb-item{font-size:10px;padding:5px 8px;gap:2px}
+.sb-sub .sb-item span.material-symbols-outlined{font-size:15px}
+
 /* ── MULTI-SELECT DROPDOWN ────────────────────────────── */
 .ms-menu::-webkit-scrollbar{width:4px}
 .ms-menu::-webkit-scrollbar-thumb{background:#c4c5d5;border-radius:4px}
@@ -86,43 +95,80 @@ html,body   { height:100%; overflow:hidden; }
   SIDEBAR — ditulis sekali, berlaku semua modul
   Tambah modul baru: cukup tambah <a> baru di sini
 ══════════════════════════════════════════════════════ -->
-<aside id="sidebar" class="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col py-4 px-3 gap-1 z-50 shadow-sm">
+<aside id="sidebar" class="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col py-3 px-2 z-50 shadow-sm overflow-y-auto">
   <!-- Brand -->
-  <div class="brand-text px-2 mb-4 flex justify-center">
-    <img src="borneo-2.png" alt="SBU Kalimantan" class="w-20 object-contain"
+  <div class="brand-text px-1 mb-3 flex justify-center">
+    <img src="borneo-2.png" alt="SBU Kalimantan" class="w-16 object-contain"
       onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
     <div class="hidden text-center">
-      <p class="text-xs font-bold text-[#00288e]">Aset &amp; Inventory</p>
-      <p class="text-[10px] text-gray-400">SBU Reg Kalimantan</p>
+      <p class="text-[10px] font-bold text-[#00288e]">Aset &amp; Inv</p>
+      <p class="text-[9px] text-gray-400">SBU Kal</p>
     </div>
   </div>
 
-  <!-- Menu: WIG Penguatan Aset -->
+  <!-- Home -->
+  <button onclick="navigateTo('home')" id="nav-home"
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">home</span>
+    <span class="text-[10px] font-medium">Home</span>
+  </button>
+
+  <div class="sb-divider"></div>
+
+  <!-- ASET GROUP -->
+  <div class="sb-group-label">Aset</div>
   <button onclick="navigateTo('wig')" id="nav-wig"
-    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0">military_tech</span>
-    <span class="text-[11px] font-medium leading-tight">WIG<br>Penguatan Aset</span>
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">military_tech</span>
+    <span class="text-[10px] font-medium leading-tight">WIG Aset</span>
   </button>
+  <button onclick="navigateTo('doktek')" id="nav-doktek"
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">folder_open</span>
+    <span class="text-[10px] font-medium leading-tight">Kendala Doktek</span>
+  </button>
+  <div class="sb-sub">
+    <button onclick="navigateTo('pm_isp')" id="nav-pm_isp"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">construction</span>
+      <span class="text-[9px] font-medium leading-tight">PM ISP</span>
+    </button>
+    <button onclick="navigateTo('pm_osp')" id="nav-pm_osp"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">cable</span>
+      <span class="text-[9px] font-medium leading-tight">PM OSP</span>
+    </button>
 
-  <!-- Menu: Administrasi Keuangan -->
+    <button onclick="navigateTo('sid_bb')" id="nav-sid_bb"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">hub</span>
+      <span class="text-[9px] font-medium leading-tight">SID Backbone</span>
+    </button>
+    <button onclick="navigateTo('uplink_olt')" id="nav-uplink_olt"
+      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
+      <span class="material-symbols-outlined text-[15px] flex-shrink-0">router</span>
+      <span class="text-[9px] font-medium leading-tight">Uplink OLT</span>
+    </button>
+  </div>
+
+  <div class="sb-divider"></div>
+
+  <!-- INVENTORY GROUP -->
+  <div class="sb-group-label">Inventory</div>
   <button onclick="navigateTo('keuangan')" id="nav-keuangan"
-    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0">account_balance</span>
-    <span class="text-[11px] font-medium leading-tight">Administrasi<br>Keuangan</span>
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">account_balance</span>
+    <span class="text-[10px] font-medium leading-tight">Administrasi<br>Keuangan</span>
   </button>
-
-  <!-- Menu: Stok Material -->
   <button onclick="navigateTo('stok')" id="nav-stok"
-    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0">inventory_2</span>
-    <span class="text-[11px] font-medium leading-tight">Stok<br>Material</span>
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">inventory_2</span>
+    <span class="text-[10px] font-medium leading-tight">Stok<br>Material</span>
   </button>
-
-  <!-- Menu: Penyerapan Material -->
   <button onclick="navigateTo('penyerapan')" id="nav-penyerapan"
-    class="sb-item nav-btn flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left w-full">
-    <span class="material-symbols-outlined text-[20px] flex-shrink-0">moving</span>
-    <span class="text-[11px] font-medium leading-tight">Penyerapan<br>Material</span>
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">moving</span>
+    <span class="text-[10px] font-medium leading-tight">Penyerapan<br>Material</span>
   </button>
 </aside>
 
@@ -156,6 +202,227 @@ html,body   { height:100%; overflow:hidden; }
     CONTENT SCROLL AREA — hanya bagian ini yang scroll
   ══════════════════════════════════════════════════ -->
   <div id="content">
+
+  <!-- ══════════════════════════════════════════════════
+    PAGE: HOME
+  ══════════════════════════════════════════════════ -->
+  <div id="page-home" class="page">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        <!-- ASET PANEL -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-[#00288e]">construction</span>
+            <p class="text-sm font-bold text-[#00288e]">ASET</p>
+          </div>
+          <div class="p-4 space-y-3">
+            <!-- WIG card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('wig')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">military_tech</span>
+                  <p class="text-[10px] font-bold">WIG Penguatan Aset</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-wig-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
+            <!-- Coming soon -->
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">PM ISP</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">PM OSP</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">Doktek Backlog</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">SID Backbone</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">Uplink OLT</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+          </div>
+        </div>
+
+        <!-- INVENTORY PANEL -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-[#00288e]">inventory</span>
+            <p class="text-sm font-bold text-[#00288e]">INVENTORY</p>
+          </div>
+          <div class="p-4 space-y-3">
+            <!-- Stok card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('stok')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">inventory_2</span>
+                  <p class="text-[10px] font-bold">Stok Material</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-stok-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
+            <!-- Penyerapan card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('penyerapan')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">moving</span>
+                  <p class="text-[10px] font-bold">Penyerapan Material</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-penyerapan-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
+            <!-- Keuangan card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('keuangan')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">account_balance</span>
+                  <p class="text-[10px] font-bold">Administrasi Keuangan</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-keuangan-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+    PAGES: COMING SOON
+  ══════════════════════════════════════════════════ -->
+  <div id="page-pm_isp" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">construction</span><p class="text-lg font-bold">PM ISP</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+  <div id="page-pm_osp" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">cable</span><p class="text-lg font-bold">PM OSP</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+  <!-- ══════════════════════════════════════════════════
+    PAGE: KENDALA DOKTEK
+  ══════════════════════════════════════════════════ -->
+  <div id="page-doktek" class="page">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+
+      <!-- Tab Toggle: Backlog vs Berjalan -->
+      <div class="flex gap-2 items-center">
+        <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50 no-print">
+          <button class="doktek-tab-btn px-3 py-1.5 text-[10px] font-bold rounded bg-[#00288e] text-white" data-tab="backlog">Backlog ≤2025</button>
+          <button class="doktek-tab-btn px-3 py-1.5 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-tab="berjalan">Berjalan 2026</button>
+        </div>
+        <p class="text-[9px] text-gray-400" id="doktek-tab-info">—</p>
+      </div>
+
+      <!-- Kelompok 1: Resume -->
+      <section>
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">folder_open</span> Resume Kendala Doktek
+        </p>
+        <div id="doktek-resume" class="space-y-3">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Kelompok 2: Chart per KP -->
+      <section>
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">bar_chart</span> Kendala Doktek per KP
+          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— klik bar untuk filter</span>
+        </p>
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <div class="flex items-center gap-4 mb-3">
+            <p class="text-xs font-bold flex-1" id="doktek-chart-title">Distribusi SLA per KP</p>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-green-500"></span>Normal ≤12hr</span>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-orange-400"></span>Perhatian 13-30hr</span>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-red-500"></span>Kritis ≥31hr</span>
+          </div>
+          <div style="position:relative;height:240px"><canvas id="doktek-kpChart"></canvas></div>
+        </div>
+      </section>
+
+      <!-- Filter Strip -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+        </p>
+        <div class="flex flex-wrap gap-1.5 items-center">
+          <div class="ms-wrap relative" id="ms-d-kp">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('kp')">
+              <span id="ms-d-kp-label">KP</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-d-kp-menu"></div>
+          </div>
+          <div class="ms-wrap relative" id="ms-d-keterangan">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('keterangan')">
+              <span id="ms-d-keterangan-label">Keterangan</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[220px] max-h-48 overflow-y-auto" id="ms-d-keterangan-menu"></div>
+          </div>
+          <div class="ms-wrap relative" id="ms-d-sla">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('sla')">
+              <span id="ms-d-sla-label">SLA</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-d-sla-menu">
+              <label class="ms-item"><input type="checkbox" value="Normal" onchange="doktekMsChange('sla')">🟢 Normal (≤12 hari)</label>
+              <label class="ms-item"><input type="checkbox" value="Perhatian" onchange="doktekMsChange('sla')">🟡 Perhatian (13-30 hari)</label>
+              <label class="ms-item"><input type="checkbox" value="Kritis" onchange="doktekMsChange('sla')">🔴 Kritis (≥31 hari)</label>
+            </div>
+          </div>
+          <div class="ms-wrap relative" id="ms-d-tahun">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('tahun')">
+              <span id="ms-d-tahun-label">Tahun</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[120px] max-h-48 overflow-y-auto" id="ms-d-tahun-menu"></div>
+          </div>
+          <input type="text" id="doktek-search" oninput="doktekApplyFilter()" placeholder="Cari PA/Service ID…"
+            class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-36 md:w-44">
+        </div>
+      </section>
+
+      <!-- Tabel Detail -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <p class="text-sm font-bold">Data Detail Kendala Doktek</p>
+            <p class="text-[10px] text-gray-400" id="doktek-filterLabel">Menampilkan semua data</p>
+          </div>
+          <button onclick="doktekExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print">
+            <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
+          </button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:900px">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Service ID</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">PA Number</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Customer</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Created At</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Keterangan</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">SLA</th>
+              </tr>
+            </thead>
+            <tbody id="doktek-tblBody">
+              <tr><td colspan="9" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <p class="text-[10px] text-gray-400">
+            <span class="font-bold" id="doktek-rangeInfo">—</span> dari <span class="font-bold" id="doktek-totalInfo">—</span> data
+          </p>
+          <div class="flex gap-1" id="doktek-pgBtns"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div id="page-sid_bb" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">hub</span><p class="text-lg font-bold">SID Backbone</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+  <div id="page-uplink_olt" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">router</span><p class="text-lg font-bold">Uplink OLT</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
 
   <!-- ══════════════════════════════════════════════════
     PAGE: ADMINISTRASI KEUANGAN
@@ -794,23 +1061,34 @@ const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vb
 const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0wA26kn60vlyZbkh8ypwhoacB1QyhLhBGcyl9XnxIPs45_ThfhOI/exec';
 const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUyjYCqkRn194DfpoLkWf7Qzo9gCbn8ELAtOnRjtmIo_EawWLx0Q3G/exec';
+const API_DOKTEK     = 'https://script.google.com/macros/s/AKfycby_oVspb0je_rrkhzPNpDH0KK2xrr1UJwOXLShP68v9qPoGhMEP2r-gIsd1bKlv99Ol/exec';
 
 // ══════════════════════════════════════════════════════════
 // NAVIGATION — SPA core
 // ══════════════════════════════════════════════════════════
 const PAGE_CONFIG = {
-  keuangan:   { title:'Administrasi Keuangan', icon:'account_balance' },
-  stok:       { title:'Stok Material',          icon:'inventory_2'     },
-  penyerapan: { title:'Penyerapan Material',      icon:'moving'          },
-  wig:        { title:'WIG Penguatan Aset',         icon:'military_tech'   },
+  home:       { title:'Dashboard',              icon:'home'            },
+  // ASET
+  wig:        { title:'WIG Penguatan Aset',     icon:'military_tech'   },
+  pm_isp:     { title:'PM ISP',                 icon:'construction'    },
+  pm_osp:     { title:'PM OSP',                 icon:'cable'           },
+  doktek:     { title:'Kendala Doktek',           icon:'folder_open'     },
+  sid_bb:     { title:'SID Backbone',            icon:'hub'             },
+  uplink_olt: { title:'Uplink OLT',              icon:'router'          },
+  // INVENTORY
+  keuangan:   { title:'Administrasi Keuangan',  icon:'account_balance' },
+  stok:       { title:'Stok Material',           icon:'inventory_2'     },
+  penyerapan: { title:'Penyerapan Material',     icon:'moving'          },
 };
 
 // Lazy load state — data hanya di-fetch saat pertama kali modul dibuka
-const loaded  = { keuangan:false, stok:false, penyerapan:false, wig:false };
-const loading = { keuangan:false, stok:false, penyerapan:false, wig:false };
+const loaded  = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false };
+const loading = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false };
 let currentPage = 'keuangan';
 
 function navigateTo(page) {
+  // Update URL hash
+  if(location.hash !== '#'+page) history.pushState(null, '', '#'+page);
   // Sembunyikan semua page
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
@@ -819,26 +1097,27 @@ function navigateTo(page) {
   document.querySelectorAll('.nav-btn').forEach(b => {
     b.classList.remove('bg-[#eaedff]','text-[#00288e]');
     b.classList.add('text-gray-500','hover:bg-[#f2f3ff]');
-    b.querySelector('span.material-symbols-outlined').classList.remove('text-[#00288e]');
-    b.querySelector('span.material-symbols-outlined').classList.add('text-gray-400');
-    b.querySelector('span.text-\\[11px\\]')?.classList.remove('text-[#00288e]','font-semibold');
+    const ico = b.querySelector('span.material-symbols-outlined');
+    if(ico){ico.classList.remove('text-[#00288e]');ico.classList.add('text-gray-400');}
   });
   const activeBtn = document.getElementById('nav-'+page);
   if (activeBtn) {
     activeBtn.classList.add('bg-[#eaedff]','text-[#00288e]');
     activeBtn.classList.remove('text-gray-500','hover:bg-[#f2f3ff]');
-    activeBtn.querySelector('span.material-symbols-outlined').classList.add('text-[#00288e]');
-    activeBtn.querySelector('span.material-symbols-outlined').classList.remove('text-gray-400');
+    const ico = activeBtn.querySelector('span.material-symbols-outlined');
+    if(ico){ico.classList.add('text-[#00288e]');ico.classList.remove('text-gray-400');}
   }
 
   // Update topnav baris 2
   updateTopnav(page);
 
   // Lazy load
-  if (page === 'keuangan' && !loaded.keuangan) kLoadData();
-  if (page === 'stok'     && !loaded.stok)     sLoadData();
+  if (page === 'home'       && !loaded.home)       homeLoadData();
+  if (page === 'keuangan'   && !loaded.keuangan)   kLoadData();
+  if (page === 'stok'       && !loaded.stok)       sLoadData();
   if (page === 'penyerapan' && !loaded.penyerapan) pLoadData();
-  if (page === 'wig'         && !loaded.wig)         wigLoadData();
+  if (page === 'wig'        && !loaded.wig)        wigLoadData();
+  if (page === 'doktek'     && !loaded.doktek)     doktekLoadData('backlog');
 
   currentPage = page;
 }
@@ -901,6 +1180,25 @@ function updateTopnav(page) {
         </button>
         <button onclick="wigLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="wig-refreshIcon">sync</span>
+        </button>
+      </div>`;
+  } else if (page === 'doktek') {
+    bar2.innerHTML = `
+      <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
+      <div class="flex items-center gap-1.5 no-print">
+        <button onclick="doktekResetFilter()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
+        </button>
+        <button onclick="doktekClearCacheAndReload()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+          <span class="material-symbols-outlined text-[16px]" id="doktek-refreshIcon">sync</span>
+        </button>
+      </div>`;
+  } else if (page === 'home') {
+    bar2.innerHTML = `
+      <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
+      <div class="flex items-center gap-1.5 no-print">
+        <button onclick="homeRefresh()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+          <span class="material-symbols-outlined text-[16px]" id="home-refreshIcon">sync</span>
         </button>
       </div>`;
   } else {
@@ -974,6 +1272,169 @@ function buildPagination(containerId, currentPg, total, pageSize, goFn) {
   h+=`<button onclick="${goFn}(${currentPg+1})" ${currentPg===pages?'disabled':''} class="p-1 border border-gray-200 rounded hover:bg-[#f2f3ff] disabled:opacity-40"><span class="material-symbols-outlined text-[14px]">chevron_right</span></button>`;
   document.getElementById(containerId).innerHTML=h;
   return {s, e};
+}
+
+
+// ══════════════════════════════════════════════════════════
+// MODULE: HOME (prefix: home)
+// Cache-based summary dari semua modul
+// ══════════════════════════════════════════════════════════
+
+const HOME_CACHE_KEY = 'asus_home_cache';
+const HOME_CACHE_TTL = 30 * 60 * 1000; // 30 menit
+
+async function homeLoadData() {
+  if(loading.home) return;
+  // Cek cache sessionStorage
+  try {
+    const cached = sessionStorage.getItem(HOME_CACHE_KEY);
+    if(cached) {
+      const { data, ts } = JSON.parse(cached);
+      if(Date.now() - ts < HOME_CACHE_TTL) {
+        homeRender(data);
+        loaded.home = true;
+        return;
+      }
+    }
+  } catch(e) {}
+
+  loading.home = true;
+  const icon = document.getElementById('home-refreshIcon');
+  if(icon) icon.classList.add('spin');
+
+  try {
+    // Fetch paralel semua API
+    const [rWig, rStok, rSerap, rKeu] = await Promise.allSettled([
+      fetch(API_WIG + '?mode=summary').then(r=>r.json()).catch(()=>null),
+      fetch(API_STOK).then(r=>r.json()).catch(()=>null),
+      fetch(API_PENYERAPAN).then(r=>r.json()).catch(()=>null),
+      fetch(API_KEUANGAN).then(r=>r.json()).catch(()=>null),
+    ]);
+
+    const data = {
+      wig:       rWig.value,
+      stok:      rStok.value,
+      serap:     rSerap.value,
+      keuangan:  rKeu.value,
+    };
+
+    // Simpan ke cache
+    try { sessionStorage.setItem(HOME_CACHE_KEY, JSON.stringify({data, ts:Date.now()})); } catch(e){}
+
+    homeRender(data);
+    loaded.home = true;
+
+    // Simpan ke modul state supaya tidak re-fetch saat pindah modul
+    if(data.wig?.ok)      { WIG_DATA = data.wig; wigRenderSummary && wigRenderSummary(); loaded.wig = true; }
+    if(data.stok?.ok)     { S_ROWS = data.stok.rows||[]; }
+    if(data.serap?.ok)    { P_ROWS = data.serap.rows||[]; }
+    if(data.keuangan?.ok) { K_ROWS = data.keuangan.allRows||data.keuangan.rows||[]; K_SUMMARY = data.keuangan.summary||{}; }
+
+  } catch(err) {
+    console.error('Home load error:', err);
+  } finally {
+    loading.home = false;
+    if(icon) icon.classList.remove('spin');
+  }
+}
+
+function homeRefresh() {
+  try { sessionStorage.removeItem(HOME_CACHE_KEY); } catch(e){}
+  loaded.home = false;
+  homeLoadData();
+}
+
+function homeRender(data) {
+  // WIG summary
+  const wigEl = document.getElementById('home-wig-content');
+  if(wigEl && data.wig?.ok) {
+    const { onTrack, offTrack, totalLm } = data.wig;
+    wigEl.innerHTML = `
+      <div class="grid grid-cols-3 gap-2">
+        <div class="bg-green-50 rounded-lg p-2 text-center">
+          <p class="text-[9px] text-green-600 font-bold">On Track</p>
+          <p class="text-lg font-black text-green-700">${onTrack}</p>
+        </div>
+        <div class="bg-red-50 rounded-lg p-2 text-center">
+          <p class="text-[9px] text-red-600 font-bold">Off Track</p>
+          <p class="text-lg font-black text-red-700">${offTrack}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-2 text-center">
+          <p class="text-[9px] text-gray-500 font-bold">Total LM</p>
+          <p class="text-lg font-black text-gray-700">${totalLm}</p>
+        </div>
+      </div>`;
+  } else if(wigEl) {
+    wigEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+  }
+
+  // Stok summary
+  const stokEl = document.getElementById('home-stok-content');
+  if(stokEl && data.stok?.ok) {
+    const rows = data.stok.rows||[];
+    const aktif = rows.filter(r=>{
+      const sloc=(r['Sloc - Gudang']||'').split(' - ')[0].trim();
+      return !['9999'].includes(sloc)&&!['RUSAK-TL','RUSAK-L'].includes(r['Batch'])&&(r['Sloc - KP']||'').toLowerCase()!=='rusak';
+    });
+    const totalVal = aktif.reduce((s,r)=>s+(parseFloat(r['Value Unrestricted'])||0),0);
+    const totalKode = new Set(aktif.map(r=>r['Material']).filter(Boolean)).size;
+    stokEl.innerHTML = `
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-blue-50 rounded-lg p-2">
+          <p class="text-[9px] text-blue-600 font-bold">Nilai Stok</p>
+          <p class="text-sm font-black text-blue-800">${fmtRp(totalVal)}</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-100 p-2">
+          <p class="text-[9px] text-gray-500 font-bold">Kode Material</p>
+          <p class="text-sm font-black text-gray-700">${totalKode.toLocaleString('id-ID')}</p>
+        </div>
+      </div>`;
+  } else if(stokEl) {
+    stokEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+  }
+
+  // Penyerapan summary
+  const seEl = document.getElementById('home-penyerapan-content');
+  if(seEl && data.serap?.ok) {
+    const rows = data.serap.rows||[];
+    const serap = rows.filter(r=>r['_type']==='penyerapan');
+    const kemBaik = rows.filter(r=>r['_type']==='kembali_baik');
+    const totalQty = serap.reduce((s,r)=>s+(r['_qty_abs']||0),0);
+    const rasio = totalQty>0 ? Math.round(kemBaik.reduce((s,r)=>s+(r['_qty_abs']||0),0)/totalQty*100) : 0;
+    seEl.innerHTML = `
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-blue-50 rounded-lg p-2">
+          <p class="text-[9px] text-blue-600 font-bold">Total Serap</p>
+          <p class="text-sm font-black text-blue-800">${Math.round(totalQty).toLocaleString('id-ID')} unit</p>
+        </div>
+        <div class="bg-${rasio>50?'red':'green'}-50 rounded-lg p-2">
+          <p class="text-[9px] text-${rasio>50?'red':'green'}-600 font-bold">Rasio Kembali</p>
+          <p class="text-sm font-black text-${rasio>50?'red':'green'}-700">${rasio}%</p>
+        </div>
+      </div>`;
+  } else if(seEl) {
+    seEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+  }
+
+  // Keuangan summary
+  const keuEl = document.getElementById('home-keuangan-content');
+  if(keuEl && data.keuangan?.ok) {
+    const s = data.keuangan.summary||{};
+    const rows = data.keuangan.allRows||data.keuangan.rows||[];
+    keuEl.innerHTML = `
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-orange-50 rounded-lg p-2">
+          <p class="text-[9px] text-orange-600 font-bold">Outstanding</p>
+          <p class="text-sm font-black text-orange-700">${fmtRp(s.globalOutstanding||0)}</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-100 p-2">
+          <p class="text-[9px] text-gray-500 font-bold">Transaksi</p>
+          <p class="text-sm font-black text-gray-700">${rows.length.toLocaleString('id-ID')}</p>
+        </div>
+      </div>`;
+  } else if(keuEl) {
+    keuEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1800,8 +2261,18 @@ function sExportCSV(){
 // INIT
 // ══════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
-  // Buka halaman keuangan secara default
-  navigateTo('wig');
+  // Restore page dari hash atau default ke home
+  const validPages = Object.keys(PAGE_CONFIG);
+  const hash = location.hash.replace('#','');
+  const initPage = validPages.includes(hash) ? hash : 'home';
+  navigateTo(initPage);
+
+  // Handle browser back/forward
+  window.addEventListener('popstate', ()=>{
+    const h = location.hash.replace('#','');
+    const p = validPages.includes(h) ? h : 'home';
+    navigateTo(p);
+  });
 
   // Tutup dropdown saat klik di luar
   document.addEventListener('click',e=>{
@@ -2319,7 +2790,7 @@ function wigRenderSummary(){
     const offT=w.lms.filter(l=>l.status==='\u274c').length;
     const lmRows=w.lms.map(l=>{
       const key=`${w.wig}-${l.lm}`,isOn=WIG_ACTIVE_KEY===key;
-      const pct=Math.round((l.pctSbu||0)*100),barW=Math.min(100,pct);
+      const pct=((l.pctSbu||0)*100).toFixed(2),barW=Math.min(100,parseFloat(pct));
       const barC=l.status==='\u2705'?'bg-green-500':l.status==='\u274c'?'bg-red-400':'bg-gray-300';
       const stC=l.status==='\u2705'?'text-green-600':l.status==='\u274c'?'text-red-600':'text-gray-400';
       return `<div class="cf rounded-lg px-2 py-1.5 ${isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e]':'hover:bg-[#f2f3ff]'} cursor-pointer" onclick="wigSelectLm(${w.wig},${l.lm})">
@@ -2353,7 +2824,7 @@ async function wigSelectLm(wigNo,lmNo){
   const wig=WIG_DATA.wigs.find(w=>w.wig===wigNo);
   const lm=wig?wig.lms.find(l=>l.lm===lmNo):null;
   if(lm&&wig){
-    const pct=Math.round((lm.pctSbu||0)*100);
+    const pct=((lm.pctSbu||0)*100).toFixed(2);
     document.getElementById('wig-detail-title').textContent=lm.nama+' \u2014 '+wig.nama.replace(/WIG \d+ \u2014 /,'');
     document.getElementById('wig-detail-sub').textContent='Memuat detail KP\u2026';
     document.getElementById('wig-detail-pct').textContent=pct+'%';
@@ -2364,9 +2835,9 @@ async function wigSelectLm(wigNo,lmNo){
     document.getElementById('wig-prog-sem').style.width=Math.min(100,pct)+'%';
     document.getElementById('wig-prog-sem').className=`h-2 rounded-full transition-all ${semC}`;
     document.getElementById('wig-prog-sem-label').textContent=pct+'%';
-    const pctW=Math.round((lm.pctMinggu||0)*100);
+    const pctW=((lm.pctMinggu||0)*100).toFixed(2);
     const weekC=lm.statusMinggu==='\u2705'?'bg-green-500':'bg-orange-400';
-    document.getElementById('wig-prog-week').style.width=Math.min(100,pctW)+'%';
+    document.getElementById('wig-prog-week').style.width=Math.min(100,parseFloat(pctW))+'%';
     document.getElementById('wig-prog-week').className=`h-2 rounded-full transition-all ${weekC}`;
     document.getElementById('wig-prog-week-label').textContent=pctW+'% '+(lm.statusMinggu||'');
     document.getElementById('wig-prog-week-label').className='text-[9px] font-bold '+(lm.statusMinggu==='\u2705'?'text-green-600':'text-orange-500');
@@ -2380,8 +2851,8 @@ async function wigSelectLm(wigNo,lmNo){
   const tbody=document.getElementById('wig-kp-tbody');
   if(detail.kpData&&detail.kpData.length){
     tbody.innerHTML=detail.kpData.map(kp=>{
-      const p=Math.round((kp.pct||0)*100);
-      const c=p>=100?'text-green-600':p>=80?'text-orange-500':'text-red-600';
+      const p=((kp.pct||0)*100).toFixed(2);
+      const c=parseFloat(p)>=100?'text-green-600':parseFloat(p)>=80?'text-orange-500':'text-red-600';
       const label=kp.kp.toLowerCase().split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
       return `<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">
         <td class="px-3 py-2 text-xs">${label}</td>
@@ -2412,6 +2883,316 @@ function wigCloseDetail(){
   document.getElementById('wig-detail').classList.add('hidden');
   wigRenderSummary();
 }
+
+
+// ══════════════════════════════════════════════════════════
+// MODULE: KENDALA DOKTEK (prefix: doktek)
+// ══════════════════════════════════════════════════════════
+
+let DOKTEK_ROWS = [], DOKTEK_FILTERED = [], doktekPage = 1;
+let DOKTEK_TAB = 'backlog';
+const DOKTEK_CACHE = {}; // cache per tab: { backlog: {rows, json}, berjalan: {...} }
+const DOKTEK_PAGE_SIZE = 15;
+const DF = { kp:[], keterangan:[], sla:[], tahun:[], search:'' };
+const SLA_COLOR = {
+  'Normal':    { row:'',            badge:'bg-green-100 text-green-700',  text:'text-green-600' },
+  'Perhatian': { row:'bg-orange-50/40', badge:'bg-orange-100 text-orange-700', text:'text-orange-500' },
+  'Kritis':    { row:'bg-red-50',   badge:'bg-red-100 text-red-700',     text:'text-red-600' },
+  '—':         { row:'',            badge:'bg-gray-100 text-gray-400',   text:'text-gray-400' },
+};
+
+async function doktekLoadData(tab) {
+  tab = tab || DOKTEK_TAB;
+  DOKTEK_TAB = tab;
+  if(loading.doktek) return;
+
+  // Pakai cache jika sudah ada — langsung render tanpa fetch
+  if(DOKTEK_CACHE[tab]) {
+    const { rows, json } = DOKTEK_CACHE[tab];
+    DOKTEK_ROWS = rows;
+    doktekBuildFilters(json);
+    const info = document.getElementById('doktek-tab-info');
+    if(info) info.textContent = `Total PA: ${json.totalPA} · Terinput: ${json.sudahTerinput} · Belum Doktek: ${json.belumDoktek}`;
+    doktekRenderResume(json);
+    // Reset filter saat ganti tab
+    Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
+    document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
+    const si = document.getElementById('doktek-search'); if(si) si.value = '';
+    doktekApplyFilter();
+    return;
+  }
+
+  loading.doktek = true;
+  const icon = document.getElementById('doktek-refreshIcon');
+  if(icon) icon.classList.add('spin');
+  Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
+  document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
+  const si = document.getElementById('doktek-search'); if(si) si.value = '';
+  try {
+    const res  = await fetch(API_DOKTEK + '?tab=' + tab);
+    const json = await res.json();
+    if(!json.ok) throw new Error(json.error || 'Gagal memuat data');
+    // Simpan ke cache
+    DOKTEK_CACHE[tab] = { rows: json.rows || [], json };
+    DOKTEK_ROWS = json.rows || [];
+    doktekBuildFilters(json);
+    const info = document.getElementById('doktek-tab-info');
+    if(info) info.textContent = `Total PA: ${json.totalPA} · Terinput: ${json.sudahTerinput} · Belum Doktek: ${json.belumDoktek}`;
+    doktekRenderResume(json);
+    doktekApplyFilter();
+    loaded.doktek = true;
+  } catch(err) {
+    document.getElementById('doktek-tblBody').innerHTML =
+      `<tr><td colspan="9" class="p-8 text-center text-red-500 text-sm">&#9888; ${err.message}</td></tr>`;
+    const el = document.getElementById('doktek-resume');
+    if(el) el.innerHTML = `<div class="p-4 text-red-500 text-sm text-center">&#9888; ${err.message}</div>`;
+  } finally {
+    loading.doktek = false;
+    if(icon) icon.classList.remove('spin');
+  }
+}
+
+function doktekBuildFilters(json) {
+  const kpMenu = document.getElementById('ms-d-kp-menu');
+  if(kpMenu) kpMenu.innerHTML = (json.kpOptions||[]).map(v =>
+    `<label class="ms-item"><input type="checkbox" value="${v}" onchange="doktekMsChange('kp')">${v}</label>`).join('');
+  const ketMenu = document.getElementById('ms-d-keterangan-menu');
+  const excludeKet = ['TERINPUT','EXCLUDE','ON PROGRESS','ONPROGRESS'];
+  if(ketMenu) ketMenu.innerHTML = (json.keteranganOptions||[])
+    .filter(v => !excludeKet.includes(v.toUpperCase()))
+    .map(v => `<label class="ms-item"><input type="checkbox" value="${v}" onchange="doktekMsChange('keterangan')">${v||'(kosong)'}</label>`).join('');
+  const tahunMenu = document.getElementById('ms-d-tahun-menu');
+  if(tahunMenu) tahunMenu.innerHTML = (json.tahunOptions||[]).map(v =>
+    `<label class="ms-item"><input type="checkbox" value="${v}" onchange="doktekMsChange('tahun')">${v}</label>`).join('');
+}
+
+function doktekRenderResume(json) {
+  const el = document.getElementById('doktek-resume');
+  if(!el) return;
+  const bd = json.breakdownKeterangan || {};
+  const bdEntries = Object.entries(bd).sort((a,b) => b[1]-a[1]);
+  el.innerHTML = `
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+      <div class="rounded-xl border p-4 shadow-sm bg-red-50 border-red-200">
+        <p class="text-[9px] font-bold uppercase mb-1 text-red-700">Total Belum Doktek</p>
+        <p class="text-2xl font-black text-red-700">${(json.belumDoktek||0).toLocaleString('id-ID')}</p>
+        <p class="text-[9px] mt-0.5 text-red-500 opacity-70">Perlu tindak lanjut</p>
+      </div>
+      <div class="rounded-xl border p-4 shadow-sm bg-red-50 border-red-300">
+        <p class="text-[9px] font-bold uppercase mb-1 text-red-700">🔴 Kritis ≥31 hari</p>
+        <p class="text-2xl font-black text-red-700">${(json.slaKritis||0).toLocaleString('id-ID')}</p>
+        <p class="text-[9px] mt-0.5 text-red-500 opacity-70">Lewati SLA Nota Dinas</p>
+      </div>
+      <div class="rounded-xl border p-4 shadow-sm bg-orange-50 border-orange-200">
+        <p class="text-[9px] font-bold uppercase mb-1 text-orange-600">🟡 Perhatian 13-30hr</p>
+        <p class="text-2xl font-black text-orange-600">${(json.slaPerhatian||0).toLocaleString('id-ID')}</p>
+        <p class="text-[9px] mt-0.5 text-orange-500 opacity-70">Mendekati batas SLA</p>
+      </div>
+      <div class="rounded-xl border p-4 shadow-sm bg-green-50 border-green-200">
+        <p class="text-[9px] font-bold uppercase mb-1 text-green-700">🟢 Normal ≤12 hari</p>
+        <p class="text-2xl font-black text-green-700">${(json.slaNormal||0).toLocaleString('id-ID')}</p>
+        <p class="text-[9px] mt-0.5 text-green-600 opacity-70">Dalam target SLA</p>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-200 p-3 shadow-sm">
+      <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">Breakdown Kendala</p>
+      <div class="flex flex-wrap gap-2">
+        ${bdEntries.map(([k,v]) => `
+          <div class="flex items-center gap-1.5 px-2.5 py-1.5 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:border-[#00288e] hover:bg-[#f2f3ff] transition-colors"
+            onclick="doktekFilterByKet('${k.replace(/'/g,"\\'")}')">
+            <span class="text-[10px] font-medium text-gray-700">${k||'(kosong)'}</span>
+            <span class="text-[9px] font-black text-[#00288e] bg-[#eaedff] px-1.5 py-0.5 rounded-full">${v}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function doktekToggleMs(key) {
+  const menu = document.getElementById('ms-d-'+key+'-menu');
+  if(!menu) return;
+  const isHidden = menu.classList.contains('hidden');
+  document.querySelectorAll('.ms-menu').forEach(m => m.classList.add('hidden'));
+  if(isHidden) menu.classList.remove('hidden');
+}
+
+function doktekMsChange(key) {
+  const menu = document.getElementById('ms-d-'+key+'-menu');
+  if(!menu) return;
+  DF[key] = [...menu.querySelectorAll('input:checked')].map(el => el.value);
+  const lbl  = document.getElementById('ms-d-'+key+'-label');
+  const wrap = document.getElementById('ms-d-'+key);
+  const labels = { kp:'KP', keterangan:'Keterangan', sla:'SLA', tahun:'Tahun' };
+  if(lbl)  lbl.textContent  = DF[key].length ? labels[key]+' ('+DF[key].length+')' : labels[key];
+  if(wrap) wrap.classList.toggle('ms-active', DF[key].length > 0);
+  doktekApplyFilter();
+}
+
+function doktekFilterByKet(ket) {
+  const menu = document.getElementById('ms-d-keterangan-menu');
+  if(menu) menu.querySelectorAll('input').forEach(cb => { cb.checked = cb.value === ket; });
+  DF.keterangan = [ket];
+  const lbl = document.getElementById('ms-d-keterangan-label');
+  if(lbl) lbl.textContent = 'Keterangan (1)';
+  const wrap = document.getElementById('ms-d-keterangan');
+  if(wrap) wrap.classList.add('ms-active');
+  doktekApplyFilter();
+}
+
+function doktekApplyFilter() {
+  DF.search = (document.getElementById('doktek-search')?.value || '').toLowerCase();
+  const chk = (arr, val) => !arr.length || arr.includes(val);
+  DOKTEK_FILTERED = DOKTEK_ROWS.filter(r => {
+    if(!chk(DF.kp,         r.namaKP))    return false;
+    if(!chk(DF.keterangan, r.acluan))    return false;
+    if(!chk(DF.sla,        r.slaStatus)) return false;
+    if(!chk(DF.tahun,      r.tahun))     return false;
+    if(DF.search && !JSON.stringify(r).toLowerCase().includes(DF.search)) return false;
+    return true;
+  });
+  doktekRenderChart();
+  doktekUpdateLabel();
+  doktekPage = 1;
+  doktekRenderTable();
+}
+
+function doktekResetFilter() {
+  Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
+  document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
+  ['ms-d-kp-label','ms-d-keterangan-label','ms-d-sla-label','ms-d-tahun-label'].forEach((id,i) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = ['KP','Keterangan','SLA','Tahun'][i];
+  });
+  const si = document.getElementById('doktek-search'); if(si) si.value = '';
+  doktekApplyFilter();
+}
+
+function doktekRenderChart() {
+  const byKP = {};
+  DOKTEK_FILTERED.forEach(r => {
+    const kp = r.namaKP || '—';
+    if(!byKP[kp]) byKP[kp] = { normal:0, perhatian:0, kritis:0, tanpaAging:0 };
+    if(r.slaStatus==='Normal')         byKP[kp].normal++;
+    else if(r.slaStatus==='Perhatian') byKP[kp].perhatian++;
+    else if(r.slaStatus==='Kritis')    byKP[kp].kritis++;
+    else                                byKP[kp].tanpaAging++;
+  });
+  const sorted = Object.entries(byKP).sort((a,b) =>
+    (b[1].normal+b[1].perhatian+b[1].kritis) - (a[1].normal+a[1].perhatian+a[1].kritis));
+  const labels = sorted.map(e => e[0]);
+  rebuildChart('doktek-kpChart', {
+    type:'bar',
+    data:{labels, datasets:[
+      {label:'Normal',     data:sorted.map(e=>e[1].normal),     backgroundColor:'#22c55e', borderRadius:3, stack:'s'},
+      {label:'Perhatian',  data:sorted.map(e=>e[1].perhatian),  backgroundColor:'#f97316', borderRadius:3, stack:'s'},
+      {label:'Kritis',     data:sorted.map(e=>e[1].kritis),     backgroundColor:'#ef4444', borderRadius:3, stack:'s'},
+      {label:'Tanpa Aging',data:sorted.map(e=>e[1].tanpaAging), backgroundColor:'#d1d5db', borderRadius:3, stack:'s'},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{stacked:true, grid:{display:false}, ticks:{font:{size:9}}},
+        y:{stacked:true, beginAtZero:true, ticks:{font:{size:9}}}
+      },
+      onClick(evt,els){
+        if(!els.length) return;
+        const kp = labels[els[0].index];
+        DF.kp = DF.kp.includes(kp) ? DF.kp.filter(k=>k!==kp) : [...DF.kp, kp];
+        const menu = document.getElementById('ms-d-kp-menu');
+        if(menu) menu.querySelectorAll('input').forEach(cb => { cb.checked = DF.kp.includes(cb.value); });
+        const lbl = document.getElementById('ms-d-kp-label');
+        if(lbl) lbl.textContent = DF.kp.length ? 'KP ('+DF.kp.length+')' : 'KP';
+        const wrap = document.getElementById('ms-d-kp');
+        if(wrap) wrap.classList.toggle('ms-active', DF.kp.length > 0);
+        doktekApplyFilter();
+      }
+    }
+  });
+}
+
+function doktekRenderTable() {
+  const start = (doktekPage-1)*DOKTEK_PAGE_SIZE;
+  const paged = DOKTEK_FILTERED.slice(start, start+DOKTEK_PAGE_SIZE);
+  const tbody = document.getElementById('doktek-tblBody');
+  if(!paged.length) {
+    tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>`;
+    buildPagination('doktek-pgBtns', doktekPage, DOKTEK_FILTERED.length, DOKTEK_PAGE_SIZE, 'doktekGoPage');
+    const ri = document.getElementById('doktek-rangeInfo'), ti = document.getElementById('doktek-totalInfo');
+    if(ri) ri.textContent='0'; if(ti) ti.textContent='0';
+    return;
+  }
+  tbody.innerHTML = paged.map((r,i) => {
+    const sc = SLA_COLOR[r.slaStatus] || SLA_COLOR['—'];
+    const agingTxt = r.aging !== null && r.aging !== undefined ? r.aging+' hari' : '—';
+    const badge = r.slaStatus && r.slaStatus!=='—'
+      ? `<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold ${sc.badge}">${r.slaStatus}</span>`
+      : '<span class="text-[9px] text-gray-300">—</span>';
+    return `<tr class="hover:bg-[#f2f3ff] transition-colors border-b border-gray-50 ${sc.row}">
+      <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>
+      <td class="p-3 text-xs font-mono">${r.service_id||'—'}</td>
+      <td class="p-3 text-xs font-semibold text-[#00288e]">${r.pa_number||'—'}</td>
+      <td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.customer||''}">${r.customer||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.namaKP||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.created_at||'—'}</td>
+      <td class="p-3 text-xs text-center font-bold ${sc.text}">${agingTxt}</td>
+      <td class="p-3 text-xs">${r.acluan||'(kosong)'}</td>
+      <td class="p-3 text-center">${badge}</td>
+    </tr>`;
+  }).join('');
+  const {s,e} = buildPagination('doktek-pgBtns', doktekPage, DOKTEK_FILTERED.length, DOKTEK_PAGE_SIZE, 'doktekGoPage');
+  const ri = document.getElementById('doktek-rangeInfo'), ti = document.getElementById('doktek-totalInfo');
+  if(ri) ri.textContent=`${s}–${e}`; if(ti) ti.textContent=DOKTEK_FILTERED.length.toLocaleString('id-ID');
+}
+
+function doktekGoPage(p) {
+  doktekPage = Math.max(1, Math.min(p, Math.ceil(DOKTEK_FILTERED.length/DOKTEK_PAGE_SIZE)||1));
+  doktekRenderTable();
+}
+
+function doktekUpdateLabel() {
+  const parts = [];
+  if(DF.kp.length)         parts.push('KP('+DF.kp.length+')');
+  if(DF.keterangan.length) parts.push('Ket('+DF.keterangan.length+')');
+  if(DF.sla.length)        parts.push('SLA: '+DF.sla.join(', '));
+  if(DF.tahun.length)      parts.push('Tahun('+DF.tahun.length+')');
+  if(DF.search)            parts.push('"'+DF.search+'"');
+  const el = document.getElementById('doktek-filterLabel');
+  if(el) el.textContent = parts.length ? 'Filter: '+parts.join(' · ') : 'Scope: belum ada doktek';
+}
+
+function doktekClearCacheAndReload() {
+  // Clear cache tab aktif → paksa fetch ulang
+  delete DOKTEK_CACHE[DOKTEK_TAB];
+  doktekLoadData(DOKTEK_TAB);
+}
+
+function doktekExportCSV() {
+  const cols = ['service_id','pa_number','customer','namaKP','created_at','aging','acluan','slaStatus'];
+  const hdrs = ['Service ID','PA Number','Customer','KP','Created At','Aging (hari)','Keterangan','SLA'];
+  const rows = [hdrs.join(',')];
+  DOKTEK_FILTERED.forEach(r => rows.push(cols.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
+  a.download = 'kendala_doktek_'+DOKTEK_TAB+'_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.doktek-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      DOKTEK_TAB = tab;
+      // Tidak reset loaded — cache per tab yang handle
+      document.querySelectorAll('.doktek-tab-btn').forEach(b => {
+        b.className = 'doktek-tab-btn px-3 py-1.5 text-[10px] font-bold rounded ' +
+          (b===btn ? 'bg-[#00288e] text-white' : 'text-gray-500 hover:bg-white');
+      });
+      doktekLoadData(tab);
+    });
+  });
+});
 
 </script>
 </body>
