@@ -122,6 +122,11 @@ html,body   { height:100%; overflow:hidden; }
     <span class="material-symbols-outlined text-[18px] flex-shrink-0">military_tech</span>
     <span class="text-[10px] font-medium leading-tight">WIG Aset</span>
   </button>
+  <button onclick="navigateTo('doktek')" id="nav-doktek"
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">folder_open</span>
+    <span class="text-[10px] font-medium leading-tight">Kendala Doktek</span>
+  </button>
   <div class="sb-sub">
     <button onclick="navigateTo('pm_isp')" id="nav-pm_isp"
       class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
@@ -1060,7 +1065,7 @@ const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vb
 const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0wA26kn60vlyZbkh8ypwhoacB1QyhLhBGcyl9XnxIPs45_ThfhOI/exec';
 const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUyjYCqkRn194DfpoLkWf7Qzo9gCbn8ELAtOnRjtmIo_EawWLx0Q3G/exec';
-const API_DOKTEK     = 'PASTE_DOKTEK_URL_HERE';
+const API_DOKTEK     = 'https://script.google.com/macros/s/AKfycby_oVspb0je_rrkhzPNpDH0KK2xrr1UJwOXLShP68v9qPoGhMEP2r-gIsd1bKlv99Ol/exec';
 
 // ══════════════════════════════════════════════════════════
 // NAVIGATION — SPA core
