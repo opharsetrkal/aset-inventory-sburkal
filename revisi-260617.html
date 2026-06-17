@@ -136,7 +136,7 @@ html,body   { height:100%; overflow:hidden; }
     <button onclick="navigateTo('doktek')" id="nav-doktek"
       class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
       <span class="material-symbols-outlined text-[15px] flex-shrink-0">folder_open</span>
-      <span class="text-[9px] font-medium leading-tight">Doktek</span>
+      <span class="text-[9px] font-medium leading-tight">Kendala Doktek</span>
     </button>
     <button onclick="navigateTo('sid_bb')" id="nav-sid_bb"
       class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
@@ -296,7 +296,130 @@ html,body   { height:100%; overflow:hidden; }
   ══════════════════════════════════════════════════ -->
   <div id="page-pm_isp" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">construction</span><p class="text-lg font-bold">PM ISP</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
   <div id="page-pm_osp" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">cable</span><p class="text-lg font-bold">PM OSP</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
-  <div id="page-doktek" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">folder_open</span><p class="text-lg font-bold">Doktek Backlog</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+  <!-- ══════════════════════════════════════════════════
+    PAGE: KENDALA DOKTEK
+  ══════════════════════════════════════════════════ -->
+  <div id="page-doktek" class="page">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+
+      <!-- Tab Toggle: Backlog vs Berjalan -->
+      <div class="flex gap-2 items-center">
+        <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50 no-print">
+          <button class="doktek-tab-btn px-3 py-1.5 text-[10px] font-bold rounded bg-[#00288e] text-white" data-tab="backlog">Backlog ≤2025</button>
+          <button class="doktek-tab-btn px-3 py-1.5 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-tab="berjalan">Berjalan 2026</button>
+        </div>
+        <p class="text-[9px] text-gray-400" id="doktek-tab-info">—</p>
+      </div>
+
+      <!-- Kelompok 1: Resume -->
+      <section>
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">folder_open</span> Resume Kendala Doktek
+        </p>
+        <div id="doktek-resume" class="space-y-3">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Kelompok 2: Chart per KP -->
+      <section>
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">bar_chart</span> Kendala Doktek per KP
+          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— klik bar untuk filter</span>
+        </p>
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <div class="flex items-center gap-4 mb-3">
+            <p class="text-xs font-bold flex-1" id="doktek-chart-title">Distribusi SLA per KP</p>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-green-500"></span>Normal ≤12hr</span>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-orange-400"></span>Perhatian 13-30hr</span>
+            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-red-500"></span>Kritis ≥31hr</span>
+          </div>
+          <div style="position:relative;height:240px"><canvas id="doktek-kpChart"></canvas></div>
+        </div>
+      </section>
+
+      <!-- Filter Strip -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+        </p>
+        <div class="flex flex-wrap gap-1.5 items-center">
+          <div class="ms-wrap relative" id="ms-d-kp">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('kp')">
+              <span id="ms-d-kp-label">KP</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-d-kp-menu"></div>
+          </div>
+          <div class="ms-wrap relative" id="ms-d-keterangan">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('keterangan')">
+              <span id="ms-d-keterangan-label">Keterangan</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[220px] max-h-48 overflow-y-auto" id="ms-d-keterangan-menu"></div>
+          </div>
+          <div class="ms-wrap relative" id="ms-d-sla">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('sla')">
+              <span id="ms-d-sla-label">SLA</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-d-sla-menu">
+              <label class="ms-item"><input type="checkbox" value="Normal" onchange="doktekMsChange('sla')">🟢 Normal (≤12 hari)</label>
+              <label class="ms-item"><input type="checkbox" value="Perhatian" onchange="doktekMsChange('sla')">🟡 Perhatian (13-30 hari)</label>
+              <label class="ms-item"><input type="checkbox" value="Kritis" onchange="doktekMsChange('sla')">🔴 Kritis (≥31 hari)</label>
+            </div>
+          </div>
+          <div class="ms-wrap relative" id="ms-d-tahun">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('tahun')">
+              <span id="ms-d-tahun-label">Tahun</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[120px] max-h-48 overflow-y-auto" id="ms-d-tahun-menu"></div>
+          </div>
+          <input type="text" id="doktek-search" oninput="doktekApplyFilter()" placeholder="Cari PA/Service ID…"
+            class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-36 md:w-44">
+        </div>
+      </section>
+
+      <!-- Tabel Detail -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <p class="text-sm font-bold">Data Detail Kendala Doktek</p>
+            <p class="text-[10px] text-gray-400" id="doktek-filterLabel">Menampilkan semua data</p>
+          </div>
+          <button onclick="doktekExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print">
+            <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
+          </button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:900px">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Service ID</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">PA Number</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Customer</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Created At</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Keterangan</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">SLA</th>
+              </tr>
+            </thead>
+            <tbody id="doktek-tblBody">
+              <tr><td colspan="9" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <p class="text-[10px] text-gray-400">
+            <span class="font-bold" id="doktek-rangeInfo">—</span> dari <span class="font-bold" id="doktek-totalInfo">—</span> data
+          </p>
+          <div class="flex gap-1" id="doktek-pgBtns"></div>
+        </div>
+      </section>
+    </main>
+  </div>
   <div id="page-sid_bb" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">hub</span><p class="text-lg font-bold">SID Backbone</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
   <div id="page-uplink_olt" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">router</span><p class="text-lg font-bold">Uplink OLT</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
 
@@ -937,6 +1060,7 @@ const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vb
 const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0wA26kn60vlyZbkh8ypwhoacB1QyhLhBGcyl9XnxIPs45_ThfhOI/exec';
 const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUyjYCqkRn194DfpoLkWf7Qzo9gCbn8ELAtOnRjtmIo_EawWLx0Q3G/exec';
+const API_DOKTEK     = 'PASTE_DOKTEK_URL_HERE';
 
 // ══════════════════════════════════════════════════════════
 // NAVIGATION — SPA core
@@ -947,7 +1071,7 @@ const PAGE_CONFIG = {
   wig:        { title:'WIG Penguatan Aset',     icon:'military_tech'   },
   pm_isp:     { title:'PM ISP',                 icon:'construction'    },
   pm_osp:     { title:'PM OSP',                 icon:'cable'           },
-  doktek:     { title:'Doktek Backlog',          icon:'folder_open'     },
+  doktek:     { title:'Kendala Doktek',           icon:'folder_open'     },
   sid_bb:     { title:'SID Backbone',            icon:'hub'             },
   uplink_olt: { title:'Uplink OLT',              icon:'router'          },
   // INVENTORY
@@ -957,8 +1081,8 @@ const PAGE_CONFIG = {
 };
 
 // Lazy load state — data hanya di-fetch saat pertama kali modul dibuka
-const loaded  = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false };
-const loading = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false };
+const loaded  = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false };
+const loading = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false };
 let currentPage = 'keuangan';
 
 function navigateTo(page) {
@@ -992,6 +1116,7 @@ function navigateTo(page) {
   if (page === 'stok'       && !loaded.stok)       sLoadData();
   if (page === 'penyerapan' && !loaded.penyerapan) pLoadData();
   if (page === 'wig'        && !loaded.wig)        wigLoadData();
+  if (page === 'doktek'     && !loaded.doktek)     doktekLoadData('backlog');
 
   currentPage = page;
 }
@@ -1054,6 +1179,17 @@ function updateTopnav(page) {
         </button>
         <button onclick="wigLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="wig-refreshIcon">sync</span>
+        </button>
+      </div>`;
+  } else if (page === 'doktek') {
+    bar2.innerHTML = `
+      <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
+      <div class="flex items-center gap-1.5 no-print">
+        <button onclick="doktekResetFilter()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
+        </button>
+        <button onclick="doktekLoadData(DOKTEK_TAB)" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+          <span class="material-symbols-outlined text-[16px]" id="doktek-refreshIcon">sync</span>
         </button>
       </div>`;
   } else if (page === 'home') {
