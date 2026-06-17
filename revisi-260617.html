@@ -3673,8 +3673,7 @@ function pmIspExportCSV() {
   const rows = [hdrs.join(',')];
   PMISP_FILTERED.forEach(r => rows.push(cols.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob(['﻿'+rows.join('
-')],{type:'text/csv;charset=utf-8;'}));
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
   a.download = 'pm_isp_'+new Date().toISOString().slice(0,10)+'.csv';
   a.click();
 }
