@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Aset &amp; Inventory SBU Reg Kalimantan</title>
+<title>Opharset SBU Regional Kalimantan</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -115,6 +115,21 @@ html,body   { height:100%; overflow:hidden; }
 
   <div class="sb-divider"></div>
 
+  <!-- HAR GROUP -->
+  <div class="sb-group-label">Har</div>
+  <button onclick="navigateTo('har_spr')" id="nav-har_spr"
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">request_quote</span>
+    <span class="text-[10px] font-medium leading-tight">Adm. SPR</span>
+  </button>
+  <button onclick="navigateTo('har_spp')" id="nav-har_spp"
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">description</span>
+    <span class="text-[10px] font-medium leading-tight">Adm. SPP</span>
+  </button>
+
+  <div class="sb-divider"></div>
+
   <!-- ASET GROUP -->
   <div class="sb-group-label">Aset</div>
   <button onclick="navigateTo('wig')" id="nav-wig"
@@ -182,7 +197,7 @@ html,body   { height:100%; overflow:hidden; }
       <img src="logo-danantara.png" alt="Danantara" class="h-7 object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>Danantara</span>'">
       <div class="text-center flex-1 px-2">
-        <p class="text-xs md:text-sm font-bold text-[#131b2e] leading-tight">Aset &amp; Inventory SBU Regional Kalimantan</p>
+        <p class="text-xs md:text-sm font-bold text-[#131b2e] leading-tight">Opharset SBU Regional Kalimantan</p>
         <p class="text-[9px] text-gray-400 hidden md:block">PLN Icon Plus · Dashboard Monitoring</p>
       </div>
       <img src="logo-pln.png" alt="PLN Icon Plus" class="h-7 object-contain"
@@ -202,7 +217,41 @@ html,body   { height:100%; overflow:hidden; }
   ══════════════════════════════════════════════════ -->
   <div id="page-home" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <!-- HAR PANEL -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-[#00288e]">handyman</span>
+            <p class="text-sm font-bold text-[#00288e]">HAR</p>
+          </div>
+          <div class="p-4 space-y-3">
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('har_spr')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">request_quote</span>
+                  <p class="text-[10px] font-bold">Administrasi SPR</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-spr-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('har_spp')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">description</span>
+                  <p class="text-[10px] font-bold">Administrasi SPP</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-spp-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- ASET PANEL -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -283,6 +332,152 @@ html,body   { height:100%; overflow:hidden; }
         </div>
 
       </div>
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+    PAGE: ADMINISTRASI SPR
+  ══════════════════════════════════════════════════ -->
+  <div id="page-har_spr" class="page">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+      <section>
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">request_quote</span> Resume SPR
+        </p>
+        <div id="har-spr-resume">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+          </div>
+        </div>
+      </section>
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs font-bold mb-1">Status Pengadaan</p>
+          <p class="text-[9px] text-gray-400 mb-3">Distribusi status · klik untuk filter</p>
+          <div style="position:relative;height:220px"><canvas id="har-spr-statusChart"></canvas></div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs font-bold mb-1">Nominal per Mitra</p>
+          <p class="text-[9px] text-gray-400 mb-3">Total nilai SPR per mitra</p>
+          <div style="position:relative;height:220px"><canvas id="har-spr-mitraChart"></canvas></div>
+        </div>
+      </section>
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+        </p>
+        <div class="flex flex-wrap gap-1.5 items-center">
+          <div class="ms-wrap relative" id="ms-hspr-statusPengadaan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','statusPengadaan')"><span id="ms-hspr-statusPengadaan-label">Status Pengadaan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-hspr-statusPengadaan-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspr-statusPenagihan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','statusPenagihan')"><span id="ms-hspr-statusPenagihan-label">Status Penagihan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-hspr-statusPenagihan-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspr-mitra"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','mitra')"><span id="ms-hspr-mitra-label">Mitra</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-hspr-mitra-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspr-peruntukan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','peruntukan')"><span id="ms-hspr-peruntukan-label">Peruntukan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-hspr-peruntukan-menu"></div></div>
+          <input type="text" id="har-spr-search" oninput="harApplyFilter('spr')" placeholder="Cari SPR…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-36 md:w-44">
+        </div>
+      </section>
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <div><p class="text-sm font-bold">Data Detail SPR</p><p class="text-[10px] text-gray-400" id="har-spr-filterLabel">Menampilkan semua data</p></div>
+          <button onclick="harExportCSV('spr')" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print"><span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV</button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:1100px">
+            <thead class="bg-gray-50 sticky top-0"><tr>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kode Anggaran</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">No SPR</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kegiatan</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Nominal</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Mitra</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">St. Pengadaan</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">St. Penagihan</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Peruntukan</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Tgl Rilis</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Tgl BAPS</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Keterangan</th>
+            </tr></thead>
+            <tbody id="har-spr-tblBody"><tr><td colspan="12" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <p class="text-[10px] text-gray-400"><span class="font-bold" id="har-spr-rangeInfo">—</span> dari <span class="font-bold" id="har-spr-totalInfo">—</span> data</p>
+          <div class="flex gap-1" id="har-spr-pgBtns"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+    PAGE: ADMINISTRASI SPP
+  ══════════════════════════════════════════════════ -->
+  <div id="page-har_spp" class="page">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+      <section>
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">description</span> Resume SPP
+        </p>
+        <div id="har-spp-resume">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+          </div>
+        </div>
+      </section>
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs font-bold mb-1">Status SPP</p>
+          <p class="text-[9px] text-gray-400 mb-3">Distribusi status · klik untuk filter</p>
+          <div style="position:relative;height:220px"><canvas id="har-spp-statusChart"></canvas></div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs font-bold mb-1">Metode Pengadaan</p>
+          <p class="text-[9px] text-gray-400 mb-3">Distribusi metode pengadaan</p>
+          <div style="position:relative;height:220px"><canvas id="har-spp-metodeChart"></canvas></div>
+        </div>
+      </section>
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+        </p>
+        <div class="flex flex-wrap gap-1.5 items-center">
+          <div class="ms-wrap relative" id="ms-hspp-status"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','status')"><span id="ms-hspp-status-label">Status</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-hspp-status-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-tipeSPP"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','tipeSPP')"><span id="ms-hspp-tipeSPP-label">Tipe SPP</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-hspp-tipeSPP-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-metodePengadaan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','metodePengadaan')"><span id="ms-hspp-metodePengadaan-label">Metode</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-48 overflow-y-auto" id="ms-hspp-metodePengadaan-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-kategoriPekerjaan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','kategoriPekerjaan')"><span id="ms-hspp-kategoriPekerjaan-label">Kategori</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-48 overflow-y-auto" id="ms-hspp-kategoriPekerjaan-menu"></div></div>
+          <input type="text" id="har-spp-search" oninput="harApplyFilter('spp')" placeholder="Cari SPP…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-36 md:w-44">
+        </div>
+      </section>
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <div><p class="text-sm font-bold">Data Detail SPP</p><p class="text-[10px] text-gray-400" id="har-spp-filterLabel">Menampilkan semua data</p></div>
+          <button onclick="harExportCSV('spp')" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print"><span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV</button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:1400px">
+            <thead class="bg-gray-50 sticky top-0"><tr>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">No SPP</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Judul SPP</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kode Anggaran</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Tipe SPP</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">No PO/SP2K</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Metode</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Nilai Pekerjaan</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kategori</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Tgl SP2K</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Durasi</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Tgl BAPS</th>
+              <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Update</th>
+            </tr></thead>
+            <tbody id="har-spp-tblBody"><tr><td colspan="14" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <p class="text-[10px] text-gray-400"><span class="font-bold" id="har-spp-rangeInfo">—</span> dari <span class="font-bold" id="har-spp-totalInfo">—</span> data</p>
+          <div class="flex gap-1" id="har-spp-pgBtns"></div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -1226,6 +1421,7 @@ const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0
 const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUyjYCqkRn194DfpoLkWf7Qzo9gCbn8ELAtOnRjtmIo_EawWLx0Q3G/exec';
 const API_DOKTEK     = 'https://script.google.com/macros/s/AKfycby_oVspb0je_rrkhzPNpDH0KK2xrr1UJwOXLShP68v9qPoGhMEP2r-gIsd1bKlv99Ol/exec';
 const API_PMISP      = 'https://script.google.com/macros/s/AKfycbxEIBqNWqVSgfsolqpIkszJajTcn2ljPS6q1pzqzA7_Ko_fGvDB9f8acUl6_kZcNxFm/exec';
+const API_HAR      = 'PASTE_HAR_API_URL_HERE';
 const API_PMOSP      = 'https://script.google.com/macros/s/AKfycby2-5gU-v_7A0Vpl1SKhmQjkC0Ooaa0tYoLUMNOOHyQD0HWh_W6ai7E62_XOGmoQgrwfQ/exec';
 
 // ══════════════════════════════════════════════════════════
@@ -1233,6 +1429,9 @@ const API_PMOSP      = 'https://script.google.com/macros/s/AKfycby2-5gU-v_7A0Vpl
 // ══════════════════════════════════════════════════════════
 const PAGE_CONFIG = {
   home:       { title:'Dashboard',              icon:'home'            },
+  // HAR
+  har_spr:    { title:'Administrasi SPR',   icon:'request_quote' },
+  har_spp:    { title:'Administrasi SPP',   icon:'description'   },
   // ASET
   wig:        { title:'WIG Penguatan Aset',     icon:'military_tech'   },
   pm_isp:     { title:'Laporan PM ISP / OSP',    icon:'construction'    },
@@ -1247,8 +1446,8 @@ const PAGE_CONFIG = {
 };
 
 // Lazy load state — data hanya di-fetch saat pertama kali modul dibuka
-const loaded  = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
-const loading = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
+const loaded  = { home:false, har_spr:false, har_spp:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
+const loading = { home:false, har_spr:false, har_spp:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
 let currentPage = 'keuangan';
 
 function navigateTo(page) {
@@ -1278,6 +1477,8 @@ function navigateTo(page) {
 
   // Lazy load
   if (page === 'home'       && !loaded.home)       homeLoadData();
+  if (page === 'har_spr'    && !loaded.har_spr)    harLoadData('spr');
+  if (page === 'har_spp'    && !loaded.har_spp)    harLoadData('spp');
   if (page === 'keuangan'   && !loaded.keuangan)   kLoadData();
   if (page === 'stok'       && !loaded.stok)       sLoadData();
   if (page === 'penyerapan' && !loaded.penyerapan) pLoadData();
@@ -1368,6 +1569,17 @@ function updateTopnav(page) {
         </button>
         <button onclick="pmIspClearCacheAndReload()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="pmisp-refreshIcon">sync</span>
+        </button>
+      </div>`;
+  } else if (page === 'har_spr' || page === 'har_spp') {
+    bar2.innerHTML = `
+      <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
+      <div class="flex items-center gap-1.5 no-print">
+        <button onclick="harResetFilter()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
+        </button>
+        <button onclick="harClearCacheAndReload()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+          <span class="material-symbols-outlined text-[16px]" id="har-refreshIcon">sync</span>
         </button>
       </div>`;
   } else if (page === 'home') {
@@ -4036,6 +4248,303 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+
+// ══════════════════════════════════════════════════════════
+// MODULE: HAR — SPR & SPP (prefix: har)
+// ══════════════════════════════════════════════════════════
+
+let HAR_SPR_ROWS=[], HAR_SPR_FILTERED=[], harSprPage=1;
+let HAR_SPP_ROWS=[], HAR_SPP_FILTERED=[], harSppPage=1;
+let HAR_SPR_CACHE=null, HAR_SPP_CACHE=null;
+const HAR_PAGE_SIZE=15;
+const HSPRF={statusPengadaan:[],statusPenagihan:[],mitra:[],peruntukan:[],search:''};
+const HSPPF={status:[],tipeSPP:[],metodePengadaan:[],kategoriPekerjaan:[],search:''};
+
+async function harLoadData(tab) {
+  const isSPR=tab==='spr';
+  const stateKey=isSPR?'har_spr':'har_spp';
+  if(loading[stateKey]) return;
+  const cache=isSPR?HAR_SPR_CACHE:HAR_SPP_CACHE;
+  if(cache){
+    if(isSPR){HAR_SPR_ROWS=cache.rows;harSprBuildFilters(cache);harSprRenderResume(cache);harSprApplyFilter();}
+    else{HAR_SPP_ROWS=cache.rows;harSppBuildFilters(cache);harSppRenderResume(cache);harSppApplyFilter();}
+    return;
+  }
+  loading[stateKey]=true;
+  const icon=document.getElementById('har-refreshIcon');
+  if(icon) icon.classList.add('spin');
+  try {
+    const res=await fetch(API_HAR+'?tab='+tab);
+    const json=await res.json();
+    if(!json.ok) throw new Error(json.error||'Gagal memuat data');
+    if(isSPR){HAR_SPR_CACHE=json;HAR_SPR_ROWS=json.rows||[];harSprBuildFilters(json);harSprRenderResume(json);harSprApplyFilter();}
+    else{HAR_SPP_CACHE=json;HAR_SPP_ROWS=json.rows||[];harSppBuildFilters(json);harSppRenderResume(json);harSppApplyFilter();}
+    loaded[stateKey]=true;
+  } catch(err) {
+    const tbody=document.getElementById('har-'+tab+'-tblBody');
+    if(tbody) tbody.innerHTML=`<tr><td colspan="14" class="p-8 text-center text-red-500 text-sm">⚠ ${err.message}</td></tr>`;
+  } finally {
+    loading[stateKey]=false;
+    if(icon) icon.classList.remove('spin');
+  }
+}
+
+function harClearCacheAndReload(){
+  if(currentPage==='har_spr'){HAR_SPR_CACHE=null;loaded.har_spr=false;harLoadData('spr');}
+  else if(currentPage==='har_spp'){HAR_SPP_CACHE=null;loaded.har_spp=false;harLoadData('spp');}
+}
+
+function harResetFilter(){
+  if(currentPage==='har_spr') harSprResetFilter();
+  else if(currentPage==='har_spp') harSppResetFilter();
+}
+
+function harApplyFilter(tab){
+  if(tab==='spr') harSprApplyFilter(); else harSppApplyFilter();
+}
+
+// ── SPR ──────────────────────────────────────────────────
+function harSprBuildFilters(json){
+  const build=(id,vals,key)=>{const el=document.getElementById(id);if(el)el.innerHTML=vals.map(v=>`<label class="ms-item"><input type="checkbox" value="${v.replace(/"/g,'&quot;')}" onchange="harMsChange('spr','${key}')">${v}</label>`).join('');};
+  build('ms-hspr-statusPengadaan-menu',json.statusPengadaanOpts||[],'statusPengadaan');
+  build('ms-hspr-statusPenagihan-menu',json.statusPenagihanOpts||[],'statusPenagihan');
+  build('ms-hspr-mitra-menu',json.mitraOpts||[],'mitra');
+  build('ms-hspr-peruntukan-menu',json.peruntukanOpts||[],'peruntukan');
+}
+
+function harSprRenderResume(json){
+  const el=document.getElementById('har-spr-resume');if(!el)return;
+  const bySP=json.byStatusPengadaan||{};
+  const byST=json.byStatusPenagihan||{};
+  el.innerHTML=`
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+      <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200"><p class="text-[9px] font-bold uppercase mb-1 text-gray-500">Total SPR</p><p class="text-2xl font-black text-[#131b2e]">${(json.totalSPR||0).toLocaleString('id-ID')}</p></div>
+      <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200"><p class="text-[9px] font-bold uppercase mb-1 text-blue-600">Total Nominal</p><p class="text-xl font-black text-blue-800">${fmtRp(json.totalNominal||0)}</p></div>
+      <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200"><p class="text-[9px] font-bold uppercase mb-1 text-gray-500">Status Pengadaan</p><div class="flex flex-wrap gap-1 mt-1">${Object.entries(bySP).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`<span class="text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${k}: ${v}</span>`).join('')}</div></div>
+      <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200"><p class="text-[9px] font-bold uppercase mb-1 text-gray-500">Status Penagihan</p><div class="flex flex-wrap gap-1 mt-1">${Object.entries(byST).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`<span class="text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${k}: ${v}</span>`).join('')}</div></div>
+    </div>`;
+  harSprRenderCharts(json);
+}
+
+function harSprRenderCharts(json){
+  const colors=['#378ADD','#1D9E75','#EF9F27','#E24B4A','#7F77DD','#F472B6','#34D399','#94A3B8'];
+  const bySP=json.byStatusPengadaan||{};
+  const spS=Object.entries(bySP).sort((a,b)=>b[1]-a[1]);
+  if(spS.length) rebuildChart('har-spr-statusChart',{type:'doughnut',data:{labels:spS.map(e=>e[0]),datasets:[{data:spS.map(e=>e[1]),backgroundColor:colors.slice(0,spS.length),borderWidth:1,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:6}},tooltip:{callbacks:{label:ctx=>' '+ctx.label+': '+ctx.parsed+' SPR'}}},onClick(evt,els){if(els.length){const st=spS[els[0].index][0];HSPRF.statusPengadaan=HSPRF.statusPengadaan.includes(st)?[]:[st];harSyncMs('spr','statusPengadaan');harSprApplyFilter();}}}});
+  const byM=json.byMitra||{};
+  const mS=Object.entries(byM).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(mS.length) rebuildChart('har-spr-mitraChart',{type:'bar',data:{labels:mS.map(e=>e[0]),datasets:[{label:'Nominal',data:mS.map(e=>e[1]),backgroundColor:'#1e40af',borderRadius:3,maxBarThickness:16}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>fmtRpFull(ctx.parsed.x)}}},scales:{x:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+}
+
+function harSprApplyFilter(){
+  HSPRF.search=(document.getElementById('har-spr-search')?.value||'').toLowerCase();
+  const chk=(arr,val)=>!arr.length||arr.includes(val);
+  HAR_SPR_FILTERED=HAR_SPR_ROWS.filter(r=>{
+    if(!chk(HSPRF.statusPengadaan,r.statusPengadaan))return false;
+    if(!chk(HSPRF.statusPenagihan,r.statusPenagihan))return false;
+    if(!chk(HSPRF.mitra,r.mitra))return false;
+    if(!chk(HSPRF.peruntukan,r.peruntukan))return false;
+    if(HSPRF.search&&!JSON.stringify(r).toLowerCase().includes(HSPRF.search))return false;
+    return true;
+  });
+  harSprUpdateLabel();harSprPage=1;harSprRenderTable();
+}
+
+function harSprResetFilter(){
+  Object.keys(HSPRF).forEach(k=>{HSPRF[k]=Array.isArray(HSPRF[k])?[]:'';});
+  document.querySelectorAll('[id^="ms-hspr-"] input[type=checkbox]').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('[id^="ms-hspr-"]').forEach(w=>w.classList.remove('ms-active'));
+  const s=document.getElementById('har-spr-search');if(s)s.value='';
+  harSprApplyFilter();
+}
+
+function harSprRenderTable(){
+  const start=(harSprPage-1)*HAR_PAGE_SIZE;
+  const paged=HAR_SPR_FILTERED.slice(start,start+HAR_PAGE_SIZE);
+  const tbody=document.getElementById('har-spr-tblBody');
+  if(!paged.length){tbody.innerHTML='<tr><td colspan="12" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';buildPagination('har-spr-pgBtns',harSprPage,HAR_SPR_FILTERED.length,HAR_PAGE_SIZE,'harSprGoPage');document.getElementById('har-spr-rangeInfo').textContent='0';document.getElementById('har-spr-totalInfo').textContent='0';return;}
+  tbody.innerHTML=paged.map((r,i)=>{
+    const spBadge=r.statusPengadaan?`<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">${r.statusPengadaan}</span>`:'<span class="text-[9px] text-gray-300">—</span>';
+    const stBadge=r.statusPenagihan?`<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">${r.statusPenagihan}</span>`:'<span class="text-[9px] text-gray-300">—</span>';
+    return`<tr class="hover:bg-[#f2f3ff] transition-colors border-b border-gray-50">
+      <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>
+      <td class="p-3 text-xs font-mono">${r.kodeAnggaran||'—'}</td>
+      <td class="p-3 text-xs font-semibold text-[#00288e]">${r.noSPR||'—'}</td>
+      <td class="p-3 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.kegiatan||''}">${r.kegiatan||'—'}</td>
+      <td class="p-3 text-xs text-right font-mono whitespace-nowrap">${r.nominal?fmtRpFull(r.nominal):'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.mitra||'—'}</td>
+      <td class="p-3 text-center">${spBadge}</td>
+      <td class="p-3 text-center">${stBadge}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.peruntukan||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${fmtDate(r.tglRilisSPR)}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${fmtDate(r.tglBapsBast)}</td>
+      <td class="p-3 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.keterangan||''}">${r.keterangan||'—'}</td>
+    </tr>`;
+  }).join('');
+  const {s,e}=buildPagination('har-spr-pgBtns',harSprPage,HAR_SPR_FILTERED.length,HAR_PAGE_SIZE,'harSprGoPage');
+  document.getElementById('har-spr-rangeInfo').textContent=`${s}–${e}`;
+  document.getElementById('har-spr-totalInfo').textContent=HAR_SPR_FILTERED.length.toLocaleString('id-ID');
+}
+function harSprGoPage(p){harSprPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPR_FILTERED.length/HAR_PAGE_SIZE)||1));harSprRenderTable();}
+function harSprUpdateLabel(){
+  const parts=[];
+  if(HSPRF.statusPengadaan.length)parts.push('Pengadaan('+HSPRF.statusPengadaan.length+')');
+  if(HSPRF.statusPenagihan.length)parts.push('Penagihan('+HSPRF.statusPenagihan.length+')');
+  if(HSPRF.mitra.length)parts.push('Mitra('+HSPRF.mitra.length+')');
+  if(HSPRF.peruntukan.length)parts.push('Peruntukan('+HSPRF.peruntukan.length+')');
+  if(HSPRF.search)parts.push('"'+HSPRF.search+'"');
+  const el=document.getElementById('har-spr-filterLabel');
+  if(el)el.textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
+}
+
+// ── SPP ──────────────────────────────────────────────────
+function harSppBuildFilters(json){
+  const build=(id,vals,key)=>{const el=document.getElementById(id);if(el)el.innerHTML=vals.map(v=>`<label class="ms-item"><input type="checkbox" value="${v.replace(/"/g,'&quot;')}" onchange="harMsChange('spp','${key}')">${v}</label>`).join('');};
+  build('ms-hspp-status-menu',json.statusOpts||[],'status');
+  build('ms-hspp-tipeSPP-menu',json.tipeSPPOpts||[],'tipeSPP');
+  build('ms-hspp-metodePengadaan-menu',json.metodePengadaanOpts||[],'metodePengadaan');
+  build('ms-hspp-kategoriPekerjaan-menu',json.kategoriPekerjaanOpts||[],'kategoriPekerjaan');
+}
+
+function harSppRenderResume(json){
+  const el=document.getElementById('har-spp-resume');if(!el)return;
+  const bySt=json.byStatus||{};
+  el.innerHTML=`
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+      <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200"><p class="text-[9px] font-bold uppercase mb-1 text-gray-500">Total SPP</p><p class="text-2xl font-black text-[#131b2e]">${(json.totalSPP||0).toLocaleString('id-ID')}</p></div>
+      <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200"><p class="text-[9px] font-bold uppercase mb-1 text-blue-600">Total Nilai Pekerjaan</p><p class="text-xl font-black text-blue-800">${fmtRp(json.totalNilai||0)}</p></div>
+      <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200"><p class="text-[9px] font-bold uppercase mb-1 text-gray-500">Status SPP</p><div class="flex flex-wrap gap-1 mt-1">${Object.entries(bySt).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`<span class="text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${k}: ${v}</span>`).join('')}</div></div>
+      <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200"><p class="text-[9px] font-bold uppercase mb-1 text-gray-500">Metode Pengadaan</p><div class="flex flex-wrap gap-1 mt-1">${Object.entries(json.byMetodePengadaan||{}).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`<span class="text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${k}: ${v}</span>`).join('')}</div></div>
+    </div>`;
+  harSppRenderCharts(json);
+}
+
+function harSppRenderCharts(json){
+  const colors=['#378ADD','#1D9E75','#EF9F27','#E24B4A','#7F77DD','#F472B6','#34D399','#94A3B8'];
+  const bySt=json.byStatus||{};
+  const stS=Object.entries(bySt).sort((a,b)=>b[1]-a[1]);
+  if(stS.length) rebuildChart('har-spp-statusChart',{type:'doughnut',data:{labels:stS.map(e=>e[0]),datasets:[{data:stS.map(e=>e[1]),backgroundColor:colors.slice(0,stS.length),borderWidth:1,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:6}},tooltip:{callbacks:{label:ctx=>' '+ctx.label+': '+ctx.parsed+' SPP'}}},onClick(evt,els){if(els.length){const st=stS[els[0].index][0];HSPPF.status=HSPPF.status.includes(st)?[]:[st];harSyncMs('spp','status');harSppApplyFilter();}}}});
+  const byM=json.byMetodePengadaan||{};
+  const mS=Object.entries(byM).sort((a,b)=>b[1]-a[1]);
+  if(mS.length) rebuildChart('har-spp-metodeChart',{type:'bar',data:{labels:mS.map(e=>e[0]),datasets:[{data:mS.map(e=>e[1]),backgroundColor:'#1e40af',borderRadius:3,maxBarThickness:16}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1,font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+}
+
+function harSppApplyFilter(){
+  HSPPF.search=(document.getElementById('har-spp-search')?.value||'').toLowerCase();
+  const chk=(arr,val)=>!arr.length||arr.includes(val);
+  HAR_SPP_FILTERED=HAR_SPP_ROWS.filter(r=>{
+    if(!chk(HSPPF.status,r.status))return false;
+    if(!chk(HSPPF.tipeSPP,r.tipeSPP))return false;
+    if(!chk(HSPPF.metodePengadaan,r.metodePengadaan))return false;
+    if(!chk(HSPPF.kategoriPekerjaan,r.kategoriPekerjaan))return false;
+    if(HSPPF.search&&!JSON.stringify(r).toLowerCase().includes(HSPPF.search))return false;
+    return true;
+  });
+  harSppUpdateLabel();harSppPage=1;harSppRenderTable();
+}
+
+function harSppResetFilter(){
+  Object.keys(HSPPF).forEach(k=>{HSPPF[k]=Array.isArray(HSPPF[k])?[]:'';});
+  document.querySelectorAll('[id^="ms-hspp-"] input[type=checkbox]').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('[id^="ms-hspp-"]').forEach(w=>w.classList.remove('ms-active'));
+  const s=document.getElementById('har-spp-search');if(s)s.value='';
+  harSppApplyFilter();
+}
+
+function harSppRenderTable(){
+  const start=(harSppPage-1)*HAR_PAGE_SIZE;
+  const paged=HAR_SPP_FILTERED.slice(start,start+HAR_PAGE_SIZE);
+  const tbody=document.getElementById('har-spp-tblBody');
+  if(!paged.length){tbody.innerHTML='<tr><td colspan="14" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';buildPagination('har-spp-pgBtns',harSppPage,HAR_SPP_FILTERED.length,HAR_PAGE_SIZE,'harSppGoPage');document.getElementById('har-spp-rangeInfo').textContent='0';document.getElementById('har-spp-totalInfo').textContent='0';return;}
+  tbody.innerHTML=paged.map((r,i)=>{
+    const stBadge=r.status?`<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">${r.status}</span>`:'<span class="text-[9px] text-gray-300">—</span>';
+    return`<tr class="hover:bg-[#f2f3ff] transition-colors border-b border-gray-50">
+      <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>
+      <td class="p-3 text-xs font-semibold text-[#00288e]">${r.noSPP||'—'}</td>
+      <td class="p-3 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.judulSPP||''}">${r.judulSPP||'—'}</td>
+      <td class="p-3 text-xs font-mono">${r.kodeAnggaran||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.tipeSPP||'—'}</td>
+      <td class="p-3 text-xs font-mono">${r.noPOSP2K||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.metodePengadaan||'—'}</td>
+      <td class="p-3 text-center">${stBadge}</td>
+      <td class="p-3 text-xs text-right font-mono whitespace-nowrap">${r.nilaiPekerjaan?fmtRpFull(r.nilaiPekerjaan):'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.kategoriPekerjaan||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${fmtDate(r.tglRilisSP2K)}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.durasiPekerjaan||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${fmtDate(r.tglBapsBast)}</td>
+      <td class="p-3 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.updateTerbaru||''}">${r.updateTerbaru||'—'}</td>
+    </tr>`;
+  }).join('');
+  const {s,e}=buildPagination('har-spp-pgBtns',harSppPage,HAR_SPP_FILTERED.length,HAR_PAGE_SIZE,'harSppGoPage');
+  document.getElementById('har-spp-rangeInfo').textContent=`${s}–${e}`;
+  document.getElementById('har-spp-totalInfo').textContent=HAR_SPP_FILTERED.length.toLocaleString('id-ID');
+}
+function harSppGoPage(p){harSppPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPP_FILTERED.length/HAR_PAGE_SIZE)||1));harSppRenderTable();}
+function harSppUpdateLabel(){
+  const parts=[];
+  if(HSPPF.status.length)parts.push('Status('+HSPPF.status.length+')');
+  if(HSPPF.tipeSPP.length)parts.push('Tipe('+HSPPF.tipeSPP.length+')');
+  if(HSPPF.metodePengadaan.length)parts.push('Metode('+HSPPF.metodePengadaan.length+')');
+  if(HSPPF.kategoriPekerjaan.length)parts.push('Kategori('+HSPPF.kategoriPekerjaan.length+')');
+  if(HSPPF.search)parts.push('"'+HSPPF.search+'"');
+  const el=document.getElementById('har-spp-filterLabel');
+  if(el)el.textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
+}
+
+// ── SHARED: Toggle, Change, Sync ──────────────────────────
+function harToggleMs(tab,key){
+  const prefix=tab==='spr'?'ms-hspr-':'ms-hspp-';
+  const menu=document.getElementById(prefix+key+'-menu');
+  if(!menu)return;
+  const isHidden=menu.classList.contains('hidden');
+  document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
+  if(isHidden)menu.classList.remove('hidden');
+}
+
+function harMsChange(tab,key){
+  const prefix=tab==='spr'?'ms-hspr-':'ms-hspp-';
+  const filter=tab==='spr'?HSPRF:HSPPF;
+  const menu=document.getElementById(prefix+key+'-menu');
+  if(!menu)return;
+  filter[key]=[...menu.querySelectorAll('input:checked')].map(el=>el.value);
+  const labels={statusPengadaan:'Status Pengadaan',statusPenagihan:'Status Penagihan',mitra:'Mitra',peruntukan:'Peruntukan',status:'Status',tipeSPP:'Tipe SPP',metodePengadaan:'Metode',kategoriPekerjaan:'Kategori'};
+  const lbl=document.getElementById(prefix+key+'-label');
+  const wrapEl=document.getElementById(prefix+key);
+  if(lbl)lbl.textContent=filter[key].length?(labels[key]||key)+' ('+filter[key].length+')':(labels[key]||key);
+  if(wrapEl)wrapEl.classList.toggle('ms-active',filter[key].length>0);
+  if(tab==='spr')harSprApplyFilter();else harSppApplyFilter();
+}
+
+function harSyncMs(tab,key){
+  const prefix=tab==='spr'?'ms-hspr-':'ms-hspp-';
+  const filter=tab==='spr'?HSPRF:HSPPF;
+  const labels={statusPengadaan:'Status Pengadaan',statusPenagihan:'Status Penagihan',mitra:'Mitra',peruntukan:'Peruntukan',status:'Status',tipeSPP:'Tipe SPP',metodePengadaan:'Metode',kategoriPekerjaan:'Kategori'};
+  const menu=document.getElementById(prefix+key+'-menu');
+  if(menu)menu.querySelectorAll('input').forEach(cb=>{cb.checked=filter[key].includes(cb.value);});
+  const lbl=document.getElementById(prefix+key+'-label');
+  if(lbl)lbl.textContent=filter[key].length?(labels[key]||key)+' ('+filter[key].length+')':(labels[key]||key);
+  const wrapEl=document.getElementById(prefix+key);
+  if(wrapEl)wrapEl.classList.toggle('ms-active',filter[key].length>0);
+}
+
+function harExportCSV(tab){
+  if(tab==='spr'){
+    const cols=['noSPR','kodeAnggaran','kegiatan','nominal','mitra','statusPengadaan','statusPenagihan','peruntukan','tglRilisSPR','tglBapsBast','keterangan'];
+    const hdrs=['No SPR','Kode Anggaran','Kegiatan','Nominal','Mitra','Status Pengadaan','Status Penagihan','Peruntukan','Tgl Rilis SPR','Tgl BAPS/BAST','Keterangan'];
+    const rows=[hdrs.join(',')];
+    HAR_SPR_FILTERED.forEach(r=>rows.push(cols.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('
+')],{type:'text/csv;charset=utf-8;'}));a.download='spr_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  } else {
+    const cols=['noSPP','judulSPP','kodeAnggaran','tipeSPP','noPOSP2K','metodePengadaan','status','nilaiPekerjaan','kategoriPekerjaan','tglRilisSP2K','durasiPekerjaan','tglBapsBast','updateTerbaru'];
+    const hdrs=['No SPP','Judul SPP','Kode Anggaran','Tipe SPP','No PO/SP2K','Metode Pengadaan','Status','Nilai Pekerjaan','Kategori','Tgl SP2K','Durasi','Tgl BAPS/BAST','Update'];
+    const rows=[hdrs.join(',')];
+    HAR_SPP_FILTERED.forEach(r=>rows.push(cols.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('
+')],{type:'text/csv;charset=utf-8;'}));a.download='spp_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  }
+}
 
 </script>
 </body>
