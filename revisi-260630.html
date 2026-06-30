@@ -120,7 +120,7 @@ html,body   { height:100%; overflow:hidden; }
   <button onclick="navigateTo('har_spr')" id="nav-har_spr"
     class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
     <span class="material-symbols-outlined text-[18px] flex-shrink-0">request_quote</span>
-    <span class="text-[10px] font-medium leading-tight">Adm. SPR</span>
+    <span class="text-[10px] font-medium leading-tight">Monitoring SPR</span>
   </button>
   <button onclick="navigateTo('har_spp')" id="nav-har_spp"
     class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
@@ -230,7 +230,7 @@ html,body   { height:100%; overflow:hidden; }
               <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center gap-2">
                   <span class="material-symbols-outlined text-[16px] text-[#00288e]">request_quote</span>
-                  <p class="text-[10px] font-bold">Administrasi SPR</p>
+                  <p class="text-[10px] font-bold">Monitoring SPR</p>
                 </div>
                 <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
               </div>
@@ -336,93 +336,107 @@ html,body   { height:100%; overflow:hidden; }
   </div>
 
   <!-- ======================================================
-    PAGE: ADMINISTRASI SPR
+    PAGE: MONITORING SPR
   ====================================================== -->
   <div id="page-har_spr" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- ① Executive Overview -->
+      <!-- 1. Resume Monitoring SPR -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Executive Overview</p>
+          <p class="text-sm font-bold text-[#131b2e]">1. Resume Monitoring SPR</p>
           <p class="text-[10px] text-gray-400">Ringkasan kondisi administrasi SPR saat ini.</p>
         </div>
-        <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-2" id="hspr-exec"></div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="hspr-exec"></div>
       </section>
 
-      <!-- ② Flow Monitoring -->
+      <!-- 2. Monitoring Proses SPR -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Flow Monitoring</p>
+          <p class="text-sm font-bold text-[#131b2e]">2. Monitoring Proses SPR</p>
           <p class="text-[10px] text-gray-400">Posisi setiap SPR pada tahapan pengadaan dan penagihan.</p>
         </div>
         <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div>
-            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">Pengadaan</p>
-            <div id="hspr-flow-pengadaan" class="space-y-1.5"></div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px] text-[#00288e]">shopping_cart</span>
+              <p class="text-xs font-bold text-[#131b2e]">Pengadaan</p>
+            </div>
+            <div id="hspr-flow-pengadaan" class="p-3 space-y-2 max-h-64 overflow-y-auto custom-scrollbar"></div>
+            <div class="px-3 py-2 border-t border-gray-100 flex justify-between text-[10px] font-bold text-gray-500" id="hspr-flow-pengadaan-total"></div>
           </div>
-          <div>
-            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">Penagihan</p>
-            <div id="hspr-flow-penagihan" class="space-y-1.5"></div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px] text-[#00288e]">description</span>
+              <p class="text-xs font-bold text-[#131b2e]">Penagihan</p>
+            </div>
+            <div id="hspr-flow-penagihan" class="p-3 space-y-2 max-h-64 overflow-y-auto custom-scrollbar"></div>
+            <div class="px-3 py-2 border-t border-gray-100 flex justify-between text-[10px] font-bold text-gray-500" id="hspr-flow-penagihan-total"></div>
           </div>
         </div>
       </section>
 
-      <!-- ③ Health -->
+      <!-- 3. Status SPR -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Health</p>
+          <p class="text-sm font-bold text-[#131b2e]">3. Status SPR</p>
           <p class="text-[10px] text-gray-400">Evaluasi SLA dan eksposur nilai SPR.</p>
         </div>
         <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <p class="text-xs font-bold mb-1">SLA Distribution</p>
-            <p class="text-[9px] text-gray-400 mb-2">Jumlah dokumen per rentang aging</p>
-            <div style="position:relative;height:180px"><canvas id="hspr-slaChart"></canvas></div>
+            <p class="text-[9px] text-gray-400 mb-2">Berdasarkan Tgl Rilis SPR</p>
+            <div class="flex items-center gap-4">
+              <div style="position:relative;width:140px;height:140px;flex-shrink:0"><canvas id="hspr-slaChart"></canvas></div>
+              <div class="flex-1 space-y-1.5" id="hspr-slaLegend"></div>
+            </div>
           </div>
           <div>
-            <p class="text-xs font-bold mb-1">Financial Exposure</p>
+            <p class="text-xs font-bold mb-1">Financial Exposure (Rp)</p>
             <p class="text-[9px] text-gray-400 mb-2">Nilai berdasarkan status pengadaan</p>
-            <div style="position:relative;height:180px"><canvas id="hspr-finChart"></canvas></div>
+            <div class="flex items-center gap-4">
+              <div style="position:relative;width:140px;height:140px;flex-shrink:0"><canvas id="hspr-finChart"></canvas></div>
+              <div class="flex-1 space-y-1.5" id="hspr-finLegend"></div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ④ Operational Analysis -->
+      <!-- 4. Analisa Penyerapan -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Operational Analysis</p>
+          <p class="text-sm font-bold text-[#131b2e]">4. Analisa Penyerapan</p>
           <p class="text-[10px] text-gray-400">Dimensi operasional dengan kontribusi terbesar.</p>
         </div>
         <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div>
-            <p class="text-xs font-bold mb-2">Top Mitra</p>
-            <div id="hspr-topMitra" class="space-y-2"></div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Top Mitra</p><p class="text-[9px] text-gray-400">Berdasarkan jumlah SPR</p></div>
+            <div id="hspr-topMitra" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
           </div>
-          <div>
-            <p class="text-xs font-bold mb-2">Top Kode Anggaran</p>
-            <div id="hspr-topAnggaran" class="space-y-2"></div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Top Kode Anggaran</p><p class="text-[9px] text-gray-400">Berdasarkan nilai</p></div>
+            <div id="hspr-topAnggaran" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
           </div>
-          <div>
-            <p class="text-xs font-bold mb-2">Top Peruntukan</p>
-            <div id="hspr-topPeruntukan" class="space-y-2"></div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Top Peruntukan</p><p class="text-[9px] text-gray-400">Berdasarkan nilai</p></div>
+            <div id="hspr-topPeruntukan" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
           </div>
         </div>
       </section>
 
-      <!-- ⑤ Monthly Trend -->
+      <!-- 5. Tren Penyerapan -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Monthly Trend</p>
+          <p class="text-sm font-bold text-[#131b2e]">5. Tren Penyerapan</p>
           <p class="text-[10px] text-gray-400">Perkembangan jumlah SPR dan nilai dari waktu ke waktu.</p>
         </div>
         <div class="p-4" style="position:relative;height:240px"><canvas id="hspr-trendChart"></canvas></div>
       </section>
 
-      <!-- ⑥ Priority Action -->
+      <!-- 6. Tindak Lanjut Urgent -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Priority Action</p>
+          <p class="text-sm font-bold text-[#131b2e]">6. Tindak Lanjut Urgent <span class="text-[10px] font-normal text-gray-400">(Top 10)</span></p>
           <p class="text-[10px] text-gray-400">SPR yang memerlukan tindak lanjut segera, diurutkan dari aging tertinggi.</p>
         </div>
         <div class="overflow-x-auto custom-scrollbar">
@@ -430,20 +444,22 @@ html,body   { height:100%; overflow:hidden; }
             <thead class="bg-gray-50"><tr>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">No SPR</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kegiatan</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Nominal</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Mitra</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Status Pengadaan</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Status Penagihan</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Nilai Outstanding</th>
             </tr></thead>
             <tbody id="hspr-priorityBody"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- ⑦ Detail -->
+      <!-- 7. Detail -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— mempengaruhi seluruh tampilan modul ini</span>
         </p>
         <div class="flex flex-wrap gap-1.5 items-center">
           <div class="ms-wrap relative" id="ms-hspr-statusPengadaan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','statusPengadaan')"><span id="ms-hspr-statusPengadaan-label">Status Pengadaan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-hspr-statusPengadaan-menu"></div></div>
@@ -1553,7 +1569,7 @@ const API_PMOSP      = 'https://script.google.com/macros/s/AKfycby2-5gU-v_7A0Vpl
 const PAGE_CONFIG = {
   home:       { title:'Dashboard',              icon:'home'            },
   // HAR
-  har_spr:    { title:'Administrasi SPR',   icon:'request_quote' },
+  har_spr:    { title:'Monitoring SPR',   icon:'request_quote' },
   har_spp:    { title:'Administrasi SPP',   icon:'description'   },
   // ASET
   wig:        { title:'WIG Penguatan Aset',     icon:'military_tech'   },
@@ -4444,108 +4460,201 @@ function harResetFilter(){if(currentPage==='har_spr')harSprResetFilter();else if
 function harApplyFilter(tab){if(tab==='spr')harSprApplyFilter();else harSppApplyFilter();}
 
 // ── SPR: BUILD ALL SECTIONS ────────────────────────────────
-function harSprBuildAll(json){
-  harSprRenderExec(json);
-  harSprRenderFlow(json);
-  harSprRenderHealth(json);
-  harSprRenderOperational(json);
-  harSprRenderTrend(json);
-  harSprRenderPriority(json);
-  harSprBuildFilters(json);
-  harSprApplyFilter();
+// ── SPR: CLIENT-SIDE AGGREGATION (semua dihitung dari rows terfilter) ──
+function harSprCompute(rows){
+  var byStatusPengadaan={},byStatusPenagihan={},byMitra={},byKodeAnggaran={},byPeruntukan={};
+  var totalNominal=0,outstandingCount=0,outstandingValue=0,doneValue=0,cancelValue=0;
+  var aging45Count=0,agingBuckets={b0_30:0,b31_45:0,bOver45:0};
+  var monthlyMap={};
+  rows.forEach(function(r){
+    var nominal=r.nominal||0;
+    var sp=(r.statusPengadaan||'').toUpperCase();
+    var st=(r.statusPenagihan||'').toUpperCase();
+    var isDone=sp==='DONE',isCancel=sp==='CANCEL',isReject=sp==='REJECT';
+    var isOutstanding=isDone&&st!=='CANCEL'&&st.indexOf('SUBMIT INVOICE KE PUSAT')===-1;
+    if(isOutstanding){outstandingCount++;outstandingValue+=nominal;}
+    if(isDone)doneValue+=nominal;
+    if(isCancel)cancelValue+=nominal;
+    var includeAging=!isDone&&!isCancel&&!isReject;
+    if(includeAging&&r.aging!==null&&r.aging!==undefined){
+      if(r.aging>45){agingBuckets.bOver45++;aging45Count++;}
+      else if(r.aging>=31)agingBuckets.b31_45++;
+      else agingBuckets.b0_30++;
+    }
+    if(r.tglRilisSPR){
+      var mk=r.tglRilisSPR.slice(0,7);
+      if(!monthlyMap[mk])monthlyMap[mk]={count:0,nominal:0};
+      monthlyMap[mk].count++;monthlyMap[mk].nominal+=nominal;
+    }
+    totalNominal+=nominal;
+    if(r.statusPengadaan)byStatusPengadaan[r.statusPengadaan]=(byStatusPengadaan[r.statusPengadaan]||0)+1;
+    if(r.statusPenagihan)byStatusPenagihan[r.statusPenagihan]=(byStatusPenagihan[r.statusPenagihan]||0)+1;
+    if(r.mitra)byMitra[r.mitra]=(byMitra[r.mitra]||0)+nominal;
+    if(r.kodeAnggaran)byKodeAnggaran[r.kodeAnggaran]=(byKodeAnggaran[r.kodeAnggaran]||0)+nominal;
+    if(r.peruntukan)byPeruntukan[r.peruntukan]=(byPeruntukan[r.peruntukan]||0)+1;
+  });
+  var priorityAction=rows.filter(function(r){
+    var sp=(r.statusPengadaan||'').toUpperCase();
+    return sp!=='DONE'&&sp!=='CANCEL'&&sp!=='REJECT'&&r.aging!==null&&r.aging!==undefined;
+  }).sort(function(a,b){
+    if((b.aging||0)!==(a.aging||0))return (b.aging||0)-(a.aging||0);
+    return (b.nominal||0)-(a.nominal||0);
+  }).slice(0,10);
+  var monthlyTrend=Object.keys(monthlyMap).sort().map(function(k){
+    return {month:k,count:monthlyMap[k].count,nominal:monthlyMap[k].nominal};
+  });
+  return {
+    totalSPR:rows.length,totalNominal:totalNominal,
+    byStatusPengadaan:byStatusPengadaan,byStatusPenagihan:byStatusPenagihan,
+    byMitra:byMitra,byKodeAnggaran:byKodeAnggaran,byPeruntukan:byPeruntukan,
+    outstandingCount:outstandingCount,outstandingValue:outstandingValue,
+    doneValue:doneValue,cancelValue:cancelValue,aging45Count:aging45Count,
+    agingBuckets:agingBuckets,priorityAction:priorityAction,monthlyTrend:monthlyTrend
+  };
 }
 
-function harSprRenderExec(json){
-  const el=document.getElementById('hspr-exec');if(!el)return;
-  const cards=[
-    {label:'Total SPR',val:(json.totalSPR||0).toLocaleString('id-ID'),cls:'bg-white border-gray-200 text-[#131b2e]'},
-    {label:'Total Nilai',val:fmtRp(json.totalNominal||0),cls:'bg-white border-gray-200 text-[#131b2e]'},
-    {label:'Outstanding',val:(json.outstandingCount||0).toLocaleString('id-ID'),cls:'bg-orange-50 border-orange-200 text-orange-700'},
-    {label:'Critical SLA (>45 hari)',val:(json.aging45Count||0).toLocaleString('id-ID'),cls:'bg-red-50 border-red-200 text-red-700'},
-    {label:'Outstanding Value',val:fmtRp(json.outstandingValue||0),cls:'bg-orange-50 border-orange-200 text-orange-700'}
+// ── SPR: BUILD ALL SECTIONS (dipanggil ulang setiap filter berubah) ──
+function harSprBuildAll(json){
+  harSprBuildFilters(json);
+  harSprApplyFilter(); // akan trigger harSprRenderAll() di dalamnya
+}
+function harSprRenderAll(rows){
+  var agg=harSprCompute(rows);
+  harSprRenderExec(agg);
+  harSprRenderFlow(agg);
+  harSprRenderHealth(agg);
+  harSprRenderOperational(agg);
+  harSprRenderTrend(agg);
+  harSprRenderPriority(agg);
+}
+
+function harSprRenderExec(agg){
+  var el=document.getElementById('hspr-exec');if(!el)return;
+  var pctOut=agg.totalSPR?Math.round(agg.outstandingCount/agg.totalSPR*100):0;
+  var pctCrit=agg.totalSPR?Math.round(agg.aging45Count/agg.totalSPR*100):0;
+  var pctOutVal=agg.totalNominal?Math.round(agg.outstandingValue/agg.totalNominal*100):0;
+  var cards=[
+    {icon:'description',label:'Total SPR',sub:'Pekerjaan',val:(agg.totalSPR||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
+    {icon:'payments',label:'Total Nilai',sub:'',val:fmtRp(agg.totalNominal||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
+    {icon:'history_toggle_off',label:'Outstanding',sub:'Pekerjaan',val:(agg.outstandingCount||0).toLocaleString('id-ID'),caption:pctOut+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'},
+    {icon:'warning',label:'Critical SLA (>45 hari)',sub:'Pekerjaan',val:(agg.aging45Count||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600'},
+    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'}
   ];
   el.innerHTML=cards.map(function(c){
-    return '<div class="rounded-xl border p-3 '+c.cls+'"><p class="text-[9px] font-bold uppercase opacity-70 mb-1">'+c.label+'</p><p class="text-lg font-black">'+c.val+'</p></div>';
+    return '<div class="rounded-xl border p-3 '+c.cls+'">'
+      +'<div class="flex items-center gap-1.5 mb-2"><span class="material-symbols-outlined text-[16px] p-1 rounded-lg '+c.iconCls+'">'+c.icon+'</span>'
+      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+(c.sub?' <span class="opacity-60">'+c.sub+'</span>':'')+'</p></div>'
+      +'<p class="text-lg font-black mb-0.5">'+c.val+'</p>'
+      +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
   }).join('');
 }
 
-function harFlowRow(label,count,color){
-  return '<div class="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg border border-gray-100">'
-    +'<span class="text-[11px] font-medium text-gray-700">'+label+'</span>'
-    +'<span class="text-[11px] font-black px-2 py-0.5 rounded-full '+color+'">'+count+'</span></div>';
+function harFlowRow(label,count,total,color){
+  var pct=total?Math.round(count/total*100):0;
+  return '<div class="px-3 py-2 bg-gray-50 rounded-lg border border-gray-100">'
+    +'<div class="flex items-center justify-between mb-1"><span class="text-[11px] font-medium text-gray-700">'+label+'</span>'
+    +'<span class="text-[11px] font-black '+color+'">'+count.toLocaleString('id-ID')+' <span class="text-[9px] font-normal text-gray-400">('+pct+'%)</span></span></div>'
+    +'<div class="w-full bg-gray-200 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#378ADD]" style="width:'+pct+'%"></div></div></div>';
 }
-function harSprRenderFlow(json){
-  const pEl=document.getElementById('hspr-flow-pengadaan');
-  const tEl=document.getElementById('hspr-flow-penagihan');
+function harSprRenderFlow(agg){
+  var pEl=document.getElementById('hspr-flow-pengadaan');
+  var tEl=document.getElementById('hspr-flow-penagihan');
+  var pTotEl=document.getElementById('hspr-flow-pengadaan-total');
+  var tTotEl=document.getElementById('hspr-flow-penagihan-total');
+  var total=agg.totalSPR||0;
   if(pEl){
-    const bp=json.byStatusPengadaan||{};
-    const entries=Object.entries(bp).sort((a,b)=>b[1]-a[1]);
-    pEl.innerHTML=entries.length?entries.map(function(e){return harFlowRow(e[0],e[1],'bg-blue-100 text-blue-700');}).join(''):'<p class="text-[10px] text-gray-400">Tidak ada data</p>';
+    var entries=Object.entries(agg.byStatusPengadaan||{}).sort(function(a,b){return b[1]-a[1];});
+    pEl.innerHTML=entries.length?entries.map(function(e){return harFlowRow(e[0],e[1],total,'text-blue-700');}).join(''):'<p class="text-[10px] text-gray-400">Tidak ada data</p>';
   }
   if(tEl){
-    const bt=json.byStatusPenagihan||{};
-    const entries=Object.entries(bt).sort((a,b)=>b[1]-a[1]);
-    tEl.innerHTML=entries.length?entries.map(function(e){return harFlowRow(e[0],e[1],'bg-green-100 text-green-700');}).join(''):'<p class="text-[10px] text-gray-400">Tidak ada data</p>';
+    var entries2=Object.entries(agg.byStatusPenagihan||{}).sort(function(a,b){return b[1]-a[1];});
+    tEl.innerHTML=entries2.length?entries2.map(function(e){return harFlowRow(e[0],e[1],total,'text-green-700');}).join(''):'<p class="text-[10px] text-gray-400">Tidak ada data</p>';
   }
+  if(pTotEl)pTotEl.innerHTML='<span>Total</span><span>'+total.toLocaleString('id-ID')+' (100%)</span>';
+  if(tTotEl)tTotEl.innerHTML='<span>Total</span><span>'+total.toLocaleString('id-ID')+' (100%)</span>';
 }
 
-function harSprRenderHealth(json){
-  const b=json.agingBuckets||{b0_30:0,b31_45:0,bOver45:0};
-  rebuildChart('hspr-slaChart',{type:'bar',data:{labels:['0-30 hari','31-45 hari','>45 hari'],datasets:[{data:[b.b0_30,b.b31_45,b.bOver45],backgroundColor:['#22c55e','#f97316','#ef4444'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
-  rebuildChart('hspr-finChart',{type:'doughnut',data:{labels:['Outstanding','Done','Cancel'],datasets:[{data:[json.outstandingValue||0,json.doneValue||0,json.cancelValue||0],backgroundColor:['#f97316','#22c55e','#94a3b8'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9}}},tooltip:{callbacks:{label:function(ctx){return ' '+ctx.label+': '+fmtRpFull(ctx.parsed);}}}}}});
+function harDonutLegend(items){
+  return items.map(function(it){
+    return '<div class="flex items-center justify-between text-[10px]"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm inline-block" style="background:'+it.color+'"></span>'+it.label+'</span><span class="font-bold">'+it.val+'</span></div>';
+  }).join('');
+}
+function harSprRenderHealth(agg){
+  var b=agg.agingBuckets||{b0_30:0,b31_45:0,bOver45:0};
+  var totalSla=b.b0_30+b.b31_45+b.bOver45;
+  rebuildChart('hspr-slaChart',{type:'doughnut',data:{labels:['0-30 hari','31-45 hari','>45 hari'],datasets:[{data:[b.b0_30,b.b31_45,b.bOver45],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  var slaEl=document.getElementById('hspr-slaLegend');
+  if(slaEl)slaEl.innerHTML=harDonutLegend([
+    {label:'0-30 hari',val:b.b0_30+' ('+(totalSla?Math.round(b.b0_30/totalSla*100):0)+'%)',color:'#22c55e'},
+    {label:'31-45 hari',val:b.b31_45+' ('+(totalSla?Math.round(b.b31_45/totalSla*100):0)+'%)',color:'#f59e0b'},
+    {label:'>45 hari',val:b.bOver45+' ('+(totalSla?Math.round(b.bOver45/totalSla*100):0)+'%)',color:'#ef4444'}
+  ]);
+
+  var totalFin=(agg.outstandingValue||0)+(agg.doneValue||0)+(agg.cancelValue||0);
+  rebuildChart('hspr-finChart',{type:'doughnut',data:{labels:['Outstanding','Done','Cancel'],datasets:[{data:[agg.outstandingValue||0,agg.doneValue||0,agg.cancelValue||0],backgroundColor:['#3b82f6','#22c55e','#94a3b8'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  var finEl=document.getElementById('hspr-finLegend');
+  if(finEl)finEl.innerHTML=harDonutLegend([
+    {label:'Outstanding',val:fmtRp(agg.outstandingValue||0)+' ('+(totalFin?Math.round((agg.outstandingValue||0)/totalFin*100):0)+'%)',color:'#3b82f6'},
+    {label:'Done',val:fmtRp(agg.doneValue||0)+' ('+(totalFin?Math.round((agg.doneValue||0)/totalFin*100):0)+'%)',color:'#22c55e'},
+    {label:'Cancel',val:fmtRp(agg.cancelValue||0)+' ('+(totalFin?Math.round((agg.cancelValue||0)/totalFin*100):0)+'%)',color:'#94a3b8'}
+  ]);
 }
 
 function harTopList(entries,isValue){
   if(!entries.length)return '<p class="text-[10px] text-gray-400">Tidak ada data</p>';
-  const max=entries[0][1]||1;
-  return entries.slice(0,5).map(function(e){
-    const pct=Math.round(e[1]/max*100);
-    const disp=isValue?fmtRp(e[1]):e[1].toLocaleString('id-ID');
+  var max=entries[0][1]||1;
+  return entries.map(function(e){
+    var pct=Math.round(e[1]/max*100);
+    var disp=isValue?fmtRp(e[1]):e[1].toLocaleString('id-ID');
     return '<div><div class="flex justify-between mb-0.5"><span class="text-[10px] font-medium truncate" title="'+e[0]+'">'+e[0]+'</span><span class="text-[10px] font-bold text-[#00288e]">'+disp+'</span></div><div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#378ADD]" style="width:'+pct+'%"></div></div></div>';
   }).join('');
 }
-function harSprRenderOperational(json){
-  const mEl=document.getElementById('hspr-topMitra');
-  const aEl=document.getElementById('hspr-topAnggaran');
-  const pEl=document.getElementById('hspr-topPeruntukan');
-  if(mEl)mEl.innerHTML=harTopList(Object.entries(json.byMitra||{}).sort((a,b)=>b[1]-a[1]),true);
-  if(aEl)aEl.innerHTML=harTopList(Object.entries(json.byKodeAnggaran||{}).sort((a,b)=>b[1]-a[1]),true);
-  if(pEl)pEl.innerHTML=harTopList(Object.entries(json.byPeruntukan||{}).sort((a,b)=>b[1]-a[1]),false);
+function harSprRenderOperational(agg){
+  var mEl=document.getElementById('hspr-topMitra');
+  var aEl=document.getElementById('hspr-topAnggaran');
+  var pEl=document.getElementById('hspr-topPeruntukan');
+  if(mEl)mEl.innerHTML=harTopList(Object.entries(agg.byMitra||{}).sort(function(a,b){return b[1]-a[1];}),true);
+  if(aEl)aEl.innerHTML=harTopList(Object.entries(agg.byKodeAnggaran||{}).sort(function(a,b){return b[1]-a[1];}),true);
+  if(pEl)pEl.innerHTML=harTopList(Object.entries(agg.byPeruntukan||{}).sort(function(a,b){return b[1]-a[1];}),false);
 }
 
-function harSprRenderTrend(json){
-  const mt=json.monthlyTrend||[];
+function harSprRenderTrend(agg){
+  var mt=agg.monthlyTrend||[];
+  var wrap=document.getElementById('hspr-trendChart')?document.getElementById('hspr-trendChart').parentElement:null;
   if(!mt.length){
-    const el=document.getElementById('hspr-trendChart');
-    if(el)el.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Belum ada data tren (TGL RILIS SPR kosong)</p>';
+    if(wrap)wrap.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Belum ada data tren (TGL RILIS SPR kosong)</p>';
     return;
   }
-  rebuildChart('hspr-trendChart',{type:'bar',data:{labels:mt.map(function(m){return monthLabel(m.month);}),datasets:[
+  if(wrap&&!document.getElementById('hspr-trendChart')){wrap.innerHTML='<canvas id="hspr-trendChart"></canvas>';}
+  rebuildChart('hspr-trendChart',{data:{labels:mt.map(function(m){return monthLabel(m.month);}),datasets:[
     {type:'bar',label:'Jumlah SPR',data:mt.map(function(m){return m.count;}),backgroundColor:'#378ADD',borderRadius:3,yAxisID:'y'},
-    {type:'line',label:'Nominal',data:mt.map(function(m){return m.nominal;}),borderColor:'#1D9E75',backgroundColor:'transparent',tension:0.3,yAxisID:'y2'}
+    {type:'line',label:'Nilai Nominal',data:mt.map(function(m){return m.nominal;}),borderColor:'#1D9E75',backgroundColor:'transparent',tension:0.3,yAxisID:'y2'}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},scales:{y:{type:'linear',position:'left',beginAtZero:true,ticks:{stepSize:1,font:{size:9}}},y2:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return fmtRp(v);},font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
 }
 
-function harSprRenderPriority(json){
-  const tbody=document.getElementById('hspr-priorityBody');
+function harSprRenderPriority(agg){
+  var tbody=document.getElementById('hspr-priorityBody');
   if(!tbody)return;
-  const pa=json.priorityAction||[];
-  if(!pa.length){tbody.innerHTML='<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Belum ada data prioritas (aging belum tersedia)</td></tr>';return;}
+  var pa=agg.priorityAction||[];
+  if(!pa.length){tbody.innerHTML='<tr><td colspan="7" class="p-6 text-center text-gray-400 text-xs">Belum ada data prioritas (aging belum tersedia)</td></tr>';return;}
   tbody.innerHTML=pa.map(function(r,i){
-    const agingCls=r.aging>45?'text-red-600':r.aging>=31?'text-orange-500':'text-green-600';
+    var agingCls=r.aging>45?'text-red-600':r.aging>=31?'text-orange-500':'text-green-600';
+    var spB='<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">'+(r.statusPengadaan||'-')+'</span>';
+    var stB='<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-orange-100 text-orange-700">'+(r.statusPenagihan||'-')+'</span>';
     return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
       +'<td class="p-2.5 text-[9px] text-gray-300">'+(i+1)+'</td>'
       +'<td class="p-2.5 text-xs font-semibold text-[#00288e]">'+r.noSPR+'</td>'
-      +'<td class="p-2.5 text-xs max-w-[220px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+r.kegiatan+'">'+r.kegiatan+'</td>'
+      +'<td class="p-2.5 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.mitra||'')+'">'+(r.mitra||'-')+'</td>'
+      +'<td class="p-2.5 text-center">'+spB+'</td>'
+      +'<td class="p-2.5 text-center">'+stB+'</td>'
       +'<td class="p-2.5 text-xs text-center font-bold '+agingCls+'">'+r.aging+' hari</td>'
-      +'<td class="p-2.5 text-xs text-right font-mono">'+fmtRpFull(r.nominal)+'</td>'
-      +'<td class="p-2.5 text-xs">'+(r.statusPenagihan||'-')+'</td></tr>';
+      +'<td class="p-2.5 text-xs text-right font-mono">'+fmtRpFull(r.nominal)+'</td></tr>';
   }).join('');
 }
 
 // ── SPR: FILTERS, TABLE, SORT ───────────────────────────────
 function harSprBuildFilters(json){
-  const build=function(id,vals,key){const el=document.getElementById(id);if(el)el.innerHTML=vals.map(function(v){return '<label class="ms-item"><input type="checkbox" value="'+v.replace(/"/g,'&quot;')+'" onchange="harMsChange(\'spr\',\''+key+'\')">'+v+'</label>';}).join('');};
+  var build=function(id,vals,key){var el=document.getElementById(id);if(el)el.innerHTML=vals.map(function(v){return '<label class="ms-item"><input type="checkbox" value="'+v.replace(/"/g,'&quot;')+'" onchange="harMsChange(\'spr\',\''+key+'\')">'+v+'</label>';}).join('');};
   build('ms-hspr-statusPengadaan-menu',json.statusPengadaanOpts||[],'statusPengadaan');
   build('ms-hspr-statusPenagihan-menu',json.statusPenagihanOpts||[],'statusPenagihan');
   build('ms-hspr-mitra-menu',json.mitraOpts||[],'mitra');
@@ -4553,7 +4662,7 @@ function harSprBuildFilters(json){
 }
 function harSprApplyFilter(){
   HSPRF.search=(document.getElementById('har-spr-search')?.value||'').toLowerCase();
-  const chk=function(arr,val){return !arr.length||arr.includes(val);};
+  var chk=function(arr,val){return !arr.length||arr.includes(val);};
   HAR_SPR_FILTERED=HAR_SPR_ROWS.filter(function(r){
     if(!chk(HSPRF.statusPengadaan,r.statusPengadaan))return false;
     if(!chk(HSPRF.statusPenagihan,r.statusPenagihan))return false;
@@ -4563,21 +4672,22 @@ function harSprApplyFilter(){
     return true;
   });
   harSprSortApply();
+  harSprRenderAll(HAR_SPR_FILTERED);
   harSprUpdateLabel();harSprPage=1;harSprRenderTable();
 }
 function harSprResetFilter(){
   Object.keys(HSPRF).forEach(function(k){HSPRF[k]=Array.isArray(HSPRF[k])?[]:'';});
   document.querySelectorAll('[id^="ms-hspr-"] input').forEach(function(cb){cb.checked=false;});
   document.querySelectorAll('[id^="ms-hspr-"]').forEach(function(w){w.classList.remove('ms-active');});
-  const s=document.getElementById('har-spr-search');if(s)s.value='';
+  var s=document.getElementById('har-spr-search');if(s)s.value='';
   harSprApplyFilter();
 }
 function harSprSortApply(){
   if(!HSPR_SORT.col)return;
-  const col=HSPR_SORT.col,dir=HSPR_SORT.dir;
-  const colDef=HSPR_COLS.find(function(c){return c.key===col;});
+  var col=HSPR_SORT.col,dir=HSPR_SORT.dir;
+  var colDef=HSPR_COLS.find(function(c){return c.key===col;});
   HAR_SPR_FILTERED.sort(function(a,b){
-    let va=a[col],vb=b[col];
+    var va=a[col],vb=b[col];
     if(colDef&&colDef.num){va=va||0;vb=vb||0;return (va-vb)*dir;}
     va=String(va||'');vb=String(vb||'');
     return va.localeCompare(vb)*dir;
@@ -4588,26 +4698,26 @@ function harSprSortBy(col){
   harSprSortApply();harSprPage=1;harSprRenderTable();harSprRenderTableHead();
 }
 function harSprRenderTableHead(){
-  const tr=document.getElementById('hspr-tblHeadRow');
+  var tr=document.getElementById('hspr-tblHeadRow');
   if(!tr)return;
-  let html='<th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>';
+  var html='<th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>';
   HSPR_COLS.forEach(function(c){
-    const isSorted=HSPR_SORT.col===c.key;
-    const arrow=isSorted?(HSPR_SORT.dir===1?' &#9650;':' &#9660;'):'';
+    var isSorted=HSPR_SORT.col===c.key;
+    var arrow=isSorted?(HSPR_SORT.dir===1?' &#9650;':' &#9660;'):'';
     html+='<th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e] whitespace-nowrap" onclick="harSprSortBy(\''+c.key+'\')">'+c.label+arrow+'</th>';
   });
   tr.innerHTML=html;
 }
 function harSprRenderTable(){
   harSprRenderTableHead();
-  const start=(harSprPage-1)*HAR_PAGE_SIZE;
-  const paged=HAR_SPR_FILTERED.slice(start,start+HAR_PAGE_SIZE);
-  const tbody=document.getElementById('har-spr-tblBody');
+  var start=(harSprPage-1)*HAR_PAGE_SIZE;
+  var paged=HAR_SPR_FILTERED.slice(start,start+HAR_PAGE_SIZE);
+  var tbody=document.getElementById('har-spr-tblBody');
   if(!paged.length){tbody.innerHTML='<tr><td colspan="13" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';buildPagination('har-spr-pgBtns',harSprPage,HAR_SPR_FILTERED.length,HAR_PAGE_SIZE,'harSprGoPage');document.getElementById('har-spr-rangeInfo').textContent='0';document.getElementById('har-spr-totalInfo').textContent='0';return;}
   tbody.innerHTML=paged.map(function(r,i){
-    const spB=r.statusPengadaan?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">'+r.statusPengadaan+'</span>':'<span class="text-[9px] text-gray-300">-</span>';
-    const stB=r.statusPenagihan?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">'+r.statusPenagihan+'</span>':'<span class="text-[9px] text-gray-300">-</span>';
-    const agingTxt=r.aging!==null&&r.aging!==undefined?r.aging+' hari':'-';
+    var spB=r.statusPengadaan?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">'+r.statusPengadaan+'</span>':'<span class="text-[9px] text-gray-300">-</span>';
+    var stB=r.statusPenagihan?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">'+r.statusPenagihan+'</span>':'<span class="text-[9px] text-gray-300">-</span>';
+    var agingTxt=r.aging!==null&&r.aging!==undefined?r.aging+' hari':'-';
     return '<tr class="hover:bg-[#f2f3ff] transition-colors border-b border-gray-50">'
       +'<td class="p-3 text-[9px] text-gray-300">'+(start+i+1)+'</td>'
       +'<td class="p-3 text-xs font-mono">'+(r.kodeAnggaran||'-')+'</td>'
@@ -4624,21 +4734,22 @@ function harSprRenderTable(){
       +'<td class="p-3 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.keterangan||'')+'">'+(r.keterangan||'-')+'</td>'
       +'</tr>';
   }).join('');
-  const pg=buildPagination('har-spr-pgBtns',harSprPage,HAR_SPR_FILTERED.length,HAR_PAGE_SIZE,'harSprGoPage');
+  var pg=buildPagination('har-spr-pgBtns',harSprPage,HAR_SPR_FILTERED.length,HAR_PAGE_SIZE,'harSprGoPage');
   document.getElementById('har-spr-rangeInfo').textContent=pg.s+'-'+pg.e;
   document.getElementById('har-spr-totalInfo').textContent=HAR_SPR_FILTERED.length.toLocaleString('id-ID');
 }
 function harSprGoPage(p){harSprPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPR_FILTERED.length/HAR_PAGE_SIZE)||1));harSprRenderTable();}
 function harSprUpdateLabel(){
-  const parts=[];
+  var parts=[];
   if(HSPRF.statusPengadaan.length)parts.push('Pengadaan('+HSPRF.statusPengadaan.length+')');
   if(HSPRF.statusPenagihan.length)parts.push('Penagihan('+HSPRF.statusPenagihan.length+')');
   if(HSPRF.mitra.length)parts.push('Mitra('+HSPRF.mitra.length+')');
   if(HSPRF.peruntukan.length)parts.push('Peruntukan('+HSPRF.peruntukan.length+')');
   if(HSPRF.search)parts.push('"'+HSPRF.search+'"');
-  const el=document.getElementById('har-spr-filterLabel');
+  var el=document.getElementById('har-spr-filterLabel');
   if(el)el.textContent=parts.length?'Filter: '+parts.join(' - '):'Menampilkan semua data';
 }
+
 
 // ── SPP: BUILD ALL SECTIONS ────────────────────────────────
 function harSppBuildAll(json){
