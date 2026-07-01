@@ -1524,18 +1524,14 @@ html,body   { height:100%; overflow:hidden; }
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-sm font-bold text-[#131b2e]">Priority Action</p>
-          <p class="text-[10px] text-gray-400">LM Off Track — perlu perhatian segera.</p>
+          <p class="text-[10px] text-gray-400">LM dengan statusMinggu Off Track — progress target minggu berjalan per KP.</p>
         </div>
         <div class="overflow-x-auto custom-scrollbar">
-          <table class="w-full text-left border-collapse">
-            <thead class="bg-gray-50"><tr>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">WIG</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">LM</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Target</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Realisasi</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Pencapaian</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status</th>
-            </tr></thead>
+          <table class="w-full text-left border-collapse" style="min-width:1400px">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">WIG</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">LM</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">BPN</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalBar</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalSel</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTeng</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTim</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50" colspan="3">SBU Total</th></tr>
+              <tr><th class="p-2 border-b border-gray-200"></th><th class="p-2 border-b border-gray-200"></th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">%</th></tr>
+            </thead>
             <tbody id="wig-priorityBody"></tbody>
           </table>
         </div>
@@ -1546,14 +1542,17 @@ html,body   { height:100%; overflow:hidden; }
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
             <p class="text-sm font-bold">Detail Data WIG Aset</p>
-            <p class="text-[10px] text-gray-400">Seluruh LM dari WIG 1, 2, 3, dan 4 · klik header untuk sort, klik baris untuk lihat detail per KP & kontributor</p>
+            <p class="text-[10px] text-gray-400">Target & Realisasi 2026 per KP · klik header WIG/LM untuk sort</p>
           </div>
           <input type="text" id="wig-search" oninput="wigApplyFilter()" placeholder="Cari LM / Inisiatif…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-44">
         </div>
         <div class="overflow-x-auto custom-scrollbar">
-          <table class="w-full text-left border-collapse" style="min-width:900px">
-            <thead class="bg-gray-50 sticky top-0"><tr id="wig-tblHeadRow"></tr></thead>
-            <tbody id="wig-tblBody"><tr><td colspan="9" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
+          <table class="w-full text-left border-collapse" style="min-width:1600px">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy('wigNama')">WIG</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy('nama')">LM</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">BPN</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalBar</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalSel</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTeng</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTim</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50" colspan="3">SBU Total</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center whitespace-nowrap">Status</th></tr>
+              <tr><th class="p-2 border-b border-gray-200"></th><th class="p-2 border-b border-gray-200"></th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">%</th><th class="p-2 border-b border-gray-200"></th></tr>
+            </thead>
+            <tbody id="wig-tblBody"><tr><td colspan="20" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
           </table>
         </div>
       </section>
@@ -1661,7 +1660,7 @@ html,body   { height:100%; overflow:hidden; }
 const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vbmk6bDp-7obfoCuyyUtYSMnv41X7b212F3fFezjiu8O2ukfaVb/exec';
 const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0wA26kn60vlyZbkh8ypwhoacB1QyhLhBGcyl9XnxIPs45_ThfhOI/exec';
-const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUyjYCqkRn194DfpoLkWf7Qzo9gCbn8ELAtOnRjtmIo_EawWLx0Q3G/exec';
+const API_WIG        = 'https://script.google.com/macros/s/AKfycbybrSp-zH5IyWY1bSjyq5SaYprpm-Lw_qn-VlU0eXX87ZpopQ-LatSjWc58vBMPvKhX/exec';
 const API_DOKTEK     = 'https://script.google.com/macros/s/AKfycby_oVspb0je_rrkhzPNpDH0KK2xrr1UJwOXLShP68v9qPoGhMEP2r-gIsd1bKlv99Ol/exec';
 const API_PMISP      = 'https://script.google.com/macros/s/AKfycbxEIBqNWqVSgfsolqpIkszJajTcn2ljPS6q1pzqzA7_Ko_fGvDB9f8acUl6_kZcNxFm/exec';
 const API_HAR      = 'https://script.google.com/macros/s/AKfycbxRCZSsvrhw0HB9wJleABO42Xpx83lXgatV2wRQlt35Hxl_Zyjj0vYAPPBd-X6NTxsOwA/exec';
@@ -3532,32 +3531,75 @@ function wigRenderProgressCompare(lms){
   }).join('');
 }
 
+function wigKpCols(kpData, useWeekly){
+  // useWeekly=true -> targetMinggu, realMinggu, % minggu
+  // useWeekly=false -> target, real, pct semester
+  var cols='';
+  var kpMap={};
+  (kpData||[]).forEach(function(kp){kpMap[kp.kp]=kp;});
+  var KPS=['BALIKPAPAN','KALIMANTAN BARAT','KALIMANTAN SELATAN','KALIMANTAN TENGAH','KALIMANTAN TIMUR'];
+  KPS.forEach(function(kpName){
+    var kp=kpMap[kpName];
+    if(useWeekly){
+      var tM=kp?kp.targetMinggu:0, rM=kp?kp.realMinggu:0;
+      var hasTarget=tM>0;
+      var pM=hasTarget?(rM/tM*100).toFixed(1):'—';
+      var pCls=!hasTarget?'text-gray-300':parseFloat(pM)>=100?'text-green-600':parseFloat(pM)>=80?'text-orange-500':'text-red-600';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20">'+(hasTarget?tM.toLocaleString('id-ID'):'—')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-semibold">'+(kp&&kp.realMinggu?rM.toLocaleString('id-ID'):'0')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-bold '+pCls+'">'+pM+(hasTarget?'%':'')+'</td>';
+    } else {
+      var t=kp?kp.target:0, r=kp?kp.real:0;
+      var p=t>0?(r/t*100).toFixed(1):'—';
+      var pC=t>0?(parseFloat(p)>=100?'text-green-600':parseFloat(p)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20">'+(t?t.toLocaleString('id-ID'):'—')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-semibold">'+(r?r.toLocaleString('id-ID'):'0')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-bold '+pC+'">'+p+(t>0?'%':'')+'</td>';
+    }
+  });
+  return cols;
+}
+
+function wigSbuTotal(lm, useWeekly){
+  if(useWeekly){
+    var tSbu=0, rSbu=0;
+    (lm.kpData||[]).forEach(function(kp){tSbu+=kp.targetMinggu||0; rSbu+=kp.realMinggu||0;});
+    var pSbu=tSbu>0?(rSbu/tSbu*100).toFixed(1):'—';
+    var pC=tSbu>0?(parseFloat(pSbu)>=100?'text-green-600':parseFloat(pSbu)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
+    return '<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+(tSbu?tSbu.toLocaleString('id-ID'):'—')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+rSbu.toLocaleString('id-ID')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-bold '+pC+'">'+pSbu+(tSbu?'%':'')+'</td>';
+  } else {
+    var t=lm.totalTarget||0, r=lm.totalReal||0;
+    var p=t>0?(r/t*100).toFixed(1):'—';
+    var pCls=t>0?(parseFloat(p)>=100?'text-green-600':parseFloat(p)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
+    return '<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+(t?t.toLocaleString('id-ID'):'—')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+r.toLocaleString('id-ID')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-bold '+pCls+'">'+p+(t>0?'%':'')+'</td>';
+  }
+}
+
 function wigRenderPriority(lms){
   const tbody=document.getElementById('wig-priorityBody');
   if(!tbody)return;
   const offMinggu=lms.filter(function(l){return l.statusMinggu==='❌';})
     .sort(function(a,b){return (a.pctMinggu||0)-(b.pctMinggu||0);});
-  if(!offMinggu.length){tbody.innerHTML='<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Semua LM memenuhi target minggu berjalan</td></tr>';return;}
+  if(!offMinggu.length){tbody.innerHTML='<tr><td colspan="18" class="p-6 text-center text-gray-400 text-xs">Semua LM memenuhi target minggu berjalan</td></tr>';return;}
   tbody.innerHTML=offMinggu.map(function(l){
-    const pctMing=((l.pctMinggu||0)*100).toFixed(1)+'%';
-    const pctSem=l.pencapaian!==null?Math.round(l.pencapaian*100)+'%':'—';
     return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
-      +'<td class="p-2.5 text-[9px] max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.wigNama+'">'+l.wigNama+'</td>'
-      +'<td class="p-2.5 text-xs font-semibold text-[#00288e] max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.nama+'">'+l.nama+'</td>'
-      +'<td class="p-2.5 text-xs text-right">'+Math.round(l.totalTarget).toLocaleString('id-ID')+'</td>'
-      +'<td class="p-2.5 text-xs text-right">'+Math.round(l.totalReal).toLocaleString('id-ID')+'</td>'
-      +'<td class="p-2.5 text-xs text-right font-bold text-orange-600">'+pctMing+'</td>'
-      +'<td class="p-2.5 text-center"><span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-orange-100 text-orange-700">Off Target Minggu</span></td></tr>';
+      +'<td class="p-2 text-[9px] text-gray-500 max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.wigNama+'">'+l.wigNama.replace(/WIG \d+ — /,'')+'</td>'
+      +'<td class="p-2 text-[9px] font-semibold text-[#00288e] whitespace-nowrap">'+l.nama+'</td>'
+      +wigKpCols(l.kpData,true)
+      +wigSbuTotal(l,true)+'</tr>';
   }).join('');
 }
 
 function wigSortApply(){
   if(!WIG_SORT.col)return;
   const col=WIG_SORT.col,dir=WIG_SORT.dir;
-  const colDef=WIG_COLS.find(function(c){return c.key===col;});
   WIG_FILTERED.sort(function(a,b){
     let va=a[col],vb=b[col];
-    if(colDef&&colDef.num){va=va||0;vb=vb||0;return (va-vb)*dir;}
+    if(typeof va==='number'||typeof vb==='number'){va=va||0;vb=vb||0;return (va-vb)*dir;}
     va=String(va||'');vb=String(vb||'');
     return va.localeCompare(vb)*dir;
   });
@@ -3566,39 +3608,25 @@ function wigSortBy(col){
   if(WIG_SORT.col===col)WIG_SORT.dir*=-1;else{WIG_SORT.col=col;WIG_SORT.dir=1;}
   wigSortApply();wigRenderTable();
 }
-function wigRenderTableHead(){
-  const tr=document.getElementById('wig-tblHeadRow');
-  if(!tr)return;
-  let html='';
-  WIG_COLS.forEach(function(c){
-    const isSorted=WIG_SORT.col===c.key;
-    const arrow=isSorted?(WIG_SORT.dir===1?' &#9650;':' &#9660;'):'';
-    html+='<th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e] whitespace-nowrap" onclick="wigSortBy(\''+c.key+'\')">'+c.label+arrow+'</th>';
-  });
-  tr.innerHTML=html;
-}
+function wigRenderTableHead(){}  // header sudah di HTML (static dengan double row)
 function wigRenderTable(){
   wigRenderTableHead();
   const tbody=document.getElementById('wig-tblBody');
   if(!tbody)return;
-  if(!WIG_FILTERED.length){tbody.innerHTML='<tr><td colspan="7" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
+  if(!WIG_FILTERED.length){tbody.innerHTML='<tr><td colspan="20" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
   tbody.innerHTML=WIG_FILTERED.map(function(l){
-    const pct=l.pencapaian!==null&&l.pencapaian!==undefined?Math.round(l.pencapaian*100)+'%':'\u2014';
-    const pctCls=l.status==='\u2705'?'text-green-600':l.status==='\u274c'?'text-red-600':'text-gray-400';
-    const stBadge=l.status==='\u2705'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">On Track</span>'
-      :l.status==='\u274c'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-red-100 text-red-700">Off Track</span>'
-      :'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-gray-100 text-gray-500">\u2014</span>';
-    const pctMinggu=((l.pctMinggu||0)*100).toFixed(1)+'%';
+    const stBadge=l.status==='✅'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">On Track</span>'
+      :l.status==='❌'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-red-100 text-red-700">Off Track</span>'
+      :'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-gray-100 text-gray-500">—</span>';
     return '<tr class="hover:bg-[#f2f3ff] cursor-pointer transition-colors border-b border-gray-50" onclick="wigSelectLm('+l.wig+','+l.lm+')">'
-      +'<td class="p-3 text-[9px] text-gray-500 max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.wigNama+'">'+l.wigNama+'</td>'
-      +'<td class="p-3 text-xs font-semibold text-[#00288e]">'+l.nama+'</td>'
-      +'<td class="p-3 text-xs text-right">'+Math.round(l.totalTarget).toLocaleString('id-ID')+'</td>'
-      +'<td class="p-3 text-xs text-right font-semibold">'+Math.round(l.totalReal).toLocaleString('id-ID')+'</td>'
-      +'<td class="p-3 text-xs text-right font-bold '+pctCls+'">'+pct+'</td>'
-      +'<td class="p-3 text-center">'+stBadge+'</td>'
-      +'<td class="p-3 text-xs text-right text-gray-400">'+pctMinggu+'</td></tr>';
+      +'<td class="p-2 text-[9px] text-gray-500 whitespace-nowrap max-w-[160px] overflow-hidden text-ellipsis" title="'+l.wigNama+'">'+l.wigNama+'</td>'
+      +'<td class="p-2 text-[9px] font-semibold text-[#00288e] whitespace-nowrap">'+l.nama+'</td>'
+      +wigKpCols(l.kpData,false)
+      +wigSbuTotal(l,false)
+      +'<td class="p-2 text-center">'+stBadge+'</td></tr>';
   }).join('');
 }
+
 
 function wigSelectLm(wigNo,lmNo){
   const key=wigNo+'-'+lmNo;
