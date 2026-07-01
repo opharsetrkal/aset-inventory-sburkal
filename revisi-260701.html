@@ -181,12 +181,12 @@ html,body   { height:100%; overflow:hidden; }
   <nav id="topnav" class="bg-white border-b border-gray-200 shadow-sm z-40">
     <!-- Baris 1: Logo kiri — Judul tengah — Logo kanan -->
     <div class="flex items-center justify-between px-4 md:px-6 h-12 border-b border-gray-100">
-      <img src="logo-danantara.png" alt="Danantara" class="h-8 object-contain"
+      <img src="logo-danantara.png" alt="Danantara" class="h-[30px] object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>Danantara</span>'">
       <div class="text-center flex-1 px-2">
-        <p class="text-sm md:text-base font-bold text-[#131b2e] leading-tight">Opharset SBU Regional Kalimantan</p>
+        <p class="text-[18px] md:text-[32px] font-bold text-[#131b2e] leading-tight">Opharset SBU Regional Kalimantan</p>
       </div>
-      <img src="logo-pln.png" alt="PLN Icon Plus" class="h-8 object-contain"
+      <img src="logo-pln.png" alt="PLN Icon Plus" class="h-[30px] object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>PLN IP</span>'">
     </div>
     <!-- Baris 2: dinamis — diisi oleh updateTopnav() -->
@@ -3429,21 +3429,22 @@ function wigApplyFilter(){
 function wigRenderResume(lms){
   const el=document.getElementById('wig-resume');
   if(!el)return;
+  const totalLM=lms.length;
+  const onTrack=lms.filter(function(l){return l.status==='✅';}).length;
+  const offTrack=lms.filter(function(l){return l.status==='❌';}).length;
+  const pctOnTrack=totalLM>0?Math.round(onTrack/totalLM*100):0;
+  const pctOffTrack=totalLM>0?Math.round(offTrack/totalLM*100):0;
   const totalTarget=lms.reduce(function(s,l){return s+(l.totalTarget||0);},0);
   const totalReal=lms.reduce(function(s,l){return s+(l.totalReal||0);},0);
   const pencapaianOverall=totalTarget>0?(totalReal/totalTarget*100):0;
-  const sisaTarget=Math.max(0,100-pencapaianOverall);
-  const onTrack=lms.filter(function(l){return l.status==='\u2705';}).length;
-  const offTrack=lms.filter(function(l){return l.status==='\u274c';}).length;
   const overallStatus=offTrack>onTrack?'Off Track':'On Track';
   const overallCls=offTrack>onTrack?'text-red-600':'text-green-600';
-
   const cards=[
-    {icon:'flag',label:'Target 2026',val:Math.round(totalTarget).toLocaleString('id-ID'),caption:'Total target seluruh LM',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
-    {icon:'check_circle',label:'Realisasi',val:Math.round(totalReal).toLocaleString('id-ID'),caption:'Total realisasi seluruh LM',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-green-50 text-green-600'},
-    {icon:'trending_up',label:'Pencapaian',val:pencapaianOverall.toFixed(1)+'%',caption:'Terhadap target',cls:'bg-blue-50 border-blue-200 text-blue-700',iconCls:'bg-blue-100 text-blue-600'},
-    {icon:'outlined_flag',label:'Sisa Target',val:sisaTarget.toFixed(1)+'%',caption:'Belum tercapai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'},
-    {icon:'monitor_heart',label:'Status Overall',val:overallStatus,caption:onTrack+' On Track \u00b7 '+offTrack+' Off Track',cls:(offTrack>onTrack?'bg-red-50 border-red-200':'bg-green-50 border-green-200')+' '+overallCls,iconCls:(offTrack>onTrack?'bg-red-100 text-red-600':'bg-green-100 text-green-600')}
+    {icon:'military_tech',label:'Total LM',val:totalLM.toLocaleString('id-ID'),caption:'Seluruh inisiatif WIG 2026',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
+    {icon:'check_circle',label:'On Track',val:onTrack.toLocaleString('id-ID'),caption:pctOnTrack+'% dari total LM',cls:'bg-green-50 border-green-200 text-green-700',iconCls:'bg-green-100 text-green-600'},
+    {icon:'cancel',label:'Off Track',val:offTrack.toLocaleString('id-ID'),caption:pctOffTrack+'% dari total LM',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600'},
+    {icon:'trending_up',label:'Pencapaian Overall',val:pencapaianOverall.toFixed(1)+'%',caption:'Realisasi vs Target gabungan',cls:'bg-blue-50 border-blue-200 text-blue-700',iconCls:'bg-blue-100 text-blue-600'},
+    {icon:'monitor_heart',label:'Status Overall',val:overallStatus,caption:onTrack+' On Track · '+offTrack+' Off Track',cls:(offTrack>onTrack?'bg-red-50 border-red-200':'bg-green-50 border-green-200')+' '+overallCls,iconCls:(offTrack>onTrack?'bg-red-100 text-red-600':'bg-green-100 text-green-600')}
   ];
   el.innerHTML=cards.map(function(c){
     return '<div class="rounded-xl border p-3 '+c.cls+'">'
@@ -3453,7 +3454,6 @@ function wigRenderResume(lms){
       +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
   }).join('');
 }
-
 function wigRenderGapAnalysis(lms){
   const el=document.getElementById('wig-gapAnalysis');
   if(!el)return;
@@ -3479,15 +3479,21 @@ function wigRenderKontributorPerLM(lms){
   const withKontributor=lms.filter(function(l){return l.kontributor&&l.kontributor.length;});
   if(!withKontributor.length){el.innerHTML='<p class="text-[10px] text-gray-400">Belum ada data kontributor</p>';return;}
   el.innerHTML=withKontributor.map(function(l){
-    const top3=l.kontributor.slice(0,3);
-    const medals=['\ud83e\udd47','\ud83e\udd48','\ud83e\udd49'];
-    const names=top3.map(function(k,i){return medals[i]+' '+k.nama+' ('+k.jumlah.toLocaleString('id-ID')+')';}).join(' \u00b7 ');
-    return '<div class="px-2 py-1.5 hover:bg-gray-50 rounded-lg">'
-      +'<p class="text-[10px] font-bold text-[#131b2e]">'+l.nama+'</p>'
-      +'<p class="text-[9px] text-gray-500">'+names+'</p></div>';
+    const maxK=l.kontributor[0].jumlah||1;
+    const kontRows=l.kontributor.map(function(k,i){
+      const pct=Math.round(k.jumlah/maxK*100);
+      const rank=i<3?['#1','#2','#3'][i]:(i+1)+'';
+      return '<div class="flex items-center gap-1.5 mb-0.5">'
+        +'<span class="text-[9px] text-gray-400 w-5 flex-shrink-0 text-center font-bold">'+rank+'</span>'
+        +'<span class="text-[9px] text-gray-700 flex-1 truncate" title="'+k.nama+'">'+k.nama+'</span>'
+        +'<div class="w-20 bg-gray-100 rounded-full h-1 mx-1"><div class="h-1 rounded-full bg-[#378ADD]" style="width:'+pct+'%"></div></div>'
+        +'<span class="text-[9px] font-bold text-[#00288e] w-12 text-right">'+k.jumlah.toLocaleString('id-ID')+'</span></div>';
+    }).join('');
+    return '<div class="mb-2 pb-2 border-b border-gray-100 last:border-0">'
+      +'<p class="text-[10px] font-bold text-[#131b2e] mb-1">'+l.nama+'</p>'
+      +kontRows+'</div>';
   }).join('');
 }
-
 function wigRenderProgressCompare(lms){
   const el=document.getElementById('wig-progressCompare');
   if(!el)return;
@@ -3506,18 +3512,19 @@ function wigRenderProgressCompare(lms){
 function wigRenderPriority(lms){
   const tbody=document.getElementById('wig-priorityBody');
   if(!tbody)return;
-  const offTrack=lms.filter(function(l){return l.status==='\u274c';})
-    .sort(function(a,b){return (a.pencapaian||0)-(b.pencapaian||0);});
-  if(!offTrack.length){tbody.innerHTML='<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Tidak ada LM Off Track \u2014 semua dalam target</td></tr>';return;}
-  tbody.innerHTML=offTrack.map(function(l){
-    const pct=l.pencapaian!==null?Math.round(l.pencapaian*100)+'%':'\u2014';
+  const offMinggu=lms.filter(function(l){return l.statusMinggu==='❌';})
+    .sort(function(a,b){return (a.pctMinggu||0)-(b.pctMinggu||0);});
+  if(!offMinggu.length){tbody.innerHTML='<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Semua LM memenuhi target minggu berjalan</td></tr>';return;}
+  tbody.innerHTML=offMinggu.map(function(l){
+    const pctMing=((l.pctMinggu||0)*100).toFixed(1)+'%';
+    const pctSem=l.pencapaian!==null?Math.round(l.pencapaian*100)+'%':'—';
     return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
-      +'<td class="p-2.5 text-xs">'+l.wigNama.replace(/WIG \d+ \u2014 /,'')+'</td>'
-      +'<td class="p-2.5 text-xs font-semibold text-[#00288e]">'+l.nama+'</td>'
+      +'<td class="p-2.5 text-[9px] max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.wigNama+'">'+l.wigNama+'</td>'
+      +'<td class="p-2.5 text-xs font-semibold text-[#00288e] max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.nama+'">'+l.nama+'</td>'
       +'<td class="p-2.5 text-xs text-right">'+Math.round(l.totalTarget).toLocaleString('id-ID')+'</td>'
       +'<td class="p-2.5 text-xs text-right">'+Math.round(l.totalReal).toLocaleString('id-ID')+'</td>'
-      +'<td class="p-2.5 text-xs text-right font-bold text-red-600">'+pct+'</td>'
-      +'<td class="p-2.5 text-center"><span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-red-100 text-red-700">Off Track</span></td></tr>';
+      +'<td class="p-2.5 text-xs text-right font-bold text-orange-600">'+pctMing+'</td>'
+      +'<td class="p-2.5 text-center"><span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-orange-100 text-orange-700">Off Target Minggu</span></td></tr>';
   }).join('');
 }
 
@@ -3560,7 +3567,7 @@ function wigRenderTable(){
       :'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-gray-100 text-gray-500">\u2014</span>';
     const pctMinggu=((l.pctMinggu||0)*100).toFixed(1)+'%';
     return '<tr class="hover:bg-[#f2f3ff] cursor-pointer transition-colors border-b border-gray-50" onclick="wigSelectLm('+l.wig+','+l.lm+')">'
-      +'<td class="p-3 text-xs text-gray-500">'+l.wigNama.replace(/WIG \d+ \u2014 /,'')+'</td>'
+      +'<td class="p-3 text-[9px] text-gray-500 max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.wigNama+'">'+l.wigNama+'</td>'
       +'<td class="p-3 text-xs font-semibold text-[#00288e]">'+l.nama+'</td>'
       +'<td class="p-3 text-xs text-right">'+Math.round(l.totalTarget).toLocaleString('id-ID')+'</td>'
       +'<td class="p-3 text-xs text-right font-semibold">'+Math.round(l.totalReal).toLocaleString('id-ID')+'</td>'
@@ -3579,7 +3586,7 @@ function wigSelectLm(wigNo,lmNo){
   const detailEl=document.getElementById('wig-detail');
   detailEl.classList.remove('hidden');
   const pct=((lm.pctSbu||0)*100).toFixed(2);
-  document.getElementById('wig-detail-title').textContent=lm.nama+' \u2014 '+lm.wigNama.replace(/WIG \d+ \u2014 /,'');
+  document.getElementById('wig-detail-title').textContent=lm.wigNama+' · '+lm.nama;
   document.getElementById('wig-detail-sub').textContent='Total Realisasi: '+Math.round(lm.totalReal||0).toLocaleString('id-ID')+' \u00b7 Target: '+Math.round(lm.totalTarget||0).toLocaleString('id-ID');
   document.getElementById('wig-detail-pct').textContent=pct+'%';
   const stEl=document.getElementById('wig-detail-status');
