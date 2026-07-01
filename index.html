@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Aset &amp; Inventory SBU Reg Kalimantan</title>
+<title>Opharset SBU Regional Kalimantan</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -115,6 +115,21 @@ html,body   { height:100%; overflow:hidden; }
 
   <div class="sb-divider"></div>
 
+  <!-- HAR GROUP -->
+  <div class="sb-group-label">Har</div>
+  <button onclick="navigateTo('har_spr')" id="nav-har_spr"
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">request_quote</span>
+    <span class="text-[10px] font-medium leading-tight">Monitoring SPR</span>
+  </button>
+  <button onclick="navigateTo('har_spp')" id="nav-har_spp"
+    class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
+    <span class="material-symbols-outlined text-[18px] flex-shrink-0">description</span>
+    <span class="text-[10px] font-medium leading-tight">Monitoring SPP</span>
+  </button>
+
+  <div class="sb-divider"></div>
+
   <!-- ASET GROUP -->
   <div class="sb-group-label">Aset</div>
   <button onclick="navigateTo('wig')" id="nav-wig"
@@ -132,27 +147,14 @@ html,body   { height:100%; overflow:hidden; }
     <span class="material-symbols-outlined text-[18px] flex-shrink-0">construction</span>
     <span class="text-[10px] font-medium leading-tight">Laporan PM</span>
   </button>
-  <div class="sb-sub">
-    <button onclick="navigateTo('sid_bb')" id="nav-sid_bb"
-      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
-      <span class="material-symbols-outlined text-[15px] flex-shrink-0">hub</span>
-      <span class="text-[9px] font-medium leading-tight">SID Backbone</span>
-    </button>
-    <button onclick="navigateTo('uplink_olt')" id="nav-uplink_olt"
-      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
-      <span class="material-symbols-outlined text-[15px] flex-shrink-0">router</span>
-      <span class="text-[9px] font-medium leading-tight">Uplink OLT</span>
-    </button>
-  </div>
-
-  <div class="sb-divider"></div>
+<div class="sb-divider"></div>
 
   <!-- INVENTORY GROUP -->
   <div class="sb-group-label">Inventory</div>
   <button onclick="navigateTo('keuangan')" id="nav-keuangan"
     class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
     <span class="material-symbols-outlined text-[18px] flex-shrink-0">account_balance</span>
-    <span class="text-[10px] font-medium leading-tight">Administrasi<br>Keuangan</span>
+    <span class="text-[10px] font-medium leading-tight">Monitoring Keuangan Inventory</span>
   </button>
   <button onclick="navigateTo('stok')" id="nav-stok"
     class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
@@ -179,13 +181,12 @@ html,body   { height:100%; overflow:hidden; }
   <nav id="topnav" class="bg-white border-b border-gray-200 shadow-sm z-40">
     <!-- Baris 1: Logo kiri — Judul tengah — Logo kanan -->
     <div class="flex items-center justify-between px-4 md:px-6 h-12 border-b border-gray-100">
-      <img src="logo-danantara.png" alt="Danantara" class="h-7 object-contain"
+      <img src="logo-danantara.png" alt="Danantara" class="h-[30px] object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>Danantara</span>'">
       <div class="text-center flex-1 px-2">
-        <p class="text-xs md:text-sm font-bold text-[#131b2e] leading-tight">Aset &amp; Inventory SBU Regional Kalimantan</p>
-        <p class="text-[9px] text-gray-400 hidden md:block">PLN Icon Plus · Dashboard Monitoring</p>
+        <p class="text-[18px] md:text-[32px] font-bold text-[#131b2e] leading-tight">Opharset SBU Regional Kalimantan</p>
       </div>
-      <img src="logo-pln.png" alt="PLN Icon Plus" class="h-7 object-contain"
+      <img src="logo-pln.png" alt="PLN Icon Plus" class="h-[30px] object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>PLN IP</span>'">
     </div>
     <!-- Baris 2: dinamis — diisi oleh updateTopnav() -->
@@ -202,7 +203,41 @@ html,body   { height:100%; overflow:hidden; }
   ══════════════════════════════════════════════════ -->
   <div id="page-home" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <!-- HAR PANEL -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-[#00288e]">handyman</span>
+            <p class="text-sm font-bold text-[#00288e]">HAR</p>
+          </div>
+          <div class="p-4 space-y-3">
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('har_spr')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">request_quote</span>
+                  <p class="text-[10px] font-bold">Monitoring SPR</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-spr-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('har_spp')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">description</span>
+                  <p class="text-[10px] font-bold">Monitoring SPP</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-spp-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- ASET PANEL -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -228,8 +263,8 @@ html,body   { height:100%; overflow:hidden; }
             <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">PM ISP</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
             <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">PM OSP</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
             <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">Doktek Backlog</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
-            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">SID Backbone</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
-            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">Uplink OLT</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('wig')"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-[#131b2e]">SID Backbone</p><span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span></div></div>
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('wig')"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-[#131b2e]">Uplink OLT</p><span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span></div></div>
           </div>
         </div>
 
@@ -271,7 +306,7 @@ html,body   { height:100%; overflow:hidden; }
               <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center gap-2">
                   <span class="material-symbols-outlined text-[16px] text-[#00288e]">account_balance</span>
-                  <p class="text-[10px] font-bold">Administrasi Keuangan</p>
+                  <p class="text-[10px] font-bold">Monitoring Keuangan Inventory</p>
                 </div>
                 <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
               </div>
@@ -283,6 +318,303 @@ html,body   { height:100%; overflow:hidden; }
         </div>
 
       </div>
+    </main>
+  </div>
+
+  <!-- ======================================================
+    PAGE: MONITORING SPR
+  ====================================================== -->
+  <div id="page-har_spr" class="page">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+
+      <!-- 1. Resume Monitoring SPR -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Resume Monitoring SPR</p>
+          <p class="text-[10px] text-gray-400">Ringkasan kondisi administrasi SPR saat ini.</p>
+        </div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="hspr-exec"></div>
+      </section>
+
+      <!-- 2. Monitoring Proses SPR -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Monitoring Proses SPR</p>
+          <p class="text-[10px] text-gray-400">Posisi setiap SPR pada tahapan pengadaan dan penagihan.</p>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px] text-[#00288e]">shopping_cart</span>
+              <p class="text-xs font-bold text-[#131b2e]">Pengadaan</p>
+            </div>
+            <div id="hspr-flow-pengadaan" class="p-3 space-y-2 max-h-64 overflow-y-auto custom-scrollbar"></div>
+            <div class="px-3 py-2 border-t border-gray-100 flex justify-between text-[10px] font-bold text-gray-500" id="hspr-flow-pengadaan-total"></div>
+          </div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px] text-[#00288e]">description</span>
+              <p class="text-xs font-bold text-[#131b2e]">Penagihan</p>
+            </div>
+            <div id="hspr-flow-penagihan" class="p-3 space-y-2 max-h-64 overflow-y-auto custom-scrollbar"></div>
+            <div class="px-3 py-2 border-t border-gray-100 flex justify-between text-[10px] font-bold text-gray-500" id="hspr-flow-penagihan-total"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Status SPR -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Status SPR</p>
+          <p class="text-[10px] text-gray-400">Evaluasi SLA dan eksposur nilai SPR.</p>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <p class="text-xs font-bold mb-1">SLA Distribution</p>
+            <p class="text-[9px] text-gray-400 mb-2">Berdasarkan Tgl Rilis SPR</p>
+            <div class="flex items-center gap-4">
+              <div style="position:relative;width:140px;height:140px;flex-shrink:0"><canvas id="hspr-slaChart"></canvas></div>
+              <div class="flex-1 space-y-1.5" id="hspr-slaLegend"></div>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-bold mb-1">Financial Exposure (Rp)</p>
+            <p class="text-[9px] text-gray-400 mb-2">Nilai berdasarkan status pengadaan</p>
+            <div class="flex items-center gap-4">
+              <div style="position:relative;width:140px;height:140px;flex-shrink:0"><canvas id="hspr-finChart"></canvas></div>
+              <div class="flex-1 space-y-1.5" id="hspr-finLegend"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Analisa Penyerapan -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Analisa Penyerapan</p>
+          <p class="text-[10px] text-gray-400">Dimensi operasional dengan kontribusi terbesar.</p>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Top Mitra</p><p class="text-[9px] text-gray-400">Berdasarkan jumlah SPR</p></div>
+            <div id="hspr-topMitra" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
+          </div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Top Kode Anggaran</p><p class="text-[9px] text-gray-400">Berdasarkan nilai</p></div>
+            <div id="hspr-topAnggaran" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
+          </div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Top Peruntukan</p><p class="text-[9px] text-gray-400">Berdasarkan nilai</p></div>
+            <div id="hspr-topPeruntukan" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Tren Penyerapan -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Tren Penyerapan</p>
+          <p class="text-[10px] text-gray-400">Perkembangan jumlah SPR dan nilai dari waktu ke waktu.</p>
+        </div>
+        <div class="p-4" style="position:relative;height:240px"><canvas id="hspr-trendChart"></canvas></div>
+      </section>
+
+      <!-- 6. Tindak Lanjut Urgent -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Tindak Lanjut Urgent <span class="text-[10px] font-normal text-gray-400">(Top 10)</span></p>
+          <p class="text-[10px] text-gray-400">SPR yang memerlukan tindak lanjut segera, diurutkan dari aging tertinggi.</p>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50"><tr>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">No SPR</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Mitra</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Status Pengadaan</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Status Penagihan</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Nilai Outstanding</th>
+            </tr></thead>
+            <tbody id="hspr-priorityBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 7. Detail -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— mempengaruhi seluruh tampilan modul ini</span>
+        </p>
+        <div class="flex flex-wrap gap-1.5 items-center">
+          <div class="ms-wrap relative" id="ms-hspr-statusPengadaan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','statusPengadaan')"><span id="ms-hspr-statusPengadaan-label">Status Pengadaan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-hspr-statusPengadaan-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspr-statusPenagihan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','statusPenagihan')"><span id="ms-hspr-statusPenagihan-label">Status Penagihan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-hspr-statusPenagihan-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspr-mitra"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','mitra')"><span id="ms-hspr-mitra-label">Mitra</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-hspr-mitra-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspr-peruntukan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spr','peruntukan')"><span id="ms-hspr-peruntukan-label">Peruntukan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-hspr-peruntukan-menu"></div></div>
+          <input type="text" id="har-spr-search" oninput="harApplyFilter('spr')" placeholder="Cari SPR..." class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-36 md:w-44">
+        </div>
+      </section>
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <div><p class="text-sm font-bold">Data Detail SPR</p><p class="text-[10px] text-gray-400" id="har-spr-filterLabel">Menampilkan semua data</p></div>
+          <button onclick="harExportCSV('spr')" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print"><span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV</button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:1200px">
+            <thead class="bg-gray-50 sticky top-0"><tr id="hspr-tblHeadRow"></tr></thead>
+            <tbody id="har-spr-tblBody"><tr><td colspan="13" class="p-10 text-center text-gray-400 text-xs">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <p class="text-[10px] text-gray-400"><span class="font-bold" id="har-spr-rangeInfo">-</span> dari <span class="font-bold" id="har-spr-totalInfo">-</span> data</p>
+          <div class="flex gap-1" id="har-spr-pgBtns"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ======================================================
+    PAGE: SPP MONITORING
+  ====================================================== -->
+  <div id="page-har_spp" class="page">
+    <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
+
+      <!-- Resume Monitoring SPP -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Resume Monitoring SPP</p>
+          <p class="text-[10px] text-gray-400">Ringkasan kondisi administrasi SPP saat ini.</p>
+        </div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="hspp-exec"></div>
+      </section>
+
+      <!-- Update Monitoring -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Update Monitoring</p>
+          <p class="text-[10px] text-gray-400">Posisi SPP berdasarkan kolom Update Terbaru.</p>
+        </div>
+        <div class="p-4 overflow-x-auto custom-scrollbar">
+          <div id="hspp-updateMonitoring" class="flex items-start min-w-max"></div>
+        </div>
+      </section>
+
+      <!-- Status SPP -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Status SPP</p>
+          <p class="text-[10px] text-gray-400">Evaluasi SLA terhadap durasi pekerjaan dan eksposur nilai.</p>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <p class="text-xs font-bold mb-1">SLA Durasi Pekerjaan</p>
+            <p class="text-[9px] text-gray-400 mb-2">Aging vs Durasi Pekerjaan</p>
+            <div class="flex items-center gap-4">
+              <div style="position:relative;width:140px;height:140px;flex-shrink:0"><canvas id="hspp-slaChart"></canvas></div>
+              <div class="flex-1 space-y-1.5" id="hspp-slaLegend"></div>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-bold mb-1">Financial Exposure (Nilai Pekerjaan)</p>
+            <p class="text-[9px] text-gray-400 mb-2">Nilai pekerjaan berdasarkan status</p>
+            <div class="flex items-center gap-4">
+              <div style="position:relative;width:140px;height:140px;flex-shrink:0"><canvas id="hspp-finChart"></canvas></div>
+              <div class="flex-1 space-y-1.5" id="hspp-finLegend"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analisa Pengadaan -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Analisa Pengadaan</p>
+          <p class="text-[10px] text-gray-400">Dimensi operasional dengan kontribusi terbesar.</p>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Metode Pengadaan</p></div>
+            <div id="hspp-topMetode" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
+          </div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Jenis Pengadaan</p></div>
+            <div id="hspp-topJenis" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
+          </div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Tipe SPP</p></div>
+            <div id="hspp-topTipe" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
+          </div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Kategori Pekerjaan</p></div>
+            <div id="hspp-topKategori" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Monthly Trend -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Monthly Trend</p>
+          <p class="text-[10px] text-gray-400">Perkembangan jumlah SPP dan nilai pekerjaan dari waktu ke waktu.</p>
+        </div>
+        <div class="p-4" style="position:relative;height:240px"><canvas id="hspp-trendChart"></canvas></div>
+      </section>
+
+      <!-- Priority Action -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Priority Action <span class="text-[10px] font-normal text-gray-400">(Top 10)</span></p>
+          <p class="text-[10px] text-gray-400">Gabungan urgensi perpanjangan kontrak dan percepatan penyelesaian pekerjaan.</p>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50"><tr>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">No SPP</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Judul SPP</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kondisi</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Keterangan</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Sisa Hari</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Nilai Pekerjaan</th>
+            </tr></thead>
+            <tbody id="hspp-priorityBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Detail -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
+        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— mempengaruhi seluruh tampilan modul ini</span>
+        </p>
+        <div class="flex flex-wrap gap-1.5 items-center">
+          <div class="ms-wrap relative" id="ms-hspp-status"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','status')"><span id="ms-hspp-status-label">Status</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-hspp-status-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-tipeSPP"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','tipeSPP')"><span id="ms-hspp-tipeSPP-label">Tipe SPP</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-hspp-tipeSPP-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-metodePengadaan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','metodePengadaan')"><span id="ms-hspp-metodePengadaan-label">Metode</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-48 overflow-y-auto" id="ms-hspp-metodePengadaan-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-jenisPengadaan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','jenisPengadaan')"><span id="ms-hspp-jenisPengadaan-label">Jenis</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-hspp-jenisPengadaan-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-kategoriPekerjaan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','kategoriPekerjaan')"><span id="ms-hspp-kategoriPekerjaan-label">Kategori</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-48 overflow-y-auto" id="ms-hspp-kategoriPekerjaan-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-kodeAnggaran"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','kodeAnggaran')"><span id="ms-hspp-kodeAnggaran-label">Kode Anggaran</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[220px] max-h-48 overflow-y-auto" id="ms-hspp-kodeAnggaran-menu"></div></div>
+          <div class="ms-wrap relative" id="ms-hspp-coa"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="harToggleMs('spp','coa')"><span id="ms-hspp-coa-label">COA</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-hspp-coa-menu"></div></div>
+          <input type="text" id="har-spp-search" oninput="harApplyFilter('spp')" placeholder="Cari SPP..." class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-36 md:w-44">
+        </div>
+      </section>
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <div><p class="text-sm font-bold">Data Detail SPP</p><p class="text-[10px] text-gray-400" id="har-spp-filterLabel">Menampilkan semua data</p></div>
+          <button onclick="harExportCSV('spp')" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print"><span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV</button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:1600px">
+            <thead class="bg-gray-50 sticky top-0"><tr id="hspp-tblHeadRow"></tr></thead>
+            <tbody id="har-spp-tblBody"><tr><td colspan="16" class="p-10 text-center text-gray-400 text-xs">Memuat data...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="p-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <p class="text-[10px] text-gray-400"><span class="font-bold" id="har-spp-rangeInfo">-</span> dari <span class="font-bold" id="har-spp-totalInfo">-</span> data</p>
+          <div class="flex gap-1" id="har-spp-pgBtns"></div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -475,26 +807,22 @@ html,body   { height:100%; overflow:hidden; }
         <p class="text-[9px] text-gray-400" id="doktek-tab-info">—</p>
       </div>
 
-      <!-- Kelompok 1: Resume -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">folder_open</span> Resume Kendala Doktek
-        </p>
-        <div id="doktek-resume" class="space-y-3">
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
-            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-            <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-          </div>
+      <!-- Resume -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Resume</p>
+          <p class="text-[10px] text-gray-400">Ringkasan kondisi kendala dokumen teknis saat ini.</p>
         </div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-4 gap-3" id="doktek-resume"></div>
       </section>
 
-      <!-- Kelompok 2: Chart per KP -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">bar_chart</span> Kendala Doktek per KP
-          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— klik bar untuk filter</span>
-        </p>
-        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+      <!-- Health -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Health</p>
+          <p class="text-[10px] text-gray-400">Distribusi aging kendala — klik bar untuk filter.</p>
+        </div>
+        <div class="p-4">
           <div class="flex items-center gap-4 mb-3">
             <p class="text-xs font-bold flex-1" id="doktek-chart-title">Distribusi SLA per KP</p>
             <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-green-500"></span>Normal ≤12hr</span>
@@ -505,10 +833,50 @@ html,body   { height:100%; overflow:hidden; }
         </div>
       </section>
 
+      <!-- Analysis -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Analysis</p>
+          <p class="text-[10px] text-gray-400">Penyebab kendala terbanyak dan KP dengan kendala terbanyak.</p>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Pareto Penyebab Kendala</p><p class="text-[9px] text-gray-400">Berdasarkan kolom Keterangan · klik untuk filter</p></div>
+            <div id="doktek-pareto" class="p-3 space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar"></div>
+          </div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Top KP</p><p class="text-[9px] text-gray-400">KP dengan kendala terbanyak · klik untuk filter</p></div>
+            <div id="doktek-topKP" class="p-3 space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Priority Action <span class="text-[10px] font-normal text-gray-400">(Top 10)</span></p>
+          <p class="text-[10px] text-gray-400">Kendala dengan aging tertinggi, perlu tindak lanjut segera.</p>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50"><tr>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Service ID</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">PA Number</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Keterangan</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">SLA</th>
+            </tr></thead>
+            <tbody id="doktek-priorityBody"></tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- Filter Strip -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
+          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— mempengaruhi seluruh tampilan modul ini</span>
         </p>
         <div class="flex flex-wrap gap-1.5 items-center">
           <div class="ms-wrap relative" id="ms-d-kp">
@@ -544,7 +912,7 @@ html,body   { height:100%; overflow:hidden; }
         </div>
       </section>
 
-      <!-- Tabel Detail -->
+      <!-- Detail -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
@@ -584,8 +952,9 @@ html,body   { height:100%; overflow:hidden; }
       </section>
     </main>
   </div>
-  <div id="page-sid_bb" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">hub</span><p class="text-lg font-bold">SID Backbone</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
-  <div id="page-uplink_olt" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-300"><span class="material-symbols-outlined text-[64px] mb-4">router</span><p class="text-lg font-bold">Uplink OLT</p><p class="text-sm mt-1">Modul ini sedang dalam pengembangan</p></div></main></div>
+
+  <div id="page-sid_bb" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-400"><span class="material-symbols-outlined text-[48px] mb-3">hub</span><p class="text-sm font-bold mb-2">SID Backbone</p><p class="text-[10px] mb-4">Data SID Backbone tersedia di modul WIG Penguatan Aset</p><button onclick="navigateTo('wig')" class="px-4 py-2 bg-[#00288e] text-white text-xs font-bold rounded-lg hover:bg-[#001f6e]">Buka WIG Aset</button></div></main></div>
+  <div id="page-uplink_olt" class="page"><main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto"><div class="flex flex-col items-center justify-center h-64 text-gray-400"><span class="material-symbols-outlined text-[48px] mb-3">router</span><p class="text-sm font-bold mb-2">Uplink OLT</p><p class="text-[10px] mb-4">Data Uplink OLT tersedia di modul WIG Penguatan Aset</p><button onclick="navigateTo('wig')" class="px-4 py-2 bg-[#00288e] text-white text-xs font-bold rounded-lg hover:bg-[#001f6e]">Buka WIG Aset</button></div></main></div>
 
   <!-- ══════════════════════════════════════════════════
     PAGE: ADMINISTRASI KEUANGAN
@@ -1105,21 +1474,90 @@ html,body   { height:100%; overflow:hidden; }
   <div id="page-wig" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- Summary semua WIG -->
-      <section id="wig-summary">
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">military_tech</span>
-          Summary WIG
-          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— klik LM untuk lihat detail</span>
-        </p>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3" id="wig-cards">
-          <div class="skeleton rounded-xl h-48"></div>
-          <div class="skeleton rounded-xl h-48"></div>
-          <div class="skeleton rounded-xl h-48"></div>
+      <!-- Resume -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Resume</p>
+          <p class="text-[10px] text-gray-400">Seberapa dekat target penguatan aset tercapai — Tahun 2026.</p>
+        </div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="wig-resume">
+          <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+          <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
+          <div class="skeleton rounded-xl h-20"></div>
         </div>
       </section>
 
-      <!-- Detail LM (muncul saat klik) -->
+      <!-- Health -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+          <div>
+            <p class="text-sm font-bold text-[#131b2e]">Health</p>
+            <p class="text-[10px] text-gray-400">Target vs Realisasi per LM · bar = target, line = realisasi.</p>
+          </div>
+          <div class="flex items-center gap-3 text-[10px] text-gray-500">
+            <span class="flex items-center gap-1"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Target</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-px inline-block bg-[#1D9E75] border-2 border-[#1D9E75]"></span>Realisasi</span>
+          </div>
+        </div>
+        <div class="p-4" style="position:relative;height:280px"><canvas id="wig-healthChart"></canvas></div>
+      </section>
+
+      <!-- Analysis -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Analysis</p>
+          <p class="text-[10px] text-gray-400">Kontributor per LM dan progress semester vs minggu berjalan.</p>
+        </div>
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Kontributor per LM</p><p class="text-[9px] text-gray-400">Klik LM untuk lihat kontributor</p></div>
+            <div id="wig-kontributorPerLM" class="p-3 space-y-1.5 max-h-72 overflow-y-auto custom-scrollbar"></div>
+          </div>
+          <div class="border border-gray-100 rounded-xl overflow-hidden">
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Progress Semester vs Minggu Berjalan</p><p class="text-[9px] text-gray-400">Per LM</p></div>
+            <div id="wig-progressCompare" class="p-3 space-y-2.5 max-h-72 overflow-y-auto custom-scrollbar"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Priority Action -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Priority Action</p>
+          <p class="text-[10px] text-gray-400">LM dengan statusMinggu Off Track — progress target minggu berjalan per KP.</p>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:1400px">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">WIG</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">LM</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">BPN</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalBar</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalSel</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTeng</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTim</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50" colspan="3">SBU Total</th></tr>
+              <tr><th class="p-2 border-b border-gray-200"></th><th class="p-2 border-b border-gray-200"></th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">%</th></tr>
+            </thead>
+            <tbody id="wig-priorityBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Detail -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <p class="text-sm font-bold">Detail Data WIG Aset</p>
+            <p class="text-[10px] text-gray-400">Target & Realisasi 2026 per KP · klik header WIG/LM untuk sort</p>
+          </div>
+          <input type="text" id="wig-search" oninput="wigApplyFilter()" placeholder="Cari LM / Inisiatif…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-44">
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse" style="min-width:1600px">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy('wigNama')">WIG</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy('nama')">LM</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">BPN</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalBar</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalSel</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTeng</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTim</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50" colspan="3">SBU Total</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center whitespace-nowrap">Status</th></tr>
+              <tr><th class="p-2 border-b border-gray-200"></th><th class="p-2 border-b border-gray-200"></th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">%</th><th class="p-2 border-b border-gray-200"></th></tr>
+            </thead>
+            <tbody id="wig-tblBody"><tr><td colspan="20" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Detail LM (muncul saat klik baris) -->
       <section id="wig-detail" class="hidden">
         <div class="bg-white rounded-xl border border-[#00288e] shadow-sm overflow-hidden">
           <div class="p-4 border-b border-gray-100 flex items-start justify-between gap-3">
@@ -1132,10 +1570,9 @@ html,body   { height:100%; overflow:hidden; }
               <p class="text-[10px]" id="wig-detail-status">—</p>
             </div>
           </div>
-          <!-- Progress bars -->
           <div class="px-4 pt-3 pb-1">
             <div class="flex items-center justify-between mb-1">
-              <span class="text-[9px] text-gray-400">Pencapaian Semester 1</span>
+              <span class="text-[9px] text-gray-400">Pencapaian Semester</span>
               <span class="text-[9px] font-bold text-[#00288e]" id="wig-prog-sem-label">—</span>
             </div>
             <div class="w-full bg-gray-100 rounded-full h-2 mb-2">
@@ -1149,7 +1586,6 @@ html,body   { height:100%; overflow:hidden; }
               <div id="wig-prog-week" class="h-2 rounded-full transition-all" style="width:0%"></div>
             </div>
           </div>
-          <!-- Tabel per KP + Kontributor -->
           <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
             <div class="p-4">
               <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">Detail per KP</p>
@@ -1158,7 +1594,7 @@ html,body   { height:100%; overflow:hidden; }
                   <thead>
                     <tr class="bg-gray-50">
                       <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
-                      <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Target Sem.1</th>
+                      <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Target</th>
                       <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Realisasi</th>
                       <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">%</th>
                       <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Target Minggu</th>
@@ -1185,6 +1621,7 @@ html,body   { height:100%; overflow:hidden; }
   </div>
 
   </div><!-- end #content -->
+
 
   <!-- FOOTER -->
   <footer class="flex-shrink-0 py-2 px-6 text-center border-t border-gray-100 bg-white">
@@ -1223,9 +1660,10 @@ html,body   { height:100%; overflow:hidden; }
 const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vbmk6bDp-7obfoCuyyUtYSMnv41X7b212F3fFezjiu8O2ukfaVb/exec';
 const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0wA26kn60vlyZbkh8ypwhoacB1QyhLhBGcyl9XnxIPs45_ThfhOI/exec';
-const API_WIG        = 'https://script.google.com/macros/s/AKfycbyY9tYQhlZL1WHUyjYCqkRn194DfpoLkWf7Qzo9gCbn8ELAtOnRjtmIo_EawWLx0Q3G/exec';
+const API_WIG        = 'https://script.google.com/macros/s/AKfycbybrSp-zH5IyWY1bSjyq5SaYprpm-Lw_qn-VlU0eXX87ZpopQ-LatSjWc58vBMPvKhX/exec';
 const API_DOKTEK     = 'https://script.google.com/macros/s/AKfycby_oVspb0je_rrkhzPNpDH0KK2xrr1UJwOXLShP68v9qPoGhMEP2r-gIsd1bKlv99Ol/exec';
 const API_PMISP      = 'https://script.google.com/macros/s/AKfycbxEIBqNWqVSgfsolqpIkszJajTcn2ljPS6q1pzqzA7_Ko_fGvDB9f8acUl6_kZcNxFm/exec';
+const API_HAR      = 'https://script.google.com/macros/s/AKfycbxRCZSsvrhw0HB9wJleABO42Xpx83lXgatV2wRQlt35Hxl_Zyjj0vYAPPBd-X6NTxsOwA/exec';
 const API_PMOSP      = 'https://script.google.com/macros/s/AKfycby2-5gU-v_7A0Vpl1SKhmQjkC0Ooaa0tYoLUMNOOHyQD0HWh_W6ai7E62_XOGmoQgrwfQ/exec';
 
 // ══════════════════════════════════════════════════════════
@@ -1233,6 +1671,9 @@ const API_PMOSP      = 'https://script.google.com/macros/s/AKfycby2-5gU-v_7A0Vpl
 // ══════════════════════════════════════════════════════════
 const PAGE_CONFIG = {
   home:       { title:'Dashboard',              icon:'home'            },
+  // HAR
+  har_spr:    { title:'Monitoring SPR',   icon:'request_quote' },
+  har_spp:    { title:'Monitoring SPP',   icon:'description'   },
   // ASET
   wig:        { title:'WIG Penguatan Aset',     icon:'military_tech'   },
   pm_isp:     { title:'Laporan PM ISP / OSP',    icon:'construction'    },
@@ -1241,14 +1682,14 @@ const PAGE_CONFIG = {
   sid_bb:     { title:'SID Backbone',            icon:'hub'             },
   uplink_olt: { title:'Uplink OLT',              icon:'router'          },
   // INVENTORY
-  keuangan:   { title:'Administrasi Keuangan',  icon:'account_balance' },
+  keuangan:   { title:'Monitoring Keuangan Inventory', icon:'account_balance' },
   stok:       { title:'Stok Material',           icon:'inventory_2'     },
   penyerapan: { title:'Penyerapan Material',     icon:'moving'          },
 };
 
 // Lazy load state — data hanya di-fetch saat pertama kali modul dibuka
-const loaded  = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
-const loading = { home:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
+const loaded  = { home:false, har_spr:false, har_spp:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
+const loading = { home:false, har_spr:false, har_spp:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
 let currentPage = 'keuangan';
 
 function navigateTo(page) {
@@ -1278,10 +1719,13 @@ function navigateTo(page) {
 
   // Lazy load
   if (page === 'home'       && !loaded.home)       homeLoadData();
+  if (page === 'har_spr'    && !loaded.har_spr)    harLoadData('spr');
+  if (page === 'har_spp'    && !loaded.har_spp)    harLoadData('spp');
   if (page === 'keuangan'   && !loaded.keuangan)   kLoadData();
   if (page === 'stok'       && !loaded.stok)       sLoadData();
   if (page === 'penyerapan' && !loaded.penyerapan) pLoadData();
   if (page === 'wig'        && !loaded.wig)        wigLoadData();
+  if ((page === 'sid_bb' || page === 'uplink_olt') && !loaded.wig) wigLoadData();
   if (page === 'doktek'     && !loaded.doktek)     doktekLoadData('backlog');
   if (page === 'pm_isp'    && !loaded.pm_isp)    pmIspLoadData();
 
@@ -1368,6 +1812,17 @@ function updateTopnav(page) {
         </button>
         <button onclick="pmIspClearCacheAndReload()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="pmisp-refreshIcon">sync</span>
+        </button>
+      </div>`;
+  } else if (page === 'har_spr' || page === 'har_spp') {
+    bar2.innerHTML = `
+      <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
+      <div class="flex items-center gap-1.5 no-print">
+        <button onclick="harResetFilter()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
+          <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
+        </button>
+        <button onclick="harClearCacheAndReload()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+          <span class="material-symbols-outlined text-[16px]" id="har-refreshIcon">sync</span>
         </button>
       </div>`;
   } else if (page === 'home') {
@@ -1502,7 +1957,7 @@ async function homeLoadData() {
     loaded.home = true;
 
     // Simpan ke modul state supaya tidak re-fetch saat pindah modul
-    if(data.wig?.ok)      { WIG_DATA = data.wig; wigRenderSummary && wigRenderSummary(); loaded.wig = true; }
+    if(data.wig?.ok)      { /* WIG page kini pakai mode=all-detail terpisah; data summary di Home tidak dipakai ulang */ }
     if(data.stok?.ok)     { S_ROWS = data.stok.rows||[]; }
     if(data.serap?.ok)    { P_ROWS = data.serap.rows||[]; }
     if(data.keuangan?.ok) { K_ROWS = data.keuangan.allRows||data.keuangan.rows||[]; K_SUMMARY = data.keuangan.summary||{}; }
@@ -2928,137 +3383,309 @@ document.addEventListener('DOMContentLoaded',()=>{
 // ══════════════════════════════════════════════════════════
 // MODULE: WIG PENGUATAN ASET (prefix: wig) - v2 lazy load
 // ══════════════════════════════════════════════════════════
-let WIG_DATA=null,WIG_ACTIVE_KEY=null,WIG_DETAIL_CACHE={};
+let WIG_ALL_DATA=null, WIG_LMS=[], WIG_FILTERED=[], WIG_ACTIVE_KEY=null;
+let WIG_SORT={col:'pencapaian',dir:-1};
+
+const WIG_COLS=[
+  {key:'wigNama',label:'WIG'},
+  {key:'nama',label:'LM / Inisiatif'},
+  {key:'totalTarget',label:'Target',num:true},
+  {key:'totalReal',label:'Realisasi',num:true},
+  {key:'pencapaian',label:'Pencapaian',num:true},
+  {key:'status',label:'Status'},
+  {key:'pctMinggu',label:'% Minggu',num:true}
+];
 
 async function wigLoadData(){
   if(loading.wig)return;loading.wig=true;
   const icon=document.getElementById('wig-refreshIcon');
   if(icon)icon.classList.add('spin');
   try{
-    const res=await fetch(API_WIG+'?mode=summary');
+    const res=await fetch(API_WIG+'?mode=all-detail');
     const json=await res.json();
     if(!json.ok)throw new Error(json.error||'Gagal memuat data WIG');
-    WIG_DATA=json;wigRenderSummary();loaded.wig=true;
+    if(!json.lms||!json.lms.length)throw new Error('Data LM kosong. Pastikan CodeWIG.gs sudah di-deploy ulang dengan mode=all-detail.');
+    WIG_ALL_DATA=json;
+    WIG_LMS=json.lms||[];
+    wigApplyFilter();
+    loaded.wig=true;
   }catch(err){
-    document.getElementById('wig-cards').innerHTML=`<div class="col-span-3 p-8 text-center text-red-500 text-sm bg-white rounded-xl border border-gray-200">&#9888; ${err.message}</div>`;
+    const el=document.getElementById('wig-resume');
+    if(el)el.innerHTML='<div class="col-span-5 p-6 text-center text-red-500 text-sm bg-red-50 rounded-xl border border-red-200">&#9888; '+err.message+'<br><span class="text-[10px] text-red-400">Buka Console (Cmd+Option+J) untuk detail error</span></div>';
+    console.error('[WIG] Load error:', err);
   }finally{loading.wig=false;if(icon)icon.classList.remove('spin');}
 }
 
-async function wigLoadDetail(wigNo,lmNo){
-  const key=`${wigNo}-${lmNo}`;
-  if(WIG_DETAIL_CACHE[key])return WIG_DETAIL_CACHE[key];
-  document.getElementById('wig-kp-tbody').innerHTML='<tr><td colspan="5" class="p-6 text-center text-gray-400 text-xs"><span class="material-symbols-outlined text-[16px] spin">sync</span> Memuat detail&hellip;</td></tr>';
-  document.getElementById('wig-kontributor').innerHTML='<p class="text-[10px] text-gray-400">Memuat&hellip;</p>';
-  try{
-    const res=await fetch(`${API_WIG}?mode=detail&wig=${wigNo}&lm=${lmNo}`);
-    const json=await res.json();
-    if(!json.ok)throw new Error(json.error);
-    WIG_DETAIL_CACHE[key]=json;return json;
-  }catch(err){
-    document.getElementById('wig-kp-tbody').innerHTML=`<tr><td colspan="5" class="p-4 text-center text-red-500 text-xs">&#9888; ${err.message}</td></tr>`;
-    return null;
-  }
+function wigApplyFilter(){
+  const q=(document.getElementById('wig-search')?.value||'').toLowerCase();
+  WIG_FILTERED=WIG_LMS.filter(function(l){
+    if(!q)return true;
+    return (l.nama+' '+l.wigNama).toLowerCase().includes(q);
+  });
+  wigSortApply();
+  wigRenderResume(WIG_LMS); // resume selalu dari semua data (tidak ikut search)
+  wigRenderGapAnalysis(WIG_LMS);
+  wigRenderKontributorPerLM(WIG_LMS);
+  wigRenderProgressCompare(WIG_LMS);
+  wigRenderPriority(WIG_LMS);
+  wigRenderTable();
 }
 
-function wigRenderSummary(){
-  if(!WIG_DATA)return;
-  document.getElementById('wig-cards').innerHTML=WIG_DATA.wigs.map(w=>{
-    const onT=w.lms.filter(l=>l.status==='\u2705').length;
-    const offT=w.lms.filter(l=>l.status==='\u274c').length;
-    const lmRows=w.lms.map(l=>{
-      const key=`${w.wig}-${l.lm}`,isOn=WIG_ACTIVE_KEY===key;
-      const pct=((l.pctSbu||0)*100).toFixed(2),barW=Math.min(100,parseFloat(pct));
-      const barC=l.status==='\u2705'?'bg-green-500':l.status==='\u274c'?'bg-red-400':'bg-gray-300';
-      const stC=l.status==='\u2705'?'text-green-600':l.status==='\u274c'?'text-red-600':'text-gray-400';
-      return `<div class="cf rounded-lg px-2 py-1.5 ${isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e]':'hover:bg-[#f2f3ff]'} cursor-pointer" onclick="wigSelectLm(${w.wig},${l.lm})">
-        <div class="flex items-center justify-between mb-0.5">
-          <span class="text-[10px] font-medium text-[#131b2e]">${l.nama}</span>
-          <div class="flex items-center gap-1"><span class="text-[9px] font-bold ${stC}">${pct}%</span><span class="text-[10px]">${l.status}</span></div>
-        </div>
-        <div class="w-full bg-gray-100 rounded-full h-1"><div class="${barC} h-1 rounded-full" style="width:${barW}%"></div></div>
-      </div>`;
+function wigRenderResume(lms){
+  const el=document.getElementById('wig-resume');
+  if(!el)return;
+  const totalLM=lms.length;
+  const onTrack=lms.filter(function(l){return l.status==='✅';}).length;
+  const offTrack=lms.filter(function(l){return l.status==='❌';}).length;
+  const pctOnTrack=totalLM>0?Math.round(onTrack/totalLM*100):0;
+  const pctOffTrack=totalLM>0?Math.round(offTrack/totalLM*100):0;
+  const totalTarget=lms.reduce(function(s,l){return s+(l.totalTarget||0);},0);
+  const totalReal=lms.reduce(function(s,l){return s+(l.totalReal||0);},0);
+  const pencapaianOverall=totalTarget>0?(totalReal/totalTarget*100):0;
+  const overallStatus=offTrack>onTrack?'Off Track':'On Track';
+  const overallCls=offTrack>onTrack?'text-red-600':'text-green-600';
+  const cards=[
+    {icon:'military_tech',label:'Total LM',val:totalLM.toLocaleString('id-ID'),caption:'Seluruh inisiatif WIG 2026',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
+    {icon:'check_circle',label:'On Track',val:onTrack.toLocaleString('id-ID'),caption:pctOnTrack+'% dari total LM',cls:'bg-green-50 border-green-200 text-green-700',iconCls:'bg-green-100 text-green-600'},
+    {icon:'cancel',label:'Off Track',val:offTrack.toLocaleString('id-ID'),caption:pctOffTrack+'% dari total LM',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600'},
+    {icon:'trending_up',label:'Pencapaian Overall',val:pencapaianOverall.toFixed(1)+'%',caption:'Realisasi vs Target gabungan',cls:'bg-blue-50 border-blue-200 text-blue-700',iconCls:'bg-blue-100 text-blue-600'},
+    {icon:'monitor_heart',label:'Status Overall',val:overallStatus,caption:onTrack+' On Track · '+offTrack+' Off Track',cls:(offTrack>onTrack?'bg-red-50 border-red-200':'bg-green-50 border-green-200')+' '+overallCls,iconCls:(offTrack>onTrack?'bg-red-100 text-red-600':'bg-green-100 text-green-600')}
+  ];
+  el.innerHTML=cards.map(function(c){
+    return '<div class="rounded-xl border p-3 '+c.cls+'">'
+      +'<div class="flex items-center gap-1.5 mb-2"><span class="material-symbols-outlined text-[16px] p-1 rounded-lg '+c.iconCls+'">'+c.icon+'</span>'
+      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+'</p></div>'
+      +'<p class="text-lg font-black mb-0.5">'+c.val+'</p>'
+      +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
+  }).join('');
+}
+function wigRenderGapAnalysis(lms){
+  const canvas=document.getElementById('wig-healthChart');
+  if(!canvas)return;
+  const withData=lms.filter(function(l){return (l.totalTarget||0)>0||(l.totalReal||0)>0;});
+  if(!withData.length){
+    canvas.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Belum ada data target / realisasi</p>';
+    return;
+  }
+  rebuildChart('wig-healthChart',{
+    data:{
+      labels:withData.map(function(l){return l.nama.replace(' — ',' - ');}),
+      datasets:[
+        {type:'bar',label:'Target 2026',data:withData.map(function(l){return l.totalTarget||0;}),backgroundColor:'rgba(55,138,221,0.7)',borderColor:'#378ADD',borderWidth:1,borderRadius:3,yAxisID:'y'},
+        {type:'line',label:'Realisasi',data:withData.map(function(l){return l.totalReal||0;}),borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1D9E75',tension:0.2,yAxisID:'y'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:function(ctx){return ' '+ctx.dataset.label+': '+Math.round(ctx.parsed.y).toLocaleString('id-ID');}}}
+      },
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:function(v){return v>=1000?Math.round(v/1000)+'K':v;},font:{size:9}}},
+        x:{ticks:{font:{size:9},maxRotation:30}}
+      }
+    }
+  });
+}
+
+
+function wigRenderKontributorPerLM(lms){
+  const el=document.getElementById('wig-kontributorPerLM');
+  if(!el)return;
+  if(!lms.length){el.innerHTML='<p class="text-[10px] text-gray-400">Belum ada data</p>';return;}
+  // Urut sesuai urutan WIG & LM (array sudah ordered dari GAS)
+  el.innerHTML=lms.map(function(l){
+    if(!l.kontributor||!l.kontributor.length){
+      return '<div class="mb-2 pb-2 border-b border-gray-100 last:border-0">'
+        +'<p class="text-[10px] font-bold text-[#131b2e] mb-0.5">'+l.nama+'</p>'
+        +'<p class="text-[9px] text-gray-300 italic">Belum ada kontributor</p></div>';
+    }
+    const maxK=l.kontributor[0].jumlah||1;
+    const kontRows=l.kontributor.map(function(k,i){
+      const pct=Math.round(k.jumlah/maxK*100);
+      const rank=i<3?['#1','#2','#3'][i]:(i+1)+'';
+      return '<div class="flex items-center gap-1.5 mb-0.5">'
+        +'<span class="text-[9px] text-gray-400 w-5 flex-shrink-0 text-center font-bold">'+rank+'</span>'
+        +'<span class="text-[9px] text-gray-700 flex-1 truncate" title="'+k.nama+'">'+k.nama+'</span>'
+        +'<div class="w-20 bg-gray-100 rounded-full h-1 mx-1"><div class="h-1 rounded-full bg-[#378ADD]" style="width:'+pct+'%"></div></div>'
+        +'<span class="text-[9px] font-bold text-[#00288e] w-12 text-right">'+k.jumlah.toLocaleString('id-ID')+'</span></div>';
     }).join('');
-    return `<div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-      <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-        <p class="text-[10px] font-bold text-[#131b2e] leading-tight flex-1">${w.nama}</p>
-        <div class="flex items-center gap-2 flex-shrink-0">
-          <span class="text-[9px] bg-green-50 text-green-700 border border-green-200 px-1.5 py-0.5 rounded-full font-bold">\u2705 ${onT}</span>
-          <span class="text-[9px] bg-red-50 text-red-700 border border-red-200 px-1.5 py-0.5 rounded-full font-bold">\u274c ${offT}</span>
-        </div>
-      </div>
-      <div class="p-3 space-y-1">${lmRows}</div>
-    </div>`;
+    return '<div class="mb-2 pb-2 border-b border-gray-100 last:border-0">'
+      +'<p class="text-[10px] font-bold text-[#131b2e] mb-1">'+l.nama+'</p>'
+      +kontRows+'</div>';
+  }).join('');
+}
+function wigRenderProgressCompare(lms){
+  const el=document.getElementById('wig-progressCompare');
+  if(!el)return;
+  if(!lms.length){el.innerHTML='<p class="text-[10px] text-gray-400">Tidak ada data</p>';return;}
+  el.innerHTML=lms.map(function(l){
+    const pctSem=((l.pctSbu||0)*100).toFixed(1);
+    const pctMing=((l.pctMinggu||0)*100).toFixed(1);
+    return '<div>'
+      +'<p class="text-[10px] font-medium text-gray-700 mb-1">'+l.nama+'</p>'
+      +'<div class="flex items-center gap-2 mb-1"><span class="text-[9px] text-gray-400 w-14">Semester</span><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#00288e]" style="width:'+Math.min(100,pctSem)+'%"></div></div><span class="text-[9px] font-bold w-12 text-right">'+pctSem+'%</span></div>'
+      +'<div class="flex items-center gap-2"><span class="text-[9px] text-gray-400 w-14">Minggu</span><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-orange-400" style="width:'+Math.min(100,pctMing)+'%"></div></div><span class="text-[9px] font-bold w-12 text-right">'+pctMing+'%</span></div>'
+      +'</div>';
   }).join('');
 }
 
-async function wigSelectLm(wigNo,lmNo){
-  const key=`${wigNo}-${lmNo}`;
-  if(WIG_ACTIVE_KEY===key){WIG_ACTIVE_KEY=null;wigCloseDetail();wigRenderSummary();return;}
-  WIG_ACTIVE_KEY=key;wigRenderSummary();
+function wigKpCols(kpData, useWeekly){
+  // useWeekly=true -> targetMinggu, realMinggu, % minggu
+  // useWeekly=false -> target, real, pct semester
+  var cols='';
+  var kpMap={};
+  (kpData||[]).forEach(function(kp){kpMap[kp.kp]=kp;});
+  var KPS=['BALIKPAPAN','KALIMANTAN BARAT','KALIMANTAN SELATAN','KALIMANTAN TENGAH','KALIMANTAN TIMUR'];
+  KPS.forEach(function(kpName){
+    var kp=kpMap[kpName];
+    if(useWeekly){
+      var tM=kp?kp.targetMinggu:0, rM=kp?kp.realMinggu:0;
+      var hasTarget=tM>0;
+      var pM=hasTarget?(rM/tM*100).toFixed(1):'—';
+      var pCls=!hasTarget?'text-gray-300':parseFloat(pM)>=100?'text-green-600':parseFloat(pM)>=80?'text-orange-500':'text-red-600';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20">'+(hasTarget?tM.toLocaleString('id-ID'):'—')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-semibold">'+(kp&&kp.realMinggu?rM.toLocaleString('id-ID'):'0')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-bold '+pCls+'">'+pM+(hasTarget?'%':'')+'</td>';
+    } else {
+      var t=kp?kp.target:0, r=kp?kp.real:0;
+      var p=t>0?(r/t*100).toFixed(1):'—';
+      var pC=t>0?(parseFloat(p)>=100?'text-green-600':parseFloat(p)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20">'+(t?t.toLocaleString('id-ID'):'—')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-semibold">'+(r?r.toLocaleString('id-ID'):'0')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-bold '+pC+'">'+p+(t>0?'%':'')+'</td>';
+    }
+  });
+  return cols;
+}
+
+function wigSbuTotal(lm, useWeekly){
+  if(useWeekly){
+    var tSbu=0, rSbu=0;
+    (lm.kpData||[]).forEach(function(kp){tSbu+=kp.targetMinggu||0; rSbu+=kp.realMinggu||0;});
+    var pSbu=tSbu>0?(rSbu/tSbu*100).toFixed(1):'—';
+    var pC=tSbu>0?(parseFloat(pSbu)>=100?'text-green-600':parseFloat(pSbu)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
+    return '<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+(tSbu?tSbu.toLocaleString('id-ID'):'—')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+rSbu.toLocaleString('id-ID')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-bold '+pC+'">'+pSbu+(tSbu?'%':'')+'</td>';
+  } else {
+    var t=lm.totalTarget||0, r=lm.totalReal||0;
+    var p=t>0?(r/t*100).toFixed(1):'—';
+    var pCls=t>0?(parseFloat(p)>=100?'text-green-600':parseFloat(p)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
+    return '<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+(t?t.toLocaleString('id-ID'):'—')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+r.toLocaleString('id-ID')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-bold '+pCls+'">'+p+(t>0?'%':'')+'</td>';
+  }
+}
+
+function wigRenderPriority(lms){
+  const tbody=document.getElementById('wig-priorityBody');
+  if(!tbody)return;
+  const offMinggu=lms.filter(function(l){return l.statusMinggu==='❌';})
+    .sort(function(a,b){return (a.pctMinggu||0)-(b.pctMinggu||0);});
+  if(!offMinggu.length){tbody.innerHTML='<tr><td colspan="18" class="p-6 text-center text-gray-400 text-xs">Semua LM memenuhi target minggu berjalan</td></tr>';return;}
+  tbody.innerHTML=offMinggu.map(function(l){
+    return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
+      +'<td class="p-2 text-[9px] text-gray-500 max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.wigNama+'">'+l.wigNama.replace(/WIG \d+ — /,'')+'</td>'
+      +'<td class="p-2 text-[9px] font-semibold text-[#00288e] whitespace-nowrap">'+l.nama+'</td>'
+      +wigKpCols(l.kpData,true)
+      +wigSbuTotal(l,true)+'</tr>';
+  }).join('');
+}
+
+function wigSortApply(){
+  if(!WIG_SORT.col)return;
+  const col=WIG_SORT.col,dir=WIG_SORT.dir;
+  WIG_FILTERED.sort(function(a,b){
+    let va=a[col],vb=b[col];
+    if(typeof va==='number'||typeof vb==='number'){va=va||0;vb=vb||0;return (va-vb)*dir;}
+    va=String(va||'');vb=String(vb||'');
+    return va.localeCompare(vb)*dir;
+  });
+}
+function wigSortBy(col){
+  if(WIG_SORT.col===col)WIG_SORT.dir*=-1;else{WIG_SORT.col=col;WIG_SORT.dir=1;}
+  wigSortApply();wigRenderTable();
+}
+function wigRenderTableHead(){}  // header sudah di HTML (static dengan double row)
+function wigRenderTable(){
+  wigRenderTableHead();
+  const tbody=document.getElementById('wig-tblBody');
+  if(!tbody)return;
+  if(!WIG_FILTERED.length){tbody.innerHTML='<tr><td colspan="20" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
+  tbody.innerHTML=WIG_FILTERED.map(function(l){
+    const stBadge=l.status==='✅'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">On Track</span>'
+      :l.status==='❌'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-red-100 text-red-700">Off Track</span>'
+      :'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-gray-100 text-gray-500">—</span>';
+    return '<tr class="hover:bg-[#f2f3ff] cursor-pointer transition-colors border-b border-gray-50" onclick="wigSelectLm('+l.wig+','+l.lm+')">'
+      +'<td class="p-2 text-[9px] text-gray-500 whitespace-nowrap max-w-[160px] overflow-hidden text-ellipsis" title="'+l.wigNama+'">'+l.wigNama+'</td>'
+      +'<td class="p-2 text-[9px] font-semibold text-[#00288e] whitespace-nowrap">'+l.nama+'</td>'
+      +wigKpCols(l.kpData,false)
+      +wigSbuTotal(l,false)
+      +'<td class="p-2 text-center">'+stBadge+'</td></tr>';
+  }).join('');
+}
+
+
+function wigSelectLm(wigNo,lmNo){
+  const key=wigNo+'-'+lmNo;
+  if(WIG_ACTIVE_KEY===key){WIG_ACTIVE_KEY=null;wigCloseDetail();return;}
+  WIG_ACTIVE_KEY=key;
+  const lm=WIG_LMS.find(function(l){return l.wig===wigNo&&l.lm===lmNo;});
+  if(!lm)return;
   const detailEl=document.getElementById('wig-detail');
   detailEl.classList.remove('hidden');
-  // Header instant dari summary
-  const wig=WIG_DATA.wigs.find(w=>w.wig===wigNo);
-  const lm=wig?wig.lms.find(l=>l.lm===lmNo):null;
-  if(lm&&wig){
-    const pct=((lm.pctSbu||0)*100).toFixed(2);
-    document.getElementById('wig-detail-title').textContent=lm.nama+' \u2014 '+wig.nama.replace(/WIG \d+ \u2014 /,'');
-    document.getElementById('wig-detail-sub').textContent='Memuat detail KP\u2026';
-    document.getElementById('wig-detail-pct').textContent=pct+'%';
-    const stEl=document.getElementById('wig-detail-status');
-    stEl.textContent=lm.status==='\u2705'?'\u2705 On Track':lm.status==='\u274c'?'\u274c Off Track':'\u2014';
-    stEl.className='text-[10px] font-bold '+(lm.status==='\u2705'?'text-green-600':lm.status==='\u274c'?'text-red-600':'text-gray-400');
-    const semC=lm.status==='\u2705'?'bg-[#00288e]':'bg-red-500';
-    document.getElementById('wig-prog-sem').style.width=Math.min(100,pct)+'%';
-    document.getElementById('wig-prog-sem').className=`h-2 rounded-full transition-all ${semC}`;
-    document.getElementById('wig-prog-sem-label').textContent=pct+'%';
-    const pctW=((lm.pctMinggu||0)*100).toFixed(2);
-    const weekC=lm.statusMinggu==='\u2705'?'bg-green-500':'bg-orange-400';
-    document.getElementById('wig-prog-week').style.width=Math.min(100,parseFloat(pctW))+'%';
-    document.getElementById('wig-prog-week').className=`h-2 rounded-full transition-all ${weekC}`;
-    document.getElementById('wig-prog-week-label').textContent=pctW+'% '+(lm.statusMinggu||'');
-    document.getElementById('wig-prog-week-label').className='text-[9px] font-bold '+(lm.statusMinggu==='\u2705'?'text-green-600':'text-orange-500');
-  }
-  detailEl.scrollIntoView({behavior:'smooth',block:'nearest'});
-  // Lazy fetch detail
-  const detail=await wigLoadDetail(wigNo,lmNo);
-  if(!detail)return;
-  document.getElementById('wig-detail-sub').textContent=`Total Realisasi: ${Math.round(detail.totalReal||0).toLocaleString('id-ID')} \u00b7 Target: ${Math.round(detail.totalTarget||0).toLocaleString('id-ID')}`;
-  // KP table
+  const pct=((lm.pctSbu||0)*100).toFixed(2);
+  document.getElementById('wig-detail-title').textContent=lm.wigNama+' · '+lm.nama;
+  document.getElementById('wig-detail-sub').textContent='Total Realisasi: '+Math.round(lm.totalReal||0).toLocaleString('id-ID')+' \u00b7 Target: '+Math.round(lm.totalTarget||0).toLocaleString('id-ID');
+  document.getElementById('wig-detail-pct').textContent=pct+'%';
+  const stEl=document.getElementById('wig-detail-status');
+  stEl.textContent=lm.status==='\u2705'?'\u2705 On Track':lm.status==='\u274c'?'\u274c Off Track':'\u2014';
+  stEl.className='text-[10px] font-bold '+(lm.status==='\u2705'?'text-green-600':lm.status==='\u274c'?'text-red-600':'text-gray-400');
+  const semC=lm.status==='\u2705'?'bg-[#00288e]':'bg-red-500';
+  document.getElementById('wig-prog-sem').style.width=Math.min(100,pct)+'%';
+  document.getElementById('wig-prog-sem').className='h-2 rounded-full transition-all '+semC;
+  document.getElementById('wig-prog-sem-label').textContent=pct+'%';
+  const pctW=((lm.pctMinggu||0)*100).toFixed(2);
+  const weekC=lm.statusMinggu==='\u2705'?'bg-green-500':'bg-orange-400';
+  document.getElementById('wig-prog-week').style.width=Math.min(100,parseFloat(pctW))+'%';
+  document.getElementById('wig-prog-week').className='h-2 rounded-full transition-all '+weekC;
+  document.getElementById('wig-prog-week-label').textContent=pctW+'% '+(lm.statusMinggu||'');
+  document.getElementById('wig-prog-week-label').className='text-[9px] font-bold '+(lm.statusMinggu==='\u2705'?'text-green-600':'text-orange-500');
+
   const tbody=document.getElementById('wig-kp-tbody');
-  if(detail.kpData&&detail.kpData.length){
-    tbody.innerHTML=detail.kpData.map(kp=>{
+  if(lm.kpData&&lm.kpData.length){
+    tbody.innerHTML=lm.kpData.map(function(kp){
       const p=((kp.pct||0)*100).toFixed(2);
       const c=parseFloat(p)>=100?'text-green-600':parseFloat(p)>=80?'text-orange-500':'text-red-600';
-      const label=kp.kp.toLowerCase().split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
-      return `<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">
-        <td class="px-3 py-2 text-xs">${label}</td>
-        <td class="px-3 py-2 text-xs text-right">${Math.round(kp.target).toLocaleString('id-ID')}</td>
-        <td class="px-3 py-2 text-xs text-right font-semibold">${Math.round(kp.real).toLocaleString('id-ID')}</td>
-        <td class="px-3 py-2 text-xs text-right font-bold ${c}">${p}%</td>
-        <td class="px-3 py-2 text-xs text-right text-gray-400">${Math.round(kp.targetMinggu).toLocaleString('id-ID')}</td>
-      </tr>`;
+      const label=kp.kp.toLowerCase().split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1);}).join(' ');
+      return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
+        +'<td class="px-3 py-2 text-xs">'+label+'</td>'
+        +'<td class="px-3 py-2 text-xs text-right">'+Math.round(kp.target).toLocaleString('id-ID')+'</td>'
+        +'<td class="px-3 py-2 text-xs text-right font-semibold">'+Math.round(kp.real).toLocaleString('id-ID')+'</td>'
+        +'<td class="px-3 py-2 text-xs text-right font-bold '+c+'">'+p+'%</td>'
+        +'<td class="px-3 py-2 text-xs text-right text-gray-400">'+Math.round(kp.targetMinggu).toLocaleString('id-ID')+'</td></tr>';
     }).join('');
   }else{tbody.innerHTML='<tr><td colspan="5" class="px-3 py-4 text-center text-gray-400 text-xs">Data KP tidak tersedia</td></tr>';}
-  // Kontributor
+
   const kontEl=document.getElementById('wig-kontributor');
-  if(detail.kontributor&&detail.kontributor.length){
-    const maxK=detail.kontributor[0].jumlah||1;
+  if(lm.kontributor&&lm.kontributor.length){
+    const maxK=lm.kontributor[0].jumlah||1;
     const medals=['\ud83e\udd47','\ud83e\udd48','\ud83e\udd49'];
-    kontEl.innerHTML=detail.kontributor.map((k,i)=>`<div>
-      <div class="flex justify-between items-center mb-0.5">
-        <span class="text-[10px] font-medium">${medals[i]||''} ${k.nama}</span>
-        <span class="text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${k.jumlah.toLocaleString('id-ID')}</span>
-      </div>
-      <div class="w-full bg-gray-100 rounded-full h-1"><div class="bg-[#00288e] h-1 rounded-full" style="width:${Math.round(k.jumlah/maxK*100)}%"></div></div>
-    </div>`).join('');
+    kontEl.innerHTML=lm.kontributor.map(function(k,i){
+      return '<div><div class="flex justify-between items-center mb-0.5">'
+        +'<span class="text-[10px] font-medium">'+(medals[i]||'')+' '+k.nama+'</span>'
+        +'<span class="text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">'+k.jumlah.toLocaleString('id-ID')+'</span></div>'
+        +'<div class="w-full bg-gray-100 rounded-full h-1"><div class="bg-[#00288e] h-1 rounded-full" style="width:'+Math.round(k.jumlah/maxK*100)+'%"></div></div></div>';
+    }).join('');
   }else{kontEl.innerHTML='<p class="text-[10px] text-gray-400">Tidak ada kontributor</p>';}
+  detailEl.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function wigCloseDetail(){
   WIG_ACTIVE_KEY=null;
   document.getElementById('wig-detail').classList.add('hidden');
-  wigRenderSummary();
 }
 
 
@@ -3089,8 +3716,7 @@ async function doktekLoadData(tab) {
     DOKTEK_ROWS = rows;
     doktekBuildFilters(json);
     const info = document.getElementById('doktek-tab-info');
-    if(info) info.textContent = `Total PA: ${json.totalPA} · Terinput: ${json.sudahTerinput} · Belum Doktek: ${json.belumDoktek}`;
-    doktekRenderResume(json);
+    if(info) info.textContent = `Total PA: ${json.totalPA||DOKTEK_ROWS.length}`;
     // Reset filter saat ganti tab
     Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
     document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
@@ -3116,8 +3742,7 @@ async function doktekLoadData(tab) {
     DOKTEK_ROWS = json.rows || [];
     doktekBuildFilters(json);
     const info = document.getElementById('doktek-tab-info');
-    if(info) info.textContent = `Total PA: ${json.totalPA} · Terinput: ${json.sudahTerinput} · Belum Doktek: ${json.belumDoktek}`;
-    doktekRenderResume(json);
+    if(info) info.textContent = `Total PA: ${json.totalPA||DOKTEK_ROWS.length}`;
     doktekApplyFilter();
     loaded.doktek = true;
   } catch(err) {
@@ -3145,45 +3770,98 @@ function doktekBuildFilters(json) {
     `<label class="ms-item"><input type="checkbox" value="${v}" onchange="doktekMsChange('tahun')">${v}</label>`).join('');
 }
 
-function doktekRenderResume(json) {
-  const el = document.getElementById('doktek-resume');
+function doktekCompute(rows) {
+  var slaNormal=0, slaPerhatian=0, slaKritis=0;
+  var byKet={}, byKP={};
+  rows.forEach(function(r){
+    if(r.slaStatus==='Normal') slaNormal++;
+    else if(r.slaStatus==='Perhatian') slaPerhatian++;
+    else if(r.slaStatus==='Kritis') slaKritis++;
+    var ket = r.acluan || '(kosong)';
+    byKet[ket] = (byKet[ket]||0) + 1;
+    var kp = r.namaKP || '—';
+    byKP[kp] = (byKP[kp]||0) + 1;
+  });
+  return { total: rows.length, slaNormal:slaNormal, slaPerhatian:slaPerhatian, slaKritis:slaKritis, byKet:byKet, byKP:byKP };
+}
+
+function doktekRenderResume(agg) {
+  var el = document.getElementById('doktek-resume');
   if(!el) return;
-  const bd = json.breakdownKeterangan || {};
-  const bdEntries = Object.entries(bd).sort((a,b) => b[1]-a[1]);
-  el.innerHTML = `
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
-      <div class="rounded-xl border p-4 shadow-sm bg-red-50 border-red-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-red-700">Total Belum Doktek</p>
-        <p class="text-2xl font-black text-red-700">${(json.belumDoktek||0).toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-red-500 opacity-70">Perlu tindak lanjut</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-red-50 border-red-300">
-        <p class="text-[9px] font-bold uppercase mb-1 text-red-700">🔴 Kritis ≥31 hari</p>
-        <p class="text-2xl font-black text-red-700">${(json.slaKritis||0).toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-red-500 opacity-70">Lewati SLA Nota Dinas</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-orange-50 border-orange-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-orange-600">🟡 Perhatian 13-30hr</p>
-        <p class="text-2xl font-black text-orange-600">${(json.slaPerhatian||0).toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-orange-500 opacity-70">Mendekati batas SLA</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-green-50 border-green-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-green-700">🟢 Normal ≤12 hari</p>
-        <p class="text-2xl font-black text-green-700">${(json.slaNormal||0).toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-green-600 opacity-70">Dalam target SLA</p>
-      </div>
-    </div>
-    <div class="bg-white rounded-xl border border-gray-200 p-3 shadow-sm">
-      <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">Breakdown Kendala</p>
-      <div class="flex flex-wrap gap-2">
-        ${bdEntries.map(([k,v]) => `
-          <div class="flex items-center gap-1.5 px-2.5 py-1.5 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:border-[#00288e] hover:bg-[#f2f3ff] transition-colors"
-            onclick="doktekFilterByKet('${k.replace(/'/g,"\\'")}')">
-            <span class="text-[10px] font-medium text-gray-700">${k||'(kosong)'}</span>
-            <span class="text-[9px] font-black text-[#00288e] bg-[#eaedff] px-1.5 py-0.5 rounded-full">${v}</span>
-          </div>`).join('')}
-      </div>
-    </div>`;
+  var cards = [
+    { icon:'folder_open', label:'Total Belum Doktek', val:agg.total.toLocaleString('id-ID'), caption:'Perlu tindak lanjut', cls:'bg-red-50 border-red-200 text-red-700', iconCls:'bg-red-100 text-red-600' },
+    { icon:'error', label:'Kritis (≥31 hari)', val:agg.slaKritis.toLocaleString('id-ID'), caption: (agg.total?Math.round(agg.slaKritis/agg.total*100):0)+'% dari total', cls:'bg-red-50 border-red-300 text-red-700', iconCls:'bg-red-100 text-red-600' },
+    { icon:'warning', label:'Perhatian (13-30 hari)', val:agg.slaPerhatian.toLocaleString('id-ID'), caption: (agg.total?Math.round(agg.slaPerhatian/agg.total*100):0)+'% dari total', cls:'bg-orange-50 border-orange-200 text-orange-700', iconCls:'bg-orange-100 text-orange-600' },
+    { icon:'check_circle', label:'Normal (≤12 hari)', val:agg.slaNormal.toLocaleString('id-ID'), caption: (agg.total?Math.round(agg.slaNormal/agg.total*100):0)+'% dari total', cls:'bg-green-50 border-green-200 text-green-700', iconCls:'bg-green-100 text-green-600' }
+  ];
+  el.innerHTML = cards.map(function(c){
+    return '<div class="rounded-xl border p-3 '+c.cls+'">'
+      +'<div class="flex items-center gap-1.5 mb-2"><span class="material-symbols-outlined text-[16px] p-1 rounded-lg '+c.iconCls+'">'+c.icon+'</span>'
+      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+'</p></div>'
+      +'<p class="text-lg font-black mb-0.5">'+c.val+'</p>'
+      +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
+  }).join('');
+}
+
+function doktekRenderPareto(agg) {
+  var el = document.getElementById('doktek-pareto');
+  if(!el) return;
+  var excludeKet = ['TERINPUT','EXCLUDE','ON PROGRESS','ONPROGRESS'];
+  var entries = Object.entries(agg.byKet).filter(function(e){ return !excludeKet.includes(e[0].toUpperCase()); }).sort(function(a,b){ return b[1]-a[1]; });
+  if(!entries.length){ el.innerHTML = '<p class="text-[10px] text-gray-400">Tidak ada data</p>'; return; }
+  var max = entries[0][1] || 1;
+  el.innerHTML = entries.map(function(e){
+    var pct = Math.round(e[1]/max*100);
+    var isOn = DF.keterangan.includes(e[0]);
+    return '<div class="cf rounded-lg '+(isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e] p-1.5':'')+'" onclick="doktekFilterByKet(\''+e[0].replace(/'/g,"\\'")+'\')">'
+      +'<div class="flex justify-between mb-0.5"><span class="text-[10px] font-medium truncate" title="'+e[0]+'">'+e[0]+'</span><span class="text-[10px] font-bold text-[#00288e]">'+e[1]+'</span></div>'
+      +'<div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#378ADD]" style="width:'+pct+'%"></div></div></div>';
+  }).join('');
+}
+
+function doktekRenderTopKP(agg) {
+  var el = document.getElementById('doktek-topKP');
+  if(!el) return;
+  var entries = Object.entries(agg.byKP).sort(function(a,b){ return b[1]-a[1]; });
+  if(!entries.length){ el.innerHTML = '<p class="text-[10px] text-gray-400">Tidak ada data</p>'; return; }
+  var max = entries[0][1] || 1;
+  el.innerHTML = entries.map(function(e){
+    var pct = Math.round(e[1]/max*100);
+    var isOn = DF.kp.includes(e[0]);
+    return '<div class="cf rounded-lg '+(isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e] p-1.5':'')+'" onclick="doktekToggleKP(\''+e[0].replace(/'/g,"\\'")+'\')">'
+      +'<div class="flex justify-between mb-0.5"><span class="text-[10px] font-medium truncate" title="'+e[0]+'">'+e[0]+'</span><span class="text-[10px] font-bold text-[#00288e]">'+e[1]+'</span></div>'
+      +'<div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#1D9E75]" style="width:'+pct+'%"></div></div></div>';
+  }).join('');
+}
+
+function doktekToggleKP(kp) {
+  DF.kp = DF.kp.includes(kp) ? DF.kp.filter(function(k){return k!==kp;}) : [...DF.kp, kp];
+  var menu = document.getElementById('ms-d-kp-menu');
+  if(menu) menu.querySelectorAll('input').forEach(function(cb){ cb.checked = DF.kp.includes(cb.value); });
+  var lbl = document.getElementById('ms-d-kp-label');
+  if(lbl) lbl.textContent = DF.kp.length ? 'KP ('+DF.kp.length+')' : 'KP';
+  var wrap = document.getElementById('ms-d-kp');
+  if(wrap) wrap.classList.toggle('ms-active', DF.kp.length > 0);
+  doktekApplyFilter();
+}
+
+function doktekRenderPriority(rows) {
+  var tbody = document.getElementById('doktek-priorityBody');
+  if(!tbody) return;
+  var top10 = rows.filter(function(r){ return r.aging !== null && r.aging !== undefined; })
+    .sort(function(a,b){ return (b.aging||0) - (a.aging||0); }).slice(0,10);
+  if(!top10.length){ tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Tidak ada data aging</td></tr>'; return; }
+  tbody.innerHTML = top10.map(function(r){
+    var sc = SLA_COLOR[r.slaStatus] || SLA_COLOR['—'];
+    var badge = '<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold '+sc.badge+'">'+(r.slaStatus||'—')+'</span>';
+    return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
+      +'<td class="p-2.5 text-xs font-mono">'+(r.service_id||'—')+'</td>'
+      +'<td class="p-2.5 text-xs font-semibold text-[#00288e]">'+(r.pa_number||'—')+'</td>'
+      +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.namaKP||'—')+'</td>'
+      +'<td class="p-2.5 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.acluan||'')+'">'+(r.acluan||'(kosong)')+'</td>'
+      +'<td class="p-2.5 text-xs text-center font-bold '+sc.text+'">'+(r.aging!=null?r.aging+' hari':'—')+'</td>'
+      +'<td class="p-2.5 text-center">'+badge+'</td></tr>';
+  }).join('');
 }
 
 function doktekToggleMs(key) {
@@ -3228,6 +3906,11 @@ function doktekApplyFilter() {
     if(DF.search && !JSON.stringify(r).toLowerCase().includes(DF.search)) return false;
     return true;
   });
+  const agg = doktekCompute(DOKTEK_FILTERED);
+  doktekRenderResume(agg);
+  doktekRenderPareto(agg);
+  doktekRenderTopKP(agg);
+  doktekRenderPriority(DOKTEK_FILTERED);
   doktekRenderChart();
   doktekUpdateLabel();
   doktekPage = 1;
@@ -4036,6 +4719,724 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+
+// ============================================================
+// MODULE: HAR - SPR & SPP (prefix: har)
+// ============================================================
+let HAR_SPR_ROWS=[],HAR_SPR_FILTERED=[],harSprPage=1;
+let HAR_SPP_ROWS=[],HAR_SPP_FILTERED=[],harSppPage=1;
+let HAR_SPR_CACHE=null,HAR_SPP_CACHE=null;
+const HAR_PAGE_SIZE=15;
+const HSPRF={statusPengadaan:[],statusPenagihan:[],mitra:[],peruntukan:[],search:''};
+const HSPPF={status:[],tipeSPP:[],metodePengadaan:[],jenisPengadaan:[],kategoriPekerjaan:[],kodeAnggaran:[],coa:[],search:''};
+let HSPR_SORT={col:'tglRilisSPR',dir:-1};
+let HSPP_SORT={col:'tglRilisSP2K',dir:-1};
+
+const HSPR_COLS=[
+  {key:'kodeAnggaran',label:'Kode Anggaran'},
+  {key:'noSPR',label:'No SPR'},
+  {key:'kegiatan',label:'Kegiatan'},
+  {key:'nominal',label:'Nominal',num:true},
+  {key:'mitra',label:'Mitra'},
+  {key:'statusPengadaan',label:'St. Pengadaan'},
+  {key:'statusPenagihan',label:'St. Penagihan'},
+  {key:'peruntukan',label:'Peruntukan'},
+  {key:'tglRilisSPR',label:'Tgl Rilis'},
+  {key:'tglBapsBast',label:'Tgl BAPS'},
+  {key:'aging',label:'Aging',num:true},
+  {key:'keterangan',label:'Keterangan'}
+];
+const HSPP_COLS=[
+  {key:'noSPP',label:'No SPP'},
+  {key:'judulSPP',label:'Judul SPP'},
+  {key:'kodeAnggaran',label:'Kode Anggaran'},
+  {key:'coa',label:'COA'},
+  {key:'tipeSPP',label:'Tipe SPP'},
+  {key:'noPOSP2K',label:'No PO/SP2K'},
+  {key:'metodePengadaan',label:'Metode'},
+  {key:'jenisPengadaan',label:'Jenis'},
+  {key:'status',label:'Status'},
+  {key:'nilaiPekerjaan',label:'Nilai Pekerjaan',num:true},
+  {key:'kategoriPekerjaan',label:'Kategori'},
+  {key:'tglRilisSP2K',label:'Tgl SP2K'},
+  {key:'durasiPekerjaan',label:'Durasi'},
+  {key:'tglBapsBast',label:'Tgl BAPS'},
+  {key:'aging',label:'Aging',num:true},
+  {key:'updateTerbaru',label:'Update'}
+];
+
+function harFmtRpShort(n){return fmtRp(n);}
+
+async function harLoadData(tab){
+  const isSPR=tab==='spr';
+  const sk=isSPR?'har_spr':'har_spp';
+  if(loading[sk])return;
+  const cache=isSPR?HAR_SPR_CACHE:HAR_SPP_CACHE;
+  if(cache){if(isSPR){HAR_SPR_ROWS=cache.rows;harSprBuildAll(cache);}else{HAR_SPP_ROWS=cache.rows;harSppBuildAll(cache);}return;}
+  loading[sk]=true;
+  const icon=document.getElementById('har-refreshIcon');
+  if(icon)icon.classList.add('spin');
+  try{
+    const res=await fetch(API_HAR+'?tab='+tab);
+    const json=await res.json();
+    if(!json.ok)throw new Error(json.error||'Gagal memuat data');
+    if(isSPR){HAR_SPR_CACHE=json;HAR_SPR_ROWS=json.rows||[];harSprBuildAll(json);}
+    else{HAR_SPP_CACHE=json;HAR_SPP_ROWS=json.rows||[];harSppBuildAll(json);}
+    loaded[sk]=true;
+  }catch(err){
+    const tbody=document.getElementById('har-'+tab+'-tblBody');
+    if(tbody)tbody.innerHTML='<tr><td colspan="14" class="p-8 text-center text-red-500 text-sm">Gagal: '+err.message+'</td></tr>';
+  }finally{loading[sk]=false;if(icon)icon.classList.remove('spin');}
+}
+function harClearCacheAndReload(){if(currentPage==='har_spr'){HAR_SPR_CACHE=null;loaded.har_spr=false;harLoadData('spr');}else if(currentPage==='har_spp'){HAR_SPP_CACHE=null;loaded.har_spp=false;harLoadData('spp');}}
+function harResetFilter(){if(currentPage==='har_spr')harSprResetFilter();else if(currentPage==='har_spp')harSppResetFilter();}
+function harApplyFilter(tab){if(tab==='spr')harSprApplyFilter();else harSppApplyFilter();}
+
+// ── SPR: BUILD ALL SECTIONS ────────────────────────────────
+// ── SPR: CLIENT-SIDE AGGREGATION (semua dihitung dari rows terfilter) ──
+function harSprCompute(rows){
+  var byStatusPengadaan={},byStatusPenagihan={},byMitra={},byKodeAnggaran={},byPeruntukan={};
+  var totalNominal=0,outstandingCount=0,outstandingValue=0,doneValue=0,cancelValue=0;
+  var aging45Count=0,agingBuckets={b0_30:0,b31_45:0,bOver45:0};
+  var monthlyMap={};
+  rows.forEach(function(r){
+    var nominal=r.nominal||0;
+    var sp=(r.statusPengadaan||'').toUpperCase();
+    var st=(r.statusPenagihan||'').toUpperCase();
+    var isDone=sp==='DONE',isCancel=sp==='CANCEL',isReject=sp==='REJECT';
+    var isOutstanding=isDone&&st!=='CANCEL'&&st.indexOf('SUBMIT INVOICE KE PUSAT')===-1;
+    if(isOutstanding){outstandingCount++;outstandingValue+=nominal;}
+    if(isDone)doneValue+=nominal;
+    if(isCancel)cancelValue+=nominal;
+    var includeAging=!isDone&&!isCancel&&!isReject;
+    if(includeAging&&r.aging!==null&&r.aging!==undefined){
+      if(r.aging>45){agingBuckets.bOver45++;aging45Count++;}
+      else if(r.aging>=31)agingBuckets.b31_45++;
+      else agingBuckets.b0_30++;
+    }
+    if(r.tglRilisSPR){
+      var mk=r.tglRilisSPR.slice(0,7);
+      if(!monthlyMap[mk])monthlyMap[mk]={count:0,nominal:0};
+      monthlyMap[mk].count++;monthlyMap[mk].nominal+=nominal;
+    }
+    totalNominal+=nominal;
+    if(r.statusPengadaan)byStatusPengadaan[r.statusPengadaan]=(byStatusPengadaan[r.statusPengadaan]||0)+1;
+    if(r.statusPenagihan)byStatusPenagihan[r.statusPenagihan]=(byStatusPenagihan[r.statusPenagihan]||0)+1;
+    if(r.mitra)byMitra[r.mitra]=(byMitra[r.mitra]||0)+nominal;
+    if(r.kodeAnggaran)byKodeAnggaran[r.kodeAnggaran]=(byKodeAnggaran[r.kodeAnggaran]||0)+nominal;
+    if(r.peruntukan)byPeruntukan[r.peruntukan]=(byPeruntukan[r.peruntukan]||0)+1;
+  });
+  var priorityAction=rows.filter(function(r){
+    var sp=(r.statusPengadaan||'').toUpperCase();
+    return sp!=='DONE'&&sp!=='CANCEL'&&sp!=='REJECT'&&r.aging!==null&&r.aging!==undefined;
+  }).sort(function(a,b){
+    if((b.aging||0)!==(a.aging||0))return (b.aging||0)-(a.aging||0);
+    return (b.nominal||0)-(a.nominal||0);
+  }).slice(0,10);
+  var monthlyTrend=Object.keys(monthlyMap).sort().map(function(k){
+    return {month:k,count:monthlyMap[k].count,nominal:monthlyMap[k].nominal};
+  });
+  return {
+    totalSPR:rows.length,totalNominal:totalNominal,
+    byStatusPengadaan:byStatusPengadaan,byStatusPenagihan:byStatusPenagihan,
+    byMitra:byMitra,byKodeAnggaran:byKodeAnggaran,byPeruntukan:byPeruntukan,
+    outstandingCount:outstandingCount,outstandingValue:outstandingValue,
+    doneValue:doneValue,cancelValue:cancelValue,aging45Count:aging45Count,
+    agingBuckets:agingBuckets,priorityAction:priorityAction,monthlyTrend:monthlyTrend
+  };
+}
+
+// ── SPR: BUILD ALL SECTIONS (dipanggil ulang setiap filter berubah) ──
+function harSprBuildAll(json){
+  harSprBuildFilters(json);
+  harSprApplyFilter(); // akan trigger harSprRenderAll() di dalamnya
+}
+function harSprRenderAll(rows){
+  var agg=harSprCompute(rows);
+  harSprRenderExec(agg);
+  harSprRenderFlow(agg);
+  harSprRenderHealth(agg);
+  harSprRenderOperational(agg);
+  harSprRenderTrend(agg);
+  harSprRenderPriority(agg);
+}
+
+function harSprRenderExec(agg){
+  var el=document.getElementById('hspr-exec');if(!el)return;
+  var pctOut=agg.totalSPR?Math.round(agg.outstandingCount/agg.totalSPR*100):0;
+  var pctCrit=agg.totalSPR?Math.round(agg.aging45Count/agg.totalSPR*100):0;
+  var pctOutVal=agg.totalNominal?Math.round(agg.outstandingValue/agg.totalNominal*100):0;
+  var cards=[
+    {icon:'description',label:'Total SPR',sub:'Pekerjaan',val:(agg.totalSPR||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
+    {icon:'payments',label:'Total Nilai',sub:'',val:fmtRp(agg.totalNominal||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
+    {icon:'history_toggle_off',label:'Outstanding',sub:'Pekerjaan',val:(agg.outstandingCount||0).toLocaleString('id-ID'),caption:pctOut+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'},
+    {icon:'warning',label:'Critical SLA (>45 hari)',sub:'Pekerjaan',val:(agg.aging45Count||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600'},
+    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'}
+  ];
+  el.innerHTML=cards.map(function(c){
+    return '<div class="rounded-xl border p-3 '+c.cls+'">'
+      +'<div class="flex items-center gap-1.5 mb-2"><span class="material-symbols-outlined text-[16px] p-1 rounded-lg '+c.iconCls+'">'+c.icon+'</span>'
+      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+(c.sub?' <span class="opacity-60">'+c.sub+'</span>':'')+'</p></div>'
+      +'<p class="text-lg font-black mb-0.5">'+c.val+'</p>'
+      +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
+  }).join('');
+}
+
+function harFlowRow(label,count,total,color){
+  var pct=total?Math.round(count/total*100):0;
+  return '<div class="px-3 py-2 bg-gray-50 rounded-lg border border-gray-100">'
+    +'<div class="flex items-center justify-between mb-1"><span class="text-[11px] font-medium text-gray-700">'+label+'</span>'
+    +'<span class="text-[11px] font-black '+color+'">'+count.toLocaleString('id-ID')+' <span class="text-[9px] font-normal text-gray-400">('+pct+'%)</span></span></div>'
+    +'<div class="w-full bg-gray-200 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#378ADD]" style="width:'+pct+'%"></div></div></div>';
+}
+function harSprRenderFlow(agg){
+  var pEl=document.getElementById('hspr-flow-pengadaan');
+  var tEl=document.getElementById('hspr-flow-penagihan');
+  var pTotEl=document.getElementById('hspr-flow-pengadaan-total');
+  var tTotEl=document.getElementById('hspr-flow-penagihan-total');
+  var total=agg.totalSPR||0;
+  if(pEl){
+    var entries=Object.entries(agg.byStatusPengadaan||{}).sort(function(a,b){return b[1]-a[1];});
+    pEl.innerHTML=entries.length?entries.map(function(e){return harFlowRow(e[0],e[1],total,'text-blue-700');}).join(''):'<p class="text-[10px] text-gray-400">Tidak ada data</p>';
+  }
+  if(tEl){
+    var entries2=Object.entries(agg.byStatusPenagihan||{}).sort(function(a,b){return b[1]-a[1];});
+    tEl.innerHTML=entries2.length?entries2.map(function(e){return harFlowRow(e[0],e[1],total,'text-green-700');}).join(''):'<p class="text-[10px] text-gray-400">Tidak ada data</p>';
+  }
+  if(pTotEl)pTotEl.innerHTML='<span>Total</span><span>'+total.toLocaleString('id-ID')+' (100%)</span>';
+  if(tTotEl)tTotEl.innerHTML='<span>Total</span><span>'+total.toLocaleString('id-ID')+' (100%)</span>';
+}
+
+function harDonutLegend(items){
+  return items.map(function(it){
+    return '<div class="flex items-center justify-between text-[10px]"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm inline-block" style="background:'+it.color+'"></span>'+it.label+'</span><span class="font-bold">'+it.val+'</span></div>';
+  }).join('');
+}
+function harSprRenderHealth(agg){
+  var b=agg.agingBuckets||{b0_30:0,b31_45:0,bOver45:0};
+  var totalSla=b.b0_30+b.b31_45+b.bOver45;
+  rebuildChart('hspr-slaChart',{type:'doughnut',data:{labels:['0-30 hari','31-45 hari','>45 hari'],datasets:[{data:[b.b0_30,b.b31_45,b.bOver45],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  var slaEl=document.getElementById('hspr-slaLegend');
+  if(slaEl)slaEl.innerHTML=harDonutLegend([
+    {label:'0-30 hari',val:b.b0_30+' ('+(totalSla?Math.round(b.b0_30/totalSla*100):0)+'%)',color:'#22c55e'},
+    {label:'31-45 hari',val:b.b31_45+' ('+(totalSla?Math.round(b.b31_45/totalSla*100):0)+'%)',color:'#f59e0b'},
+    {label:'>45 hari',val:b.bOver45+' ('+(totalSla?Math.round(b.bOver45/totalSla*100):0)+'%)',color:'#ef4444'}
+  ]);
+
+  var totalFin=(agg.outstandingValue||0)+(agg.doneValue||0)+(agg.cancelValue||0);
+  rebuildChart('hspr-finChart',{type:'doughnut',data:{labels:['Outstanding','Done','Cancel'],datasets:[{data:[agg.outstandingValue||0,agg.doneValue||0,agg.cancelValue||0],backgroundColor:['#3b82f6','#22c55e','#94a3b8'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  var finEl=document.getElementById('hspr-finLegend');
+  if(finEl)finEl.innerHTML=harDonutLegend([
+    {label:'Outstanding',val:fmtRp(agg.outstandingValue||0)+' ('+(totalFin?Math.round((agg.outstandingValue||0)/totalFin*100):0)+'%)',color:'#3b82f6'},
+    {label:'Done',val:fmtRp(agg.doneValue||0)+' ('+(totalFin?Math.round((agg.doneValue||0)/totalFin*100):0)+'%)',color:'#22c55e'},
+    {label:'Cancel',val:fmtRp(agg.cancelValue||0)+' ('+(totalFin?Math.round((agg.cancelValue||0)/totalFin*100):0)+'%)',color:'#94a3b8'}
+  ]);
+}
+
+function harTopList(entries,isValue){
+  if(!entries.length)return '<p class="text-[10px] text-gray-400">Tidak ada data</p>';
+  var max=entries[0][1]||1;
+  return entries.map(function(e){
+    var pct=Math.round(e[1]/max*100);
+    var disp=isValue?fmtRp(e[1]):e[1].toLocaleString('id-ID');
+    return '<div><div class="flex justify-between mb-0.5"><span class="text-[10px] font-medium truncate" title="'+e[0]+'">'+e[0]+'</span><span class="text-[10px] font-bold text-[#00288e]">'+disp+'</span></div><div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#378ADD]" style="width:'+pct+'%"></div></div></div>';
+  }).join('');
+}
+function harSprRenderOperational(agg){
+  var mEl=document.getElementById('hspr-topMitra');
+  var aEl=document.getElementById('hspr-topAnggaran');
+  var pEl=document.getElementById('hspr-topPeruntukan');
+  if(mEl)mEl.innerHTML=harTopList(Object.entries(agg.byMitra||{}).sort(function(a,b){return b[1]-a[1];}),true);
+  if(aEl)aEl.innerHTML=harTopList(Object.entries(agg.byKodeAnggaran||{}).sort(function(a,b){return b[1]-a[1];}),true);
+  if(pEl)pEl.innerHTML=harTopList(Object.entries(agg.byPeruntukan||{}).sort(function(a,b){return b[1]-a[1];}),false);
+}
+
+function harSprRenderTrend(agg){
+  var mt=agg.monthlyTrend||[];
+  var wrap=document.getElementById('hspr-trendChart')?document.getElementById('hspr-trendChart').parentElement:null;
+  if(!mt.length){
+    if(wrap)wrap.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Belum ada data tren (TGL RILIS SPR kosong)</p>';
+    return;
+  }
+  if(wrap&&!document.getElementById('hspr-trendChart')){wrap.innerHTML='<canvas id="hspr-trendChart"></canvas>';}
+  rebuildChart('hspr-trendChart',{data:{labels:mt.map(function(m){return monthLabel(m.month);}),datasets:[
+    {type:'bar',label:'Jumlah SPR',data:mt.map(function(m){return m.count;}),backgroundColor:'#378ADD',borderRadius:3,yAxisID:'y'},
+    {type:'line',label:'Nilai Nominal',data:mt.map(function(m){return m.nominal;}),borderColor:'#1D9E75',backgroundColor:'transparent',tension:0.3,yAxisID:'y2'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},scales:{y:{type:'linear',position:'left',beginAtZero:true,ticks:{stepSize:1,font:{size:9}}},y2:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return fmtRp(v);},font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+function harSprRenderPriority(agg){
+  var tbody=document.getElementById('hspr-priorityBody');
+  if(!tbody)return;
+  var pa=agg.priorityAction||[];
+  if(!pa.length){tbody.innerHTML='<tr><td colspan="7" class="p-6 text-center text-gray-400 text-xs">Belum ada data prioritas (aging belum tersedia)</td></tr>';return;}
+  tbody.innerHTML=pa.map(function(r,i){
+    var agingCls=r.aging>45?'text-red-600':r.aging>=31?'text-orange-500':'text-green-600';
+    var spB='<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">'+(r.statusPengadaan||'-')+'</span>';
+    var stB='<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-orange-100 text-orange-700">'+(r.statusPenagihan||'-')+'</span>';
+    return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
+      +'<td class="p-2.5 text-[9px] text-gray-300">'+(i+1)+'</td>'
+      +'<td class="p-2.5 text-xs font-semibold text-[#00288e]">'+r.noSPR+'</td>'
+      +'<td class="p-2.5 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.mitra||'')+'">'+(r.mitra||'-')+'</td>'
+      +'<td class="p-2.5 text-center">'+spB+'</td>'
+      +'<td class="p-2.5 text-center">'+stB+'</td>'
+      +'<td class="p-2.5 text-xs text-center font-bold '+agingCls+'">'+r.aging+' hari</td>'
+      +'<td class="p-2.5 text-xs text-right font-mono">'+fmtRpFull(r.nominal)+'</td></tr>';
+  }).join('');
+}
+
+// ── SPR: FILTERS, TABLE, SORT ───────────────────────────────
+function harSprBuildFilters(json){
+  var build=function(id,vals,key){var el=document.getElementById(id);if(el)el.innerHTML=vals.map(function(v){return '<label class="ms-item"><input type="checkbox" value="'+v.replace(/"/g,'&quot;')+'" onchange="harMsChange(\'spr\',\''+key+'\')">'+v+'</label>';}).join('');};
+  build('ms-hspr-statusPengadaan-menu',json.statusPengadaanOpts||[],'statusPengadaan');
+  build('ms-hspr-statusPenagihan-menu',json.statusPenagihanOpts||[],'statusPenagihan');
+  build('ms-hspr-mitra-menu',json.mitraOpts||[],'mitra');
+  build('ms-hspr-peruntukan-menu',json.peruntukanOpts||[],'peruntukan');
+}
+function harSprApplyFilter(){
+  HSPRF.search=(document.getElementById('har-spr-search')?.value||'').toLowerCase();
+  var chk=function(arr,val){return !arr.length||arr.includes(val);};
+  HAR_SPR_FILTERED=HAR_SPR_ROWS.filter(function(r){
+    if(!chk(HSPRF.statusPengadaan,r.statusPengadaan))return false;
+    if(!chk(HSPRF.statusPenagihan,r.statusPenagihan))return false;
+    if(!chk(HSPRF.mitra,r.mitra))return false;
+    if(!chk(HSPRF.peruntukan,r.peruntukan))return false;
+    if(HSPRF.search&&!JSON.stringify(r).toLowerCase().includes(HSPRF.search))return false;
+    return true;
+  });
+  harSprSortApply();
+  harSprRenderAll(HAR_SPR_FILTERED);
+  harSprUpdateLabel();harSprPage=1;harSprRenderTable();
+}
+function harSprResetFilter(){
+  Object.keys(HSPRF).forEach(function(k){HSPRF[k]=Array.isArray(HSPRF[k])?[]:'';});
+  document.querySelectorAll('[id^="ms-hspr-"] input').forEach(function(cb){cb.checked=false;});
+  document.querySelectorAll('[id^="ms-hspr-"]').forEach(function(w){w.classList.remove('ms-active');});
+  var s=document.getElementById('har-spr-search');if(s)s.value='';
+  harSprApplyFilter();
+}
+function harSprSortApply(){
+  if(!HSPR_SORT.col)return;
+  var col=HSPR_SORT.col,dir=HSPR_SORT.dir;
+  var colDef=HSPR_COLS.find(function(c){return c.key===col;});
+  HAR_SPR_FILTERED.sort(function(a,b){
+    var va=a[col],vb=b[col];
+    if(colDef&&colDef.num){va=va||0;vb=vb||0;return (va-vb)*dir;}
+    va=String(va||'');vb=String(vb||'');
+    return va.localeCompare(vb)*dir;
+  });
+}
+function harSprSortBy(col){
+  if(HSPR_SORT.col===col)HSPR_SORT.dir*=-1;else{HSPR_SORT.col=col;HSPR_SORT.dir=1;}
+  harSprSortApply();harSprPage=1;harSprRenderTable();harSprRenderTableHead();
+}
+function harSprRenderTableHead(){
+  var tr=document.getElementById('hspr-tblHeadRow');
+  if(!tr)return;
+  var html='<th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>';
+  HSPR_COLS.forEach(function(c){
+    var isSorted=HSPR_SORT.col===c.key;
+    var arrow=isSorted?(HSPR_SORT.dir===1?' &#9650;':' &#9660;'):'';
+    html+='<th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e] whitespace-nowrap" onclick="harSprSortBy(\''+c.key+'\')">'+c.label+arrow+'</th>';
+  });
+  tr.innerHTML=html;
+}
+function harSprRenderTable(){
+  harSprRenderTableHead();
+  var start=(harSprPage-1)*HAR_PAGE_SIZE;
+  var paged=HAR_SPR_FILTERED.slice(start,start+HAR_PAGE_SIZE);
+  var tbody=document.getElementById('har-spr-tblBody');
+  if(!paged.length){tbody.innerHTML='<tr><td colspan="13" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';buildPagination('har-spr-pgBtns',harSprPage,HAR_SPR_FILTERED.length,HAR_PAGE_SIZE,'harSprGoPage');document.getElementById('har-spr-rangeInfo').textContent='0';document.getElementById('har-spr-totalInfo').textContent='0';return;}
+  tbody.innerHTML=paged.map(function(r,i){
+    var spB=r.statusPengadaan?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">'+r.statusPengadaan+'</span>':'<span class="text-[9px] text-gray-300">-</span>';
+    var stB=r.statusPenagihan?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">'+r.statusPenagihan+'</span>':'<span class="text-[9px] text-gray-300">-</span>';
+    var agingTxt=r.aging!==null&&r.aging!==undefined?r.aging+' hari':'-';
+    return '<tr class="hover:bg-[#f2f3ff] transition-colors border-b border-gray-50">'
+      +'<td class="p-3 text-[9px] text-gray-300">'+(start+i+1)+'</td>'
+      +'<td class="p-3 text-xs font-mono">'+(r.kodeAnggaran||'-')+'</td>'
+      +'<td class="p-3 text-xs font-semibold text-[#00288e]">'+(r.noSPR||'-')+'</td>'
+      +'<td class="p-3 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.kegiatan||'')+'">'+(r.kegiatan||'-')+'</td>'
+      +'<td class="p-3 text-xs text-right font-mono whitespace-nowrap">'+(r.nominal?fmtRpFull(r.nominal):'-')+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+(r.mitra||'-')+'</td>'
+      +'<td class="p-3 text-center">'+spB+'</td>'
+      +'<td class="p-3 text-center">'+stB+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+(r.peruntukan||'-')+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+fmtDate(r.tglRilisSPR)+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+fmtDate(r.tglBapsBast)+'</td>'
+      +'<td class="p-3 text-xs text-center">'+agingTxt+'</td>'
+      +'<td class="p-3 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.keterangan||'')+'">'+(r.keterangan||'-')+'</td>'
+      +'</tr>';
+  }).join('');
+  var pg=buildPagination('har-spr-pgBtns',harSprPage,HAR_SPR_FILTERED.length,HAR_PAGE_SIZE,'harSprGoPage');
+  document.getElementById('har-spr-rangeInfo').textContent=pg.s+'-'+pg.e;
+  document.getElementById('har-spr-totalInfo').textContent=HAR_SPR_FILTERED.length.toLocaleString('id-ID');
+}
+function harSprGoPage(p){harSprPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPR_FILTERED.length/HAR_PAGE_SIZE)||1));harSprRenderTable();}
+function harSprUpdateLabel(){
+  var parts=[];
+  if(HSPRF.statusPengadaan.length)parts.push('Pengadaan('+HSPRF.statusPengadaan.length+')');
+  if(HSPRF.statusPenagihan.length)parts.push('Penagihan('+HSPRF.statusPenagihan.length+')');
+  if(HSPRF.mitra.length)parts.push('Mitra('+HSPRF.mitra.length+')');
+  if(HSPRF.peruntukan.length)parts.push('Peruntukan('+HSPRF.peruntukan.length+')');
+  if(HSPRF.search)parts.push('"'+HSPRF.search+'"');
+  var el=document.getElementById('har-spr-filterLabel');
+  if(el)el.textContent=parts.length?'Filter: '+parts.join(' - '):'Menampilkan semua data';
+}
+
+
+// ── SPP: BUILD ALL SECTIONS ────────────────────────────────
+// ── SPP: CLIENT-SIDE AGGREGATION (semua dihitung dari rows terfilter) ──
+function harSppCompute(rows){
+  var byStatus={},byUpdateTerbaru={},byTipeSPP={},byMetodePengadaan={},byJenisPengadaan={},byKategoriPekerjaan={};
+  var totalNilai=0,aktifCount=0,outstandingValue=0,doneValue=0,cancelValue=0,criticalCount=0;
+  var agingBuckets={b0_30:0,b31_45:0,bOver45:0};
+  var monthlyMap={};
+  rows.forEach(function(r){
+    var nilai=r.nilaiPekerjaan||0;
+    var statusUp=(r.status||'').toUpperCase();
+    var isCancel=statusUp==='CANCEL';
+    var isDone=(r.updateTerbaru||'').toUpperCase().indexOf('SELESAI')!==-1;
+    if(r.isAktif){aktifCount++;outstandingValue+=nilai;}
+    if(isDone)doneValue+=nilai;
+    if(isCancel)cancelValue+=nilai;
+    var includeAging=!isCancel&&r.isAktif;
+    if(includeAging&&r.aging!==null&&r.aging!==undefined){
+      if(r.isCritical){agingBuckets.bOver45++;criticalCount++;}
+      else if(r.durasiRencana!==null&&r.aging>=r.durasiRencana*0.7)agingBuckets.b31_45++;
+      else agingBuckets.b0_30++;
+    }
+    if(r.tglRilisSP2K){
+      var mk=r.tglRilisSP2K.slice(0,7);
+      if(!monthlyMap[mk])monthlyMap[mk]={count:0,nominal:0};
+      monthlyMap[mk].count++;monthlyMap[mk].nominal+=nilai;
+    }
+    totalNilai+=nilai;
+    if(r.status)byStatus[r.status]=(byStatus[r.status]||0)+1;
+    if(r.updateTerbaru)byUpdateTerbaru[r.updateTerbaru]=(byUpdateTerbaru[r.updateTerbaru]||0)+1;
+    if(r.tipeSPP)byTipeSPP[r.tipeSPP]=(byTipeSPP[r.tipeSPP]||0)+1;
+    if(r.metodePengadaan)byMetodePengadaan[r.metodePengadaan]=(byMetodePengadaan[r.metodePengadaan]||0)+1;
+    if(r.jenisPengadaan)byJenisPengadaan[r.jenisPengadaan]=(byJenisPengadaan[r.jenisPengadaan]||0)+1;
+    if(r.kategoriPekerjaan)byKategoriPekerjaan[r.kategoriPekerjaan]=(byKategoriPekerjaan[r.kategoriPekerjaan]||0)+1;
+  });
+
+  // Priority Action dual-condition (sama logic dengan GAS, dihitung ulang client-side untuk filter global)
+  var priorityA=rows.filter(function(r){
+    var st=(r.status||'').toUpperCase();
+    return st!=='CANCEL'&&r.isAktif&&r.isPerpanjangan&&r.sisaHariKontrak!==null&&r.sisaHariKontrak!==undefined;
+  }).map(function(r){
+    var kondisi,score;
+    if(r.sisaHariKontrak<0){kondisi='Melewati Masa Kontrak';score=10000+Math.abs(r.sisaHariKontrak);}
+    else if(r.sisaHariKontrak<=30){kondisi='Kritis';score=5000+(30-r.sisaHariKontrak);}
+    else if(r.sisaHariKontrak<=60){kondisi='Perhatian';score=1000+(60-r.sisaHariKontrak);}
+    else return null;
+    return {noSPP:r.noSPP,judulSPP:r.judulSPP,kondisi:kondisi,keterangan:'Perpanjangan',sisaHari:r.sisaHariKontrak,nilaiPekerjaan:r.nilaiPekerjaan,score:score};
+  }).filter(function(x){return x!==null;});
+
+  var priorityB=rows.filter(function(r){
+    var st=(r.status||'').toUpperCase();
+    return st!=='CANCEL'&&r.isAktif&&!r.isPerpanjangan&&r.aging!==null&&r.aging!==undefined&&
+      r.tglRilisSP2K&&r.durasiRencana!==null&&r.durasiRencana!==undefined&&r.aging>=r.durasiRencana*0.7;
+  }).map(function(r){
+    var lewat=r.aging-r.durasiRencana;
+    var kondisi=lewat>0?'Melewati Durasi Pekerjaan':'Mendekati Batas Durasi';
+    return {noSPP:r.noSPP,judulSPP:r.judulSPP,kondisi:kondisi,keterangan:'Percepatan Penyelesaian',sisaHari:r.durasiRencana-r.aging,nilaiPekerjaan:r.nilaiPekerjaan,score:3000+lewat};
+  });
+
+  var priorityAction=priorityA.concat(priorityB).sort(function(a,b){return b.score-a.score;}).slice(0,10);
+
+  var monthlyTrend=Object.keys(monthlyMap).sort().map(function(k){
+    return {month:k,count:monthlyMap[k].count,nominal:monthlyMap[k].nominal};
+  });
+
+  return {
+    totalSPP:rows.length,totalNilai:totalNilai,
+    byStatus:byStatus,byUpdateTerbaru:byUpdateTerbaru,byTipeSPP:byTipeSPP,
+    byMetodePengadaan:byMetodePengadaan,byJenisPengadaan:byJenisPengadaan,byKategoriPekerjaan:byKategoriPekerjaan,
+    aktifCount:aktifCount,outstandingValue:outstandingValue,doneValue:doneValue,cancelValue:cancelValue,
+    criticalCount:criticalCount,agingBuckets:agingBuckets,priorityAction:priorityAction,monthlyTrend:monthlyTrend
+  };
+}
+
+// ── SPP: BUILD ALL SECTIONS (dipanggil ulang setiap filter berubah) ──
+function harSppBuildAll(json){
+  harSppBuildFilters(json);
+  harSppApplyFilter();
+}
+function harSppRenderAll(rows){
+  var agg=harSppCompute(rows);
+  harSppRenderExec(agg);
+  harSppRenderUpdateMonitoring(agg,rows.length);
+  harSppRenderHealth(agg);
+  harSppRenderOperational(agg);
+  harSppRenderTrend(agg);
+  harSppRenderPriority(agg);
+}
+
+function harSppRenderExec(agg){
+  var el=document.getElementById('hspp-exec');if(!el)return;
+  var pctAktif=agg.totalSPP?Math.round(agg.aktifCount/agg.totalSPP*100):0;
+  var pctCrit=agg.totalSPP?Math.round(agg.criticalCount/agg.totalSPP*100):0;
+  var pctOutVal=agg.totalNilai?Math.round(agg.outstandingValue/agg.totalNilai*100):0;
+  var cards=[
+    {icon:'description',label:'Total SPP',sub:'',val:(agg.totalSPP||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
+    {icon:'payments',label:'Total Nilai Pekerjaan',sub:'',val:fmtRp(agg.totalNilai||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
+    {icon:'history_toggle_off',label:'SPP Aktif',sub:'',val:(agg.aktifCount||0).toLocaleString('id-ID'),caption:pctAktif+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'},
+    {icon:'warning',label:'Critical SLA',sub:'',val:(agg.criticalCount||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600'},
+    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'}
+  ];
+  el.innerHTML=cards.map(function(c){
+    return '<div class="rounded-xl border p-3 '+c.cls+'">'
+      +'<div class="flex items-center gap-1.5 mb-2"><span class="material-symbols-outlined text-[16px] p-1 rounded-lg '+c.iconCls+'">'+c.icon+'</span>'
+      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+'</p></div>'
+      +'<p class="text-lg font-black mb-0.5">'+c.val+'</p>'
+      +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
+  }).join('');
+}
+
+function harSppRenderUpdateMonitoring(agg,total){
+  var el=document.getElementById('hspp-updateMonitoring');if(!el)return;
+  var entries=Object.entries(agg.byUpdateTerbaru||{}).sort(function(a,b){return b[1]-a[1];});
+  if(!entries.length){el.innerHTML='<p class="text-[10px] text-gray-400">Tidak ada data</p>';return;}
+  var icons=['schedule','description','shopping_cart','receipt_long','task_alt','more_horiz'];
+  var colors=['#3b82f6','#22c55e','#f59e0b','#a855f7','#94a3b8','#64748b'];
+  el.innerHTML=entries.map(function(e,i){
+    var pct=total?Math.round(e[1]/total*100):0;
+    var icon=icons[i%icons.length],color=colors[i%colors.length];
+    var connector=i<entries.length-1?'<div class="flex-1 h-px bg-gray-200 mt-5" style="min-width:32px"></div>':'';
+    return '<div class="flex items-center">'
+      +'<div class="flex flex-col items-center px-3" style="min-width:120px">'
+      +'<span class="material-symbols-outlined text-[20px] p-2 rounded-full" style="background:'+color+'22;color:'+color+'">'+icon+'</span>'
+      +'<p class="text-[10px] font-medium text-gray-600 mt-1.5 text-center truncate w-full" title="'+e[0]+'">'+e[0]+'</p>'
+      +'<p class="text-base font-black text-[#131b2e] mt-0.5">'+e[1]+'</p>'
+      +'<p class="text-[9px] text-gray-400">'+pct+'%</p>'
+      +'</div>'+connector+'</div>';
+  }).join('');
+}
+
+function harDonutLegendSPP(items){
+  return items.map(function(it){
+    return '<div class="flex items-center justify-between text-[10px]"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm inline-block" style="background:'+it.color+'"></span>'+it.label+'</span><span class="font-bold">'+it.val+'</span></div>';
+  }).join('');
+}
+function harSppRenderHealth(agg){
+  var b=agg.agingBuckets||{b0_30:0,b31_45:0,bOver45:0};
+  var totalSla=b.b0_30+b.b31_45+b.bOver45;
+  rebuildChart('hspp-slaChart',{type:'doughnut',data:{labels:['0-30 hari','31-45 hari','>45 hari'],datasets:[{data:[b.b0_30,b.b31_45,b.bOver45],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  var slaEl=document.getElementById('hspp-slaLegend');
+  if(slaEl)slaEl.innerHTML=harDonutLegendSPP([
+    {label:'0-30 hari',val:b.b0_30+' ('+(totalSla?Math.round(b.b0_30/totalSla*100):0)+'%)',color:'#22c55e'},
+    {label:'31-45 hari',val:b.b31_45+' ('+(totalSla?Math.round(b.b31_45/totalSla*100):0)+'%)',color:'#f59e0b'},
+    {label:'>45 hari',val:b.bOver45+' ('+(totalSla?Math.round(b.bOver45/totalSla*100):0)+'%)',color:'#ef4444'}
+  ]);
+
+  var totalFin=(agg.outstandingValue||0)+(agg.doneValue||0)+(agg.cancelValue||0);
+  rebuildChart('hspp-finChart',{type:'doughnut',data:{labels:['Outstanding','Done','Cancel'],datasets:[{data:[agg.outstandingValue||0,agg.doneValue||0,agg.cancelValue||0],backgroundColor:['#3b82f6','#22c55e','#94a3b8'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  var finEl=document.getElementById('hspp-finLegend');
+  if(finEl)finEl.innerHTML=harDonutLegendSPP([
+    {label:'Outstanding',val:fmtRp(agg.outstandingValue||0)+' ('+(totalFin?Math.round((agg.outstandingValue||0)/totalFin*100):0)+'%)',color:'#3b82f6'},
+    {label:'Done',val:fmtRp(agg.doneValue||0)+' ('+(totalFin?Math.round((agg.doneValue||0)/totalFin*100):0)+'%)',color:'#22c55e'},
+    {label:'Cancel',val:fmtRp(agg.cancelValue||0)+' ('+(totalFin?Math.round((agg.cancelValue||0)/totalFin*100):0)+'%)',color:'#94a3b8'}
+  ]);
+}
+
+function harSppRenderOperational(agg){
+  var mEl=document.getElementById('hspp-topMetode');
+  var jEl=document.getElementById('hspp-topJenis');
+  var tEl=document.getElementById('hspp-topTipe');
+  var kEl=document.getElementById('hspp-topKategori');
+  if(mEl)mEl.innerHTML=harTopList(Object.entries(agg.byMetodePengadaan||{}).sort(function(a,b){return b[1]-a[1];}),false);
+  if(jEl)jEl.innerHTML=harTopList(Object.entries(agg.byJenisPengadaan||{}).sort(function(a,b){return b[1]-a[1];}),false);
+  if(tEl)tEl.innerHTML=harTopList(Object.entries(agg.byTipeSPP||{}).sort(function(a,b){return b[1]-a[1];}),false);
+  if(kEl)kEl.innerHTML=harTopList(Object.entries(agg.byKategoriPekerjaan||{}).sort(function(a,b){return b[1]-a[1];}),false);
+}
+
+function harSppRenderTrend(agg){
+  var mt=agg.monthlyTrend||[];
+  var wrap=document.getElementById('hspp-trendChart')?document.getElementById('hspp-trendChart').parentElement:null;
+  if(!mt.length){
+    if(wrap)wrap.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Belum ada data tren (TGL RILIS SP2K kosong)</p>';
+    return;
+  }
+  if(wrap&&!document.getElementById('hspp-trendChart')){wrap.innerHTML='<canvas id="hspp-trendChart"></canvas>';}
+  rebuildChart('hspp-trendChart',{data:{labels:mt.map(function(m){return monthLabel(m.month);}),datasets:[
+    {type:'bar',label:'Jumlah SPP',data:mt.map(function(m){return m.count;}),backgroundColor:'#378ADD',borderRadius:3,yAxisID:'y'},
+    {type:'line',label:'Nilai Pekerjaan',data:mt.map(function(m){return m.nominal;}),borderColor:'#1D9E75',backgroundColor:'transparent',tension:0.3,yAxisID:'y2'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},scales:{y:{type:'linear',position:'left',beginAtZero:true,ticks:{stepSize:1,font:{size:9}}},y2:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return fmtRp(v);},font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+function harSppRenderPriority(agg){
+  var tbody=document.getElementById('hspp-priorityBody');
+  if(!tbody)return;
+  var pa=agg.priorityAction||[];
+  if(!pa.length){tbody.innerHTML='<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Tidak ada SPP yang memerlukan tindak lanjut urgent</td></tr>';return;}
+  tbody.innerHTML=pa.map(function(r){
+    var kondisiCls='text-orange-600 bg-orange-100';
+    if(r.kondisi==='Melewati Masa Kontrak'||r.kondisi==='Melewati Durasi Pekerjaan')kondisiCls='text-white bg-gray-800';
+    else if(r.kondisi==='Kritis')kondisiCls='text-red-700 bg-red-100';
+    var kondisiB='<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold '+kondisiCls+'">'+r.kondisi+'</span>';
+    var keterB='<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold '+(r.keterangan==='Perpanjangan'?'bg-purple-100 text-purple-700':'bg-blue-100 text-blue-700')+'">'+r.keterangan+'</span>';
+    var sisaTxt=r.sisaHari<0?Math.abs(r.sisaHari)+' hari lewat':r.sisaHari+' hari';
+    var sisaCls=r.sisaHari<0?'text-gray-800':r.sisaHari<=30?'text-red-600':'text-orange-500';
+    return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
+      +'<td class="p-2.5 text-xs font-semibold text-[#00288e]">'+r.noSPP+'</td>'
+      +'<td class="p-2.5 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+r.judulSPP+'">'+r.judulSPP+'</td>'
+      +'<td class="p-2.5 text-center">'+kondisiB+'</td>'
+      +'<td class="p-2.5 text-center">'+keterB+'</td>'
+      +'<td class="p-2.5 text-xs text-center font-bold '+sisaCls+'">'+sisaTxt+'</td>'
+      +'<td class="p-2.5 text-xs text-right font-mono">'+fmtRpFull(r.nilaiPekerjaan)+'</td></tr>';
+  }).join('');
+}
+
+// ── SPP: FILTERS, TABLE, SORT ───────────────────────────────
+function harSppBuildFilters(json){
+  var build=function(id,vals,key){var el=document.getElementById(id);if(el)el.innerHTML=vals.map(function(v){return '<label class="ms-item"><input type="checkbox" value="'+v.replace(/"/g,'&quot;')+'" onchange="harMsChange(\'spp\',\''+key+'\')">'+v+'</label>';}).join('');};
+  build('ms-hspp-status-menu',json.statusOpts||[],'status');
+  build('ms-hspp-tipeSPP-menu',json.tipeSPPOpts||[],'tipeSPP');
+  build('ms-hspp-metodePengadaan-menu',json.metodePengadaanOpts||[],'metodePengadaan');
+  build('ms-hspp-jenisPengadaan-menu',json.jenisPengadaanOpts||[],'jenisPengadaan');
+  build('ms-hspp-kategoriPekerjaan-menu',json.kategoriPekerjaanOpts||[],'kategoriPekerjaan');
+  var kaSet={},coaSet={};
+  (json.rows||[]).forEach(function(r){if(r.kodeAnggaran)kaSet[r.kodeAnggaran]=1;if(r.coa)coaSet[r.coa]=1;});
+  build('ms-hspp-kodeAnggaran-menu',Object.keys(kaSet).sort(),'kodeAnggaran');
+  build('ms-hspp-coa-menu',Object.keys(coaSet).sort(),'coa');
+}
+function harSppApplyFilter(){
+  HSPPF.search=(document.getElementById('har-spp-search')?.value||'').toLowerCase();
+  var chk=function(arr,val){return !arr.length||arr.includes(val);};
+  HAR_SPP_FILTERED=HAR_SPP_ROWS.filter(function(r){
+    if(!chk(HSPPF.status,r.status))return false;
+    if(!chk(HSPPF.tipeSPP,r.tipeSPP))return false;
+    if(!chk(HSPPF.metodePengadaan,r.metodePengadaan))return false;
+    if(!chk(HSPPF.jenisPengadaan,r.jenisPengadaan))return false;
+    if(!chk(HSPPF.kategoriPekerjaan,r.kategoriPekerjaan))return false;
+    if(!chk(HSPPF.kodeAnggaran,r.kodeAnggaran))return false;
+    if(!chk(HSPPF.coa,r.coa))return false;
+    if(HSPPF.search&&!JSON.stringify(r).toLowerCase().includes(HSPPF.search))return false;
+    return true;
+  });
+  harSppSortApply();
+  harSppRenderAll(HAR_SPP_FILTERED);
+  harSppUpdateLabel();harSppPage=1;harSppRenderTable();
+}
+function harSppResetFilter(){
+  Object.keys(HSPPF).forEach(function(k){HSPPF[k]=Array.isArray(HSPPF[k])?[]:'';});
+  document.querySelectorAll('[id^="ms-hspp-"] input').forEach(function(cb){cb.checked=false;});
+  document.querySelectorAll('[id^="ms-hspp-"]').forEach(function(w){w.classList.remove('ms-active');});
+  var s=document.getElementById('har-spp-search');if(s)s.value='';
+  harSppApplyFilter();
+}
+function harSppSortApply(){
+  if(!HSPP_SORT.col)return;
+  var col=HSPP_SORT.col,dir=HSPP_SORT.dir;
+  var colDef=HSPP_COLS.find(function(c){return c.key===col;});
+  HAR_SPP_FILTERED.sort(function(a,b){
+    var va=a[col],vb=b[col];
+    if(colDef&&colDef.num){va=va||0;vb=vb||0;return (va-vb)*dir;}
+    va=String(va||'');vb=String(vb||'');
+    return va.localeCompare(vb)*dir;
+  });
+}
+function harSppSortBy(col){
+  if(HSPP_SORT.col===col)HSPP_SORT.dir*=-1;else{HSPP_SORT.col=col;HSPP_SORT.dir=1;}
+  harSppSortApply();harSppPage=1;harSppRenderTable();harSppRenderTableHead();
+}
+function harSppRenderTableHead(){
+  var tr=document.getElementById('hspp-tblHeadRow');
+  if(!tr)return;
+  var html='<th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>';
+  HSPP_COLS.forEach(function(c){
+    var isSorted=HSPP_SORT.col===c.key;
+    var arrow=isSorted?(HSPP_SORT.dir===1?' &#9650;':' &#9660;'):'';
+    html+='<th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e] whitespace-nowrap" onclick="harSppSortBy(\''+c.key+'\')">'+c.label+arrow+'</th>';
+  });
+  tr.innerHTML=html;
+}
+function harSppRenderTable(){
+  harSppRenderTableHead();
+  var start=(harSppPage-1)*HAR_PAGE_SIZE;
+  var paged=HAR_SPP_FILTERED.slice(start,start+HAR_PAGE_SIZE);
+  var tbody=document.getElementById('har-spp-tblBody');
+  if(!paged.length){tbody.innerHTML='<tr><td colspan="16" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';buildPagination('har-spp-pgBtns',harSppPage,HAR_SPP_FILTERED.length,HAR_PAGE_SIZE,'harSppGoPage');document.getElementById('har-spp-rangeInfo').textContent='0';document.getElementById('har-spp-totalInfo').textContent='0';return;}
+  tbody.innerHTML=paged.map(function(r,i){
+    var stB=r.status?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-700">'+r.status+'</span>':'<span class="text-[9px] text-gray-300">-</span>';
+    var agingTxt=r.aging!==null&&r.aging!==undefined?r.aging+' hari':'-';
+    return '<tr class="hover:bg-[#f2f3ff] transition-colors border-b border-gray-50">'
+      +'<td class="p-3 text-[9px] text-gray-300">'+(start+i+1)+'</td>'
+      +'<td class="p-3 text-xs font-semibold text-[#00288e]">'+(r.noSPP||'-')+'</td>'
+      +'<td class="p-3 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.judulSPP||'')+'">'+(r.judulSPP||'-')+'</td>'
+      +'<td class="p-3 text-xs font-mono">'+(r.kodeAnggaran||'-')+'</td>'
+      +'<td class="p-3 text-xs font-mono">'+(r.coa||'-')+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+(r.tipeSPP||'-')+'</td>'
+      +'<td class="p-3 text-xs font-mono">'+(r.noPOSP2K||'-')+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+(r.metodePengadaan||'-')+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+(r.jenisPengadaan||'-')+'</td>'
+      +'<td class="p-3 text-center">'+stB+'</td>'
+      +'<td class="p-3 text-xs text-right font-mono whitespace-nowrap">'+(r.nilaiPekerjaan?fmtRpFull(r.nilaiPekerjaan):'-')+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+(r.kategoriPekerjaan||'-')+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+fmtDate(r.tglRilisSP2K)+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+(r.durasiPekerjaan||'-')+'</td>'
+      +'<td class="p-3 text-xs whitespace-nowrap">'+fmtDate(r.tglBapsBast)+'</td>'
+      +'<td class="p-3 text-xs text-center">'+agingTxt+'</td>'
+      +'<td class="p-3 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.updateTerbaru||'')+'">'+(r.updateTerbaru||'-')+'</td>'
+      +'</tr>';
+  }).join('');
+  var pg=buildPagination('har-spp-pgBtns',harSppPage,HAR_SPP_FILTERED.length,HAR_PAGE_SIZE,'harSppGoPage');
+  document.getElementById('har-spp-rangeInfo').textContent=pg.s+'-'+pg.e;
+  document.getElementById('har-spp-totalInfo').textContent=HAR_SPP_FILTERED.length.toLocaleString('id-ID');
+}
+function harSppGoPage(p){harSppPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPP_FILTERED.length/HAR_PAGE_SIZE)||1));harSppRenderTable();}
+function harSppUpdateLabel(){
+  var parts=[];
+  if(HSPPF.status.length)parts.push('Status('+HSPPF.status.length+')');
+  if(HSPPF.tipeSPP.length)parts.push('Tipe('+HSPPF.tipeSPP.length+')');
+  if(HSPPF.metodePengadaan.length)parts.push('Metode('+HSPPF.metodePengadaan.length+')');
+  if(HSPPF.jenisPengadaan.length)parts.push('Jenis('+HSPPF.jenisPengadaan.length+')');
+  if(HSPPF.kategoriPekerjaan.length)parts.push('Kategori('+HSPPF.kategoriPekerjaan.length+')');
+  if(HSPPF.kodeAnggaran.length)parts.push('Kode Anggaran('+HSPPF.kodeAnggaran.length+')');
+  if(HSPPF.coa.length)parts.push('COA('+HSPPF.coa.length+')');
+  if(HSPPF.search)parts.push('"'+HSPPF.search+'"');
+  var el=document.getElementById('har-spp-filterLabel');
+  if(el)el.textContent=parts.length?'Filter: '+parts.join(' - '):'Menampilkan semua data';
+}
+
+
+// ── SHARED: Toggle, Change, Export ──────────────────────────
+function harToggleMs(tab,key){
+  const pfx=tab==='spr'?'ms-hspr-':'ms-hspp-';
+  const menu=document.getElementById(pfx+key+'-menu');if(!menu)return;
+  const ih=menu.classList.contains('hidden');
+  document.querySelectorAll('.ms-menu').forEach(function(m){m.classList.add('hidden');});
+  if(ih)menu.classList.remove('hidden');
+}
+function harMsChange(tab,key){
+  const pfx=tab==='spr'?'ms-hspr-':'ms-hspp-';
+  const filter=tab==='spr'?HSPRF:HSPPF;
+  const menu=document.getElementById(pfx+key+'-menu');if(!menu)return;
+  filter[key]=[...menu.querySelectorAll('input:checked')].map(function(el){return el.value;});
+  const labels={statusPengadaan:'Status Pengadaan',statusPenagihan:'Status Penagihan',mitra:'Mitra',peruntukan:'Peruntukan',status:'Status',tipeSPP:'Tipe SPP',metodePengadaan:'Metode',kategoriPekerjaan:'Kategori'};
+  const lbl=document.getElementById(pfx+key+'-label');
+  const wE=document.getElementById(pfx+key);
+  if(lbl)lbl.textContent=filter[key].length?(labels[key]||key)+' ('+filter[key].length+')':(labels[key]||key);
+  if(wE)wE.classList.toggle('ms-active',filter[key].length>0);
+  if(tab==='spr')harSprApplyFilter();else harSppApplyFilter();
+}
+function harExportCSV(tab){
+  var rows,hdrs,cols;
+  if(tab==='spr'){
+    cols=['noSPR','kodeAnggaran','kegiatan','nominal','mitra','statusPengadaan','statusPenagihan','peruntukan','tglRilisSPR','tglBapsBast','aging','keterangan'];
+    hdrs=['No SPR','Kode Anggaran','Kegiatan','Nominal','Mitra','Status Pengadaan','Status Penagihan','Peruntukan','Tgl Rilis SPR','Tgl BAPS/BAST','Aging','Keterangan'];
+    rows=[hdrs.join(',')];
+    HAR_SPR_FILTERED.forEach(function(r){rows.push(cols.map(function(c){return '"'+String(r[c]==null?'':r[c]).replace(/"/g,'""')+'"';}).join(','));});
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));a.download='spr_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  }else{
+    cols=['noSPP','judulSPP','kodeAnggaran','tipeSPP','noPOSP2K','metodePengadaan','status','nilaiPekerjaan','kategoriPekerjaan','tglRilisSP2K','durasiPekerjaan','tglBapsBast','aging','updateTerbaru'];
+    hdrs=['No SPP','Judul SPP','Kode Anggaran','Tipe SPP','No PO/SP2K','Metode Pengadaan','Status','Nilai Pekerjaan','Kategori','Tgl SP2K','Durasi','Tgl BAPS/BAST','Aging','Update Terbaru'];
+    rows=[hdrs.join(',')];
+    HAR_SPP_FILTERED.forEach(function(r){rows.push(cols.map(function(c){return '"'+String(r[c]==null?'':r[c]).replace(/"/g,'""')+'"';}).join(','));});
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));a.download='spp_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  }
+}
 
 </script>
 </body>
