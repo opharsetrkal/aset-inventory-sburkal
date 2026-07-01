@@ -1489,11 +1489,17 @@ html,body   { height:100%; overflow:hidden; }
 
       <!-- Health -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Health</p>
-          <p class="text-[10px] text-gray-400">Gap Analysis — ranking LM berdasarkan pencapaian terhadap target.</p>
+        <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+          <div>
+            <p class="text-sm font-bold text-[#131b2e]">Health</p>
+            <p class="text-[10px] text-gray-400">Target vs Realisasi per LM · bar = target, line = realisasi.</p>
+          </div>
+          <div class="flex items-center gap-3 text-[10px] text-gray-500">
+            <span class="flex items-center gap-1"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Target</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-px inline-block bg-[#1D9E75] border-2 border-[#1D9E75]"></span>Realisasi</span>
+          </div>
         </div>
-        <div class="p-4" id="wig-gapAnalysis"></div>
+        <div class="p-4" style="position:relative;height:280px"><canvas id="wig-healthChart"></canvas></div>
       </section>
 
       <!-- Analysis -->
@@ -3455,30 +3461,47 @@ function wigRenderResume(lms){
   }).join('');
 }
 function wigRenderGapAnalysis(lms){
-  const el=document.getElementById('wig-gapAnalysis');
-  if(!el)return;
-  const withPencapaian=lms.filter(function(l){return l.pencapaian!==null&&l.pencapaian!==undefined;});
-  const sorted=withPencapaian.slice().sort(function(a,b){return (b.pencapaian||0)-(a.pencapaian||0);});
-  if(!sorted.length){el.innerHTML='<p class="text-[10px] text-gray-400">Belum ada data pencapaian</p>';return;}
-  el.innerHTML=sorted.map(function(l){
-    const pct=Math.round((l.pencapaian||0)*100);
-    const gap=pct-100;
-    const isPositive=gap>=0;
-    const barW=Math.min(100,Math.abs(pct));
-    return '<div class="flex items-center gap-3 py-1.5 border-b border-gray-50 last:border-0">'
-      +'<span class="text-[10px] font-medium w-40 truncate" title="'+l.nama+'">'+l.nama+'</span>'
-      +'<span class="text-[10px] font-bold w-16 text-right '+(isPositive?'text-green-600':'text-red-600')+'">'+(isPositive?'+':'')+gap+'%</span>'
-      +'<div class="flex-1 bg-gray-100 rounded-full h-2"><div class="h-2 rounded-full '+(isPositive?'bg-green-500':'bg-red-500')+'" style="width:'+barW+'%"></div></div>'
-      +'<span class="text-[12px]">'+(l.status||'\u2014')+'</span></div>';
-  }).join('');
+  const canvas=document.getElementById('wig-healthChart');
+  if(!canvas)return;
+  const withData=lms.filter(function(l){return (l.totalTarget||0)>0||(l.totalReal||0)>0;});
+  if(!withData.length){
+    canvas.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Belum ada data target / realisasi</p>';
+    return;
+  }
+  rebuildChart('wig-healthChart',{
+    data:{
+      labels:withData.map(function(l){return l.nama.replace(' — ',' - ');}),
+      datasets:[
+        {type:'bar',label:'Target 2026',data:withData.map(function(l){return l.totalTarget||0;}),backgroundColor:'rgba(55,138,221,0.7)',borderColor:'#378ADD',borderWidth:1,borderRadius:3,yAxisID:'y'},
+        {type:'line',label:'Realisasi',data:withData.map(function(l){return l.totalReal||0;}),borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1D9E75',tension:0.2,yAxisID:'y'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:function(ctx){return ' '+ctx.dataset.label+': '+Math.round(ctx.parsed.y).toLocaleString('id-ID');}}}
+      },
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:function(v){return v>=1000?Math.round(v/1000)+'K':v;},font:{size:9}}},
+        x:{ticks:{font:{size:9},maxRotation:30}}
+      }
+    }
+  });
 }
+
 
 function wigRenderKontributorPerLM(lms){
   const el=document.getElementById('wig-kontributorPerLM');
   if(!el)return;
-  const withKontributor=lms.filter(function(l){return l.kontributor&&l.kontributor.length;});
-  if(!withKontributor.length){el.innerHTML='<p class="text-[10px] text-gray-400">Belum ada data kontributor</p>';return;}
-  el.innerHTML=withKontributor.map(function(l){
+  if(!lms.length){el.innerHTML='<p class="text-[10px] text-gray-400">Belum ada data</p>';return;}
+  // Urut sesuai urutan WIG & LM (array sudah ordered dari GAS)
+  el.innerHTML=lms.map(function(l){
+    if(!l.kontributor||!l.kontributor.length){
+      return '<div class="mb-2 pb-2 border-b border-gray-100 last:border-0">'
+        +'<p class="text-[10px] font-bold text-[#131b2e] mb-0.5">'+l.nama+'</p>'
+        +'<p class="text-[9px] text-gray-300 italic">Belum ada kontributor</p></div>';
+    }
     const maxK=l.kontributor[0].jumlah||1;
     const kontRows=l.kontributor.map(function(k,i){
       const pct=Math.round(k.jumlah/maxK*100);
