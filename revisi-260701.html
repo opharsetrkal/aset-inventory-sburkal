@@ -147,27 +147,14 @@ html,body   { height:100%; overflow:hidden; }
     <span class="material-symbols-outlined text-[18px] flex-shrink-0">construction</span>
     <span class="text-[10px] font-medium leading-tight">Laporan PM</span>
   </button>
-  <div class="sb-sub">
-    <button onclick="navigateTo('wig')" id="nav-sid_bb"
-      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
-      <span class="material-symbols-outlined text-[15px] flex-shrink-0">hub</span>
-      <span class="text-[9px] font-medium leading-tight">SID Backbone</span>
-    </button>
-    <button onclick="navigateTo('wig')" id="nav-uplink_olt"
-      class="sb-item nav-btn flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-left w-full">
-      <span class="material-symbols-outlined text-[15px] flex-shrink-0">router</span>
-      <span class="text-[9px] font-medium leading-tight">Uplink OLT</span>
-    </button>
-  </div>
-
-  <div class="sb-divider"></div>
+<div class="sb-divider"></div>
 
   <!-- INVENTORY GROUP -->
   <div class="sb-group-label">Inventory</div>
   <button onclick="navigateTo('keuangan')" id="nav-keuangan"
     class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
     <span class="material-symbols-outlined text-[18px] flex-shrink-0">account_balance</span>
-    <span class="text-[10px] font-medium leading-tight">Administrasi<br>Keuangan</span>
+    <span class="text-[10px] font-medium leading-tight">Monitoring Keuangan Inventory</span>
   </button>
   <button onclick="navigateTo('stok')" id="nav-stok"
     class="sb-item nav-btn flex items-center gap-2 px-2 py-2 rounded-lg transition-colors text-left w-full">
@@ -194,13 +181,12 @@ html,body   { height:100%; overflow:hidden; }
   <nav id="topnav" class="bg-white border-b border-gray-200 shadow-sm z-40">
     <!-- Baris 1: Logo kiri — Judul tengah — Logo kanan -->
     <div class="flex items-center justify-between px-4 md:px-6 h-12 border-b border-gray-100">
-      <img src="logo-danantara.png" alt="Danantara" class="h-7 object-contain"
+      <img src="logo-danantara.png" alt="Danantara" class="h-8 object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>Danantara</span>'">
       <div class="text-center flex-1 px-2">
-        <p class="text-xs md:text-sm font-bold text-[#131b2e] leading-tight">Opharset SBU Regional Kalimantan</p>
-        <p class="text-[9px] text-gray-400 hidden md:block">PLN Icon Plus · Dashboard Monitoring</p>
+        <p class="text-sm md:text-base font-bold text-[#131b2e] leading-tight">Opharset SBU Regional Kalimantan</p>
       </div>
-      <img src="logo-pln.png" alt="PLN Icon Plus" class="h-7 object-contain"
+      <img src="logo-pln.png" alt="PLN Icon Plus" class="h-8 object-contain"
         onerror="this.outerHTML='<span class=\'text-[10px] font-bold text-[#00288e]\'>PLN IP</span>'">
     </div>
     <!-- Baris 2: dinamis — diisi oleh updateTopnav() -->
@@ -320,7 +306,7 @@ html,body   { height:100%; overflow:hidden; }
               <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center gap-2">
                   <span class="material-symbols-outlined text-[16px] text-[#00288e]">account_balance</span>
-                  <p class="text-[10px] font-bold">Administrasi Keuangan</p>
+                  <p class="text-[10px] font-bold">Monitoring Keuangan Inventory</p>
                 </div>
                 <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
               </div>
@@ -1554,7 +1540,7 @@ html,body   { height:100%; overflow:hidden; }
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
             <p class="text-sm font-bold">Detail Data WIG Aset</p>
-            <p class="text-[10px] text-gray-400">Seluruh LM dari WIG 1, 2, dan 3 · klik header untuk sort, klik baris untuk lihat detail per KP & kontributor</p>
+            <p class="text-[10px] text-gray-400">Seluruh LM dari WIG 1, 2, 3, dan 4 · klik header untuk sort, klik baris untuk lihat detail per KP & kontributor</p>
           </div>
           <input type="text" id="wig-search" oninput="wigApplyFilter()" placeholder="Cari LM / Inisiatif…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-44">
         </div>
@@ -1691,7 +1677,7 @@ const PAGE_CONFIG = {
   sid_bb:     { title:'SID Backbone',            icon:'hub'             },
   uplink_olt: { title:'Uplink OLT',              icon:'router'          },
   // INVENTORY
-  keuangan:   { title:'Administrasi Keuangan',  icon:'account_balance' },
+  keuangan:   { title:'Monitoring Keuangan Inventory', icon:'account_balance' },
   stok:       { title:'Stok Material',           icon:'inventory_2'     },
   penyerapan: { title:'Penyerapan Material',     icon:'moving'          },
 };
@@ -3413,13 +3399,15 @@ async function wigLoadData(){
     const res=await fetch(API_WIG+'?mode=all-detail');
     const json=await res.json();
     if(!json.ok)throw new Error(json.error||'Gagal memuat data WIG');
+    if(!json.lms||!json.lms.length)throw new Error('Data LM kosong. Pastikan CodeWIG.gs sudah di-deploy ulang dengan mode=all-detail.');
     WIG_ALL_DATA=json;
     WIG_LMS=json.lms||[];
     wigApplyFilter();
     loaded.wig=true;
   }catch(err){
     const el=document.getElementById('wig-resume');
-    if(el)el.innerHTML='<div class="col-span-5 p-8 text-center text-red-500 text-sm">&#9888; '+err.message+'</div>';
+    if(el)el.innerHTML='<div class="col-span-5 p-6 text-center text-red-500 text-sm bg-red-50 rounded-xl border border-red-200">&#9888; '+err.message+'<br><span class="text-[10px] text-red-400">Buka Console (Cmd+Option+J) untuk detail error</span></div>';
+    console.error('[WIG] Load error:', err);
   }finally{loading.wig=false;if(icon)icon.classList.remove('spin');}
 }
 
