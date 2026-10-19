@@ -433,6 +433,20 @@ html,body   { height:100%; overflow:hidden; }
         <div class="p-4" style="position:relative;height:240px"><canvas id="hspr-trendChart"></canvas></div>
       </section>
 
+      <!-- Pengingat -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Pengingat SPR</p>
+          <p class="text-[10px] text-gray-400">Data yang perlu dilengkapi dan SPR yang perlu tindak lanjut. Pengadaan Cancel/Reject tidak dihitung. Klik label untuk memfilter.</p>
+        </div>
+        <div class="p-3 flex flex-wrap gap-1.5" id="hspr-pengingatChips"></div>
+        <div class="overflow-x-auto custom-scrollbar" style="max-height:340px;overflow-y:auto">
+          <table class="w-full text-left border-collapse" style="min-width:900px">
+            <tbody id="hspr-pengingatBody"><tr><td class="p-6 text-center text-gray-400 text-xs">Memuat...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- Tindak Lanjut Urgent -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
@@ -573,6 +587,20 @@ html,body   { height:100%; overflow:hidden; }
           <p class="text-[10px] text-gray-400">Perkembangan jumlah SPP dan nilai pekerjaan dari waktu ke waktu.</p>
         </div>
         <div class="p-4" style="position:relative;height:240px"><canvas id="hspp-trendChart"></canvas></div>
+      </section>
+
+      <!-- Pengingat -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Pengingat SPP</p>
+          <p class="text-[10px] text-gray-400">Wajib dilengkapi = SP2K/AMD sudah rilis tapi data kosong. Menunggu proses = SP2K belum rilis. SPP Cancel tidak dihitung. Klik label untuk memfilter.</p>
+        </div>
+        <div class="p-3 flex flex-wrap gap-1.5" id="hspp-pengingatChips"></div>
+        <div class="overflow-x-auto custom-scrollbar" style="max-height:340px;overflow-y:auto">
+          <table class="w-full text-left border-collapse" style="min-width:900px">
+            <tbody id="hspp-pengingatBody"><tr><td class="p-6 text-center text-gray-400 text-xs">Memuat...</td></tr></tbody>
+          </table>
+        </div>
       </section>
 
       <!-- Tindak Lanjut Urgent -->
@@ -6294,8 +6322,105 @@ let HAR_SPR_ROWS=[],HAR_SPR_FILTERED=[],harSprPage=1;
 let HAR_SPP_ROWS=[],HAR_SPP_FILTERED=[],harSppPage=1;
 let HAR_SPR_CACHE=null,HAR_SPP_CACHE=null;
 const HAR_PAGE_SIZE=15;
-const HSPRF={statusPengadaan:[],statusPenagihan:[],mitra:[],peruntukan:[],search:'',cardFilter:''};
-const HSPPF={status:[],tipeSPP:[],metodePengadaan:[],jenisPengadaan:[],kategoriPekerjaan:[],kodeAnggaran:[],coa:[],search:'',cardFilter:''};
+const HSPRF={statusPengadaan:[],statusPenagihan:[],mitra:[],peruntukan:[],search:'',cardFilter:'',pengingat:''};
+const HSPPF={status:[],tipeSPP:[],metodePengadaan:[],jenisPengadaan:[],kategoriPekerjaan:[],kodeAnggaran:[],coa:[],search:'',cardFilter:'',pengingat:''};
+let HAR_SPR_BASE=[],HAR_SPP_BASE=[];  // hasil filter tanpa filter pengingat (dasar hitungan kartu Pengingat)
+
+// ── PENGINGAT (kode dari GAS HAR v2.2) ─────────────────────
+const HAR_PENGINGAT={
+  TANPA_NO_SPR:     {label:'No SPR kosong',          cls:'bg-gray-100 text-gray-700',    sev:2},
+  TANPA_NO_SPP:     {label:'No SPP kosong',          cls:'bg-gray-100 text-gray-700',    sev:2},
+  TANPA_NO_PO_SP2K: {label:'No PO/SP2K kosong',      cls:'bg-gray-100 text-gray-700',    sev:2},
+  TANPA_TGL_RILIS:  {label:'Tgl rilis kosong',       cls:'bg-amber-100 text-amber-800',  sev:2},
+  TANPA_DURASI:     {label:'Durasi kosong',          cls:'bg-amber-100 text-amber-800',  sev:2},
+  TGL_TIDAK_WAJAR:  {label:'Tanggal tidak wajar',    cls:'bg-red-100 text-red-700',      sev:3},
+  LEWAT_SLA:        {label:'Lewat SLA 45 hari',      cls:'bg-red-100 text-red-700',      sev:4},
+  LEWAT_DURASI:     {label:'Lewat durasi',           cls:'bg-red-100 text-red-700',      sev:4},
+  KONTRAK_HABIS:    {label:'Kontrak ≤30 hari',  cls:'bg-red-100 text-red-700',      sev:4},
+  MENDEKATI_BATAS:  {label:'Mendekati batas durasi', cls:'bg-orange-100 text-orange-700',sev:3},
+  INVOICE_TERTAHAN: {label:'Invoice tertahan',       cls:'bg-orange-100 text-orange-700',sev:3}
+};
+const HAR_SLA_CLS={
+  'Lewat SLA':'bg-red-100 text-red-700','Lewat Durasi':'bg-red-100 text-red-700',
+  'Selesai lewat SLA':'bg-red-50 text-red-600','Selesai terlambat':'bg-red-50 text-red-600',
+  'Perhatian':'bg-orange-100 text-orange-700','Mendekati Batas':'bg-orange-100 text-orange-700',
+  'Normal':'bg-green-100 text-green-700','Selesai dalam SLA':'bg-green-50 text-green-700','Selesai tepat waktu':'bg-green-50 text-green-700',
+  'Batal':'bg-gray-100 text-gray-400'
+};
+function harEsc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function harSlaBadge(r){
+  if(!r.slaStatus)return '<span class="text-[9px] text-gray-300">-</span>';
+  var cls=HAR_SLA_CLS[r.slaStatus]||'bg-amber-50 text-amber-700';
+  return '<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold whitespace-nowrap '+cls+'">'+harEsc(r.slaStatus)+'</span>';
+}
+function harSisaTxt(r){
+  if(r.sisaSla===null||r.sisaSla===undefined)return '-';
+  return r.sisaSla<0?'<span class="text-red-600 font-bold">lewat '+Math.abs(r.sisaSla)+' hr</span>':r.sisaSla+' hr';
+}
+function harPengingatBadges(r,aktif){
+  return (r.pengingat||[]).map(function(k){
+    var d=HAR_PENGINGAT[k]||{label:k,cls:'bg-gray-100 text-gray-600'};
+    return '<span class="px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap '+d.cls+(aktif===k?' ring-1 ring-[#00288e]':'')+'">'+d.label+'</span>';
+  }).join(' ');
+}
+function harPengingatClick(tab,kode){
+  var F=tab==='spr'?HSPRF:HSPPF;
+  F.pengingat=F.pengingat===kode?'':kode;
+  if(tab==='spr')harSprApplyFilter();else harSppApplyFilter();
+}
+function harRenderPengingat(tab,rows){
+  var chipsEl=document.getElementById('h'+tab+'-pengingatChips');
+  var body=document.getElementById('h'+tab+'-pengingatBody');
+  if(!chipsEl||!body)return;
+  var F=tab==='spr'?HSPRF:HSPPF;
+  if(rows.length&&!rows.some(function(r){return Array.isArray(r.pengingat);})){
+    chipsEl.innerHTML='';
+    body.innerHTML='<tr><td class="p-6 text-center text-gray-400 text-xs">Data pengingat belum tersedia (API HAR belum versi 2.2).</td></tr>';
+    return;
+  }
+  var cnt={};
+  rows.forEach(function(r){(r.pengingat||[]).forEach(function(k){cnt[k]=(cnt[k]||0)+1;});});
+  var kodes=Object.keys(cnt).sort(function(a,b){return ((HAR_PENGINGAT[b]||{}).sev||0)-((HAR_PENGINGAT[a]||{}).sev||0)||cnt[b]-cnt[a];});
+  chipsEl.innerHTML=kodes.length?kodes.map(function(k){
+    var d=HAR_PENGINGAT[k]||{label:k,cls:'bg-gray-100 text-gray-600'};
+    var on=F.pengingat===k;
+    return '<button onclick="harPengingatClick(\''+tab+'\',\''+k+'\')" class="px-2 py-1 rounded-lg text-[10px] font-bold '+d.cls+(on?' ring-2 ring-[#00288e]':' hover:opacity-80')+'">'+d.label+' <span class="ml-0.5 px-1 rounded bg-white/70">'+cnt[k]+'</span></button>';
+  }).join('')+(F.pengingat?'<button onclick="harPengingatClick(\''+tab+'\',\''+F.pengingat+'\')" class="px-2 py-1 rounded-lg text-[10px] font-bold text-[#00288e] underline">Tampilkan semua</button>':'')
+  :'<span class="text-[10px] text-green-600 font-semibold">Tidak ada pengingat untuk data yang ditampilkan.</span>';
+
+  var list=rows.filter(function(r){return (r.pengingat||[]).length&&(!F.pengingat||r.pengingat.includes(F.pengingat));});
+  var skor=function(r){return Math.max.apply(null,r.pengingat.map(function(k){return (HAR_PENGINGAT[k]||{}).sev||0;}))*100+r.pengingat.length;};
+  list.sort(function(a,b){return skor(b)-skor(a)||(b.aging||0)-(a.aging||0);});
+  if(!list.length){body.innerHTML='<tr><td class="p-6 text-center text-gray-400 text-xs">Tidak ada data.</td></tr>';return;}
+  var th='<tr class="bg-gray-50 sticky top-0">'+['Baris','No','Uraian',tab==='spr'?'St. Pengadaan':'Status',tab==='spr'?'St. Penagihan':'Update Terbaru','Pengingat','Aging / SLA','Nilai']
+    .map(function(h){return '<th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">'+h+'</th>';}).join('')+'</tr>';
+  var baris=function(r){
+    var no=tab==='spr'?r.noSPR:r.noSPP, uraian=tab==='spr'?r.kegiatan:r.judulSPP;
+    var s1=tab==='spr'?r.statusPengadaan:r.status, s2=tab==='spr'?r.statusPenagihan:r.updateTerbaru;
+    var nilai=tab==='spr'?r.nominal:r.nilaiPekerjaan;
+    var aging=(r.aging!==null&&r.aging!==undefined)?r.aging+' hr'+(r.slaHari?' / '+r.slaHari+' hr':''):'-';
+    return '<tr class="border-b border-gray-50 hover:bg-[#f2f3ff]">'
+      +'<td class="p-2 text-[10px] text-gray-400 font-mono">'+(r.barisSheet||'-')+'</td>'
+      +'<td class="p-2 text-[10px] font-semibold text-[#00288e] whitespace-nowrap">'+(no?harEsc(no):'<span class="text-red-500">(kosong)</span>')+'</td>'
+      +'<td class="p-2 text-[10px] max-w-[220px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+harEsc(uraian)+'">'+harEsc(uraian||'-')+'</td>'
+      +'<td class="p-2 text-[10px] whitespace-nowrap">'+harEsc(s1||'-')+'</td>'
+      +'<td class="p-2 text-[10px] max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+harEsc(s2)+'">'+harEsc(s2||'-')+'</td>'
+      +'<td class="p-2">'+harPengingatBadges(r,F.pengingat)+(r.tglTidakWajar?'<div class="text-[9px] text-red-500 mt-0.5">'+harEsc(r.tglTidakWajar)+'</div>':'')+'</td>'
+      +'<td class="p-2 text-[10px] whitespace-nowrap">'+aging+'</td>'
+      +'<td class="p-2 text-[10px] text-right font-mono whitespace-nowrap">'+(nilai?fmtRpFull(nilai):'-')+'</td></tr>';
+  };
+  var grup=function(judul,ket,arr,cls){
+    if(!arr.length)return '';
+    return '<tr><td colspan="8" class="px-2 pt-3 pb-1 text-[10px] font-bold '+cls+'">'+judul+' ('+arr.length+') <span class="font-normal text-gray-400">— '+ket+'</span></td></tr>'+arr.map(baris).join('');
+  };
+  if(tab==='spp'){
+    body.innerHTML=th
+      +grup('Wajib dilengkapi','SP2K/AMD sudah rilis',list.filter(function(r){return r.sudahRilis;}),'text-red-700')
+      +grup('Menunggu proses','SP2K belum rilis, data wajar belum lengkap',list.filter(function(r){return !r.sudahRilis;}),'text-gray-500');
+  }else{
+    body.innerHTML=th+list.map(baris).join('');
+  }
+}
 let HSPR_SORT={col:'tglRilisSPR',dir:-1};
 let HSPP_SORT={col:'tglRilisSP2K',dir:-1};
 
@@ -6311,7 +6436,10 @@ const HSPR_COLS=[
   {key:'tglRilisSPR',label:'Tgl Rilis'},
   {key:'tglBapsBast',label:'Tgl BAPS'},
   {key:'aging',label:'Aging',num:true},
-  {key:'keterangan',label:'Keterangan'}
+  {key:'slaStatus',label:'Status SLA'},
+  {key:'sisaSla',label:'Sisa SLA',num:true},
+  {key:'keterangan',label:'Keterangan'},
+  {key:'pengingat',label:'Pengingat'}
 ];
 const HSPP_COLS=[
   {key:'noSPP',label:'No SPP'},
@@ -6329,7 +6457,10 @@ const HSPP_COLS=[
   {key:'durasiPekerjaan',label:'Durasi'},
   {key:'tglBapsBast',label:'Tgl BAPS'},
   {key:'aging',label:'Aging',num:true},
-  {key:'updateTerbaru',label:'Update'}
+  {key:'slaStatus',label:'Status SLA'},
+  {key:'sisaSla',label:'Sisa SLA',num:true},
+  {key:'updateTerbaru',label:'Update'},
+  {key:'pengingat',label:'Pengingat'}
 ];
 
 function harFmtRpShort(n){return fmtRp(n);}
@@ -6571,7 +6702,7 @@ function harSprBuildFilters(json){
 function harSprApplyFilter(){
   HSPRF.search=(document.getElementById('har-spr-search')?.value||'').toLowerCase();
   var chk=function(arr,val){return !arr.length||arr.includes(val);};
-  HAR_SPR_FILTERED=HAR_SPR_ROWS.filter(function(r){
+  HAR_SPR_BASE=HAR_SPR_ROWS.filter(function(r){
     if(!chk(HSPRF.statusPengadaan,r.statusPengadaan))return false;
     if(!chk(HSPRF.statusPenagihan,r.statusPenagihan))return false;
     if(!chk(HSPRF.mitra,r.mitra))return false;
@@ -6592,8 +6723,10 @@ function harSprApplyFilter(){
     }
     return true;
   });
+  HAR_SPR_FILTERED=HSPRF.pengingat?HAR_SPR_BASE.filter(function(r){return (r.pengingat||[]).includes(HSPRF.pengingat);}):HAR_SPR_BASE.slice();
   harSprSortApply();
   harSprRenderAll(HAR_SPR_FILTERED);
+  harRenderPengingat('spr',HAR_SPR_BASE);
   harSprUpdateLabel();harSprPage=1;harSprRenderTable();
 }
 function harSprResetFilter(){
@@ -6609,6 +6742,8 @@ function harSprSortApply(){
   var colDef=HSPR_COLS.find(function(c){return c.key===col;});
   HAR_SPR_FILTERED.sort(function(a,b){
     var va=a[col],vb=b[col];
+    if(col==='pengingat')return (((a.pengingat||[]).length)-((b.pengingat||[]).length))*dir;
+    if(colDef&&colDef.num&&(va===null||va===undefined)&&(vb===null||vb===undefined))return 0;
     if(colDef&&colDef.num){va=va||0;vb=vb||0;return (va-vb)*dir;}
     va=String(va||'');vb=String(vb||'');
     return va.localeCompare(vb)*dir;
@@ -6652,7 +6787,10 @@ function harSprRenderTable(){
       +'<td class="p-3 text-xs whitespace-nowrap">'+fmtDate(r.tglRilisSPR)+'</td>'
       +'<td class="p-3 text-xs whitespace-nowrap">'+fmtDate(r.tglBapsBast)+'</td>'
       +'<td class="p-3 text-xs text-center">'+agingTxt+'</td>'
+      +'<td class="p-3 text-center">'+harSlaBadge(r)+'</td>'
+      +'<td class="p-3 text-xs text-center whitespace-nowrap">'+harSisaTxt(r)+'</td>'
       +'<td class="p-3 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.keterangan||'')+'">'+(r.keterangan||'-')+'</td>'
+      +'<td class="p-3">'+harPengingatBadges(r,HSPRF.pengingat)+'</td>'
       +'</tr>';
   }).join('');
   var pg=buildPagination('har-spr-pgBtns',harSprPage,HAR_SPR_FILTERED.length,HAR_PAGE_SIZE,'harSprGoPage');
@@ -6663,6 +6801,7 @@ function harSprGoPage(p){harSprPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPR_FILT
 function harSprUpdateLabel(){
   var parts=[];
   if(HSPRF.cardFilter)parts.push({outstanding:'Outstanding',critical:'Critical SLA >45hr'}[HSPRF.cardFilter]||HSPRF.cardFilter);
+  if(HSPRF.pengingat)parts.push('Pengingat: '+((HAR_PENGINGAT[HSPRF.pengingat]||{}).label||HSPRF.pengingat));
   if(HSPRF.statusPengadaan.length)parts.push('Pengadaan('+HSPRF.statusPengadaan.length+')');
   if(HSPRF.statusPenagihan.length)parts.push('Penagihan('+HSPRF.statusPenagihan.length+')');
   if(HSPRF.mitra.length)parts.push('Mitra('+HSPRF.mitra.length+')');
@@ -6694,7 +6833,7 @@ function harSppCompute(rows){
   rows.forEach(function(r){
     var nilai=r.nilaiPekerjaan||0;
     var statusUp=(r.status||'').toUpperCase();
-    var isCancel=statusUp==='CANCEL';
+    var isCancel=(r.isCancel!==undefined)?!!r.isCancel:statusUp.indexOf('CANCEL')!==-1;
     var isDone=(r.updateTerbaru||'').toUpperCase().indexOf('SELESAI')!==-1;
     if(r.isAktif){aktifCount++;outstandingValue+=nilai;}
     if(isDone)doneValue+=nilai;
@@ -6911,7 +7050,7 @@ function harSppBuildFilters(json){
 function harSppApplyFilter(){
   HSPPF.search=(document.getElementById('har-spp-search')?.value||'').toLowerCase();
   var chk=function(arr,val){return !arr.length||arr.includes(val);};
-  HAR_SPP_FILTERED=HAR_SPP_ROWS.filter(function(r){
+  HAR_SPP_BASE=HAR_SPP_ROWS.filter(function(r){
     if(!chk(HSPPF.status,r.status))return false;
     if(!chk(HSPPF.tipeSPP,r.tipeSPP))return false;
     if(!chk(HSPPF.metodePengadaan,r.metodePengadaan))return false;
@@ -6929,8 +7068,10 @@ function harSppApplyFilter(){
     }
     return true;
   });
+  HAR_SPP_FILTERED=HSPPF.pengingat?HAR_SPP_BASE.filter(function(r){return (r.pengingat||[]).includes(HSPPF.pengingat);}):HAR_SPP_BASE.slice();
   harSppSortApply();
   harSppRenderAll(HAR_SPP_FILTERED);
+  harRenderPengingat('spp',HAR_SPP_BASE);
   harSppUpdateLabel();harSppPage=1;harSppRenderTable();
 }
 function harSppResetFilter(){
@@ -6946,6 +7087,8 @@ function harSppSortApply(){
   var colDef=HSPP_COLS.find(function(c){return c.key===col;});
   HAR_SPP_FILTERED.sort(function(a,b){
     var va=a[col],vb=b[col];
+    if(col==='pengingat')return (((a.pengingat||[]).length)-((b.pengingat||[]).length))*dir;
+    if(colDef&&colDef.num&&(va===null||va===undefined)&&(vb===null||vb===undefined))return 0;
     if(colDef&&colDef.num){va=va||0;vb=vb||0;return (va-vb)*dir;}
     va=String(va||'');vb=String(vb||'');
     return va.localeCompare(vb)*dir;
@@ -6992,7 +7135,10 @@ function harSppRenderTable(){
       +'<td class="p-3 text-xs whitespace-nowrap">'+(r.durasiPekerjaan||'-')+'</td>'
       +'<td class="p-3 text-xs whitespace-nowrap">'+fmtDate(r.tglBapsBast)+'</td>'
       +'<td class="p-3 text-xs text-center">'+agingTxt+'</td>'
+      +'<td class="p-3 text-center">'+harSlaBadge(r)+'</td>'
+      +'<td class="p-3 text-xs text-center whitespace-nowrap">'+harSisaTxt(r)+'</td>'
       +'<td class="p-3 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.updateTerbaru||'')+'">'+(r.updateTerbaru||'-')+'</td>'
+      +'<td class="p-3">'+harPengingatBadges(r,HSPPF.pengingat)+'</td>'
       +'</tr>';
   }).join('');
   var pg=buildPagination('har-spp-pgBtns',harSppPage,HAR_SPP_FILTERED.length,HAR_PAGE_SIZE,'harSppGoPage');
@@ -7003,6 +7149,7 @@ function harSppGoPage(p){harSppPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPP_FILT
 function harSppUpdateLabel(){
   var parts=[];
   if(HSPPF.cardFilter)parts.push({aktif:'SPP Aktif',critical:'Critical SLA'}[HSPPF.cardFilter]||HSPPF.cardFilter);
+  if(HSPPF.pengingat)parts.push('Pengingat: '+((HAR_PENGINGAT[HSPPF.pengingat]||{}).label||HSPPF.pengingat));
   if(HSPPF.status.length)parts.push('Status('+HSPPF.status.length+')');
   if(HSPPF.tipeSPP.length)parts.push('Tipe('+HSPPF.tipeSPP.length+')');
   if(HSPPF.metodePengadaan.length)parts.push('Metode('+HSPPF.metodePengadaan.length+')');
@@ -7051,16 +7198,16 @@ function harMsChange(tab,key){
 function harExportCSV(tab){
   var rows,hdrs,cols;
   if(tab==='spr'){
-    cols=['noSPR','kodeAnggaran','kegiatan','nominal','mitra','statusPengadaan','statusPenagihan','peruntukan','tglRilisSPR','tglBapsBast','aging','keterangan'];
-    hdrs=['No SPR','Kode Anggaran','Kegiatan','Nominal','Mitra','Status Pengadaan','Status Penagihan','Peruntukan','Tgl Rilis SPR','Tgl BAPS/BAST','Aging','Keterangan'];
+    cols=['barisSheet','noSPR','kodeAnggaran','kegiatan','nominal','mitra','statusPengadaan','statusPenagihan','peruntukan','tglRilisSPR','tglBapsBast','aging','slaHari','sisaSla','slaStatus','keterangan','pengingatTxt'];
+    hdrs=['Baris Sheet','No SPR','Kode Anggaran','Kegiatan','Nominal','Mitra','Status Pengadaan','Status Penagihan','Peruntukan','Tgl Rilis SPR','Tgl BAPS/BAST','Aging','SLA (hari)','Sisa SLA','Status SLA','Keterangan','Pengingat'];
     rows=[hdrs.join(',')];
-    HAR_SPR_FILTERED.forEach(function(r){rows.push(cols.map(function(c){return '"'+String(r[c]==null?'':r[c]).replace(/"/g,'""')+'"';}).join(','));});
+    HAR_SPR_FILTERED.forEach(function(r){r=Object.assign({},r,{pengingatTxt:(r.pengingat||[]).map(function(k){return (HAR_PENGINGAT[k]||{}).label||k;}).join('; ')});rows.push(cols.map(function(c){return '"'+String(r[c]==null?'':r[c]).replace(/"/g,'""')+'"';}).join(','));});
     var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));a.download='spr_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
   }else{
-    cols=['noSPP','judulSPP','kodeAnggaran','tipeSPP','noPOSP2K','metodePengadaan','status','nilaiPekerjaan','kategoriPekerjaan','tglRilisSP2K','durasiPekerjaan','tglBapsBast','aging','updateTerbaru'];
-    hdrs=['No SPP','Judul SPP','Kode Anggaran','Tipe SPP','No PO/SP2K','Metode Pengadaan','Status','Nilai Pekerjaan','Kategori','Tgl SP2K','Durasi','Tgl BAPS/BAST','Aging','Update Terbaru'];
+    cols=['barisSheet','noSPP','judulSPP','kodeAnggaran','tipeSPP','noPOSP2K','metodePengadaan','status','nilaiPekerjaan','kategoriPekerjaan','tglRilisSP2K','durasiPekerjaan','tglBapsBast','aging','slaHari','sisaSla','slaStatus','updateTerbaru','pengingatTxt'];
+    hdrs=['Baris Sheet','No SPP','Judul SPP','Kode Anggaran','Tipe SPP','No PO/SP2K','Metode Pengadaan','Status','Nilai Pekerjaan','Kategori','Tgl SP2K','Durasi','Tgl BAPS/BAST','Aging','SLA (hari)','Sisa SLA','Status SLA','Update Terbaru','Pengingat'];
     rows=[hdrs.join(',')];
-    HAR_SPP_FILTERED.forEach(function(r){rows.push(cols.map(function(c){return '"'+String(r[c]==null?'':r[c]).replace(/"/g,'""')+'"';}).join(','));});
+    HAR_SPP_FILTERED.forEach(function(r){r=Object.assign({},r,{pengingatTxt:(r.pengingat||[]).map(function(k){return (HAR_PENGINGAT[k]||{}).label||k;}).join('; ')});rows.push(cols.map(function(c){return '"'+String(r[c]==null?'':r[c]).replace(/"/g,'""')+'"';}).join(','));});
     var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));a.download='spp_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
   }
 }
