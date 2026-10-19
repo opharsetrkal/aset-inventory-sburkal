@@ -2243,13 +2243,19 @@ async function homeLoadData(force) {
   const ambil = (k, url) => fetch(url).then(r=>r.json()).catch(()=>null).then(v => {
     data[k] = v; HOME_PENDING.delete(k); homeRender(data);
   });
+  const ambilHar = () => Promise.all([
+      fetch(API_HAR + '?tab=spr').then(r=>r.json()).catch(()=>null),
+      fetch(API_HAR + '?tab=spp').then(r=>r.json()).catch(()=>null)
+    ]).then(([spr, spp]) => {
+      data.har = homeHarSummary(spr, spp); HOME_PENDING.delete('har'); homeRender(data);
+    });
   try {
     await Promise.allSettled([
       ambil('wig',      API_WIG + '?mode=summary'),
       ambil('stok',     API_STOK + '?mode=summary' + nc),
       ambil('serap',    API_PENYERAPAN + '?mode=summary'),
       ambil('keuangan', API_KEUANGAN),
-      ambil('har',      API_HAR + '?mode=home-summary'),
+      ambilHar(),
     ]);
     homeWriteCache(data);
     loaded.home = true;
@@ -2271,6 +2277,23 @@ function homeRefresh() {
   homeLoadData(true);
 }
 
+// Ringkasan SPR/SPP untuk Home dari data tab penuh (kecil, ±0,05 MB).
+// Data tab juga disimpan ke cache modul HAR -> halaman SPR/SPP terbuka tanpa fetch ulang.
+function homeHarSummary(spr, spp) {
+  const out = { ok: !!((spr && spr.ok) || (spp && spp.ok)) };
+  if(spr && spr.ok) {
+    if(!HAR_SPR_CACHE) HAR_SPR_CACHE = spr;
+    const a = harSprCompute(spr.rows || []);
+    out.spr = { total: a.totalSPR, critical: a.aging45Count };
+  }
+  if(spp && spp.ok) {
+    if(!HAR_SPP_CACHE) HAR_SPP_CACHE = spp;
+    const b = harSppCompute(spp.rows || []);
+    out.spp = { total: b.totalSPP, criticalSla: b.criticalCount };
+  }
+  return out;
+}
+
 function homeRender(data) {
   // ── HAR: SPR summary ────────────────────────────────────
   const sprEl = document.getElementById('home-spr-content');
@@ -2285,12 +2308,11 @@ function homeRender(data) {
             <p class="text-lg font-black text-blue-800">${(s.total||0).toLocaleString('id-ID')}</p>
           </div>
           <div class="bg-${(s.critical||0)>0?'red':'gray'}-50 rounded-lg p-2">
-            <p class="text-[9px] text-${(s.critical||0)>0?'red':'gray'}-500 font-bold">Critical</p>
+            <p class="text-[9px] text-${(s.critical||0)>0?'red':'gray'}-500 font-bold">Critical SLA &gt;45 hr</p>
             <p class="text-lg font-black text-${(s.critical||0)>0?'red':'gray'}-700">${(s.critical||0)}</p>
           </div>
         </div>`;
     } else if(!homePending('har')) {
-      // fallback: gunakan K_ROWS jika HAR API tidak return spr
       sprEl.innerHTML = '<p class="text-[9px] text-gray-300 text-center py-2">—</p>';
     }
   }
@@ -3747,19 +3769,26 @@ function idbOpen() {
     r.onerror   = () => rej(r.error);
   });
 }
+const IDB_TIMEOUT_MS = 2000;
+function idbBatasWaktu(p) {
+  return Promise.race([p, new Promise(res => setTimeout(() => res(null), IDB_TIMEOUT_MS))]);
+}
 async function idbGet(k) {
   try {
-    const db = await idbOpen();
-    return await new Promise(res => {
-      const q = db.transaction('kv').objectStore('kv').get(k);
-      q.onsuccess = () => res(q.result || null);
-      q.onerror   = () => res(null);
-    });
+    return await idbBatasWaktu((async () => {
+      const db = await idbOpen();
+      return await new Promise(res => {
+        const q = db.transaction('kv').objectStore('kv').get(k);
+        q.onsuccess = () => res(q.result || null);
+        q.onerror   = () => res(null);
+      });
+    })());
   } catch(e) { return null; }
 }
 async function idbSet(k, v) {
   try {
-    const db = await idbOpen();
+    const db = await idbBatasWaktu(idbOpen());
+    if(!db) return;
     await new Promise(res => {
       const t = db.transaction('kv', 'readwrite');
       t.objectStore('kv').put(v, k);
