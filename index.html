@@ -1572,6 +1572,14 @@ html,body   { height:100%; overflow:hidden; }
             <input type="date" id="p-dateTo" onchange="pOnFilterChange()"
               class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600">
           </div>
+          <!-- Kategori Transaksi (GAS Penyerapan v3) -->
+          <div class="ms-wrap relative" id="ms-p-kategori">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pToggleMs('kategori')">
+              <span id="ms-p-kategori-label">Kategori Transaksi</span>
+              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-48 overflow-y-auto" id="ms-p-kategori-menu"></div>
+          </div>
           <!-- Movement Type -->
           <div class="ms-wrap relative" id="ms-p-mvt">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pToggleMs('mvt')">
@@ -2452,7 +2460,7 @@ function homeRender(data) {
       const serap = rows.filter(r=>r['_type']==='penyerapan');
       const kemBaik = rows.filter(r=>r['_type']==='kembali_baik');
       totalQty = serap.reduce((s,r)=>s+(r['_qty_abs']||0),0);
-      rasio = totalQty>0 ? Math.round(kemBaik.reduce((s,r)=>s+(r['_qty_abs']||0),0)/totalQty*100) : 0;
+      rasio = totalQty>0 ? Math.round(kemBaik.reduce((s,r)=>s+(r['_qty_abs']||0),0)/totalQty*1000)/10 : 0;
     }
     seEl.innerHTML = `
       <div class="grid grid-cols-2 gap-2">
@@ -2462,7 +2470,7 @@ function homeRender(data) {
         </div>
         <div class="bg-${rasio>50?'red':'green'}-50 rounded-lg p-2">
           <p class="text-[9px] text-${rasio>50?'red':'green'}-600 font-bold">Rasio Kembali</p>
-          <p class="text-sm font-black text-${rasio>50?'red':'green'}-700">${rasio}%</p>
+          <p class="text-sm font-black text-${rasio>50?'red':'green'}-700">${(Math.round(rasio*10)/10).toLocaleString('id-ID',{maximumFractionDigits:1})}%</p>
         </div>
       </div>`;
   } else if(seEl && !homePending('serap')) {
@@ -3372,7 +3380,7 @@ function sRenderAlert(filtered) {
   const conByKat = {};
   giRows.forEach(r => {
     const kat = r['Kategori - Teknik'] || '(Tidak ada)';
-    const qty = Math.abs(parseFloat(r['Quantity']) || 0);
+    const qty = (r['_qty_abs'] !== undefined) ? (+r['_qty_abs'] || 0) : Math.abs(parseFloat(r['Quantity']) || 0);
     const mk  = (r['Posting Date'] || '').slice(0, 7);
     if(!mk) return;
     if(!conByKat[kat]) conByKat[kat] = { totalQty: 0, months: new Set() };
@@ -3775,6 +3783,7 @@ const P_COLS=['Material Document','Item','Material','Material Description','Batc
   'Kategori - Teknik','Movement Type Text','Posting Date','_type'];
 
 const P_MS_CONFIG={
+  kategori:  {col:'_kategori',          label:'Kategori Transaksi'},
   mvt:       {col:'Movement Type Text', label:'Movement Type'},
   slocKp:    {col:'Sloc - KP',          label:'Sloc KP'},
   slocGudang:{col:'Sloc - Gudang',      label:'Sloc Gudang'},
@@ -3785,7 +3794,7 @@ const P_MS_CONFIG={
 
 const PF={
   dateFrom:'', dateTo:'',
-  mvt:[], slocKp:[], slocGudang:[], brand:[], katTeknik:[], katSap:[],
+  kategori:[], mvt:[], slocKp:[], slocGudang:[], brand:[], katTeknik:[], katSap:[],
   search:'', top5KatTeknik:''
 };
 
@@ -3985,6 +3994,7 @@ function pApplyFilter(rows) {
     const d=r['Posting Date']||'';
     if(PF.dateFrom&&d<PF.dateFrom)return false;
     if(PF.dateTo  &&d>PF.dateTo)  return false;
+    if(!pChk(PF.kategori,  r['_kategori']))         return false;
     if(!pChk(PF.mvt,       r['Movement Type Text']))return false;
     if(!pChk(PF.slocKp,    r['Sloc - KP']))         return false;
     if(!pChk(PF.slocGudang,r['Sloc - Gudang']))      return false;
@@ -4028,23 +4038,35 @@ function pResetAllFilters() {
   pApplyAll();
 }
 
+// Nilai Rp bersih: koreksi/pembatalan (_qty_abs negatif) mengurangi, bukan menambah
+function pNilai(r){
+  const a=Math.abs(parseFloat(r['Amount in LC'])||0);
+  return (r['_qty_abs']||0)<0?-a:a;
+}
+function pFmtPct(v){return (Math.round(v*10)/10).toLocaleString('id-ID',{maximumFractionDigits:1});}
+
 // ── RENDER RESUME ─────────────────────────────────────────
 function pRenderResume() {
   const serap  =P_FILTERED.filter(r=>r['_type']==='penyerapan');
   const kemBaik=P_FILTERED.filter(r=>r['_type']==='kembali_baik');
   const kemRusak=P_FILTERED.filter(r=>r['_type']==='kembali_rusak');
   const totalQtySerap  =serap.reduce((s,r)=>s+(r['_qty_abs']||0),0);
-  const totalNilaiSerap=serap.reduce((s,r)=>s+Math.abs(parseFloat(r['Amount in LC'])||0),0);
+  const totalNilaiSerap=serap.reduce((s,r)=>s+pNilai(r),0);
+  const trf=P_FILTERED.filter(r=>r['_type']==='transfer');
+  const trfKeluar=trf.filter(r=>(+r['Quantity']||0)<0).reduce((s,r)=>s+Math.abs(+r['Quantity']||0),0);
+  const trfMasuk =trf.filter(r=>(+r['Quantity']||0)>0).reduce((s,r)=>s+(+r['Quantity']||0),0);
+  const nKoreksi=serap.filter(r=>(r['_qty_abs']||0)<0).length;
   const totalQtyBaik   =kemBaik.reduce((s,r)=>s+(r['_qty_abs']||0),0);
   const totalQtyRusak  =kemRusak.reduce((s,r)=>s+(r['_qty_abs']||0),0);
-  const rasio=totalQtySerap>0?Math.round((totalQtyBaik/totalQtySerap)*100):0;
+  const rasio=totalQtySerap>0?Math.round((totalQtyBaik/totalQtySerap)*1000)/10:0;
   const rasioColor=rasio>50?'text-red-600 font-black':'text-green-600 font-black';
 
   document.getElementById('p-kpiResume').innerHTML=`
     <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm">
       <p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Total Qty Penyerapan</p>
       <p class="text-xl font-black text-blue-800">${Math.round(totalQtySerap).toLocaleString('id-ID')}</p>
-      <p class="text-[9px] text-blue-400 mt-0.5">${serap.length.toLocaleString('id-ID')} transaksi</p>
+      <p class="text-[9px] text-blue-400 mt-0.5">${(serap.length-nKoreksi).toLocaleString('id-ID')} transaksi${nKoreksi?' · '+nKoreksi+' koreksi':''}</p>
+      ${trf.length?`<p class="text-[9px] text-purple-500 mt-0.5" title="Transfer antar gudang/plant (TF/TR to stck in trans.) tidak dihitung sebagai penyerapan">Transfer antar gudang (tidak dihitung): keluar ${Math.round(trfKeluar).toLocaleString('id-ID')} · masuk ${Math.round(trfMasuk).toLocaleString('id-ID')}</p>`:''}
     </div>
     <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
       <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Nilai Penyerapan</p>
@@ -4063,7 +4085,7 @@ function pRenderResume() {
     </div>
     <div class="bg-white p-4 rounded-xl border ${rasio>50?'border-red-400':'border-gray-200'} shadow-sm">
       <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Rasio Kembali Baik</p>
-      <p class="text-xl ${rasioColor}">${rasio}%</p>
+      <p class="text-xl ${rasioColor}">${pFmtPct(rasio)}%</p>
       <p class="text-[9px] ${rasio>50?'text-red-500':'text-gray-400'} mt-0.5">${rasio>50?'⚠ Perlu perhatian':'Normal'}</p>
     </div>`;
 }
@@ -4083,9 +4105,9 @@ function pRenderRasioTable() {
   });
   const rows=Object.values(map).map(d=>({
     ...d,
-    rasioB:d.serap>0?Math.round(d.kembaliBaik /d.serap*100):0,
-    rasioR:d.serap>0?Math.round(d.kembaliRusak/d.serap*100):0,
-  })).sort((a,b)=>b.rasioB-a.rasioB);
+    rasioB:d.serap>0?Math.round(d.kembaliBaik /d.serap*1000)/10:0,
+    rasioR:d.serap>0?Math.round(d.kembaliRusak/d.serap*1000)/10:0,
+  })).filter(d=>d.serap!==0||d.kembaliBaik!==0||d.kembaliRusak!==0).sort((a,b)=>b.rasioB-a.rasioB);
 
   const tbody=document.getElementById('p-rasioTbody');
   if(!rows.length){tbody.innerHTML='<tr><td colspan="5" class="p-4 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
@@ -4096,7 +4118,7 @@ function pRenderRasioTable() {
       <td class="px-3 py-2 text-xs">${d.slocKp}</td>
       <td class="px-3 py-2 text-xs text-right">${Math.round(d.serap).toLocaleString('id-ID')}</td>
       <td class="px-3 py-2 text-xs text-right text-green-700 font-semibold">${Math.round(d.kembaliBaik).toLocaleString('id-ID')}</td>
-      <td class="px-3 py-2 text-xs text-right font-bold ${d.rasioB>50?'text-red-600':'text-green-600'}">${d.rasioB}%</td>
+      <td class="px-3 py-2 text-xs text-right font-bold ${d.rasioB>50?'text-red-600':'text-green-600'}" ${d.rasioB>100?'title="Pengembalian lebih besar dari penyerapan pada periode yang sama — umumnya material yang dikeluarkan sebelum periode ini (mis. dismantle CPE pelanggan)"':''}>${pFmtPct(d.rasioB)}%${d.rasioB>100?' <span class="text-[9px] font-normal text-gray-400">(kembali &gt; serap)</span>':''}</td>
     </tr>`;
   }).join('');
 }
@@ -4220,7 +4242,7 @@ function pRenderTrendChart() {
     if(!k)return;
     if(!byKey[k])byKey[k]={qty:0,nilai:0,trx:0};
     byKey[k].qty  +=(r['_qty_abs']||0);
-    byKey[k].nilai+=Math.abs(parseFloat(r['Amount in LC'])||0);
+    byKey[k].nilai+=pNilai(r);
     byKey[k].trx  +=1;
   });
   const keys=Object.keys(byKey).sort();
@@ -4287,14 +4309,22 @@ function pRenderTable() {
     return;
   }
   tbody.innerHTML=paged.map((r,i)=>{
-    const typeBadge=r['_type']==='penyerapan'
+    const KB={
+      'Penyerapan':['Serap','bg-blue-100 text-blue-800'],'Koreksi penyerapan':['Koreksi serap','bg-blue-50 text-blue-600'],
+      'Kembali baik':['Kembali Baik','bg-green-100 text-green-800'],'Koreksi kembali baik':['Koreksi kembali','bg-green-50 text-green-600'],
+      'Kembali rusak':['Kembali Rusak','bg-red-100 text-red-800'],'Koreksi kembali rusak':['Koreksi rusak','bg-red-50 text-red-600'],
+      'Transfer keluar':['Transfer keluar','bg-purple-100 text-purple-700'],'Transfer masuk':['Transfer masuk','bg-purple-100 text-purple-700'],
+      'Selisih stock opname':['Selisih opname','bg-gray-100 text-gray-600']};
+    const kb=r['_kategori']?(KB[r['_kategori']]||[r['_kategori'],'bg-amber-100 text-amber-800']):null;
+    const typeBadge=kb?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold whitespace-nowrap '+kb[1]+'">'+kb[0]+'</span>'
+      :r['_type']==='penyerapan'
       ?'<span class="px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[9px] font-bold">Serap</span>'
       :r['_type']==='kembali_baik'
       ?'<span class="px-1.5 py-0.5 rounded-full bg-green-100 text-green-800 text-[9px] font-bold">Kembali Baik</span>'
       :r['_type']==='kembali_rusak'
       ?'<span class="px-1.5 py-0.5 rounded-full bg-red-100 text-red-800 text-[9px] font-bold">Kembali Rusak</span>'
       :'<span class="px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 text-[9px]">—</span>';
-    const rowBg=r['_type']==='kembali_baik'?'bg-green-50/30':r['_type']==='kembali_rusak'?'bg-red-50/30':'';
+    const rowBg=r['_type']==='kembali_baik'?'bg-green-50/30':r['_type']==='kembali_rusak'?'bg-red-50/30':r['_type']==='transfer'?'bg-purple-50/30':'';
     const cells=P_COLS.map(col=>{
       const v=r[col];
       if(col==='_type')return`<td class="p-3">${typeBadge}</td>`;
@@ -4343,8 +4373,8 @@ function pRenderProyeksi(mode) {
   const byKat = {}; // kat → { months: {YYYY-MM: {qty, amt}} }
   giRows.forEach(r => {
     const kat = r['Kategori - Teknik'] || '(Tidak ada)';
-    const qty = Math.abs(parseFloat(r['Quantity']) || 0);
-    const amt = Math.abs(parseFloat(r['Amount in LC']) || 0);
+    const qty = (r['_qty_abs'] !== undefined) ? (+r['_qty_abs'] || 0) : Math.abs(parseFloat(r['Quantity']) || 0);
+    const amt = pNilai(r);
     const mk  = (r['Posting Date'] || '').slice(0, 7);
     if(!mk) return;
     if(!byKat[kat]) byKat[kat] = {};
