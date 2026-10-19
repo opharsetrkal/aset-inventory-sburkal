@@ -350,6 +350,22 @@ html,body   { height:100%; overflow:hidden; }
         <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="hspr-exec"></div>
       </section>
 
+      <!-- Pengingat -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Pengingat SPR</p>
+          <p class="text-[10px] text-gray-400">Data yang perlu dilengkapi dan SPR yang perlu tindak lanjut. Pengadaan Cancel/Reject tidak dihitung. Klik label untuk memfilter.</p>
+        </div>
+        <div class="p-3 flex flex-wrap gap-1.5" id="hspr-pengingatChips"></div>
+        <div class="overflow-x-auto custom-scrollbar" style="max-height:340px;overflow-y:auto">
+          <table class="w-full text-left border-collapse" style="min-width:900px">
+            <tbody id="hspr-pengingatBody"><tr><td class="p-6 text-center text-gray-400 text-xs">Memuat...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Baris: Monitoring Proses SPR + Status SPR -->
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
       <!-- Monitoring Proses SPR -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
@@ -375,7 +391,6 @@ html,body   { height:100%; overflow:hidden; }
           </div>
         </div>
       </section>
-
       <!-- Status SPR -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
@@ -401,6 +416,7 @@ html,body   { height:100%; overflow:hidden; }
           </div>
         </div>
       </section>
+      </div>
 
       <!-- 4. Analisa Penyerapan -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -431,20 +447,6 @@ html,body   { height:100%; overflow:hidden; }
           <p class="text-[10px] text-gray-400">Perkembangan jumlah SPR dan nilai dari waktu ke waktu.</p>
         </div>
         <div class="p-4" style="position:relative;height:240px"><canvas id="hspr-trendChart"></canvas></div>
-      </section>
-
-      <!-- Pengingat -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Pengingat SPR</p>
-          <p class="text-[10px] text-gray-400">Data yang perlu dilengkapi dan SPR yang perlu tindak lanjut. Pengadaan Cancel/Reject tidak dihitung. Klik label untuk memfilter.</p>
-        </div>
-        <div class="p-3 flex flex-wrap gap-1.5" id="hspr-pengingatChips"></div>
-        <div class="overflow-x-auto custom-scrollbar" style="max-height:340px;overflow-y:auto">
-          <table class="w-full text-left border-collapse" style="min-width:900px">
-            <tbody id="hspr-pengingatBody"><tr><td class="p-6 text-center text-gray-400 text-xs">Memuat...</td></tr></tbody>
-          </table>
-        </div>
       </section>
 
       <!-- Tindak Lanjut Urgent -->
@@ -517,6 +519,20 @@ html,body   { height:100%; overflow:hidden; }
         <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="hspp-exec"></div>
       </section>
 
+      <!-- Pengingat -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Pengingat SPP</p>
+          <p class="text-[10px] text-gray-400">Wajib dilengkapi = SP2K/AMD sudah rilis tapi data kosong. Menunggu proses = SP2K belum rilis. SPP Cancel tidak dihitung. Klik label untuk memfilter.</p>
+        </div>
+        <div class="p-3 flex flex-wrap gap-1.5" id="hspp-pengingatChips"></div>
+        <div class="overflow-x-auto custom-scrollbar" style="max-height:340px;overflow-y:auto">
+          <table class="w-full text-left border-collapse" style="min-width:900px">
+            <tbody id="hspp-pengingatBody"><tr><td class="p-6 text-center text-gray-400 text-xs">Memuat...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- Update Monitoring -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
@@ -528,6 +544,8 @@ html,body   { height:100%; overflow:hidden; }
         </div>
       </section>
 
+      <!-- Baris: Status SPP + Analisa Pengadaan -->
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
       <!-- Status SPP -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
@@ -553,14 +571,13 @@ html,body   { height:100%; overflow:hidden; }
           </div>
         </div>
       </section>
-
       <!-- Analisa Pengadaan -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-sm font-bold text-[#131b2e]">Analisa Pengadaan</p>
           <p class="text-[10px] text-gray-400">Dimensi operasional dengan kontribusi terbesar.</p>
         </div>
-        <div class="p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="border border-gray-100 rounded-xl overflow-hidden">
             <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Metode Pengadaan</p></div>
             <div id="hspp-topMetode" class="p-3 space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar"></div>
@@ -579,6 +596,7 @@ html,body   { height:100%; overflow:hidden; }
           </div>
         </div>
       </section>
+      </div>
 
       <!-- Tren Bulanan -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -587,20 +605,6 @@ html,body   { height:100%; overflow:hidden; }
           <p class="text-[10px] text-gray-400">Perkembangan jumlah SPP dan nilai pekerjaan dari waktu ke waktu.</p>
         </div>
         <div class="p-4" style="position:relative;height:240px"><canvas id="hspp-trendChart"></canvas></div>
-      </section>
-
-      <!-- Pengingat -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Pengingat SPP</p>
-          <p class="text-[10px] text-gray-400">Wajib dilengkapi = SP2K/AMD sudah rilis tapi data kosong. Menunggu proses = SP2K belum rilis. SPP Cancel tidak dihitung. Klik label untuk memfilter.</p>
-        </div>
-        <div class="p-3 flex flex-wrap gap-1.5" id="hspp-pengingatChips"></div>
-        <div class="overflow-x-auto custom-scrollbar" style="max-height:340px;overflow-y:auto">
-          <table class="w-full text-left border-collapse" style="min-width:900px">
-            <tbody id="hspp-pengingatBody"><tr><td class="p-6 text-center text-gray-400 text-xs">Memuat...</td></tr></tbody>
-          </table>
-        </div>
       </section>
 
       <!-- Tindak Lanjut Urgent -->
@@ -6335,13 +6339,17 @@ const HAR_PENGINGAT={
   TANPA_DURASI:     {label:'Durasi kosong',          cls:'bg-amber-100 text-amber-800',  sev:2},
   TGL_TIDAK_WAJAR:  {label:'Tanggal tidak wajar',    cls:'bg-red-100 text-red-700',      sev:3},
   LEWAT_SLA:        {label:'Lewat SLA 45 hari',      cls:'bg-red-100 text-red-700',      sev:4},
-  LEWAT_DURASI:     {label:'Lewat durasi',           cls:'bg-red-100 text-red-700',      sev:4},
+  LEWAT_DURASI:     {label:'Lewat SLA (durasi/45 hr)',cls:'bg-red-100 text-red-700',     sev:4},
   KONTRAK_HABIS:    {label:'Kontrak ≤30 hari',  cls:'bg-red-100 text-red-700',      sev:4},
   MENDEKATI_BATAS:  {label:'Mendekati batas durasi', cls:'bg-orange-100 text-orange-700',sev:3},
-  INVOICE_TERTAHAN: {label:'Invoice tertahan',       cls:'bg-orange-100 text-orange-700',sev:3}
+  INVOICE_TERTAHAN: {label:'Belum submit ke pusat',  cls:'bg-orange-100 text-orange-700',sev:3},
+  PENAGIHAN_BASPR:  {label:'BASPR belum dibuat (ICON)', cls:'bg-orange-100 text-orange-700',sev:3},
+  PENAGIHAN_LAKDAN: {label:'Invoice di Lakdan SBU',  cls:'bg-orange-100 text-orange-700',sev:3},
+  PENAGIHAN_REVISI: {label:'Revisi invoice (mitra)', cls:'bg-orange-100 text-orange-700',sev:3},
+  PENAGIHAN_KOSONG: {label:'Status penagihan kosong',cls:'bg-gray-100 text-gray-700',    sev:2}
 };
 const HAR_SLA_CLS={
-  'Lewat SLA':'bg-red-100 text-red-700','Lewat Durasi':'bg-red-100 text-red-700',
+  'Lewat SLA':'bg-red-100 text-red-700','Lewat Durasi':'bg-red-100 text-red-700','Tanpa Tgl Rilis':'bg-amber-50 text-amber-700','Belum Rilis SP2K':'bg-gray-100 text-gray-500',
   'Selesai lewat SLA':'bg-red-50 text-red-600','Selesai terlambat':'bg-red-50 text-red-600',
   'Perhatian':'bg-orange-100 text-orange-700','Mendekati Batas':'bg-orange-100 text-orange-700',
   'Normal':'bg-green-100 text-green-700','Selesai dalam SLA':'bg-green-50 text-green-700','Selesai tepat waktu':'bg-green-50 text-green-700',
@@ -6398,7 +6406,7 @@ function harRenderPengingat(tab,rows){
     var no=tab==='spr'?r.noSPR:r.noSPP, uraian=tab==='spr'?r.kegiatan:r.judulSPP;
     var s1=tab==='spr'?r.statusPengadaan:r.status, s2=tab==='spr'?r.statusPenagihan:r.updateTerbaru;
     var nilai=tab==='spr'?r.nominal:r.nilaiPekerjaan;
-    var aging=(r.aging!==null&&r.aging!==undefined)?r.aging+' hr'+(r.slaHari?' / '+r.slaHari+' hr':''):'-';
+    var aging=(r.aging!==null&&r.aging!==undefined)?r.aging+' hr'+(r.slaHari?' / '+r.slaHari+' hr':'')+(r.slaDasar&&r.slaDasar.indexOf('Default')===0?' <span class="text-[9px] text-gray-400">(default)</span>':''):'-';
     return '<tr class="border-b border-gray-50 hover:bg-[#f2f3ff]">'
       +'<td class="p-2 text-[10px] text-gray-400 font-mono">'+(r.barisSheet||'-')+'</td>'
       +'<td class="p-2 text-[10px] font-semibold text-[#00288e] whitespace-nowrap">'+(no?harEsc(no):'<span class="text-red-500">(kosong)</span>')+'</td>'
@@ -6492,6 +6500,15 @@ function harApplyFilter(tab){if(tab==='spr')harSprApplyFilter();else harSppApply
 
 // ── SPR: BUILD ALL SECTIONS ────────────────────────────────
 // ── SPR: CLIENT-SIDE AGGREGATION (semua dihitung dari rows terfilter) ──
+function harSprIsBatal(r){
+  var sp=(r.statusPengadaan||'').toUpperCase();
+  return sp.indexOf('CANCEL')!==-1||sp.indexOf('REJECT')!==-1;
+}
+function harSprIsAktif(r){
+  if(r.isAktif!==undefined)return !!r.isAktif;
+  var st=(r.statusPenagihan||'').toUpperCase();
+  return !harSprIsBatal(r)&&st!=='CANCEL'&&st.indexOf('SUBMIT INVOICE KE PUSAT')===-1;
+}
 function harSprCompute(rows){
   var byStatusPengadaan={},byStatusPenagihan={},byMitra={},byKodeAnggaran={},byPeruntukan={};
   var totalNominal=0,outstandingCount=0,outstandingValue=0,doneValue=0,cancelValue=0;
@@ -6534,7 +6551,19 @@ function harSprCompute(rows){
   var monthlyTrend=Object.keys(monthlyMap).sort().map(function(k){
     return {month:k,count:monthlyMap[k].count,nominal:monthlyMap[k].nominal};
   });
+  // SPR Aktif (GAS v2.3: r.isAktif) = bukan Cancel/Reject & belum Submit Invoice ke Pusat
+  var aktifCount=0,aktifValue=0,pusatValue=0,batalValue=0,tahapAktif={};
+  rows.forEach(function(r){
+    var n=r.nominal||0;
+    if(harSprIsBatal(r)){batalValue+=n;return;}
+    if(harSprIsAktif(r)){
+      aktifCount++;aktifValue+=n;
+      var t=r.statusPenagihan||((r.statusPengadaan||'').toUpperCase()==='DONE'?'(penagihan kosong)':(r.statusPengadaan||'(status kosong)'));
+      tahapAktif[t]=(tahapAktif[t]||0)+1;
+    } else pusatValue+=n;
+  });
   return {
+    aktifCount:aktifCount,aktifValue:aktifValue,pusatValue:pusatValue,batalValue:batalValue,tahapAktif:tahapAktif,
     totalSPR:rows.length,totalNominal:totalNominal,
     byStatusPengadaan:byStatusPengadaan,byStatusPenagihan:byStatusPenagihan,
     byMitra:byMitra,byKodeAnggaran:byKodeAnggaran,byPeruntukan:byPeruntukan,
@@ -6564,13 +6593,15 @@ function harSprRenderExec(agg){
   var pctOut=agg.totalSPR?Math.round(agg.outstandingCount/agg.totalSPR*100):0;
   var pctCrit=agg.totalSPR?Math.round(agg.aging45Count/agg.totalSPR*100):0;
   var pctOutVal=agg.totalNominal?Math.round(agg.outstandingValue/agg.totalNominal*100):0;
+  var pctAktif=agg.totalSPR?Math.round(agg.aktifCount/agg.totalSPR*100):0;
+  var pctAktifVal=agg.totalNominal?Math.round(agg.aktifValue/agg.totalNominal*100):0;
   var cf=HSPRF.cardFilter;
   var cards=[
-    {icon:'description',label:'Total SPR',sub:'Pekerjaan',val:(agg.totalSPR||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
-    {icon:'payments',label:'Total Nilai',sub:'',val:fmtRp(agg.totalNominal||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
-    {icon:'history_toggle_off',label:'Outstanding',sub:'Pekerjaan',val:(agg.outstandingCount||0).toLocaleString('id-ID'),caption:pctOut+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'outstanding'},
-    {icon:'warning',label:'Critical SLA (>45 hari)',sub:'Pekerjaan',val:(agg.aging45Count||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600',action:'critical'},
-    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'outstanding'}
+    {icon:'description',label:'Total SPR',sub:'',val:(agg.totalSPR||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
+    {icon:'payments',label:'Total Nilai SPR',sub:'',val:fmtRp(agg.totalNominal||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
+    {icon:'history_toggle_off',label:'SPR Aktif',sub:'',val:(agg.aktifCount||0).toLocaleString('id-ID'),caption:pctAktif+'% dari total · '+(agg.outstandingCount||0)+' di tahap penagihan',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'aktif'},
+    {icon:'warning',label:'Critical SLA (>45 hari)',sub:'',val:(agg.aging45Count||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600',action:'critical'},
+    {icon:'account_balance_wallet',label:'Nilai SPR Aktif',sub:'',val:fmtRp(agg.aktifValue||0),caption:pctAktifVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'aktif'}
   ];
   el.innerHTML=cards.map(function(c){
     var isActive=(c.action!=='reset'&&cf===c.action);
@@ -6629,13 +6660,14 @@ function harSprRenderHealth(agg){
     {label:'>45 hari',val:b.bOver45+' ('+(totalSla?Math.round(b.bOver45/totalSla*100):0)+'%)',color:'#ef4444'}
   ]);
 
-  var totalFin=(agg.outstandingValue||0)+(agg.doneValue||0)+(agg.cancelValue||0);
-  rebuildChart('hspr-finChart',{type:'doughnut',data:{labels:['Outstanding','Done','Cancel'],datasets:[{data:[agg.outstandingValue||0,agg.doneValue||0,agg.cancelValue||0],backgroundColor:['#3b82f6','#22c55e','#94a3b8'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  var fA=agg.aktifValue||0,fP=agg.pusatValue||0,fB=agg.batalValue||0,totalFin=fA+fP+fB;
+  var pf=function(v){return totalFin?Math.round(v/totalFin*100):0;};
+  rebuildChart('hspr-finChart',{type:'doughnut',data:{labels:['Aktif','Sudah submit ke pusat','Batal'],datasets:[{data:[fA,fP,fB],backgroundColor:['#3b82f6','#22c55e','#94a3b8'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
   var finEl=document.getElementById('hspr-finLegend');
   if(finEl)finEl.innerHTML=harDonutLegend([
-    {label:'Outstanding',val:fmtRp(agg.outstandingValue||0)+' ('+(totalFin?Math.round((agg.outstandingValue||0)/totalFin*100):0)+'%)',color:'#3b82f6'},
-    {label:'Done',val:fmtRp(agg.doneValue||0)+' ('+(totalFin?Math.round((agg.doneValue||0)/totalFin*100):0)+'%)',color:'#22c55e'},
-    {label:'Cancel',val:fmtRp(agg.cancelValue||0)+' ('+(totalFin?Math.round((agg.cancelValue||0)/totalFin*100):0)+'%)',color:'#94a3b8'}
+    {label:'Aktif',val:fmtRp(fA)+' ('+pf(fA)+'%)',color:'#3b82f6'},
+    {label:'Sudah submit ke pusat',val:fmtRp(fP)+' ('+pf(fP)+'%)',color:'#22c55e'},
+    {label:'Batal (Cancel/Reject)',val:fmtRp(fB)+' ('+pf(fB)+'%)',color:'#94a3b8'}
   ]);
 }
 
@@ -6709,6 +6741,7 @@ function harSprApplyFilter(){
     if(!chk(HSPRF.peruntukan,r.peruntukan))return false;
     if(HSPRF.search&&!JSON.stringify(r).toLowerCase().includes(HSPRF.search))return false;
     // cardFilter: kondisi komposit yang tidak bisa dimap ke checkbox biasa
+    if(HSPRF.cardFilter==='aktif'&&!harSprIsAktif(r))return false;
     if(HSPRF.cardFilter==='outstanding'){
       var sp=(r.statusPengadaan||'').toUpperCase();
       var st=(r.statusPenagihan||'').toUpperCase();
@@ -6800,7 +6833,7 @@ function harSprRenderTable(){
 function harSprGoPage(p){harSprPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPR_FILTERED.length/HAR_PAGE_SIZE)||1));harSprRenderTable();}
 function harSprUpdateLabel(){
   var parts=[];
-  if(HSPRF.cardFilter)parts.push({outstanding:'Outstanding',critical:'Critical SLA >45hr'}[HSPRF.cardFilter]||HSPRF.cardFilter);
+  if(HSPRF.cardFilter)parts.push({aktif:'SPR Aktif',outstanding:'Outstanding',critical:'Critical SLA >45 hari'}[HSPRF.cardFilter]||HSPRF.cardFilter);
   if(HSPRF.pengingat)parts.push('Pengingat: '+((HAR_PENGINGAT[HSPRF.pengingat]||{}).label||HSPRF.pengingat));
   if(HSPRF.statusPengadaan.length)parts.push('Pengadaan('+HSPRF.statusPengadaan.length+')');
   if(HSPRF.statusPenagihan.length)parts.push('Penagihan('+HSPRF.statusPenagihan.length+')');
@@ -6825,6 +6858,11 @@ function harSprCardClick(type){
 
 // ── SPP: BUILD ALL SECTIONS ────────────────────────────────
 // ── SPP: CLIENT-SIDE AGGREGATION (semua dihitung dari rows terfilter) ──
+// Batas SLA SPP: slaHari dari GAS v2.3 (durasi, atau 45 hari bila durasi kosong)
+function harSppBatas(r){
+  if(r.slaHari!==null&&r.slaHari!==undefined)return r.slaHari;
+  return (r.durasiRencana!==null&&r.durasiRencana!==undefined)?r.durasiRencana:null;
+}
 function harSppCompute(rows){
   var byStatus={},byUpdateTerbaru={},byTipeSPP={},byMetodePengadaan={},byJenisPengadaan={},byKategoriPekerjaan={};
   var totalNilai=0,aktifCount=0,outstandingValue=0,doneValue=0,cancelValue=0,criticalCount=0;
@@ -6841,7 +6879,7 @@ function harSppCompute(rows){
     var includeAging=!isCancel&&r.isAktif;
     if(includeAging&&r.aging!==null&&r.aging!==undefined){
       if(r.isCritical){agingBuckets.bOver45++;criticalCount++;}
-      else if(r.durasiRencana!==null&&r.aging>=r.durasiRencana*0.7)agingBuckets.b31_45++;
+      else if(harSppBatas(r)!==null&&r.aging>=harSppBatas(r)*0.7)agingBuckets.b31_45++;
       else agingBuckets.b0_30++;
     }
     if(r.tglRilisSP2K){
@@ -6874,11 +6912,11 @@ function harSppCompute(rows){
   var priorityB=rows.filter(function(r){
     var st=(r.status||'').toUpperCase();
     return st!=='CANCEL'&&r.isAktif&&!r.isPerpanjangan&&r.aging!==null&&r.aging!==undefined&&
-      r.tglRilisSP2K&&r.durasiRencana!==null&&r.durasiRencana!==undefined&&r.aging>=r.durasiRencana*0.7;
+      r.tglRilisSP2K&&harSppBatas(r)!==null&&r.aging>=harSppBatas(r)*0.7;
   }).map(function(r){
-    var lewat=r.aging-r.durasiRencana;
+    var lewat=r.aging-harSppBatas(r);
     var kondisi=lewat>0?'Melewati Durasi Pekerjaan':'Mendekati Batas Durasi';
-    return {noSPP:r.noSPP,judulSPP:r.judulSPP,kondisi:kondisi,keterangan:'Percepatan Penyelesaian',sisaHari:r.durasiRencana-r.aging,nilaiPekerjaan:r.nilaiPekerjaan,score:3000+lewat};
+    return {noSPP:r.noSPP,judulSPP:r.judulSPP,kondisi:kondisi,keterangan:'Percepatan Penyelesaian',sisaHari:harSppBatas(r)-r.aging,nilaiPekerjaan:r.nilaiPekerjaan,score:3000+lewat};
   });
 
   var priorityAction=priorityA.concat(priorityB).sort(function(a,b){return b.score-a.score;}).slice(0,10);
@@ -6887,7 +6925,15 @@ function harSppCompute(rows){
     return {month:k,count:monthlyMap[k].count,nominal:monthlyMap[k].nominal};
   });
 
+  var finBast=0,finBerjalan=0,finProses=0,finBatal=0;
+  rows.forEach(function(r){
+    var n=r.nilaiPekerjaan||0,stU=(r.status||'').toUpperCase(),upU=(r.updateTerbaru||'').toUpperCase();
+    var batal=(r.isCancel!==undefined)?!!r.isCancel:(stU.indexOf('CANCEL')!==-1||upU.indexOf('CANCEL')!==-1);
+    var rilis=(r.sudahRilis!==undefined)?!!r.sudahRilis:(upU.indexOf('SELESAI')!==-1&&upU.indexOf('RILIS')!==-1);
+    if(batal)finBatal+=n;else if(r.tglBapsBast)finBast+=n;else if(rilis)finBerjalan+=n;else finProses+=n;
+  });
   return {
+    finBast:finBast,finBerjalan:finBerjalan,finProses:finProses,finBatal:finBatal,
     totalSPP:rows.length,totalNilai:totalNilai,
     byStatus:byStatus,byUpdateTerbaru:byUpdateTerbaru,byTipeSPP:byTipeSPP,
     byMetodePengadaan:byMetodePengadaan,byJenisPengadaan:byJenisPengadaan,byKategoriPekerjaan:byKategoriPekerjaan,
@@ -6919,10 +6965,10 @@ function harSppRenderExec(agg){
   var cf=HSPPF.cardFilter;
   var cards=[
     {icon:'description',label:'Total SPP',sub:'',val:(agg.totalSPP||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
-    {icon:'payments',label:'Total Nilai Pekerjaan',sub:'',val:fmtRp(agg.totalNilai||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
+    {icon:'payments',label:'Total Nilai SPP',sub:'',val:fmtRp(agg.totalNilai||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
     {icon:'history_toggle_off',label:'SPP Aktif',sub:'',val:(agg.aktifCount||0).toLocaleString('id-ID'),caption:pctAktif+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'aktif'},
-    {icon:'warning',label:'Critical SLA',sub:'',val:(agg.criticalCount||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600',action:'critical'},
-    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'aktif'}
+    {icon:'warning',label:'Critical SLA (>durasi / 45 hari)',sub:'',val:(agg.criticalCount||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600',action:'critical'},
+    {icon:'account_balance_wallet',label:'Nilai SPP Aktif',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'aktif'}
   ];
   el.innerHTML=cards.map(function(c){
     var isActive=(c.action!=='reset'&&cf===c.action);
@@ -6968,21 +7014,23 @@ function harDonutLegendSPP(items){
 function harSppRenderHealth(agg){
   var b=agg.agingBuckets||{b0_30:0,b31_45:0,bOver45:0};
   var totalSla=b.b0_30+b.b31_45+b.bOver45;
-  rebuildChart('hspp-slaChart',{type:'doughnut',data:{labels:['0-30 hari','31-45 hari','>45 hari'],datasets:[{data:[b.b0_30,b.b31_45,b.bOver45],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  rebuildChart('hspp-slaChart',{type:'doughnut',data:{labels:['Normal','Mendekati batas','Lewat batas'],datasets:[{data:[b.b0_30,b.b31_45,b.bOver45],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
   var slaEl=document.getElementById('hspp-slaLegend');
   if(slaEl)slaEl.innerHTML=harDonutLegendSPP([
-    {label:'0-30 hari',val:b.b0_30+' ('+(totalSla?Math.round(b.b0_30/totalSla*100):0)+'%)',color:'#22c55e'},
-    {label:'31-45 hari',val:b.b31_45+' ('+(totalSla?Math.round(b.b31_45/totalSla*100):0)+'%)',color:'#f59e0b'},
-    {label:'>45 hari',val:b.bOver45+' ('+(totalSla?Math.round(b.bOver45/totalSla*100):0)+'%)',color:'#ef4444'}
+    {label:'Normal (<70% batas)',val:b.b0_30+' ('+(totalSla?Math.round(b.b0_30/totalSla*100):0)+'%)',color:'#22c55e'},
+    {label:'Mendekati batas (≥70%)',val:b.b31_45+' ('+(totalSla?Math.round(b.b31_45/totalSla*100):0)+'%)',color:'#f59e0b'},
+    {label:'Lewat batas',val:b.bOver45+' ('+(totalSla?Math.round(b.bOver45/totalSla*100):0)+'%)',color:'#ef4444'}
   ]);
 
-  var totalFin=(agg.outstandingValue||0)+(agg.doneValue||0)+(agg.cancelValue||0);
-  rebuildChart('hspp-finChart',{type:'doughnut',data:{labels:['Outstanding','Done','Cancel'],datasets:[{data:[agg.outstandingValue||0,agg.doneValue||0,agg.cancelValue||0],backgroundColor:['#3b82f6','#22c55e','#94a3b8'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  var g1=agg.finProses||0,g2=agg.finBerjalan||0,g3=agg.finBast||0,g4=agg.finBatal||0,totalFin=g1+g2+g3+g4;
+  var pf=function(v){return totalFin?Math.round(v/totalFin*100):0;};
+  rebuildChart('hspp-finChart',{type:'doughnut',data:{labels:['Proses pengadaan','Berjalan (SP2K rilis)','Selesai BAST','Batal'],datasets:[{data:[g1,g2,g3,g4],backgroundColor:['#f59e0b','#3b82f6','#22c55e','#94a3b8'],borderWidth:1,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
   var finEl=document.getElementById('hspp-finLegend');
   if(finEl)finEl.innerHTML=harDonutLegendSPP([
-    {label:'Outstanding',val:fmtRp(agg.outstandingValue||0)+' ('+(totalFin?Math.round((agg.outstandingValue||0)/totalFin*100):0)+'%)',color:'#3b82f6'},
-    {label:'Done',val:fmtRp(agg.doneValue||0)+' ('+(totalFin?Math.round((agg.doneValue||0)/totalFin*100):0)+'%)',color:'#22c55e'},
-    {label:'Cancel',val:fmtRp(agg.cancelValue||0)+' ('+(totalFin?Math.round((agg.cancelValue||0)/totalFin*100):0)+'%)',color:'#94a3b8'}
+    {label:'Proses pengadaan',val:fmtRp(g1)+' ('+pf(g1)+'%)',color:'#f59e0b'},
+    {label:'Berjalan (SP2K rilis)',val:fmtRp(g2)+' ('+pf(g2)+'%)',color:'#3b82f6'},
+    {label:'Selesai BAST',val:fmtRp(g3)+' ('+pf(g3)+'%)',color:'#22c55e'},
+    {label:'Batal',val:fmtRp(g4)+' ('+pf(g4)+'%)',color:'#94a3b8'}
   ]);
 }
 
