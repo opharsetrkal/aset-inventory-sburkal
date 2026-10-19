@@ -2053,7 +2053,7 @@ function updateTopnav(page) {
         <button onclick="pResetAllFilters()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
         </button>
-        <button onclick="pLoadData()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+        <button onclick="pLoadData(true)" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="p-refreshIcon">sync</span>
         </button>
       </div>`;
@@ -2219,9 +2219,10 @@ function homeReadCache() {
   return null;
 }
 function homeWriteCache(data) {
-  // Penyerapan tidak disimpan (data penuh ±20 MB, melebihi kuota browser)
+  // Penyerapan disimpan hanya bila berupa ringkasan (mode summary, kecil)
   try {
     const small = { wig:data.wig, stok:data.stok, keuangan:data.keuangan, har:data.har };
+    if(data.serap && data.serap.mode==='summary') small.serap = data.serap;
     localStorage.setItem(HOME_CACHE_KEY, JSON.stringify({ data:small, ts:Date.now() }));
   } catch(e) {}
 }
@@ -2246,14 +2247,14 @@ async function homeLoadData(force) {
     await Promise.allSettled([
       ambil('wig',      API_WIG + '?mode=summary'),
       ambil('stok',     API_STOK + '?mode=summary' + nc),
-      ambil('serap',    API_PENYERAPAN),
+      ambil('serap',    API_PENYERAPAN + '?mode=summary'),
       ambil('keuangan', API_KEUANGAN),
       ambil('har',      API_HAR + '?mode=home-summary'),
     ]);
     homeWriteCache(data);
     loaded.home = true;
     // Simpan ke modul state supaya tidak re-fetch saat pindah modul
-    if(data.serap?.ok)    { P_ROWS = data.serap.rows||[]; }
+    if(data.serap?.ok && Array.isArray(data.serap.rows) && !P_ROWS.length) { P_ROWS = data.serap.rows; }
     if(data.keuangan?.ok) { K_ROWS = data.keuangan.allRows||data.keuangan.rows||[]; K_SUMMARY = data.keuangan.summary||{}; }
   } catch(err) {
     console.error('Home load error:', err);
@@ -2386,11 +2387,19 @@ function homeRender(data) {
   // ── INVENTORY: Penyerapan summary ──────────────────────
   const seEl = document.getElementById('home-penyerapan-content');
   if(seEl && data.serap?.ok) {
-    const rows = data.serap.rows||[];
-    const serap = rows.filter(r=>r['_type']==='penyerapan');
-    const kemBaik = rows.filter(r=>r['_type']==='kembali_baik');
-    const totalQty = serap.reduce((s,r)=>s+(r['_qty_abs']||0),0);
-    const rasio = totalQty>0 ? Math.round(kemBaik.reduce((s,r)=>s+(r['_qty_abs']||0),0)/totalQty*100) : 0;
+    let totalQty, rasio;
+    if(data.serap.mode==='summary') {
+      // Ringkasan dihitung di GAS (?mode=summary)
+      totalQty = data.serap.totalSerap||0;
+      rasio    = data.serap.rasioKembaliBaik||0;
+    } else {
+      // Cadangan: API versi lama (baris penuh)
+      const rows = data.serap.rows||[];
+      const serap = rows.filter(r=>r['_type']==='penyerapan');
+      const kemBaik = rows.filter(r=>r['_type']==='kembali_baik');
+      totalQty = serap.reduce((s,r)=>s+(r['_qty_abs']||0),0);
+      rasio = totalQty>0 ? Math.round(kemBaik.reduce((s,r)=>s+(r['_qty_abs']||0),0)/totalQty*100) : 0;
+    }
     seEl.innerHTML = `
       <div class="grid grid-cols-2 gap-2">
         <div class="bg-blue-50 rounded-lg p-2">
@@ -3295,8 +3304,12 @@ function sRenderAlert(filtered) {
   if(!tbody) return;
 
   if(!P_ROWS || P_ROWS.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-[10px] text-orange-500">Data konsumsi belum tersedia — buka modul Penyerapan Material terlebih dahulu.</td></tr>';
+    const sedangMuat = !P_ENSURE_TRIED || P_FETCH;
+    tbody.innerHTML = sedangMuat
+      ? '<tr><td colspan="6" class="p-6 text-center text-[10px] text-gray-400">Memuat data konsumsi dari Penyerapan Material…</td></tr>'
+      : '<tr><td colspan="6" class="p-6 text-center text-[10px] text-orange-500">Data konsumsi gagal dimuat — buka modul Penyerapan Material lalu klik refresh.</td></tr>';
     if(countEl) countEl.textContent = '—';
+    pEnsureRows();
     return;
   }
 
@@ -3722,30 +3735,135 @@ const PF={
   search:'', top5KatTeknik:''
 };
 
-// ── LOAD ─────────────────────────────────────────────────
-async function pLoadData() {
-  if(loading.penyerapan) return;
-  loading.penyerapan=true;
-  const icon=document.getElementById('p-refreshIcon');
-  if(icon)icon.classList.add('spin');
+// ── PENYIMPANAN BROWSER (IndexedDB) ──────────────────────
+// Data Penyerapan ±4 MB: terlalu besar untuk localStorage, jadi pakai IndexedDB.
+// Semua akses dibungkus try/catch: bila diblokir browser, dashboard tetap jalan tanpa cache.
+const ASUS_IDB = 'asus_dashboard';
+function idbOpen() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(ASUS_IDB, 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('kv');
+    r.onsuccess = () => res(r.result);
+    r.onerror   = () => rej(r.error);
+  });
+}
+async function idbGet(k) {
   try {
-    const res=await fetch(API_PENYERAPAN);
-    const json=await res.json();
-    if(!json.ok)throw new Error(json.error||'Gagal memuat data');
-    P_ROWS=json.rows||[];
-    P_RASIO_TABLE=json.rasioTable||[];
-    pBuildDropdowns(json);
-    pApplyAll();
-    pRenderProyeksi(P_PROJ_MODE);
-    // Kalau modul stok sudah load, refresh alert reorder karena P_ROWS baru tersedia
-    if(loaded.stok && S_ROWS.length) sRenderAlert(sApplyF(S_ROWS,SF));
-    loaded.penyerapan=true;
+    const db = await idbOpen();
+    return await new Promise(res => {
+      const q = db.transaction('kv').objectStore('kv').get(k);
+      q.onsuccess = () => res(q.result || null);
+      q.onerror   = () => res(null);
+    });
+  } catch(e) { return null; }
+}
+async function idbSet(k, v) {
+  try {
+    const db = await idbOpen();
+    await new Promise(res => {
+      const t = db.transaction('kv', 'readwrite');
+      t.objectStore('kv').put(v, k);
+      t.oncomplete = res; t.onerror = res; t.onabort = res;
+    });
+  } catch(e) {}
+}
+
+// ── LOAD ─────────────────────────────────────────────────
+const P_IDB_KEY = 'asus_serap_lite_v1';
+const P_FRESH_MS = 10 * 60 * 1000;   // data jaringan < 10 menit dianggap masih baru
+let P_SIG = '', P_FETCH = null, P_LAST_FETCH = 0, P_ENSURE_TRIED = false;
+
+// Format lite: {cols:[...], data:[[...],...]} -> array objek. Format lama: {rows:[...]}
+function pLiteToRows(json) {
+  if(Array.isArray(json.rows)) return json.rows;
+  const cols = json.cols || [];
+  return (json.data || []).map(a => {
+    const o = {};
+    for(let i = 0; i < cols.length; i++) o[cols[i]] = a[i];
+    return o;
+  });
+}
+function pSigOf(json) {
+  return (json.dibuat || '') + '|' + (json.total != null ? json.total : (json.rows || []).length);
+}
+function pSetData(json) {
+  P_ROWS = pLiteToRows(json);
+  P_RASIO_TABLE = json.rasioTable || [];
+  P_SIG = pSigOf(json);
+}
+
+// Satu permintaan jaringan dipakai bersama (modul Penyerapan & Alert Stok tidak fetch dobel)
+function pFetch(force) {
+  if(P_FETCH) return P_FETCH;
+  P_FETCH = fetch(API_PENYERAPAN + '?mode=lite' + (force ? '&nocache=1' : ''))
+    .then(r => r.json())
+    .then(json => {
+      if(!json.ok) throw new Error(json.error || 'Gagal memuat data');
+      P_LAST_FETCH = Date.now();
+      idbSet(P_IDB_KEY, json);
+      return json;
+    })
+    .finally(() => { P_FETCH = null; });
+  return P_FETCH;
+}
+
+function pRenderAll() {
+  pBuildDropdowns();
+  // Pertahankan centang filter yang sudah dipilih user
+  Object.keys(P_MS_CONFIG).forEach(key => {
+    const menu = document.getElementById('ms-p-' + key + '-menu');
+    if(!menu || !PF[key].length) return;
+    menu.querySelectorAll('input').forEach(el => { el.checked = PF[key].includes(el.value); });
+  });
+  pApplyAll();
+  pRenderProyeksi(P_PROJ_MODE);
+  // Alert Stok Rendah memakai P_ROWS -> perbarui bila modul Stok sudah dimuat
+  if(loaded.stok && S_ROWS.length) sRenderAlert(sApplyF(S_ROWS, SF));
+}
+
+async function pLoadData(force) {
+  if(loading.penyerapan) return;
+  loading.penyerapan = true;
+  const icon = document.getElementById('p-refreshIcon');
+  if(icon) icon.classList.add('spin');
+  let shown = false;
+  try {
+    // 1) Tampilkan data yang sudah ada (memori / IndexedDB) secara instan
+    if(!force) {
+      if(!P_ROWS.length) {
+        const c = await idbGet(P_IDB_KEY);
+        if(c && c.ok) pSetData(c);
+      }
+      if(P_ROWS.length) { pRenderAll(); shown = true; loaded.penyerapan = true; }
+    }
+    // 2) Perbarui dari server bila belum baru (lite ±4 MB, bukan 20 MB)
+    if(force || !shown || Date.now() - P_LAST_FETCH > P_FRESH_MS) {
+      const json = await pFetch(force);
+      if(!shown || pSigOf(json) !== P_SIG) { pSetData(json); pRenderAll(); }
+      loaded.penyerapan = true;
+    }
   } catch(err) {
-    document.getElementById('p-tblBody').innerHTML=`<tr><td colspan="15" class="p-8 text-center text-red-500 text-sm">⚠ ${err.message}</td></tr>`;
+    if(!shown) document.getElementById('p-tblBody').innerHTML=`<tr><td colspan="15" class="p-8 text-center text-red-500 text-sm">⚠ ${err.message}</td></tr>`;
+    else console.warn('Penyerapan: gagal memperbarui, menampilkan data tersimpan.', err);
   } finally {
-    loading.penyerapan=false;
-    if(icon)icon.classList.remove('spin');
+    loading.penyerapan = false;
+    if(icon) icon.classList.remove('spin');
   }
+}
+
+// Dipanggil Alert Stok Rendah bila data konsumsi belum ada: muat di latar tanpa render modul
+async function pEnsureRows() {
+  if(P_ROWS.length || P_ENSURE_TRIED) return;
+  P_ENSURE_TRIED = true;
+  try {
+    const c = await idbGet(P_IDB_KEY);
+    if(c && c.ok && !P_ROWS.length) pSetData(c);
+    if(!P_ROWS.length) {
+      const json = await pFetch(false);
+      if(!P_ROWS.length) pSetData(json);
+    }
+  } catch(e) { console.warn('Alert stok: data konsumsi gagal dimuat.', e); }
+  if(loaded.stok && S_ROWS.length) sRenderAlert(sApplyF(S_ROWS, SF));
 }
 
 // ── BUILD DROPDOWNS ───────────────────────────────────────
