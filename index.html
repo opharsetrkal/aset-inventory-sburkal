@@ -66,6 +66,26 @@ html,body   { height:100%; overflow:hidden; }
 .ms-item:hover{background:#f2f3ff}
 .ms-item input[type=checkbox]{width:12px;height:12px;accent-color:#00288e;cursor:pointer;flex-shrink:0}
 .ms-active .ms-btn{border-color:#00288e;background:#eaedff;color:#00288e}
+/* Dropdown ala filter Excel: kotak cari + (Pilih semua) — dipasang otomatis oleh msEnhance() */
+.ms-tools{position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid #e5e7eb;padding:6px 6px 4px}
+.ms-search-box{position:relative;display:flex;align-items:center}
+.ms-search-box .material-symbols-outlined{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:13px!important;line-height:1;color:#9ca3af;pointer-events:none}
+.ms-tools input.ms-search{width:100%!important;height:24px!important;min-height:0!important;font-size:10px!important;line-height:14px!important;
+  padding:0 6px 0 22px!important;border:1px solid #d1d5db!important;border-radius:6px!important;outline:none!important;
+  color:#131b2e!important;background:#fff!important;box-shadow:none!important;margin:0!important}
+.ms-tools input.ms-search:focus{border-color:#00288e!important;box-shadow:0 0 0 2px #eaedff!important}
+.ms-tools-row{display:flex;align-items:center;gap:6px;margin-top:4px}
+.ms-all{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#131b2e;cursor:pointer;padding:2px 4px;flex:1;white-space:nowrap;text-align:left;border-radius:4px}
+.ms-all:hover{background:#f2f3ff}
+.ms-box{width:12px;height:12px;border:1.5px solid #767683;border-radius:2px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;line-height:1;color:#fff;flex-shrink:0}
+.ms-all[data-state=all] .ms-box,.ms-all[data-state=some] .ms-box{background:#00288e;border-color:#00288e}
+.ms-all[data-state=all] .ms-box::after{content:'¹3'}
+.ms-all[data-state=some] .ms-box::after{content:'3'}
+.ms-count{font-size:9px;color:#9ca3af;white-space:nowrap}
+.ms-clear{font-size:9px;font-weight:700;color:#00288e;padding:1px 4px;border-radius:4px}
+.ms-clear:hover{background:#eaedff}
+.ms-empty{font-size:10px;color:#9ca3af;padding:8px 10px;text-align:center}
+.ms-item mark{background:#fde68a;color:inherit;padding:0;border-radius:2px}
 
 /* ── MOBILE — hanya layar HP kecil (<480px) ───────────── */
 @media(max-width:480px){
@@ -90,6 +110,13 @@ html,body   { height:100%; overflow:hidden; }
 </style>
 </head>
 <body class="bg-[#f0f2f7] text-[#131b2e] font-sans min-h-screen flex flex-col">
+<!-- Banner koneksi: muncul bila data diambil dari simpanan browser karena server tidak terjangkau -->
+<div id="net-banner" class="hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-[9999] max-w-[92vw] bg-amber-50 border border-amber-300 text-amber-900 rounded-xl shadow-lg px-4 py-2.5 text-[11px] flex items-start gap-3">
+  <span class="material-symbols-outlined text-[18px] text-amber-600">wifi_off</span>
+  <div class="flex-1"><p class="font-bold">Koneksi ke server data gagal</p><p id="net-banner-text" class="mt-0.5"></p></div>
+  <button onclick="location.reload()" class="px-2 py-1 rounded-lg bg-amber-600 text-white font-bold whitespace-nowrap">Coba lagi</button>
+  <button onclick="document.getElementById('net-banner').classList.add('hidden')" class="px-1 text-amber-700" title="Tutup">&times;</button>
+</div>
 
 <!-- ══════════════════════════════════════════════════════
   SIDEBAR — ditulis sekali, berlaku semua modul
@@ -1145,39 +1172,32 @@ html,body   { height:100%; overflow:hidden; }
   <div id="page-keuangan" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- Resume Keuangan -->
+      <!-- Resume Keuangan: Ringkasan | Status Pekerjaan | Aging Pembayaran (satu kartu ringkas) -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-sm font-bold text-[#131b2e]">Resume Keuangan Inventory</p>
-          <p class="text-[10px] text-gray-400">Ringkasan administrasi keuangan pengiriman material.</p>
+          <p class="text-[10px] text-gray-400">Ringkasan administrasi keuangan pengiriman material · klik kartu untuk filter.</p>
         </div>
-        <div class="p-4 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" id="k-kpiFinansial">
-          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
-          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
-        </div>
-      </section>
-
-      <!-- Status Pekerjaan -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Status Pekerjaan</p>
-          <p class="text-[10px] text-gray-400">Distribusi status seluruh pekerjaan · klik card untuk filter.</p>
-        </div>
-        <div class="p-4 grid gap-2" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))" id="k-statusCards">
-          <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-          <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-        </div>
-      </section>
-
-      <!-- Aging Pembayaran -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Aging Pembayaran</p>
-          <p class="text-[10px] text-gray-400">Dihitung dari Tgl AWB · hanya status Belum Dibayar.</p>
-        </div>
-        <div class="p-4 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" id="k-kpiAging">
-          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
-          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
+        <div class="p-3 grid grid-cols-1 lg:grid-cols-12 gap-3">
+          <div class="lg:col-span-3">
+            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1.5">Ringkasan</p>
+            <div class="grid grid-cols-2 lg:grid-cols-1 gap-2" id="k-kpiFinansial">
+              <div class="skeleton rounded-lg h-16"></div><div class="skeleton rounded-lg h-16"></div>
+            </div>
+          </div>
+          <div class="lg:col-span-5 lg:border-l lg:border-gray-100 lg:pl-3">
+            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1.5">Status Pekerjaan</p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="k-statusCards">
+              <div class="skeleton rounded-lg h-10"></div><div class="skeleton rounded-lg h-10"></div><div class="skeleton rounded-lg h-10"></div>
+            </div>
+          </div>
+          <div class="lg:col-span-4 lg:border-l lg:border-gray-100 lg:pl-3">
+            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1.5">Aging Pembayaran <span class="normal-case font-normal text-gray-400">· dari Tgl AWB, belum dibayar</span></p>
+            <div class="grid grid-cols-2 gap-2" id="k-kpiAging">
+              <div class="skeleton rounded-lg h-14"></div><div class="skeleton rounded-lg h-14"></div>
+              <div class="skeleton rounded-lg h-14"></div><div class="skeleton rounded-lg h-14"></div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1438,7 +1458,7 @@ html,body   { height:100%; overflow:hidden; }
         <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-3">
           <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
             <div class="flex items-center gap-4 mb-3">
-              <p class="text-xs font-bold text-[#131b2e] flex-1"></p>
+              <p class="text-xs font-bold text-[#131b2e] flex-1" id="s-gudangSel"></p>
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Regional</span>
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#EF9F27]"></span>Lapangan</span>
             </div>
@@ -1987,6 +2007,80 @@ const API_HAR      = 'https://script.google.com/macros/s/AKfycbxRCZSsvrhw0HB9wJl
 const API_PMOSP      = 'https://script.google.com/macros/s/AKfycby2-5gU-v_7A0Vpl1SKhmQjkC0Ooaa0tYoLUMNOOHyQD0HWh_W6ai7E62_XOGmoQgrwfQ/exec';
 
 // ══════════════════════════════════════════════════════════
+// apiJson — ambil JSON dari API GAS dengan:
+//  1. batas waktu per percobaan + coba ulang otomatis,
+//  2. menyimpan respons terakhir yang berhasil (IndexedDB, per URL),
+//  3. bila server tidak terjangkau / error: memakai data tersimpan + banner peringatan.
+// opt.simpan=false untuk API yang sudah punya cache sendiri (Stok lite, Penyerapan lite).
+// ══════════════════════════════════════════════════════════
+const API_NAMA = {};
+[[API_KEUANGAN,'Keuangan'],[API_STOK,'Stok'],[API_PENYERAPAN,'Penyerapan'],[API_WIG,'WIG'],
+ [API_DOKTEK,'Doktek'],[API_PMISP,'PM ISP'],[API_HAR,'HAR'],[API_PMOSP,'PM OSP']].forEach(function(a){API_NAMA[a[0]]=a[1];});
+const API_STALE = {};   // kunci -> {nama, ts}
+function apiKunci(url){ return 'api:' + String(url).replace(/[?&]nocache=1/,''); }
+function apiNamaDari(url){
+  const base=String(url).split('?')[0], q=String(url).split('?')[1]||'';
+  const nama=API_NAMA[base]||'Data';
+  const m=q.match(/(?:mode|tab)=([^&]+)/);
+  return nama+(m?' ('+decodeURIComponent(m[1])+')':'');
+}
+function apiBanner(){
+  const el=document.getElementById('net-banner'), tx=document.getElementById('net-banner-text');
+  if(!el||!tx)return;
+  const daftar=Object.values(API_STALE);
+  if(!daftar.length){el.classList.add('hidden');return;}
+  tx.innerHTML='Menampilkan data tersimpan: '+daftar.map(function(d){
+    return '<b>'+d.nama+'</b>'+(d.ts?' per '+new Date(d.ts).toLocaleString('id-ID',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'');
+  }).join(', ')+'. Angka bisa belum terbaru. Bila berlanjut, cek jaringan (akses ke script.googleusercontent.com).';
+  el.classList.remove('hidden');
+}
+function apiTunggu(ms){return new Promise(function(r){setTimeout(r,ms);});}
+async function apiSekali(url, ms){
+  const ac = (typeof AbortController!=='undefined') ? new AbortController() : null;
+  const t = setTimeout(function(){ if(ac) ac.abort(); }, ms);
+  try{
+    const res = await fetch(url, ac ? {signal:ac.signal} : undefined);
+    const json = await res.json();
+    if(json && json.ok===false) throw new Error(json.error||'Server mengembalikan error');
+    return json;
+  } finally { clearTimeout(t); }
+}
+async function apiJson(url, opt){
+  opt = opt || {};
+  const simpan = opt.simpan !== false;
+  const batas = opt.batasMs || 60000;          // GAS bisa >30 dtk bila cache server kosong
+  const coba  = opt.coba || 3;
+  const kunci = apiKunci(url);
+  let errAkhir = null;
+  for(let i=0;i<coba;i++){
+    try{
+      const json = await apiSekali(url, batas);
+      if(simpan) idbSet(kunci, {ts:Date.now(), json:json});
+      if(API_STALE[kunci]){ delete API_STALE[kunci]; apiBanner(); }
+      return json;
+    }catch(e){
+      errAkhir = e;
+      console.warn('[apiJson] percobaan '+(i+1)+'/'+coba+' gagal:', apiNamaDari(url), e && e.message);
+      // Ada data tersimpan -> langsung tampilkan (tidak menunggu semua percobaan)
+      if(simpan){
+        const c = await idbGet(kunci);
+        if(c && c.json){
+          API_STALE[kunci] = {nama:apiNamaDari(url), ts:c.ts};
+          apiBanner();
+          const out = Object.assign({}, c.json, {_stale:true, _staleTs:c.ts});
+          return out;
+        }
+      }
+      if(i<coba-1) await apiTunggu(1500*(i+1));
+    }
+  }
+  API_STALE[kunci] = {nama:apiNamaDari(url)+' — belum ada data tersimpan', ts:0};
+  apiBanner();
+  throw new Error((errAkhir&&errAkhir.name==='AbortError')?'Server tidak merespons (batas waktu habis)':
+    ((errAkhir&&errAkhir.message)||'Gagal memuat data') + ' — koneksi ke server data gagal');
+}
+
+// ══════════════════════════════════════════════════════════
 // NAVIGATION — SPA core
 // ══════════════════════════════════════════════════════════
 const PAGE_CONFIG = {
@@ -2280,12 +2374,12 @@ async function homeLoadData(force) {
 
   // 2) Ambil data terbaru; tiap bagian dirender begitu API-nya selesai (tidak saling menunggu)
   const nc = force ? '&nocache=1' : '';
-  const ambil = (k, url) => fetch(url).then(r=>r.json()).catch(()=>null).then(v => {
+  const ambil = (k, url) => apiJson(url).catch(()=>null).then(v => {
     data[k] = v; HOME_PENDING.delete(k); homeRender(data);
   });
   const ambilHar = () => Promise.all([
-      fetch(API_HAR + '?tab=spr').then(r=>r.json()).catch(()=>null),
-      fetch(API_HAR + '?tab=spp').then(r=>r.json()).catch(()=>null)
+      apiJson(API_HAR + '?tab=spr').catch(()=>null),
+      apiJson(API_HAR + '?tab=spp').catch(()=>null)
     ]).then(([spr, spp]) => {
       data.har = homeHarSummary(spr, spp); HOME_PENDING.delete('har'); homeRender(data);
     });
@@ -2513,8 +2607,7 @@ async function kLoadData() {
   const icon = document.getElementById('k-refreshIcon');
   if (icon) icon.classList.add('spin');
   try {
-    const res  = await fetch(API_KEUANGAN);
-    const json = await res.json();
+    const json = await apiJson(API_KEUANGAN);
     if (!json.ok) throw new Error(json.error||'Gagal memuat data');
     K_ROWS      = json.allRows || json.rows || [];
     K_SUMMARY   = json.summary || {};
@@ -2716,23 +2809,13 @@ function kUpdateLabel() {
 function kRenderResume(nom) {
   const s=K_SUMMARY; const has=Object.values(KF).some(v=>Array.isArray(v)?v.length>0:(v&&v!=='SEMUA'&&v!==''));
   document.getElementById('k-kpiFinansial').innerHTML=`
-    <div class="cf bg-white p-4 rounded-xl border ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('reset','all')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Transaksi</p>
-      <p class="text-2xl font-black text-[#00288e]">${K_FILTERED.length.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] text-gray-400 mt-1">Jumlah transaksi keuangan</p>
+    <div class="cf bg-white px-3 py-2 rounded-lg border ${has?'border-[#00288e] on':'border-gray-200'}" onclick="kOnCardClick('reset','all')" title="Klik untuk menampilkan semua data">
+      <p class="text-[9px] font-bold text-gray-500 uppercase">Total Transaksi</p>
+      <p class="text-xl font-black text-[#00288e] leading-tight">${K_FILTERED.length.toLocaleString('id-ID')}</p>
     </div>
-    <div class="cf bg-white p-4 rounded-xl border ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('reset','all')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Nominal</p>
-      <p class="text-xl font-black text-[#00288e]">${fmtRp(nom)}</p>
-      <p class="text-[9px] text-gray-400 mt-1">Nilai keseluruhan pengiriman</p>
-    </div>
-    <div class="cf bg-orange-50 p-4 rounded-xl border ${KF.activeCardFilter==='outstanding:belum-dibayar'?'border-[#00288e] on':'border-orange-200'} shadow-sm" onclick="kOnCardClick('outstanding','belum-dibayar')">
-      <p class="text-[9px] font-bold text-orange-600 uppercase mb-1">Belum Dibayar</p>
-      <p class="text-xl font-black text-orange-700">${fmtRp(s.globalOutstanding||0)}</p>
-    </div>
-    <div class="cf bg-green-50 p-4 rounded-xl border ${KF.status==='Paid'?'border-[#00288e] on':'border-green-200'} shadow-sm" onclick="kOnCardClick('paid','Paid')">
-      <p class="text-[9px] font-bold text-green-600 uppercase mb-1">Sudah Dibayar</p>
-      <p class="text-xl font-black text-green-700">${fmtRp(s.globalPaid||0)}</p>
+    <div class="cf bg-white px-3 py-2 rounded-lg border ${has?'border-[#00288e] on':'border-gray-200'}" onclick="kOnCardClick('reset','all')" title="Klik untuk menampilkan semua data">
+      <p class="text-[9px] font-bold text-gray-500 uppercase">Total Nominal</p>
+      <p class="text-lg font-black text-[#00288e] leading-tight">${fmtRp(nom)}</p>
     </div>`;
 }
 
@@ -2741,25 +2824,21 @@ function kRenderAging() {
   const r1=s.agingBuckets?.r1||0, r2=s.agingBuckets?.r2||0, norm=s.agingBuckets?.normal||0;
   const belum=K_ROWS.filter(r=>r['Status']!=='Paid').length;
   document.getElementById('k-kpiAging').innerHTML=`
-    <div class="cf bg-gray-50 p-4 rounded-xl border ${KF.activeCardFilter==='outstanding:belum-dibayar'?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('outstanding','belum-dibayar')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Belum Dibayar</p>
-      <p class="text-2xl font-black text-gray-700">${belum}</p>
-      <p class="text-[9px] text-gray-400 mt-1">Semua status aktif</p>
+    <div class="cf bg-gray-50 px-2.5 py-2 rounded-lg border ${KF.activeCardFilter==='outstanding:belum-dibayar'?'border-[#00288e] on':'border-gray-200'}" onclick="kOnCardClick('outstanding','belum-dibayar')">
+      <p class="text-[9px] font-bold text-gray-500 uppercase">Belum Dibayar</p>
+      <p class="text-lg font-black text-gray-700 leading-tight">${belum} <span class="text-[10px] font-bold text-orange-600">${fmtRp(s.globalOutstanding||0)}</span></p>
     </div>
-    <div class="cf bg-blue-50 p-4 rounded-xl border ${KF.activeCardFilter==='aging:normal'?'border-[#00288e] on':'border-blue-200'} shadow-sm" onclick="kOnCardClick('aging','normal')">
-      <p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Normal</p>
-      <p class="text-2xl font-black text-blue-700">${norm}</p>
-      <p class="text-[9px] text-blue-500 mt-1">0–7 hari</p>
+    <div class="cf bg-blue-50 px-2.5 py-2 rounded-lg border ${KF.activeCardFilter==='aging:normal'?'border-[#00288e] on':'border-blue-200'}" onclick="kOnCardClick('aging','normal')">
+      <p class="text-[9px] font-bold text-blue-600 uppercase">Normal <span class="font-normal normal-case text-blue-500">0–7 hr</span></p>
+      <p class="text-lg font-black text-blue-700 leading-tight">${norm}</p>
     </div>
-    <div class="cf bg-orange-50 p-4 rounded-xl border ${KF.activeCardFilter==='aging:R1'?'border-[#00288e] on':'border-orange-200'} shadow-sm" onclick="kOnCardClick('aging','R1')">
-      <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-orange-500 text-[14px]">warning</span><p class="text-[9px] font-bold text-orange-600 uppercase">Perhatian</p></div>
-      <p class="text-2xl font-black text-orange-600">${r1}</p>
-      <p class="text-[9px] text-orange-400 mt-1">8–14 hari</p>
+    <div class="cf bg-orange-50 px-2.5 py-2 rounded-lg border ${KF.activeCardFilter==='aging:R1'?'border-[#00288e] on':'border-orange-200'}" onclick="kOnCardClick('aging','R1')">
+      <p class="text-[9px] font-bold text-orange-600 uppercase flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">warning</span>Perhatian <span class="font-normal normal-case text-orange-400">8–14 hr</span></p>
+      <p class="text-lg font-black text-orange-600 leading-tight">${r1}</p>
     </div>
-    <div class="cf p-4 rounded-xl border ${r2>0?'bg-red-100 border-red-400':'bg-red-50 border-red-200'} ${KF.activeCardFilter==='aging:R2'?'on':''} shadow-sm" onclick="kOnCardClick('aging','R2')">
-      <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-red-600 text-[14px]">error</span><p class="text-[9px] font-bold text-red-700 uppercase">Kritis</p></div>
-      <p class="text-2xl font-black text-red-700">${r2}</p>
-      <p class="text-[9px] text-red-500 mt-1">&gt;14 hari</p>
+    <div class="cf px-2.5 py-2 rounded-lg border ${r2>0?'bg-red-100 border-red-400':'bg-red-50 border-red-200'} ${KF.activeCardFilter==='aging:R2'?'on':''}" onclick="kOnCardClick('aging','R2')">
+      <p class="text-[9px] font-bold text-red-700 uppercase flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">error</span>Kritis <span class="font-normal normal-case text-red-500">&gt;14 hr</span></p>
+      <p class="text-lg font-black text-red-700 leading-tight">${r2}</p>
     </div>`;
 }
 
@@ -2768,9 +2847,9 @@ function kRenderStatusCards() {
   const statuses=Object.keys(K_STATUS_COLOR_MAP);
   document.getElementById('k-statusCards').innerHTML=statuses.map((s,i)=>{
     const clr=K_STATUS_COLOR_MAP[s]||K_COLOR_FALLBACK[i%K_COLOR_FALLBACK.length];
-    return `<div class="cf p-3 rounded-xl border-2 ${KF.statusArr&&KF.statusArr.includes(s)?'on':''}" style="background:${clr.card};border-color:${clr.border}" onclick="kOnCardClick('status','${s.replace(/'/g,"\\'")}')">
-      <p class="text-[10px] font-bold mb-1 leading-tight" style="color:${clr.text}">${s}</p>
-      <p class="text-2xl font-black" style="color:${clr.text}">${byStatus[s]||0}</p>
+    return `<div class="cf px-2.5 py-1.5 rounded-lg border flex items-center justify-between gap-2 ${KF.statusArr&&KF.statusArr.includes(s)?'on':''}" style="background:${clr.card};border-color:${clr.border}" onclick="kOnCardClick('status','${s.replace(/'/g,"\\'")}')" title="${s}">
+      <p class="text-[10px] font-bold leading-tight truncate" style="color:${clr.text}">${s}</p>
+      <p class="text-base font-black" style="color:${clr.text}">${byStatus[s]||0}</p>
     </div>`;
   }).join('');
 }
@@ -2858,11 +2937,20 @@ function kRenderIoChart() {
     byIOCount[io]=(byIOCount[io]||0)+1;
   });
   const sorted=Object.entries(byIO).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  // Data kosong: sembunyikan canvas & tampilkan pesan (canvas TIDAK dihapus).
+  // Dulu innerHTML parent diganti -> canvas hilang permanen, chart tidak muncul lagi
+  // walaupun filter diubah/direset (hanya pulih setelah reload halaman).
+  const cv=document.getElementById('k-ioChart');
+  let kosong=document.getElementById('k-ioEmpty');
   if(!sorted.length){
-    const el=document.getElementById('k-ioChart');
-    if(el&&el.parentElement)el.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-12">Tidak ada data IO/PRK</p>';
+    if(CHARTS['k-ioChart']){CHARTS['k-ioChart'].destroy();delete CHARTS['k-ioChart'];}
+    if(cv)cv.style.display='none';
+    if(!kosong&&cv&&cv.parentElement){kosong=document.createElement('p');kosong.id='k-ioEmpty';kosong.className='text-[10px] text-gray-400 text-center py-12';cv.parentElement.appendChild(kosong);}
+    if(kosong){kosong.style.display='';kosong.textContent=K_FILTERED.length?'Kolom IO/PRK kosong pada '+K_FILTERED.length.toLocaleString('id-ID')+' transaksi yang ditampilkan':'Tidak ada transaksi pada filter ini';}
     return;
   }
+  if(cv)cv.style.display='';
+  if(kosong)kosong.style.display='none';
   const labels=sorted.map(e=>e[0]);
   rebuildChart('k-ioChart',{type:'bar',
     data:{labels,datasets:[
@@ -3198,8 +3286,7 @@ async function sLoadData(force) {
   }
   try {
     // 2) GAS ?mode=lite: 13 kolom, Tgl Update terbaru saja (±0,4 MB, bukan 41 MB)
-    const res=await fetch(API_STOK+'?mode=lite'+(force?'&nocache=1':''));
-    const json=await res.json();
+    const json=await apiJson(API_STOK+'?mode=lite'+(force?'&nocache=1':''),{simpan:false});
     if(!json.ok)throw new Error(json.error||'Gagal memuat data');
     try{ localStorage.setItem(S_CACHE_KEY, JSON.stringify({json, ts:Date.now()})); }catch(e){}
     // Render ulang hanya jika data berbeda dari yang sudah tampil (filter user tidak tereset)
@@ -3237,7 +3324,7 @@ async function sEnsureTgl(list) {
   const display=document.getElementById('s-tglActive');
   if(display)display.textContent='Memuat '+need.length+' tanggal…';
   try {
-    const res=await Promise.allSettled(need.map(t=>fetch(API_STOK+'?mode=lite&tgl='+encodeURIComponent(t)).then(r=>r.json())));
+    const res=await Promise.allSettled(need.map(t=>apiJson(API_STOK+'?mode=lite&tgl='+encodeURIComponent(t),{simpan:false})));
     res.forEach((r,i)=>{
       if(r.status==='fulfilled'&&r.value&&r.value.ok){
         S_ROWS=S_ROWS.concat(r.value.rows||[]);
@@ -3284,6 +3371,117 @@ function sBuildDropdowns() {
     if(m)m.querySelectorAll('input').forEach(cb=>{cb.checked=cb.value===S_DEFAULT_TGL;});
     sUpdateMsLabel('tglUpdate');
   }
+}
+
+// ══════════════════════════════════════════════════════════
+// msEnhance — dropdown filter ala Excel untuk semua .ms-menu
+//  · kotak "Cari…" (menyaring daftar, teks yang cocok ditandai)
+//  · "(Pilih semua)" untuk item yang sedang tampil + jumlah terpilih + "Hapus"
+//  · memanggil handler asli modul (onchange checkbox), jadi logika filter tiap modul tidak berubah
+// Item < MS_MIN_CARI tidak diberi kotak cari. Dropdown di MS_TANPA_PILIH_SEMUA tidak diberi
+// "(Pilih semua)" — mis. Tgl Update Stok: memilih semua = memuat semua snapshot sekaligus (berat).
+// ══════════════════════════════════════════════════════════
+const MS_MIN_CARI=7;
+const MS_TANPA_PILIH_SEMUA=['ms-s-tglUpdate-menu'];
+function msItems(menu){return [...menu.children].filter(el=>el.matches&&el.matches('label.ms-item'));}
+function msTeksAsli(item){if(item.dataset.msTeks===undefined)item.dataset.msTeks=item.textContent.trim();return item.dataset.msTeks;}
+function msTandai(item,q){
+  // Tandai teks yang cocok tanpa merusak checkbox (hanya node teks setelah input)
+  const cb=item.querySelector('input');const teks=msTeksAsli(item);
+  // Label berisi elemen lain (mis. badge warna status) -> tidak diubah, hanya disaring
+  if([...item.children].some(el=>el!==cb&&el.tagName!=='MARK'))return;
+  [...item.childNodes].forEach(n=>{if(n!==cb)item.removeChild(n);});
+  if(!q){item.appendChild(document.createTextNode(teks));return;}
+  const i=teks.toLowerCase().indexOf(q);
+  if(i<0){item.appendChild(document.createTextNode(teks));return;}
+  item.appendChild(document.createTextNode(teks.slice(0,i)));
+  const m=document.createElement('mark');m.textContent=teks.slice(i,i+q.length);item.appendChild(m);
+  item.appendChild(document.createTextNode(teks.slice(i+q.length)));
+}
+function msSegarkan(menu){
+  const tools=menu.querySelector(':scope > .ms-tools');if(!tools)return;
+  const q=(menu.dataset.msq||'').toLowerCase();
+  const items=msItems(menu);let tampil=0,tampilCek=0,totalCek=0;
+  items.forEach(it=>{
+    const cb=it.querySelector('input');const cocok=!q||msTeksAsli(it).toLowerCase().includes(q);
+    it.style.display=cocok?'':'none';msTandai(it,q);
+    if(cb&&cb.checked)totalCek++;
+    if(cocok){tampil++;if(cb&&cb.checked)tampilCek++;}
+  });
+  const all=tools.querySelector('.ms-all');
+  if(all){const st=(tampil>0&&tampilCek===tampil)?'all':(tampilCek>0?'some':'none');all.dataset.state=st;all.setAttribute('aria-checked',st==='all'?'true':(st==='some'?'mixed':'false'));}
+  const lbl=tools.querySelector('.ms-all-txt');if(lbl)lbl.textContent=q?'(Pilih semua hasil)':'(Pilih semua)';
+  const cnt=tools.querySelector('.ms-count');if(cnt)cnt.textContent=totalCek?totalCek+' dipilih':(q?tampil+' dari '+items.length:items.length+' pilihan');
+  let kosong=menu.querySelector(':scope > .ms-empty');
+  if(!tampil&&!kosong){kosong=document.createElement('div');kosong.className='ms-empty';kosong.textContent='Tidak ada yang cocok';menu.appendChild(kosong);}
+  if(tampil&&kosong)kosong.remove();
+}
+function msUbahBanyak(menu,targetCek){
+  // Ubah checkbox yang tampil, lalu panggil handler asli SEKALI (handler membaca semua centang)
+  let terakhir=null;
+  msItems(menu).forEach(it=>{
+    if(it.style.display==='none')return;
+    const cb=it.querySelector('input');if(!cb||cb.checked===targetCek)return;
+    cb.checked=targetCek;terakhir=cb;
+  });
+  if(terakhir)terakhir.dispatchEvent(new Event('change',{bubbles:true}));
+  msSegarkan(menu);
+}
+function msEnhance(menu,baruDibuka){
+  if(!menu||menu.classList.contains('hidden'))return;
+  const items=msItems(menu);
+  // Tidak ada pilihan sama sekali (mis. kolom datanya kosong) -> tampilkan keterangan
+  const kosong0=menu.querySelector(':scope > .ms-empty0');
+  if(!items.length){
+    if(!kosong0){const d=document.createElement('div');d.className='ms-empty ms-empty0';d.textContent='Tidak ada pilihan — kolom data ini kosong';menu.appendChild(d);}
+    return;
+  }
+  if(kosong0)kosong0.remove();
+  if(items.length<MS_MIN_CARI)return;
+  let tools=menu.querySelector(':scope > .ms-tools');
+  if(!tools){
+    tools=document.createElement('div');tools.className='ms-tools';
+    const bolehSemua=!MS_TANPA_PILIH_SEMUA.includes(menu.id);
+    tools.innerHTML='<div class="ms-search-box"><span class="material-symbols-outlined">search</span>'
+      +'<input class="ms-search" type="text" placeholder="" aria-label="Cari pilihan" autocomplete="off"></div>'
+      +'<div class="ms-tools-row">'
+      +(bolehSemua?'<button type="button" class="ms-all" role="checkbox" data-state="none"><span class="ms-box"></span><span class="ms-all-txt">(Pilih semua)</span></button>':'<span class="flex-1"></span>')
+      +'<span class="ms-count"></span><button type="button" class="ms-clear">Hapus</button></div>';
+    menu.prepend(tools);
+    const inp=tools.querySelector('.ms-search');
+    inp.addEventListener('input',()=>{menu.dataset.msq=inp.value.trim();msSegarkan(menu);menu.scrollTop=0;});
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){e.preventDefault();const vis=msItems(menu).filter(it=>it.style.display!=='none');
+        if(vis.length===1){const cb=vis[0].querySelector('input');cb.checked=!cb.checked;cb.dispatchEvent(new Event('change',{bubbles:true}));msSegarkan(menu);}}
+    });
+    const all=tools.querySelector('.ms-all');
+    if(all)all.addEventListener('click',()=>msUbahBanyak(menu,all.dataset.state!=='all'));
+    // Escape menutup dropdown dari mana pun di dalam menu
+    menu.addEventListener('keydown',e=>{if(e.key==='Escape'){menu.classList.add('hidden');const b=menu.parentElement&&menu.parentElement.querySelector('.ms-btn');if(b)b.focus();}});
+    tools.querySelector('.ms-clear').addEventListener('click',()=>{
+      const q=menu.dataset.msq;menu.dataset.msq='';inp.value='';msSegarkan(menu);msUbahBanyak(menu,false);
+      if(q){menu.dataset.msq='';msSegarkan(menu);}
+    });
+    menu.addEventListener('change',e=>{if(e.target&&e.target.closest('label.ms-item'))setTimeout(()=>msSegarkan(menu),0);});
+    // Daftar bisa dibangun ulang modul (innerHTML) saat dropdown terbuka -> pasang ulang alat
+    if(!menu.dataset.msObs){
+      menu.dataset.msObs='1';
+      new MutationObserver(()=>{
+        if(menu.classList.contains('hidden'))return;
+        if(!menu.querySelector(':scope > .ms-tools')){const q=menu.dataset.msq||'';msEnhance(menu,false);
+          const i2=menu.querySelector('.ms-search');if(i2&&q){i2.value=q;msSegarkan(menu);}}
+      }).observe(menu,{childList:true});
+    }
+    menu.style.maxHeight='18rem';
+  }
+  const inp=tools.querySelector('.ms-search');
+  if(baruDibuka){
+    // Excel: setiap kali dibuka, pencarian kosong lagi
+    menu.dataset.msq='';inp.value='';menu.scrollTop=0;
+    // Fokus otomatis hanya di perangkat bermouse (di HP keyboard akan menutupi daftar)
+    if(window.matchMedia&&window.matchMedia('(pointer:fine)').matches)setTimeout(()=>inp.focus(),0);
+  }
+  msSegarkan(menu);
 }
 
 function sToggleMs(key) {
@@ -3616,18 +3814,41 @@ function sRenderGudangChart(filtered) {
   const chartH=Math.max(320,sorted.length*30);
   const wrap=document.getElementById('s-gudangChartWrap');
   if(wrap)wrap.style.height=chartH+'px';
+  // Gudang terpilih (klik bar): bar lain diredupkan, bar terpilih diberi garis tepi + label tebal
+  const sel=SF.cardGudang||'';
+  const pilih=d=>!sel||d.g===sel;
+  const warna=(c,redup)=>sorted.map(d=>pilih(d)?c:redup);
+  const tepi=sorted.map(d=>sel&&d.g===sel?2:0);
   rebuildChart('s-gudangChart',{
     type:'bar',
     data:{labels:sorted.map(d=>d.g.split(' - ')[1]||d.g),datasets:[
-      {label:'Regional',data:sorted.map(d=>d.regional),backgroundColor:'#378ADD',borderRadius:3,stack:'s'},
-      {label:'Lapangan',data:sorted.map(d=>d.lapangan),backgroundColor:'#EF9F27',borderRadius:3,stack:'s'},
+      {label:'Regional',data:sorted.map(d=>d.regional),backgroundColor:warna('#378ADD','rgba(55,138,221,0.22)'),borderColor:'#00288e',borderWidth:tepi,borderRadius:3,stack:'s'},
+      {label:'Lapangan',data:sorted.map(d=>d.lapangan),backgroundColor:warna('#EF9F27','rgba(239,159,39,0.22)'),borderColor:'#00288e',borderWidth:tepi,borderRadius:3,stack:'s'},
     ]},
     options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-      plugins:{legend:{display:false}},
-      scales:{x:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}},y:{stacked:true,grid:{display:false},ticks:{font:{size:9}}}},
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{footer:items=>{const d=items.length&&sorted[items[0].dataIndex];if(!d)return '';
+          return 'Total: '+Math.round(d.total).toLocaleString('id-ID')+(sel&&d.g===sel?'\n✔ Terpilih — klik lagi untuk batal':'\nKlik untuk filter gudang ini');}}}},
+      scales:{x:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}},
+        y:{stacked:true,grid:{display:false},ticks:{
+          font:c=>({size:9,weight:(sel&&sorted[c.index]&&sorted[c.index].g===sel)?'bold':'normal'}),
+          color:c=>(sel&&sorted[c.index])?(sorted[c.index].g===sel?'#00288e':'#c4c5d5'):'#666'}}},
+      onHover(evt,els){const t=evt.native&&evt.native.target;if(t)t.style.cursor=els.length?'pointer':'default';},
       onClick(evt,els){if(els.length&&sorted[els[0].index])sToggleCardGudang(sorted[els[0].index].g);}
     }
   });
+  // Label gudang terpilih + tombol batal di atas chart
+  const selEl=document.getElementById('s-gudangSel');
+  if(selEl){
+    selEl.innerHTML=sel?`<span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-[#eaedff] text-[#00288e] text-[10px] font-bold border border-[#00288e]">
+      <span class="material-symbols-outlined text-[13px]">warehouse</span>${sel.split(' - ')[1]||sel}
+      <button onclick="sToggleCardGudang('${sel.replace(/'/g,"\\'")}')" class="ml-1 hover:text-red-600" title="Batalkan pilihan gudang">✕</button></span>`:'';
+  }
+  // Gulir agar bar terpilih terlihat (chart bisa lebih tinggi dari kotaknya)
+  if(sel&&wrap&&wrap.parentElement){
+    const i=sorted.findIndex(d=>d.g===sel);
+    if(i>=0){const box=wrap.parentElement,y=i*(chartH/Math.max(1,sorted.length));if(y<box.scrollTop||y>box.scrollTop+box.clientHeight-40)box.scrollTop=Math.max(0,y-60);}
+  }
 }
 
 function sRenderBrandChart(filtered) {
@@ -3762,6 +3983,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.addEventListener('click',e=>{
     if(!e.target.closest('.ms-wrap'))document.querySelectorAll('.ms-menu').forEach(m=>m.classList.add('hidden'));
   });
+  // Dropdown ala filter Excel: pasang kotak cari setiap kali dropdown dibuka
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('.ms-btn');
+    if(!btn)return;
+    const menu=btn.parentElement&&btn.parentElement.querySelector('.ms-menu');
+    setTimeout(()=>msEnhance(menu,true),0);
+  });
 
   // Tutup modal keuangan dengan Escape
   window.addEventListener('keydown',e=>{if(e.key==='Escape')kCloseModal();});
@@ -3865,8 +4093,7 @@ function pSetData(json) {
 // Satu permintaan jaringan dipakai bersama (modul Penyerapan & Alert Stok tidak fetch dobel)
 function pFetch(force) {
   if(P_FETCH) return P_FETCH;
-  P_FETCH = fetch(API_PENYERAPAN + '?mode=lite' + (force ? '&nocache=1' : ''))
-    .then(r => r.json())
+  P_FETCH = apiJson(API_PENYERAPAN + '?mode=lite' + (force ? '&nocache=1' : ''), {simpan:false})
     .then(json => {
       if(!json.ok) throw new Error(json.error || 'Gagal memuat data');
       P_LAST_FETCH = Date.now();
@@ -4579,8 +4806,7 @@ async function wigLoadData(){
   const icon=document.getElementById('wig-refreshIcon');
   if(icon)icon.classList.add('spin');
   try{
-    const res=await fetch(API_WIG+'?mode=all-detail');
-    const json=await res.json();
+    const json=await apiJson(API_WIG+'?mode=all-detail');
     if(!json.ok)throw new Error(json.error||'Gagal memuat data WIG');
     if(!json.lms||!json.lms.length)throw new Error('Data LM kosong. Pastikan CodeWIG.gs sudah di-deploy ulang dengan mode=all-detail.');
     WIG_ALL_DATA=json;
@@ -4589,7 +4815,7 @@ async function wigLoadData(){
     loaded.wig=true;
   }catch(err){
     const el=document.getElementById('wig-resume');
-    if(el)el.innerHTML='<div class="col-span-5 p-6 text-center text-red-500 text-sm bg-red-50 rounded-xl border border-red-200">&#9888; '+err.message+'<br><span class="text-[10px] text-red-400">Buka Console (Cmd+Option+J) untuk detail error</span></div>';
+    if(el)el.innerHTML='<div class="col-span-5 p-6 text-center text-red-500 text-sm bg-red-50 rounded-xl border border-red-200">&#9888; '+err.message+'<br><span class="text-[10px] text-red-400">Data tersimpan belum ada. Cek koneksi lalu klik refresh.</span></div>';
     console.error('[WIG] Load error:', err);
   }finally{loading.wig=false;if(icon)icon.classList.remove('spin');}
 }
@@ -5019,8 +5245,7 @@ async function doktekLoadData(tab) {
   document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
   const si = document.getElementById('doktek-search'); if(si) si.value = '';
   try {
-    const res  = await fetch(API_DOKTEK + '?tab=' + tab);
-    const json = await res.json();
+    const json = await apiJson(API_DOKTEK + '?tab=' + tab);
     if(!json.ok) throw new Error(json.error || 'Gagal memuat data');
     const normalized = doktekNormalizeRows(json.rows || []);
     // Simpan ke cache
@@ -5475,8 +5700,7 @@ async function pmIspLoadData() {
   const icon = document.getElementById('pmisp-refreshIcon');
   if(icon) icon.classList.add('spin');
   try {
-    const res  = await fetch(API_PMISP);
-    const json = await res.json();
+    const json = await apiJson(API_PMISP);
     if(!json.ok) throw new Error(json.error || 'Gagal memuat data PM ISP');
     PMISP_CACHE = json;
     PMISP_ROWS  = json.rows || [];
@@ -5927,8 +6151,7 @@ async function pmOspLoadData() {
   const icon = document.getElementById('pmisp-refreshIcon');
   if(icon) icon.classList.add('spin');
   try {
-    const res  = await fetch(API_PMOSP);
-    const json = await res.json();
+    const json = await apiJson(API_PMOSP);
     if(!json.ok) throw new Error(json.error || 'Gagal memuat data PM OSP');
     PMOSP_CACHE = json;
     PMOSP_ROWS  = json.rows || [];
@@ -6513,8 +6736,7 @@ async function harLoadData(tab){
   const icon=document.getElementById('har-refreshIcon');
   if(icon)icon.classList.add('spin');
   try{
-    const res=await fetch(API_HAR+'?tab='+tab);
-    const json=await res.json();
+    const json=await apiJson(API_HAR+'?tab='+tab);
     if(!json.ok)throw new Error(json.error||'Gagal memuat data');
     if(isSPR){HAR_SPR_CACHE=json;HAR_SPR_ROWS=json.rows||[];harSprBuildAll(json);}
     else{HAR_SPP_CACHE=json;HAR_SPP_ROWS=json.rows||[];harSppBuildAll(json);}
