@@ -2937,11 +2937,20 @@ function kRenderIoChart() {
     byIOCount[io]=(byIOCount[io]||0)+1;
   });
   const sorted=Object.entries(byIO).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  // Data kosong: sembunyikan canvas & tampilkan pesan (canvas TIDAK dihapus).
+  // Dulu innerHTML parent diganti -> canvas hilang permanen, chart tidak muncul lagi
+  // walaupun filter diubah/direset (hanya pulih setelah reload halaman).
+  const cv=document.getElementById('k-ioChart');
+  let kosong=document.getElementById('k-ioEmpty');
   if(!sorted.length){
-    const el=document.getElementById('k-ioChart');
-    if(el&&el.parentElement)el.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-12">Tidak ada data IO/PRK</p>';
+    if(CHARTS['k-ioChart']){CHARTS['k-ioChart'].destroy();delete CHARTS['k-ioChart'];}
+    if(cv)cv.style.display='none';
+    if(!kosong&&cv&&cv.parentElement){kosong=document.createElement('p');kosong.id='k-ioEmpty';kosong.className='text-[10px] text-gray-400 text-center py-12';cv.parentElement.appendChild(kosong);}
+    if(kosong){kosong.style.display='';kosong.textContent=K_FILTERED.length?'Kolom IO/PRK kosong pada '+K_FILTERED.length.toLocaleString('id-ID')+' transaksi yang ditampilkan':'Tidak ada transaksi pada filter ini';}
     return;
   }
+  if(cv)cv.style.display='';
+  if(kosong)kosong.style.display='none';
   const labels=sorted.map(e=>e[0]);
   rebuildChart('k-ioChart',{type:'bar',
     data:{labels,datasets:[
