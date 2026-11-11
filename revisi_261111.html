@@ -68,10 +68,12 @@ html,body   { height:100%; overflow:hidden; }
 .ms-active .ms-btn{border-color:#00288e;background:#eaedff;color:#00288e}
 /* Dropdown ala filter Excel: kotak cari + (Pilih semua) — dipasang otomatis oleh msEnhance() */
 .ms-tools{position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid #e5e7eb;padding:6px 6px 4px}
-.ms-search-box{position:relative}
-.ms-search-box .material-symbols-outlined{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:13px;color:#9ca3af}
-.ms-search{width:100%;font-size:10px;padding:5px 6px 5px 22px;border:1px solid #d1d5db;border-radius:6px;outline:none;color:#131b2e;background:#fff}
-.ms-search:focus{border-color:#00288e;box-shadow:0 0 0 2px #eaedff}
+.ms-search-box{position:relative;display:flex;align-items:center}
+.ms-search-box .material-symbols-outlined{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:13px!important;line-height:1;color:#9ca3af;pointer-events:none}
+.ms-tools input.ms-search{width:100%!important;height:24px!important;min-height:0!important;font-size:10px!important;line-height:14px!important;
+  padding:0 6px 0 22px!important;border:1px solid #d1d5db!important;border-radius:6px!important;outline:none!important;
+  color:#131b2e!important;background:#fff!important;box-shadow:none!important;margin:0!important}
+.ms-tools input.ms-search:focus{border-color:#00288e!important;box-shadow:0 0 0 2px #eaedff!important}
 .ms-tools-row{display:flex;align-items:center;gap:6px;margin-top:4px}
 .ms-all{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#131b2e;cursor:pointer;padding:2px 4px;flex:1;white-space:nowrap;text-align:left;border-radius:4px}
 .ms-all:hover{background:#f2f3ff}
@@ -1170,39 +1172,32 @@ html,body   { height:100%; overflow:hidden; }
   <div id="page-keuangan" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- Resume Keuangan -->
+      <!-- Resume Keuangan: Ringkasan | Status Pekerjaan | Aging Pembayaran (satu kartu ringkas) -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-sm font-bold text-[#131b2e]">Resume Keuangan Inventory</p>
-          <p class="text-[10px] text-gray-400">Ringkasan administrasi keuangan pengiriman material.</p>
+          <p class="text-[10px] text-gray-400">Ringkasan administrasi keuangan pengiriman material · klik kartu untuk filter.</p>
         </div>
-        <div class="p-4 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" id="k-kpiFinansial">
-          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
-          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
-        </div>
-      </section>
-
-      <!-- Status Pekerjaan -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Status Pekerjaan</p>
-          <p class="text-[10px] text-gray-400">Distribusi status seluruh pekerjaan · klik card untuk filter.</p>
-        </div>
-        <div class="p-4 grid gap-2" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))" id="k-statusCards">
-          <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-          <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-        </div>
-      </section>
-
-      <!-- Aging Pembayaran -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Aging Pembayaran</p>
-          <p class="text-[10px] text-gray-400">Dihitung dari Tgl AWB · hanya status Belum Dibayar.</p>
-        </div>
-        <div class="p-4 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" id="k-kpiAging">
-          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
-          <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
+        <div class="p-3 grid grid-cols-1 lg:grid-cols-12 gap-3">
+          <div class="lg:col-span-3">
+            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1.5">Ringkasan</p>
+            <div class="grid grid-cols-2 lg:grid-cols-1 gap-2" id="k-kpiFinansial">
+              <div class="skeleton rounded-lg h-16"></div><div class="skeleton rounded-lg h-16"></div>
+            </div>
+          </div>
+          <div class="lg:col-span-5 lg:border-l lg:border-gray-100 lg:pl-3">
+            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1.5">Status Pekerjaan</p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="k-statusCards">
+              <div class="skeleton rounded-lg h-10"></div><div class="skeleton rounded-lg h-10"></div><div class="skeleton rounded-lg h-10"></div>
+            </div>
+          </div>
+          <div class="lg:col-span-4 lg:border-l lg:border-gray-100 lg:pl-3">
+            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1.5">Aging Pembayaran <span class="normal-case font-normal text-gray-400">· dari Tgl AWB, belum dibayar</span></p>
+            <div class="grid grid-cols-2 gap-2" id="k-kpiAging">
+              <div class="skeleton rounded-lg h-14"></div><div class="skeleton rounded-lg h-14"></div>
+              <div class="skeleton rounded-lg h-14"></div><div class="skeleton rounded-lg h-14"></div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -2814,23 +2809,13 @@ function kUpdateLabel() {
 function kRenderResume(nom) {
   const s=K_SUMMARY; const has=Object.values(KF).some(v=>Array.isArray(v)?v.length>0:(v&&v!=='SEMUA'&&v!==''));
   document.getElementById('k-kpiFinansial').innerHTML=`
-    <div class="cf bg-white p-4 rounded-xl border ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('reset','all')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Transaksi</p>
-      <p class="text-2xl font-black text-[#00288e]">${K_FILTERED.length.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] text-gray-400 mt-1">Jumlah transaksi keuangan</p>
+    <div class="cf bg-white px-3 py-2 rounded-lg border ${has?'border-[#00288e] on':'border-gray-200'}" onclick="kOnCardClick('reset','all')" title="Klik untuk menampilkan semua data">
+      <p class="text-[9px] font-bold text-gray-500 uppercase">Total Transaksi</p>
+      <p class="text-xl font-black text-[#00288e] leading-tight">${K_FILTERED.length.toLocaleString('id-ID')}</p>
     </div>
-    <div class="cf bg-white p-4 rounded-xl border ${has?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('reset','all')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Total Nominal</p>
-      <p class="text-xl font-black text-[#00288e]">${fmtRp(nom)}</p>
-      <p class="text-[9px] text-gray-400 mt-1">Nilai keseluruhan pengiriman</p>
-    </div>
-    <div class="cf bg-orange-50 p-4 rounded-xl border ${KF.activeCardFilter==='outstanding:belum-dibayar'?'border-[#00288e] on':'border-orange-200'} shadow-sm" onclick="kOnCardClick('outstanding','belum-dibayar')">
-      <p class="text-[9px] font-bold text-orange-600 uppercase mb-1">Belum Dibayar</p>
-      <p class="text-xl font-black text-orange-700">${fmtRp(s.globalOutstanding||0)}</p>
-    </div>
-    <div class="cf bg-green-50 p-4 rounded-xl border ${KF.status==='Paid'?'border-[#00288e] on':'border-green-200'} shadow-sm" onclick="kOnCardClick('paid','Paid')">
-      <p class="text-[9px] font-bold text-green-600 uppercase mb-1">Sudah Dibayar</p>
-      <p class="text-xl font-black text-green-700">${fmtRp(s.globalPaid||0)}</p>
+    <div class="cf bg-white px-3 py-2 rounded-lg border ${has?'border-[#00288e] on':'border-gray-200'}" onclick="kOnCardClick('reset','all')" title="Klik untuk menampilkan semua data">
+      <p class="text-[9px] font-bold text-gray-500 uppercase">Total Nominal</p>
+      <p class="text-lg font-black text-[#00288e] leading-tight">${fmtRp(nom)}</p>
     </div>`;
 }
 
@@ -2839,25 +2824,21 @@ function kRenderAging() {
   const r1=s.agingBuckets?.r1||0, r2=s.agingBuckets?.r2||0, norm=s.agingBuckets?.normal||0;
   const belum=K_ROWS.filter(r=>r['Status']!=='Paid').length;
   document.getElementById('k-kpiAging').innerHTML=`
-    <div class="cf bg-gray-50 p-4 rounded-xl border ${KF.activeCardFilter==='outstanding:belum-dibayar'?'border-[#00288e] on':'border-gray-200'} shadow-sm" onclick="kOnCardClick('outstanding','belum-dibayar')">
-      <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Belum Dibayar</p>
-      <p class="text-2xl font-black text-gray-700">${belum}</p>
-      <p class="text-[9px] text-gray-400 mt-1">Semua status aktif</p>
+    <div class="cf bg-gray-50 px-2.5 py-2 rounded-lg border ${KF.activeCardFilter==='outstanding:belum-dibayar'?'border-[#00288e] on':'border-gray-200'}" onclick="kOnCardClick('outstanding','belum-dibayar')">
+      <p class="text-[9px] font-bold text-gray-500 uppercase">Belum Dibayar</p>
+      <p class="text-lg font-black text-gray-700 leading-tight">${belum} <span class="text-[10px] font-bold text-orange-600">${fmtRp(s.globalOutstanding||0)}</span></p>
     </div>
-    <div class="cf bg-blue-50 p-4 rounded-xl border ${KF.activeCardFilter==='aging:normal'?'border-[#00288e] on':'border-blue-200'} shadow-sm" onclick="kOnCardClick('aging','normal')">
-      <p class="text-[9px] font-bold text-blue-600 uppercase mb-1">Normal</p>
-      <p class="text-2xl font-black text-blue-700">${norm}</p>
-      <p class="text-[9px] text-blue-500 mt-1">0–7 hari</p>
+    <div class="cf bg-blue-50 px-2.5 py-2 rounded-lg border ${KF.activeCardFilter==='aging:normal'?'border-[#00288e] on':'border-blue-200'}" onclick="kOnCardClick('aging','normal')">
+      <p class="text-[9px] font-bold text-blue-600 uppercase">Normal <span class="font-normal normal-case text-blue-500">0–7 hr</span></p>
+      <p class="text-lg font-black text-blue-700 leading-tight">${norm}</p>
     </div>
-    <div class="cf bg-orange-50 p-4 rounded-xl border ${KF.activeCardFilter==='aging:R1'?'border-[#00288e] on':'border-orange-200'} shadow-sm" onclick="kOnCardClick('aging','R1')">
-      <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-orange-500 text-[14px]">warning</span><p class="text-[9px] font-bold text-orange-600 uppercase">Perhatian</p></div>
-      <p class="text-2xl font-black text-orange-600">${r1}</p>
-      <p class="text-[9px] text-orange-400 mt-1">8–14 hari</p>
+    <div class="cf bg-orange-50 px-2.5 py-2 rounded-lg border ${KF.activeCardFilter==='aging:R1'?'border-[#00288e] on':'border-orange-200'}" onclick="kOnCardClick('aging','R1')">
+      <p class="text-[9px] font-bold text-orange-600 uppercase flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">warning</span>Perhatian <span class="font-normal normal-case text-orange-400">8–14 hr</span></p>
+      <p class="text-lg font-black text-orange-600 leading-tight">${r1}</p>
     </div>
-    <div class="cf p-4 rounded-xl border ${r2>0?'bg-red-100 border-red-400':'bg-red-50 border-red-200'} ${KF.activeCardFilter==='aging:R2'?'on':''} shadow-sm" onclick="kOnCardClick('aging','R2')">
-      <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-red-600 text-[14px]">error</span><p class="text-[9px] font-bold text-red-700 uppercase">Kritis</p></div>
-      <p class="text-2xl font-black text-red-700">${r2}</p>
-      <p class="text-[9px] text-red-500 mt-1">&gt;14 hari</p>
+    <div class="cf px-2.5 py-2 rounded-lg border ${r2>0?'bg-red-100 border-red-400':'bg-red-50 border-red-200'} ${KF.activeCardFilter==='aging:R2'?'on':''}" onclick="kOnCardClick('aging','R2')">
+      <p class="text-[9px] font-bold text-red-700 uppercase flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">error</span>Kritis <span class="font-normal normal-case text-red-500">&gt;14 hr</span></p>
+      <p class="text-lg font-black text-red-700 leading-tight">${r2}</p>
     </div>`;
 }
 
@@ -2866,9 +2847,9 @@ function kRenderStatusCards() {
   const statuses=Object.keys(K_STATUS_COLOR_MAP);
   document.getElementById('k-statusCards').innerHTML=statuses.map((s,i)=>{
     const clr=K_STATUS_COLOR_MAP[s]||K_COLOR_FALLBACK[i%K_COLOR_FALLBACK.length];
-    return `<div class="cf p-3 rounded-xl border-2 ${KF.statusArr&&KF.statusArr.includes(s)?'on':''}" style="background:${clr.card};border-color:${clr.border}" onclick="kOnCardClick('status','${s.replace(/'/g,"\\'")}')">
-      <p class="text-[10px] font-bold mb-1 leading-tight" style="color:${clr.text}">${s}</p>
-      <p class="text-2xl font-black" style="color:${clr.text}">${byStatus[s]||0}</p>
+    return `<div class="cf px-2.5 py-1.5 rounded-lg border flex items-center justify-between gap-2 ${KF.statusArr&&KF.statusArr.includes(s)?'on':''}" style="background:${clr.card};border-color:${clr.border}" onclick="kOnCardClick('status','${s.replace(/'/g,"\\'")}')" title="${s}">
+      <p class="text-[10px] font-bold leading-tight truncate" style="color:${clr.text}">${s}</p>
+      <p class="text-base font-black" style="color:${clr.text}">${byStatus[s]||0}</p>
     </div>`;
   }).join('');
 }
@@ -3440,13 +3421,20 @@ function msUbahBanyak(menu,targetCek){
 function msEnhance(menu,baruDibuka){
   if(!menu||menu.classList.contains('hidden'))return;
   const items=msItems(menu);
+  // Tidak ada pilihan sama sekali (mis. kolom datanya kosong) -> tampilkan keterangan
+  const kosong0=menu.querySelector(':scope > .ms-empty0');
+  if(!items.length){
+    if(!kosong0){const d=document.createElement('div');d.className='ms-empty ms-empty0';d.textContent='Tidak ada pilihan — kolom data ini kosong';menu.appendChild(d);}
+    return;
+  }
+  if(kosong0)kosong0.remove();
   if(items.length<MS_MIN_CARI)return;
   let tools=menu.querySelector(':scope > .ms-tools');
   if(!tools){
     tools=document.createElement('div');tools.className='ms-tools';
     const bolehSemua=!MS_TANPA_PILIH_SEMUA.includes(menu.id);
     tools.innerHTML='<div class="ms-search-box"><span class="material-symbols-outlined">search</span>'
-      +'<input class="ms-search" type="text" placeholder="Cari..." autocomplete="off"></div>'
+      +'<input class="ms-search" type="text" placeholder="" aria-label="Cari pilihan" autocomplete="off"></div>'
       +'<div class="ms-tools-row">'
       +(bolehSemua?'<button type="button" class="ms-all" role="checkbox" data-state="none"><span class="ms-box"></span><span class="ms-all-txt">(Pilih semua)</span></button>':'<span class="flex-1"></span>')
       +'<span class="ms-count"></span><button type="button" class="ms-clear">Hapus</button></div>';
