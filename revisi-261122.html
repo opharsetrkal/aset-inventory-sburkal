@@ -1701,13 +1701,9 @@ html,body   { height:100%; overflow:hidden; }
       <!-- Analisis Penyerapan -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center gap-2">
-          <p class="text-sm font-bold text-[#131b2e]">Analisis Penyerapan</p>
-          <!-- Toggle dimensi bar chart -->
-          <div class="flex gap-1" id="p-dimToggle">
-            <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-[#00288e] text-white" data-dim="katTeknik">Kat. Teknik</button>
-            <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]" data-dim="slocKp">Sloc KP</button>
-            <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]" data-dim="slocGudang">Gudang</button>
-            <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]" data-dim="mvt">Movement</button>
+          <div>
+            <p class="text-sm font-bold text-[#131b2e]">Analisis Penyerapan</p>
+            <p class="text-[10px] text-gray-400">Mengikuti card Filter · klik bar Kat. Teknik atau irisan Brand untuk filter semua card.</p>
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
@@ -1715,6 +1711,7 @@ html,body   { height:100%; overflow:hidden; }
           <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
             <div class="flex items-center gap-4 mb-3">
               <p class="text-xs font-bold text-[#131b2e] flex-1" id="p-barTitle">Penyerapan vs Pengembalian per Kat. Teknik</p>
+              <span id="p-katSel"></span>
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Penyerapan</span>
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#1D9E75]"></span>Kembali Baik</span>
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#E24B4A]"></span>Kembali Rusak</span>
@@ -1723,8 +1720,11 @@ html,body   { height:100%; overflow:hidden; }
           </div>
           <!-- Donut brand -->
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold text-[#131b2e] mb-1">Brand Material</p>
-            <p class="text-[9px] text-gray-400 mb-3">Berdasarkan qty penyerapan · hover untuk detail</p>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <p class="text-xs font-bold text-[#131b2e]">Brand Material</p>
+              <span id="p-brandSel"></span>
+            </div>
+            <p class="text-[9px] text-gray-400 mb-3">Berdasarkan qty penyerapan · klik irisan/legend untuk filter semua card</p>
             <div style="position:relative;height:280px"><canvas id="p-brandChart"></canvas></div>
           </div>
         </div>
@@ -1734,79 +1734,131 @@ html,body   { height:100%; overflow:hidden; }
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-sm font-bold text-[#131b2e]">Top Kategori Teknik Terbanyak Diserap</p>
-          <p class="text-[10px] text-gray-400">Klik untuk filter tabel.</p>
+          <p class="text-[10px] text-gray-400">Klik untuk filter semua card (sama dengan klik bar Kat. Teknik).</p>
         </div>
         <div class="p-4 space-y-2" id="p-top5"></div>
       </section>
 
-      <!-- Tren Penyerapan -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <p class="text-sm font-bold text-[#131b2e]">Tren Penyerapan</p>
-            <p class="text-[9px] text-gray-400" id="p-trendLabel">Semua periode</p>
-          </div>
-          <div class="flex gap-1 no-print">
-            <!-- Toggle periode -->
-            <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50">
-              <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white" data-period="daily">Harian</button>
-              <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-period="weekly">Mingguan</button>
-              <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-period="monthly">Bulanan</button>
+      <!-- Tren + Proyeksi (satu baris) -->
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <!-- Tren Penyerapan -->
+        <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p class="text-sm font-bold text-[#131b2e]">Tren Penyerapan</p>
+              <p class="text-[9px] text-gray-400" id="p-trendLabel">Semua periode</p>
             </div>
+            <div class="flex gap-1 no-print">
+              <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50">
+                <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white" data-period="daily">Harian</button>
+                <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-period="weekly">Mingguan</button>
+                <button class="p-period-btn px-2 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-period="monthly">Bulanan</button>
+              </div>
+            </div>
+          </div>
+          <div class="p-4" style="position:relative;height:300px"><canvas id="p-trendChart"></canvas></div>
+        </section>
 
+        <!-- Proyeksi Kebutuhan Material (tabel saja) -->
+        <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p class="text-sm font-bold text-[#131b2e]">Proyeksi Kebutuhan Material</p>
+              <p class="text-[10px] text-gray-400">Rata-rata 12 bulan kalender terakhir · ikut card Filter · <span class="text-orange-500 font-semibold">estimasi, bukan plan resmi</span></p>
+            </div>
+            <select id="p-projSel" onchange="pRenderProyeksi(this.value)" class="no-print text-[10px] h-7 pl-2 pr-7 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-700 font-semibold"></select>
           </div>
-        </div>
-        <div class="p-4" style="position:relative;height:250px"><canvas id="p-trendChart"></canvas></div>
-      </section>
-
-      <!-- Proyeksi Kebutuhan Material -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <p class="text-sm font-bold text-[#131b2e]">Proyeksi Kebutuhan Material</p>
-            <p class="text-[10px] text-gray-400">Moving average dari data historis · <span class="text-orange-500 font-semibold">estimasi, bukan plan resmi</span></p>
-          </div>
-          <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50 no-print">
-            <button id="proj-btn-2026" onclick="pRenderProyeksi('2026')" class="px-3 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white">Sisa 2026</button>
-            <button id="proj-btn-2027" onclick="pRenderProyeksi('2027')" class="px-3 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white">2027</button>
-          </div>
-        </div>
-        <div class="p-4">
-          <p class="text-[9px] text-gray-400 mb-3" id="p-projLabel">—</p>
-          <div style="position:relative;height:260px"><canvas id="p-proyeksiChart"></canvas></div>
-        </div>
-        <div class="px-4 pb-4">
-          <p class="text-[10px] font-semibold text-gray-500 mb-2">Ringkasan Proyeksi per Kategori Teknik</p>
-          <div class="overflow-x-auto overflow-y-auto custom-scrollbar" style="max-height:280px">
-            <table class="w-full text-left border-collapse" style="min-width:500px">
+          <p class="text-[9px] text-gray-500 px-4 pt-2" id="p-projLabel">—</p>
+          <div class="overflow-y-auto custom-scrollbar px-4 pb-2 flex-1" style="max-height:290px">
+            <table class="w-full text-left border-collapse">
               <thead class="bg-gray-50 sticky top-0"><tr>
-                <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kategori Teknik</th>
-                <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Avg/Bulan (Historis)</th>
-                <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Proyeksi Total Qty</th>
-                <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Periode</th>
+                <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kategori Teknik</th>
+                <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Avg/Bulan</th>
+                <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right" id="p-projHead">Proyeksi Qty</th>
               </tr></thead>
               <tbody id="p-proyeksiTbody">
-                <tr><td colspan="4" class="p-6 text-center text-gray-400 text-xs">Memuat…</td></tr>
+                <tr><td colspan="3" class="p-6 text-center text-gray-400 text-xs">Memuat…</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="text-[9px] text-gray-300 mt-2">* Proyeksi menggunakan moving average sederhana dari data yang tersedia. Tidak memperhitungkan seasonality atau perubahan proyek.</p>
+          <p class="text-[9px] text-gray-400 px-4 pb-3">* Avg/Bulan = penyerapan bersih 12 bulan kalender penuh terakhir ÷ 12 (bulan tanpa pemakaian dihitung 0). Tidak memperhitungkan musim atau rencana proyek.</p>
+        </section>
+      </div>
+
+      <!-- Pasangan STO 351 <-> 101 -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p class="text-sm font-bold text-[#131b2e]">Pasangan STO (351 ↔ 101)</p>
+            <p class="text-[10px] text-gray-400">Per No. STO (Purchase Order) × Material · Kirim = 351 − 352 · Terima = 101 − 102 · ikut card Filter (kecuali Kategori Transaksi & Movement).</p>
+          </div>
+          <div class="flex flex-wrap gap-1" id="p-stoChips"></div>
         </div>
+        <div id="p-stoNote" class="hidden mx-4 mt-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-[10px] text-amber-800 leading-snug"></div>
+        <div class="overflow-x-auto overflow-y-auto custom-scrollbar p-4 pt-3" style="max-height:380px">
+          <table class="w-full text-left border-collapse" style="min-width:980px">
+            <thead class="bg-gray-50 sticky top-0"><tr>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">No. STO</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Tgl 351</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Gudang Asal</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Gudang Terima</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Material</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Kirim</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Terima</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Selisih</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Umur (hr)</th>
+              <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status</th>
+            </tr></thead>
+            <tbody id="p-stoTbody"><tr><td colspan="10" class="p-6 text-center text-gray-400 text-xs">Memuat…</td></tr></tbody>
+          </table>
+        </div>
+        <p class="text-[9px] text-gray-400 px-4 pb-3" id="p-stoFoot"></p>
       </section>
 
       <!-- Tabel Detail -->
-      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" id="p-tableSection">
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-visible" id="p-tableSection">
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
             <p class="text-sm font-bold">Data Detail Penyerapan Material</p>
             <p class="text-[10px] text-gray-400" id="p-activeFilterLabel">Menampilkan semua data</p>
           </div>
-          <button onclick="pExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print">
-            <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
-          </button>
+          <div class="relative no-print" id="p-expWrap">
+            <button onclick="pExpToggle(event)" id="p-expBtn" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50">
+              <span class="material-symbols-outlined text-[13px]">download</span> Export <span class="material-symbols-outlined text-[13px]">expand_more</span>
+            </button>
+            <div id="p-expMenu" class="hidden absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-72 space-y-2.5">
+              <div>
+                <p class="text-[11px] font-bold text-[#131b2e]">Export Transaksi per Bulan</p>
+                <p class="text-[9px] text-gray-500" id="p-expPeriode">Periode: —</p>
+              </div>
+              <div>
+                <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Format</p>
+                <div class="flex gap-1" id="p-expFormat">
+                  <button type="button" data-v="pptx" onclick="pExpPilih('format','pptx')" class="p-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">PPT</button>
+                  <button type="button" data-v="xlsx" onclick="pExpPilih('format','xlsx')" class="p-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">Excel</button>
+                </div>
+              </div>
+              <div>
+                <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Kategori Moving</p>
+                <div class="flex gap-1" id="p-expMoving">
+                  <button type="button" data-v="fast" onclick="pExpPilih('moving','fast')" class="p-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">Fast</button>
+                  <button type="button" data-v="slow" onclick="pExpPilih('moving','slow')" class="p-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">Slow</button>
+                  <button type="button" data-v="both" onclick="pExpPilih('moving','both')" class="p-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">Keduanya</button>
+                </div>
+              </div>
+              <p class="text-[9px] text-gray-400 leading-snug">Sum of Quantity (semua movement, bertanda +/−) per Kat. Teknik per bulan. Periode = filter tanggal (kosong = 1 Jan tahun berjalan s/d data terakhir, maks 12 bulan). Filter lain ikut. Fast = "Fast Moving", Slow = Moving kosong.</p>
+              <button type="button" id="p-expGo" onclick="pExportJalankan()" class="w-full flex items-center justify-center gap-1 bg-[#00288e] text-white text-[10px] font-bold rounded py-1.5 hover:opacity-90">
+                <span class="material-symbols-outlined text-[13px]">download</span> Unduh
+              </button>
+              <p class="text-[9px] leading-snug" id="p-expMsg"></p>
+              <div class="border-t border-gray-100 pt-2">
+                <button type="button" onclick="pExportCSV()" class="text-[10px] text-[#00288e] font-semibold hover:underline">CSV data detail (sesuai filter)</button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="overflow-x-auto custom-scrollbar">
-          <table class="w-full text-left border-collapse" style="min-width:1100px">
+          <table class="w-full text-left border-collapse" style="min-width:1400px">
             <thead class="bg-gray-50 sticky top-0" id="p-tblHead"></thead>
             <tbody id="p-tblBody">
               <tr><td colspan="15" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr>
@@ -4377,9 +4429,13 @@ let P_ACTIVE_DIM='katTeknik', P_PERIOD='daily';
 let P_TOP5_FILTER='';
 
 const P_PAGE_SIZE=15;
-const P_COLS=['Material Document','Item','Material','Material Description','Batch',
+const P_COLS=['Material Document','Item','Material','Material Description','Batch','_sn',
   'Quantity','Amount in LC','Sloc - Gudang','Sloc - KP','Material - Brand',
-  'Kategori - Teknik','Movement Type Text','Posting Date','_type'];
+  'Kategori - Teknik','Movement Type','Movement Type Text','Purchase Order','Posting Date','_type'];
+
+// Batch berisi status (bukan serial number). Selain ini & kosong -> dianggap Serial Number.
+const P_BATCH_STATUS=['BAIK','DISMANTLE','EX-PROJECT','RUSAK','RUSAK-TL','RUSAK-L','REKONDISI'];
+function pSerial(b){const v=String(b===null||b===undefined?'':b).trim();return v&&!P_BATCH_STATUS.includes(v.toUpperCase())?v:'';}
 
 const P_MS_CONFIG={
   kategori:  {col:'_kategori',          label:'Kategori Transaksi'},
@@ -4394,7 +4450,7 @@ const P_MS_CONFIG={
 const PF={
   dateFrom:'', dateTo:'',
   kategori:[], mvt:[], slocKp:[], slocGudang:[], brand:[], katTeknik:[], katSap:[],
-  search:'', top5KatTeknik:''
+  search:'', top5KatTeknik:'', cardBrand:''
 };
 
 // ── PENYIMPANAN BROWSER (IndexedDB) ──────────────────────
@@ -4438,19 +4494,24 @@ async function idbSet(k, v) {
 }
 
 // ── LOAD ─────────────────────────────────────────────────
-const P_IDB_KEY = 'asus_serap_lite_v1';
+const P_IDB_KEY = 'asus_serap_lite_v2';   // v2: + Movement Type, Purchase Order, Kategori - Moving (GAS v3.2)
 const P_FRESH_MS = 10 * 60 * 1000;   // data jaringan < 10 menit dianggap masih baru
 let P_SIG = '', P_FETCH = null, P_LAST_FETCH = 0, P_ENSURE_TRIED = false;
 
 // Format lite: {cols:[...], data:[[...],...]} -> array objek. Format lama: {rows:[...]}
 function pLiteToRows(json) {
-  if(Array.isArray(json.rows)) return json.rows;
-  const cols = json.cols || [];
-  return (json.data || []).map(a => {
-    const o = {};
-    for(let i = 0; i < cols.length; i++) o[cols[i]] = a[i];
-    return o;
-  });
+  let rows;
+  if(Array.isArray(json.rows)) rows = json.rows;
+  else {
+    const cols = json.cols || [];
+    rows = (json.data || []).map(a => {
+      const o = {};
+      for(let i = 0; i < cols.length; i++) o[cols[i]] = a[i];
+      return o;
+    });
+  }
+  rows.forEach(r => { r['_sn'] = pSerial(r['Batch']); });
+  return rows;
 }
 function pSigOf(json) {
   return (json.dibuat || '') + '|' + (json.total != null ? json.total : (json.rows || []).length);
@@ -4587,20 +4648,22 @@ function pOnFilterChange() {
 // ── APPLY FILTER ──────────────────────────────────────────
 const pChk=(arr,val)=>!arr.length||arr.includes(val);
 
-function pApplyFilter(rows) {
-  const q=(PF.search||'').toLowerCase();
+function pApplyFilter(rows, f) {
+  f=f||PF;
+  const q=(f.search||'').toLowerCase();
   return rows.filter(r=>{
     const d=r['Posting Date']||'';
-    if(PF.dateFrom&&d<PF.dateFrom)return false;
-    if(PF.dateTo  &&d>PF.dateTo)  return false;
-    if(!pChk(PF.kategori,  r['_kategori']))         return false;
-    if(!pChk(PF.mvt,       r['Movement Type Text']))return false;
-    if(!pChk(PF.slocKp,    r['Sloc - KP']))         return false;
-    if(!pChk(PF.slocGudang,r['Sloc - Gudang']))      return false;
-    if(!pChk(PF.brand,     r['Material - Brand']))   return false;
-    if(!pChk(PF.katTeknik, r['Kategori - Teknik']))  return false;
-    if(!pChk(PF.katSap,    r['Kategori - SAP']))     return false;
-    if(PF.top5KatTeknik&&r['Kategori - Teknik']!==PF.top5KatTeknik)return false;
+    if(f.dateFrom&&d<f.dateFrom)return false;
+    if(f.dateTo  &&d>f.dateTo)  return false;
+    if(!pChk(f.kategori,  r['_kategori']))         return false;
+    if(!pChk(f.mvt,       r['Movement Type Text']))return false;
+    if(!pChk(f.slocKp,    r['Sloc - KP']))         return false;
+    if(!pChk(f.slocGudang,r['Sloc - Gudang']))      return false;
+    if(!pChk(f.brand,     r['Material - Brand']))   return false;
+    if(!pChk(f.katTeknik, r['Kategori - Teknik']))  return false;
+    if(!pChk(f.katSap,    r['Kategori - SAP']))     return false;
+    if(f.top5KatTeknik&&r['Kategori - Teknik']!==f.top5KatTeknik)return false;
+    if(f.cardBrand&&r['Material - Brand']!==f.cardBrand)return false;
     if(q){var pk=P_COLS.map(function(c){return String(r[c]||'');}).join('|').toLowerCase();if(!pk.includes(q))return false;}
     return true;
   });
@@ -4614,6 +4677,8 @@ function pApplyAll() {
   pRenderBrandChart();
   pRenderTop5();
   pRenderTrendChart();
+  pRenderProyeksi();
+  pRenderSto();
   pUpdateLabel();
   pPage=1;pRenderTable();
 }
@@ -4723,69 +4788,89 @@ function pRenderRasioTable() {
 }
 
 // ── RENDER BAR CHART ──────────────────────────────────────
+// Dihitung dari filter aktif TANPA filter Kat. Teknik-card, supaya kategori lain tetap terlihat (diredupkan).
 function pRenderBarChart() {
-  const dimMap={
-    katTeknik:'Kategori - Teknik',
-    slocKp:'Sloc - KP',
-    slocGudang:'Sloc - Gudang',
-    mvt:'Movement Type Text',
-  };
-  const col=dimMap[P_ACTIVE_DIM]||'Kategori - Teknik';
+  const src=pApplyFilter(P_ROWS,{...PF,top5KatTeknik:''});
   const map={};
-  P_FILTERED.forEach(r=>{
-    const key=r[col]||'—';
+  src.forEach(r=>{
+    const key=r['Kategori - Teknik']||'—';
     if(!map[key])map[key]={serap:0,kembaliBaik:0,kembaliRusak:0};
     if(r['_type']==='penyerapan')   map[key].serap       +=(r['_qty_abs']||0);
     if(r['_type']==='kembali_baik') map[key].kembaliBaik +=(r['_qty_abs']||0);
     if(r['_type']==='kembali_rusak')map[key].kembaliRusak+=(r['_qty_abs']||0);
   });
-  const sorted=Object.entries(map).sort((a,b)=>b[1].serap-a[1].serap).slice(0,15);
+  const all=Object.entries(map).sort((a,b)=>b[1].serap-a[1].serap);
+  const sel=PF.top5KatTeknik||'';
+  let sorted=all.slice(0,15);
+  if(sel&&!sorted.some(e=>e[0]===sel)){const e=all.find(e=>e[0]===sel);if(e)sorted=[...all.slice(0,14),e];}
   const labels=sorted.map(e=>e[0]);
   const chartH=Math.max(200,sorted.length*28);
   const el=document.getElementById('p-barChart');
   if(el)el.parentElement.style.height=chartH+'px';
+  const w=(c,r)=>sorted.map(e=>!sel||e[0]===sel?c:r);
   rebuildChart('p-barChart',{type:'bar',
     data:{labels,datasets:[
-      {label:'Penyerapan',data:sorted.map(e=>e[1].serap),backgroundColor:'#378ADD',borderRadius:3,stack:'s'},
-      {label:'Kembali Baik',data:sorted.map(e=>e[1].kembaliBaik),backgroundColor:'#1D9E75',borderRadius:3,stack:'s'},
-      {label:'Kembali Rusak',data:sorted.map(e=>e[1].kembaliRusak),backgroundColor:'#E24B4A',borderRadius:3,stack:'s'},
+      {label:'Penyerapan',data:sorted.map(e=>e[1].serap),backgroundColor:w('#378ADD','rgba(55,138,221,0.2)'),borderRadius:3,stack:'s'},
+      {label:'Kembali Baik',data:sorted.map(e=>e[1].kembaliBaik),backgroundColor:w('#1D9E75','rgba(29,158,117,0.2)'),borderRadius:3,stack:'s'},
+      {label:'Kembali Rusak',data:sorted.map(e=>e[1].kembaliRusak),backgroundColor:w('#E24B4A','rgba(226,75,74,0.2)'),borderRadius:3,stack:'s'},
     ]},
     options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-      plugins:{legend:{display:false}},
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{footer:items=>{const i=items.length?items[0].dataIndex:-1;if(i<0)return '';return labels[i]===sel?'✔ Terpilih — klik lagi untuk batal':'Klik untuk filter semua card';}}}},
+      onHover(evt,els){const t=evt.native&&evt.native.target;if(t)t.style.cursor=els.length?'pointer':'default';},
+      onClick(evt,els){if(els.length&&labels[els[0].index]&&labels[els[0].index]!=='—')pToggleTop5(labels[els[0].index]);},
       scales:{
         x:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}},
-        y:{stacked:true,grid:{display:false},ticks:{font:{size:9}}}
+        y:{stacked:true,grid:{display:false},ticks:{
+          font:c=>({size:9,weight:sel&&labels[c.index]===sel?'bold':'normal'}),
+          color:c=>sel?(labels[c.index]===sel?'#00288e':'#c4c5d5'):'#666'}}
       }
     }
   });
-  // Update title
-  const titles={katTeknik:'per Kat. Teknik',slocKp:'per Sloc KP',slocGudang:'per Gudang',mvt:'per Movement Type'};
   const t=document.getElementById('p-barTitle');
-  if(t)t.textContent='Penyerapan vs Pengembalian '+( titles[P_ACTIVE_DIM]||'');
+  if(t)t.textContent='Penyerapan vs Pengembalian per Kat. Teknik';
+  const se=document.getElementById('p-katSel');
+  if(se)se.innerHTML=sel?`<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#eaedff] text-[#00288e] text-[10px] font-bold border border-[#00288e]">${esc(sel)}<button onclick="pToggleTop5(PF.top5KatTeknik)" class="ml-1 hover:text-red-600" title="Batalkan filter Kat. Teknik">✕</button></span>`:'';
 }
 
 // ── RENDER BRAND DONUT ────────────────────────────────────
+function pToggleCardBrand(b){PF.cardBrand=PF.cardBrand===b?'':b;pApplyAll();}
 function pRenderBrandChart() {
-  const src=P_FILTERED.filter(r=>r['_type']==='penyerapan');
+  const src=pApplyFilter(P_ROWS,{...PF,cardBrand:''}).filter(r=>r['_type']==='penyerapan');
   const totalQty=src.reduce((s,r)=>s+(r['_qty_abs']||0),0);
   const byB={};
   src.forEach(r=>{const b=r['Material - Brand'];if(b)byB[b]=(byB[b]||0)+(r['_qty_abs']||0);});
   const sorted=Object.entries(byB).sort((a,b)=>b[1]-a[1]);
-  const top9=sorted.slice(0,9), others=sorted.slice(9).reduce((s,e)=>s+e[1],0);
-  const labels=[...top9.map(e=>e[0]),...(others>0?['Lainnya']:[])];
-  const data  =[...top9.map(e=>e[1]),...(others>0?[others]:[])];
-  const colors=['#378ADD','#EF9F27','#1D9E75','#E24B4A','#7F77DD','#F472B6','#34D399','#FB923C','#60A5FA','#94A3B8'];
+  const sel=PF.cardBrand||'';
+  let top=sorted.slice(0,9);
+  if(sel&&!top.some(e=>e[0]===sel)){const e=sorted.find(e=>e[0]===sel);if(e)top=[...sorted.slice(0,8),e];}
+  const topSet=new Set(top.map(e=>e[0]));
+  const others=sorted.filter(e=>!topSet.has(e[0])).reduce((s,e)=>s+e[1],0);
+  const labels=[...top.map(e=>e[0]),...(others>0?['Lainnya']:[])];
+  const data  =[...top.map(e=>e[1]),...(others>0?[others]:[])];
+  const base=['#378ADD','#EF9F27','#1D9E75','#E24B4A','#7F77DD','#F472B6','#34D399','#FB923C','#60A5FA','#94A3B8'];
+  const redup=h=>{const n=parseInt(h.slice(1),16);return 'rgba('+(n>>16)+','+((n>>8)&255)+','+(n&255)+',0.18)';};
+  const colors=labels.map((l,i)=>(!sel||l===sel)?base[i]:redup(base[i]));
+  const bisaKlik=i=>labels[i]&&labels[i]!=='Lainnya';
+  const klik=i=>{if(bisaKlik(i))pToggleCardBrand(labels[i]);};
   rebuildChart('p-brandChart',{type:'doughnut',
-    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length),borderWidth:1,borderColor:'#fff',hoverOffset:8}]},
+    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:labels.map(l=>sel&&l===sel?3:1),borderColor:labels.map(l=>sel&&l===sel?'#00288e':'#fff'),hoverOffset:8,offset:labels.map(l=>sel&&l===sel?10:0)}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      onHover(evt,els){const t=evt.native&&evt.native.target;if(t)t.style.cursor=(els.length&&bisaKlik(els[0].index))?'pointer':'default';},
+      onClick(evt,els){if(els.length)klik(els[0].index);},
       plugins:{
-        legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:6,
-          generateLabels:chart=>chart.data.labels.map((l,i)=>({text:l.length>14?l.slice(0,14)+'…':l,fillStyle:chart.data.datasets[0].backgroundColor[i],hidden:false,index:i}))
+        legend:{position:'bottom',onClick:(e,item)=>klik(item.index),
+          labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:6,
+          generateLabels:chart=>chart.data.labels.map((l,i)=>({text:(l.length>14?l.slice(0,14)+'…':l)+(sel&&l===sel?' ✔':''),fillStyle:chart.data.datasets[0].backgroundColor[i],strokeStyle:chart.data.datasets[0].backgroundColor[i],fontColor:(!sel||l===sel)?'#374151':'#c4c5d5',hidden:false,index:i}))
         }},
-        tooltip:{callbacks:{label:ctx=>{const qty=ctx.parsed;const pct=totalQty>0?((qty/totalQty)*100).toFixed(1):0;return` ${ctx.label}: ${Math.round(qty).toLocaleString('id-ID')} unit (${pct}%)`;}}}
+        tooltip:{callbacks:{
+          label:ctx=>{const qty=ctx.parsed;const pct=totalQty>0?((qty/totalQty)*100).toFixed(1):0;return` ${ctx.label}: ${Math.round(qty).toLocaleString('id-ID')} unit (${pct}%)`;},
+          footer:items=>{const i=items.length?items[0].dataIndex:-1;if(!bisaKlik(i))return '';return labels[i]===sel?'✔ Terpilih — klik lagi untuk batal':'Klik untuk filter semua card';}}}
       }
     }
   });
+  const se=document.getElementById('p-brandSel');
+  if(se)se.innerHTML=sel?`<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#eaedff] text-[#00288e] text-[10px] font-bold border border-[#00288e]">${esc(sel)}<button onclick="pToggleCardBrand(PF.cardBrand)" class="ml-1 hover:text-red-600" title="Batalkan filter brand">✕</button></span>`:'';
 }
 
 // ── RENDER TOP 5 ──────────────────────────────────────────
@@ -4804,9 +4889,9 @@ function pRenderTop5() {
   el.innerHTML=sorted.map(([kt,qty],i)=>{
     const isOn=PF.top5KatTeknik===kt;
     return`<div class="cf rounded-lg p-2.5 ${isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e]':'bg-white hover:bg-gray-50 border border-gray-200'} transition-all shadow-sm"
-      onclick="pToggleTop5('${kt.replace(/'/g,"\'")}')" >
+      data-kt="${esc(kt)}" onclick="pToggleTop5(this.dataset.kt)" >
       <div class="flex justify-between mb-1">
-        <span class="text-xs font-bold">${medals[i]} ${kt}</span>
+        <span class="text-xs font-bold">${medals[i]} ${esc(kt)}</span>
         <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold">${Math.round(qty).toLocaleString('id-ID')} unit</span>
       </div>
       <div class="w-full bg-gray-100 rounded-full h-1.5">
@@ -4822,18 +4907,21 @@ function pToggleTop5(kt) {
 }
 
 // ── RENDER TREND CHART ────────────────────────────────────
+function pTglLokal(dt){return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
 function pRenderTrendChart() {
   const src=P_FILTERED.filter(r=>r['_type']==='penyerapan');
+  const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  let keys=[], labelOf=k=>k;
   const getKey=d=>{
     if(!d)return null;
     if(P_PERIOD==='monthly')return d.slice(0,7);
     if(P_PERIOD==='weekly'){
-      const dt=new Date(d); if(isNaN(dt))return null;
-      const day=dt.getDay(), diff=dt.getDate()-day+(day===0?-6:1);
-      const mon=new Date(dt.setDate(diff));
-      return mon.toISOString().slice(0,10);
+      const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(d); if(!m)return null;
+      const dt=new Date(+m[1],+m[2]-1,+m[3]);          // tanggal lokal, bukan UTC
+      const day=dt.getDay(); dt.setDate(dt.getDate()-(day===0?6:day-1));   // Senin
+      return pTglLokal(dt);
     }
-    return d; // daily
+    return d.slice(0,10);
   };
   const byKey={};
   src.forEach(r=>{
@@ -4844,23 +4932,29 @@ function pRenderTrendChart() {
     byKey[k].nilai+=pNilai(r);
     byKey[k].trx  +=1;
   });
-  const keys=Object.keys(byKey).sort();
-  const periodLabel={daily:'Harian',weekly:'Mingguan',monthly:'Bulanan'};
+  if(P_PERIOD==='monthly'){
+    // Selalu 12 bulan: 11 bulan sebelumnya + bulan berjalan; bulan tanpa transaksi = 0
+    const now=new Date();
+    for(let i=11;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);keys.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));}
+    labelOf=k=>BLN[+k.slice(5,7)-1]+' '+k.slice(2,4);
+  } else keys=Object.keys(byKey).sort();
+  const periodLabel={daily:'Harian',weekly:'Mingguan (mulai Senin)',monthly:'Bulanan · 12 bulan terakhir termasuk bulan berjalan'};
   const lbl=document.getElementById('p-trendLabel');
   if(lbl)lbl.textContent=(periodLabel[P_PERIOD]||'') + ' · Qty | Nilai Rp | Transaksi';
-  rebuildChart('p-trendChart',{type:'line',
-    data:{labels:keys,datasets:[
-      {label:'Qty',data:keys.map(k=>byKey[k].qty||0),borderColor:'#00288e',backgroundColor:'rgba(0,40,142,0.05)',fill:true,tension:0.4,pointRadius:2,yAxisID:'y'},
-      {label:'Nilai (Rp)',data:keys.map(k=>byKey[k].nilai||0),borderColor:'#1D9E75',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:2,borderDash:[4,2],yAxisID:'y2'},
-      {label:'Transaksi',data:keys.map(k=>byKey[k].trx||0),borderColor:'#EF9F27',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:2,borderDash:[2,3],yAxisID:'y3'}
+  const v=(k,f)=>byKey[k]?byKey[k][f]:0;
+  rebuildChart('p-trendChart',{type:P_PERIOD==='monthly'?'bar':'line',
+    data:{labels:keys.map(labelOf),datasets:[
+      {type:P_PERIOD==='monthly'?'bar':'line',label:'Qty',data:keys.map(k=>v(k,'qty')),borderColor:'#00288e',backgroundColor:P_PERIOD==='monthly'?'rgba(55,138,221,0.65)':'rgba(0,40,142,0.05)',fill:P_PERIOD!=='monthly',tension:0.4,pointRadius:2,borderRadius:3,yAxisID:'y',order:2},
+      {type:'line',label:'Nilai (Rp)',data:keys.map(k=>v(k,'nilai')),borderColor:'#1D9E75',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:2,borderDash:[4,2],yAxisID:'y2',order:1},
+      {type:'line',label:'Transaksi',data:keys.map(k=>v(k,'trx')),borderColor:'#EF9F27',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:2,borderDash:[2,3],yAxisID:'y3',order:0}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:true,position:'top',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:8}}},
       scales:{
         y:{type:'linear',position:'left',beginAtZero:true,ticks:{callback:v=>Math.round(v).toLocaleString('id-ID'),font:{size:9}},title:{display:true,text:'Qty',font:{size:8},color:'#00288e'}},
         y2:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:v=>fmtRp(v),font:{size:9}},title:{display:true,text:'Nilai',font:{size:8},color:'#1D9E75'}},
-        y3:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{stepSize:1,callback:v=>Number.isInteger(v)?v:'',font:{size:9}},title:{display:true,text:'Trx',font:{size:8},color:'#EF9F27'}},
-        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:12}}
+        y3:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{precision:0,font:{size:9}},title:{display:true,text:'Trx',font:{size:8},color:'#EF9F27'}},
+        x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:P_PERIOD==='monthly'?12:14}}
       }
     }
   });
@@ -4871,7 +4965,8 @@ const P_COL_LABELS={'Material Document':'Mat.Doc','Item':'Item','Material':'Mate
   'Material Description':'Deskripsi','Batch':'Batch','Quantity':'Qty',
   'Amount in LC':'Nilai (Rp)','Sloc - Gudang':'Gudang','Sloc - KP':'KP',
   'Material - Brand':'Brand','Kategori - Teknik':'Kat. Teknik',
-  'Movement Type Text':'Movement','Posting Date':'Tgl','_type':'Tipe'};
+  'Movement Type Text':'Movement','Posting Date':'Tgl','_type':'Tipe',
+  '_sn':'Serial Number','Movement Type':'Mvt','Purchase Order':'No. STO/PO'};
 
 let P_SORT = { col: '', dir: 1 };
 function pSortBy(col) {
@@ -4929,8 +5024,9 @@ function pRenderTable() {
       if(col==='_type')return`<td class="p-3">${typeBadge}</td>`;
       if(col==='Quantity')return`<td class="p-3 text-xs text-right font-mono ${parseFloat(v)<0?'text-blue-700':'text-green-700'}">${v}</td>`;
       if(col==='Amount in LC')return`<td class="p-3 text-xs text-right font-mono whitespace-nowrap">${v?fmtRpFull(Math.abs(+v)):'-'}</td>`;
-      if(col==='Material Description')return`<td class="p-3 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v||''}">${v||'-'}</td>`;
-      return`<td class="p-3 text-xs whitespace-nowrap">${v||'-'}</td>`;
+      if(col==='Material Description')return`<td class="p-2 text-[10px] leading-snug whitespace-normal break-words min-w-[220px] max-w-[340px]">${esc(v||'-')}</td>`;
+      if(col==='_sn')return`<td class="p-3 text-xs whitespace-nowrap font-mono">${v?esc(v):'<span class="text-gray-300">-</span>'}</td>`;
+      return`<td class="p-3 text-xs whitespace-nowrap">${esc(v||'-')}</td>`;
     }).join('');
     return`<tr class="hover:bg-[#f2f3ff] transition-colors ${rowBg}">
       <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>${cells}</tr>`;
@@ -4943,121 +5039,341 @@ function pRenderTable() {
 function pGoPage(p){pPage=Math.max(1,Math.min(p,Math.ceil(P_FILTERED.length/P_PAGE_SIZE)||1));pRenderTable();}
 
 // ── PROYEKSI KEBUTUHAN ─────────────────────────────────────
-// Moving average per kategori teknik dari data GI historis.
-// mode='2026' → proyeksi Jul-Des 2026 (sisa tahun)
-// mode='2027' → proyeksi Jan-Des 2027
-let P_PROJ_MODE = '2026';
-
+// Baseline = penyerapan bersih P_PROJ_BULAN bulan kalender PENUH sebelum bulan berjalan, ÷ P_PROJ_BULAN.
+// Ikut card Filter (kecuali rentang tanggal, karena baseline punya rentang sendiri).
+// Pilihan periode dibuat otomatis dari tanggal hari ini: sisa tahun berjalan + 2 tahun berikutnya.
+const P_PROJ_BULAN = 12;
+let P_PROJ_MODE = '';
+function pProjOpsi() {
+  const now=new Date(), y=now.getFullYear(), m=now.getMonth()+1, o=[];
+  if(m<12) o.push({v:'sisa-'+y, t:'Sisa '+y+' ('+(12-m)+' bln)', bulan:12-m, mulai:[y,m+1]});
+  [y+1,y+2].forEach(t=>o.push({v:String(t), t:'Tahun '+t+' (12 bln)', bulan:12, mulai:[t,1]}));
+  return o;
+}
 function pRenderProyeksi(mode) {
-  mode = mode || P_PROJ_MODE;
-  P_PROJ_MODE = mode;
-  // Update toggle button style
-  ['2026','2027'].forEach(m => {
-    const btn = document.getElementById('proj-btn-'+m);
-    if(btn) btn.className = 'px-3 py-1 text-[10px] font-bold rounded '
-      + (m===mode ? 'bg-[#00288e] text-white' : 'text-gray-500 hover:bg-white');
-  });
-
-  const tbody = document.getElementById('p-proyeksiTbody');
-  const labelEl = document.getElementById('p-projLabel');
+  const opsi=pProjOpsi();
+  if(mode) P_PROJ_MODE=mode;
+  if(!opsi.some(o=>o.v===P_PROJ_MODE)) P_PROJ_MODE=opsi[0].v;
+  const pilih=opsi.find(o=>o.v===P_PROJ_MODE);
+  const selEl=document.getElementById('p-projSel');
+  if(selEl){
+    selEl.innerHTML=opsi.map(o=>'<option value="'+o.v+'"'+(o.v===P_PROJ_MODE?' selected':'')+'>'+o.t+'</option>').join('');
+  }
+  const tbody=document.getElementById('p-proyeksiTbody');
+  const labelEl=document.getElementById('p-projLabel');
   if(!tbody) return;
-
-  const giRows = P_ROWS.filter(r => r['_type'] === 'penyerapan');
-  if(!giRows.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-400 text-xs">Tidak ada data penyerapan.</td></tr>';
-    return;
-  }
-
-  // Agregasi per kat.teknik per bulan
-  const byKat = {}; // kat → { months: {YYYY-MM: {qty, amt}} }
-  giRows.forEach(r => {
-    const kat = r['Kategori - Teknik'] || '(Tidak ada)';
-    const qty = (r['_qty_abs'] !== undefined) ? (+r['_qty_abs'] || 0) : Math.abs(parseFloat(r['Quantity']) || 0);
-    const amt = pNilai(r);
-    const mk  = (r['Posting Date'] || '').slice(0, 7);
-    if(!mk) return;
-    if(!byKat[kat]) byKat[kat] = {};
-    if(!byKat[kat][mk]) byKat[kat][mk] = { qty: 0, amt: 0 };
-    byKat[kat][mk].qty += qty;
-    byKat[kat][mk].amt += amt;
-  });
-
-  // Hitung avg per bulan per kat
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth() + 1; // 1-based
-
-  // Bulan proyeksi
-  let projMonths = [];
-  if(mode === '2026') {
-    // Sisa 2026: bulan ini+1 sampai Desember 2026
-    for(let m = currentMonth + 1; m <= 12; m++) {
-      projMonths.push(currentYear + '-' + String(m).padStart(2,'0'));
-    }
-    if(!projMonths.length) projMonths = [currentYear + '-' + String(currentMonth).padStart(2,'0')];
-  } else {
-    // 2027: Januari sampai Desember
-    for(let m = 1; m <= 12; m++) {
-      projMonths.push('2027-' + String(m).padStart(2,'0'));
-    }
-  }
-
-  const rows = Object.entries(byKat).map(([kat, months]) => {
-    const monthKeys = Object.keys(months);
-    const nMonths = monthKeys.length || 1;
-    const totalQty = monthKeys.reduce((s,k) => s + months[k].qty, 0);
-    const totalAmt = monthKeys.reduce((s,k) => s + months[k].amt, 0);
-    const avgQty = totalQty / nMonths;
-    const avgAmt = totalAmt / nMonths;
-    const projQty = avgQty * projMonths.length;
-    const projAmt = avgAmt * projMonths.length;
-    return { kat, avgQty, avgAmt, projQty, projAmt, nMonths };
-  }).sort((a,b) => b.projQty - a.projQty);
-
-  const periodLabel = mode === '2026'
-    ? `Proyeksi sisa 2026 (${projMonths.length} bulan ke depan) · baseline dari ${rows[0]?.nMonths||0} bulan historis`
-    : `Proyeksi 2027 (12 bulan) · baseline dari ${rows[0]?.nMonths||0} bulan historis`;
-  if(labelEl) labelEl.textContent = periodLabel;
-
-  tbody.innerHTML = rows.map(r => `
+  const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const now=new Date(), win=[];
+  for(let i=P_PROJ_BULAN;i>=1;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);win.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));}
+  const winSet=new Set(win);
+  const lb=k=>BLN[+k.slice(5,7)-1]+' '+k.slice(0,4);
+  const src=pApplyFilter(P_ROWS,{...PF,dateFrom:'',dateTo:''}).filter(r=>r['_type']==='penyerapan'&&winSet.has(String(r['Posting Date']||'').slice(0,7)));
+  const byKat={};
+  src.forEach(r=>{const k=r['Kategori - Teknik']||'(Tidak ada)';byKat[k]=(byKat[k]||0)+((r['_qty_abs']!==undefined)?(+r['_qty_abs']||0):0);});
+  const rows=Object.entries(byKat).map(([kat,tot])=>({kat,avg:tot/P_PROJ_BULAN,proj:tot/P_PROJ_BULAN*pilih.bulan}))
+    .filter(r=>Math.round(r.proj)!==0).sort((a,b)=>b.proj-a.proj);
+  const akhir=new Date(pilih.mulai[0],pilih.mulai[1]-1+pilih.bulan-1,1);
+  const per=BLN[pilih.mulai[1]-1]+' '+pilih.mulai[0]+' – '+BLN[akhir.getMonth()]+' '+akhir.getFullYear();
+  if(labelEl) labelEl.textContent='Baseline: '+lb(win[0])+' – '+lb(win[win.length-1])+' (÷'+P_PROJ_BULAN+') · Proyeksi: '+per+' ('+pilih.bulan+' bulan) · '+rows.length+' kategori';
+  const head=document.getElementById('p-projHead');
+  if(head) head.textContent='Proyeksi '+pilih.bulan+' bln';
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="3" class="p-6 text-center text-gray-400 text-xs">Tidak ada penyerapan pada periode baseline untuk filter ini.</td></tr>';return;}
+  const f=n=>Math.round(n).toLocaleString('id-ID');
+  tbody.innerHTML=rows.map(r=>`
     <tr class="hover:bg-[#f2f3ff] border-b border-gray-50">
-      <td class="p-2.5 text-xs">${r.kat}</td>
-      <td class="p-2.5 text-xs text-right font-mono">${Math.round(r.avgQty).toLocaleString('id-ID')}</td>
-      <td class="p-2.5 text-xs text-right font-mono font-semibold">${Math.round(r.projQty).toLocaleString('id-ID')}</td>
-      <td class="p-2.5 text-xs text-right text-gray-400">${projMonths[0]||'—'} s/d ${projMonths[projMonths.length-1]||'—'}</td>
+      <td class="p-2 text-[11px]">${esc(r.kat)}</td>
+      <td class="p-2 text-[11px] text-right font-mono">${f(r.avg)}</td>
+      <td class="p-2 text-[11px] text-right font-mono font-semibold">${f(r.proj)}</td>
     </tr>`).join('');
+}
 
-  // Chart: stacked bar per kategori
-  const labels = rows.map(r => r.kat.length > 20 ? r.kat.slice(0,18)+'…' : r.kat);
-  rebuildChart('p-proyeksiChart', {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Proyeksi Qty',
-        data: rows.map(r => Math.round(r.projQty)),
-        backgroundColor: 'rgba(55,138,221,0.75)',
-        borderRadius: 4
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-      plugins: { legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ' Qty: ' + ctx.parsed.x.toLocaleString('id-ID') } }
-      },
-      scales: {
-        x: { beginAtZero: true, ticks: { font: { size: 9 } } },
-        y: { ticks: { font: { size: 9 } }, grid: { display: false } }
-      }
-    }
+// ── PASANGAN STO 351 <-> 101 ──────────────────────────────
+// Kunci: Purchase Order (No. STO) × Material. Kirim = −(351+352), Terima = 101+102 (Quantity bertanda).
+// Adaptif: bila ekstrak MB51 belum memuat 101/102, semua STO tampil "Menunggu 101" + catatan.
+let P_STO_STATUS = '';
+const P_STO_STATUS_DEF = {
+  menunggu: {t:'Menunggu 101',   c:'bg-amber-100 text-amber-800'},
+  sebagian: {t:'Sebagian',       c:'bg-orange-100 text-orange-800'},
+  lebih:    {t:'Terima > Kirim', c:'bg-purple-100 text-purple-800'},
+  lengkap:  {t:'Lengkap',        c:'bg-green-100 text-green-800'},
+  tanpa351: {t:'101 tanpa 351',  c:'bg-blue-100 text-blue-800'},
+  batal:    {t:'Dibatalkan',     c:'bg-gray-100 text-gray-500'},
+};
+function pStoPilih(st){P_STO_STATUS=P_STO_STATUS===st?'':st;pRenderSto();}
+function pRenderSto() {
+  const tbody=document.getElementById('p-stoTbody');
+  if(!tbody) return;
+  const MVT=new Set(['351','352','101','102']);
+  const mvt=r=>String(r['Movement Type']===undefined||r['Movement Type']===null?'':r['Movement Type']).trim();
+  const adaKode=P_ROWS.some(r=>mvt(r)!=='');
+  const note=document.getElementById('p-stoNote'), foot=document.getElementById('p-stoFoot'), chips=document.getElementById('p-stoChips');
+  if(!adaKode){
+    tbody.innerHTML='<tr><td colspan="10" class="p-6 text-center text-gray-400 text-xs">Kolom kode Movement Type belum ada di data (perlu GAS Penyerapan v3.2). Tekan Refresh setelah GAS diperbarui.</td></tr>';
+    if(chips)chips.innerHTML=''; if(note)note.classList.add('hidden'); if(foot)foot.textContent=''; return;
+  }
+  const ada101=P_ROWS.some(r=>mvt(r)==='101'||mvt(r)==='102');
+  const src=pApplyFilter(P_ROWS,{...PF,kategori:[],mvt:[]}).filter(r=>MVT.has(mvt(r)));
+  const g={}, tanpaPO={baris:0};
+  src.forEach(r=>{
+    const po=String(r['Purchase Order']||'').trim();
+    if(!po){tanpaPO.baris++;return;}
+    const key=po+'|'+r['Material'];
+    if(!g[key])g[key]={po,material:r['Material'],desc:r['Material Description']||'',kat:r['Kategori - Teknik']||'',kirim:0,terima:0,tgl351:'',asal:'',tujuan:''};
+    const o=g[key], q=parseFloat(r['Quantity'])||0, m=mvt(r), d=String(r['Posting Date']||'');
+    if(m==='351'||m==='352'){o.kirim+=-q; if(m==='351'){if(!o.tgl351||d<o.tgl351)o.tgl351=d; if(!o.asal)o.asal=r['Sloc - Gudang']||'';}}
+    else {o.terima+=q; if(m==='101'&&!o.tujuan)o.tujuan=r['Sloc - Gudang']||'';}
   });
+  const hari=new Date(); hari.setHours(0,0,0,0);
+  const umur=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(d||'');if(!m)return null;return Math.round((hari-new Date(+m[1],+m[2]-1,+m[3]))/864e5);};
+  const list=Object.values(g).map(o=>{
+    const k=Math.round(o.kirim*1000)/1000, t=Math.round(o.terima*1000)/1000;
+    let st;
+    if(k<=0&&t<=0) st='batal';
+    else if(k<=0) st='tanpa351';
+    else if(t<=0) st='menunggu';
+    else if(t<k) st='sebagian';
+    else if(t>k) st='lebih';
+    else st='lengkap';
+    return {...o,kirim:k,terima:t,selisih:k-t,status:st,umur:(st==='menunggu'||st==='sebagian')?umur(o.tgl351):null};
+  });
+  const hit={}; list.forEach(o=>hit[o.status]=(hit[o.status]||0)+1);
+  if(chips)chips.innerHTML=Object.entries(P_STO_STATUS_DEF).filter(([k])=>hit[k]).map(([k,d])=>
+    `<button type="button" onclick="pStoPilih('${k}')" class="px-2 py-0.5 rounded-full text-[9px] font-bold ${d.c} ${P_STO_STATUS===k?'ring-2 ring-[#00288e]':''} ${P_STO_STATUS&&P_STO_STATUS!==k?'opacity-40':''}">${d.t}: ${hit[k].toLocaleString('id-ID')}</button>`).join('');
+  if(note){
+    if(!ada101){
+      note.innerHTML='<b>Ekstrak MB51 belum memuat movement 101/102</b> (0 baris di seluruh data). Semua STO tampil "Menunggu 101". '
+        +'Untuk POSTO satu plant: tambahkan 101/102 plant yang sama ke ekstrak MB51. Untuk POSTO beda plant: 101 tercatat di plant penerima — '
+        +'perlu MB5T (Stock in Transit) atau kolom Receiving Plant agar bisa dibedakan dari "belum GR".';
+      note.classList.remove('hidden');
+    } else note.classList.add('hidden');
+  }
+  const urut={menunggu:0,sebagian:1,lebih:2,tanpa351:3,lengkap:4,batal:5};
+  const tampil=list.filter(o=>!P_STO_STATUS||o.status===P_STO_STATUS)
+    .sort((a,b)=>(urut[a.status]-urut[b.status])||((b.umur||0)-(a.umur||0))||String(a.po).localeCompare(String(b.po)));
+  const MAX=300;
+  if(!tampil.length){tbody.innerHTML='<tr><td colspan="10" class="p-6 text-center text-gray-400 text-xs">Tidak ada transaksi 351/352/101/102 untuk filter ini.</td></tr>';}
+  else{
+    const f=n=>Math.round(n).toLocaleString('id-ID');
+    const gd=v=>v?esc(String(v).split(' - ')[1]||v):'<span class="text-gray-300">—</span>';
+    tbody.innerHTML=tampil.slice(0,MAX).map(o=>{
+      const d=P_STO_STATUS_DEF[o.status], tua=o.umur!==null&&o.umur>30;
+      return `<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">
+        <td class="p-2 text-[11px] font-mono">${esc(o.po)}</td>
+        <td class="p-2 text-[11px] whitespace-nowrap">${esc(o.tgl351||'—')}</td>
+        <td class="p-2 text-[11px] whitespace-nowrap">${gd(o.asal)}</td>
+        <td class="p-2 text-[11px] whitespace-nowrap">${gd(o.tujuan)}</td>
+        <td class="p-2 text-[10px] leading-snug min-w-[220px]"><span class="font-mono text-gray-500">${esc(o.material)}</span> · ${esc(o.kat)}<br><span class="text-gray-500">${esc(o.desc)}</span></td>
+        <td class="p-2 text-[11px] text-right font-mono">${f(o.kirim)}</td>
+        <td class="p-2 text-[11px] text-right font-mono">${f(o.terima)}</td>
+        <td class="p-2 text-[11px] text-right font-mono ${o.selisih>0?'text-red-600 font-bold':''}">${f(o.selisih)}</td>
+        <td class="p-2 text-[11px] text-right font-mono ${tua?'text-red-600 font-bold':''}">${o.umur===null?'—':o.umur}</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold whitespace-nowrap ${d.c}">${d.t}</span></td>
+      </tr>`;}).join('');
+  }
+  if(foot)foot.textContent=list.length.toLocaleString('id-ID')+' pasangan STO × material'
+    +(tampil.length>MAX?' · menampilkan '+MAX+' teratas (urut status & umur), gunakan filter untuk mempersempit':'')
+    +(tanpaPO.baris?' · '+tanpaPO.baris+' baris 351/101 tanpa No. STO tidak dihitung':'')
+    +' · umur > 30 hari ditandai merah.';
+}
+
+// ══════════════════════════════════════════════════════════
+// EXPORT TRANSAKSI PER BULAN (Penyerapan) — PPT / Excel
+//  · Sum of Quantity (semua movement, bertanda) per Kategori Teknik per bulan
+//  · Periode = filter tanggal; kosong = 1 Jan tahun berjalan s/d data terakhir; maks 12 bulan
+//  · Fast = Kategori - Moving 'Fast Moving'; Slow = kosong; nilai lain dicatat di catatan kaki
+//  · Library & SRI memakai S_EXP_LIB / sExpMuatLib (sama dengan export Stok)
+// ══════════════════════════════════════════════════════════
+const P_EXP = {format:'pptx', moving:'fast', jalan:false};
+const P_BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+function pExpToggle(ev){ if(ev)ev.stopPropagation(); const m=document.getElementById('p-expMenu'); if(!m)return; m.classList.toggle('hidden'); if(!m.classList.contains('hidden'))pExpSegarkan(); }
+function pExpPilih(k,v){ P_EXP[k]=v; pExpSegarkan(); }
+function pExpSegarkan(){
+  ['format','moving'].forEach(k=>{
+    const w=document.getElementById(k==='format'?'p-expFormat':'p-expMoving'); if(!w)return;
+    w.querySelectorAll('.p-exp-opt').forEach(b=>{const on=b.dataset.v===P_EXP[k];b.style.background=on?'#00288e':'#fff';b.style.color=on?'#fff':'#374151';b.style.borderColor=on?'#00288e':'#e5e7eb';});
+  });
+  const p=pExpPeriode(), el=document.getElementById('p-expPeriode');
+  if(el){el.textContent=p.ok?'Periode: '+p.label+' ('+p.bulan.length+' bulan)':p.pesan; el.style.color=p.ok?'':'#c2410c';}
+}
+document.addEventListener('click',e=>{const w=document.getElementById('p-expWrap'),m=document.getElementById('p-expMenu');if(w&&m&&!m.classList.contains('hidden')&&!w.contains(e.target))m.classList.add('hidden');});
+
+function pExpPeriode(){
+  const tglData=P_ROWS.map(r=>String(r['Posting Date']||'')).filter(Boolean);
+  const maxData=tglData.length?tglData.reduce((a,b)=>a>b?a:b):'';
+  const y=new Date().getFullYear();
+  const dari=PF.dateFrom||(y+'-01-01');
+  let sampai=PF.dateTo||maxData||pTglLokal(new Date());
+  if(sampai<dari) return {ok:false,pesan:'Rentang tanggal tidak valid.'};
+  // tanggal akhir sebenarnya = transaksi terakhir di dalam rentang
+  const dalam=tglData.filter(d=>d>=dari&&d<=sampai);
+  const akhir=dalam.length?dalam.reduce((a,b)=>a>b?a:b):sampai;
+  const bulan=[]; let yy=+dari.slice(0,4), mm=+dari.slice(5,7);
+  const yE=+sampai.slice(0,4), mE=+sampai.slice(5,7);
+  while(yy<yE||(yy===yE&&mm<=mE)){bulan.push(yy+'-'+String(mm).padStart(2,'0')); mm++; if(mm>12){mm=1;yy++;} if(bulan.length>12)break;}
+  if(bulan.length>12) return {ok:false,pesan:'Rentang maksimal 12 bulan — persempit filter tanggal.'};
+  const fmt=(d,penuh)=>{const t=+d.slice(8,10),b=P_BLN[+d.slice(5,7)-1],th=d.slice(0,4);return (penuh||t!==1?t+' ':'')+b+(penuh?' '+th:'');};
+  const kiri=fmt(dari,false)+(dari.slice(0,4)!==akhir.slice(0,4)?' '+dari.slice(0,4):'');
+  return {ok:true,dari,sampai,akhir,bulan,label:kiri+' – '+fmt(akhir,true),file:dari.replace(/-/g,'')+'-'+akhir.replace(/-/g,'')};
+}
+function pExpFilterTeks(){
+  const p=[];
+  Object.keys(P_MS_CONFIG).forEach(k=>{if(PF[k]&&PF[k].length)p.push(P_MS_CONFIG[k].label+': '+PF[k].join(', '));});
+  if(PF.top5KatTeknik)p.push('Kat. Teknik: '+PF.top5KatTeknik);
+  if(PF.cardBrand)p.push('Brand: '+PF.cardBrand);
+  if(PF.search)p.push('Cari: "'+PF.search+'"');
+  return p.join(' · ');
+}
+function pExpData(jenis,per){
+  const mv=r=>String(r['Kategori - Moving']===null||r['Kategori - Moving']===undefined?'':r['Kategori - Moving']).trim();
+  const semua=pApplyFilter(P_ROWS,{...PF,dateFrom:per.dari,dateTo:per.sampai});
+  const rows=semua.filter(r=>jenis==='fast'?mv(r)===S_FAST_MOVING:mv(r)==='');
+  const lain=semua.filter(r=>mv(r)!==S_FAST_MOVING&&mv(r)!=='');
+  const idx={}; per.bulan.forEach((b,i)=>idx[b]=i);
+  const grup={};
+  rows.forEach(r=>{
+    const i=idx[String(r['Posting Date']||'').slice(0,7)]; if(i===undefined)return;
+    const k=String(r['Kategori - Teknik']||'').trim()||'(Kosong)';
+    if(!grup[k])grup[k]={status:k,qty:per.bulan.map(()=>0),n:per.bulan.map(()=>0)};
+    grup[k].qty[i]+=parseFloat(r['Quantity'])||0; grup[k].n[i]++;
+  });
+  const list=Object.values(grup).map(g=>({...g,qty:g.qty.map(v=>Math.round(v)),total:Math.round(g.qty.reduce((a,b)=>a+b,0)),ada:g.n.some(Boolean)}))
+    .sort((a,b)=>a.status.localeCompare(b.status,'en',{numeric:true,sensitivity:'base'}));
+  const tot=per.bulan.map((_,i)=>list.reduce((s,g)=>s+g.qty[i],0)), ntot=per.bulan.map((_,i)=>list.reduce((s,g)=>s+g.n[i],0));
+  return {jenis,judul:jenis==='fast'?'FAST MOVING':'SLOW MOVING',list,tot,ntot,total:tot.reduce((a,b)=>a+b,0),
+    lain:{baris:lain.length,nilai:[...new Set(lain.map(mv))]}};
+}
+function pExpPesan(t,err){const el=document.getElementById('p-expMsg');if(el){el.textContent=t;el.style.color=err?'#dc2626':'#15803d';}}
+function pExpCatatan(d,filter){
+  const c=['Sumber: Dashboard Opharset SBU RKAL · MB51 · Sum of Quantity semua movement (+ masuk, − keluar) · Material = Kategori Teknik'];
+  if(d.jenis==='slow')c.push('Slow Moving = Kategori Moving kosong');
+  if(filter)c.push('Filter: '+filter);
+  if(d.lain.baris)c.push('Tidak termasuk '+d.lain.baris+' baris Moving "'+d.lain.nilai.join('", "')+'"');
+  return c.join(' · ');
+}
+async function pExportJalankan(){
+  if(P_EXP.jalan)return;
+  if(!P_ROWS.length){pExpPesan('Data penyerapan belum dimuat.',true);return;}
+  const per=pExpPeriode(); if(!per.ok){pExpPesan(per.pesan,true);return;}
+  const jenis=P_EXP.moving==='both'?['fast','slow']:[P_EXP.moving];
+  const set=jenis.map(j=>pExpData(j,per));
+  if(set.every(d=>!d.list.length)){pExpPesan('Tidak ada data untuk pilihan & filter ini.',true);return;}
+  const btn=document.getElementById('p-expGo'); P_EXP.jalan=true; if(btn)btn.style.opacity='0.5';
+  pExpPesan('Menyiapkan file…',false);
+  try{
+    const lib=await sExpMuatLib(P_EXP.format);
+    const label=P_EXP.moving==='both'?'FastSlow':(P_EXP.moving==='fast'?'FastMoving':'SlowMoving');
+    const nama='Transaksi_'+label+'_'+per.file, filter=pExpFilterTeks();
+    if(P_EXP.format==='pptx')await pExpPptx(lib,set,per,filter,nama); else await pExpXlsx(lib,set,per,filter,nama);
+    pExpPesan('Selesai: '+nama+'.'+P_EXP.format,false);
+  }catch(e){console.error('Export penyerapan:',e);pExpPesan('Gagal: '+(e&&e.message?e.message:e),true);}
+  finally{P_EXP.jalan=false;if(btn)btn.style.opacity='';}
+}
+const P_WARNA={pos:'15803D',neg:'DC2626',nol:'2563EB',kosong:'9CA3AF'};
+const pExpSel=(v,ada)=>!ada?{t:'-',w:P_WARNA.kosong}:{t:Math.round(v).toLocaleString('en-US'),w:v>0?P_WARNA.pos:v<0?P_WARNA.neg:P_WARNA.nol};
+
+async function pExpPptx(PptxGenJS,set,per,filter,nama){
+  const pptx=new PptxGenJS(); pptx.layout='LAYOUT_WIDE'; pptx.title='Transaksi Material per Bulan';
+  const BIRU='1D4ED8', HEAD='D6E4FB', FONT='Arial', PER=31;
+  const bln=per.bulan.map(b=>P_BLN[+b.slice(5,7)-1]+(per.bulan.length>1&&per.bulan[0].slice(0,4)!==per.bulan[per.bulan.length-1].slice(0,4)?' '+b.slice(2,4):''));
+  set.forEach(d=>{
+    if(!d.list.length)return;
+    const bag=[]; for(let i=0;i<d.list.length;i+=PER)bag.push(d.list.slice(i,i+PER));
+    bag.forEach((isi,bi)=>{
+      const sl=pptx.addSlide(); sl.background={color:'FFFFFF'};
+      sl.addShape(pptx.ShapeType.cube,{x:0.2,y:0.12,w:0.62,h:0.62,fill:{color:'2563EB'},line:{color:'1E40AF',width:1}});
+      sl.addText('TRANSAKSI MATERIAL '+d.judul+' — '+d.list.length+' MATERIAL',{x:0.95,y:0.08,w:9.2,h:0.5,fontFace:FONT,fontSize:24,bold:true,color:BIRU,margin:0});
+      sl.addText('Sum of Quantity (Qty) · MB51 · '+per.label+' · Bagian '+(bi+1)+'/'+bag.length,{x:0.95,y:0.56,w:9.2,h:0.3,fontFace:FONT,fontSize:12,color:'2563EB',margin:0});
+      [['Positif = material masuk',P_WARNA.pos],['Negatif = material keluar',P_WARNA.neg],['0 = transaksi ada, quantity = 0',P_WARNA.nol],['- = tidak ada transaksi',P_WARNA.kosong]].forEach((l,i)=>{
+        sl.addShape(pptx.ShapeType.ellipse,{x:10.25,y:0.1+i*0.2+0.04,w:0.11,h:0.11,fill:{color:l[1]},line:{color:l[1]}});
+        sl.addText(l[0],{x:10.42,y:0.1+i*0.2,w:2.8,h:0.19,fontFace:FONT,fontSize:9,color:'111827',margin:0});
+      });
+      const c=(t,o)=>({text:String(t),options:Object.assign({fontFace:FONT,fontSize:8,margin:[0,0.04,0,0.04],valign:'middle'},o)});
+      const header=[c('No',{bold:true,align:'center',fill:{color:HEAD},color:'111827'}),c('Material',{bold:true,fill:{color:HEAD},color:'111827'})]
+        .concat(bln.map(b=>c(b,{bold:true,align:'center',fill:{color:HEAD},color:'111827'}))).concat([c('Total',{bold:true,align:'center',fill:{color:HEAD},color:'111827'})]);
+      const rows=[header];
+      isi.forEach((g,ri)=>{
+        const fill={color:ri%2?'F3F6FD':'FFFFFF'};
+        const t=pExpSel(g.total,g.ada);
+        rows.push([c(bi*PER+ri+1,{align:'center',color:'374151',fill}),c(g.status,{color:'111827',fill})]
+          .concat(g.qty.map((v,i)=>{const x=pExpSel(v,g.n[i]>0);return c(x.t,{align:'center',color:x.w,fill});}))
+          .concat([c(t.t,{align:'center',color:t.w,fill})]));
+      });
+      if(bi===bag.length-1){
+        const f={color:HEAD};
+        rows.push([c('',{fill:f}),c('GRAND TOTAL',{bold:true,color:BIRU,fill:f})]
+          .concat(d.tot.map((v,i)=>{const x=pExpSel(v,d.ntot[i]>0);return c(x.t,{bold:true,align:'center',color:x.t==='-'?P_WARNA.kosong:'111827',fill:f});}))
+          .concat([c(Math.round(d.total).toLocaleString('en-US'),{bold:true,align:'center',color:'111827',fill:f})]));
+      }
+      const wNo=0.45,wMat=2.9,wTot=1.3,wB=(12.93-wNo-wMat-wTot)/bln.length;
+      sl.addTable(rows,{x:0.2,y:0.98,w:12.93,colW:[wNo,wMat].concat(bln.map(()=>wB)).concat([wTot]),rowH:0.185,border:{type:'solid',pt:0.5,color:'C7D2EA'},autoPage:false});
+      sl.addText(pExpCatatan(d,filter),{x:0.2,y:7.2,w:12.9,h:0.22,fontFace:FONT,fontSize:7,color:'6B7280',margin:0});
+    });
+  });
+  await pptx.writeFile({fileName:nama+'.pptx',compression:true});
+}
+
+async function pExpXlsx(ExcelJS,set,per,filter,nama){
+  const wb=new ExcelJS.Workbook(); wb.creator='Dashboard Opharset SBU RKAL';
+  const A=h=>'FF'+h, garis={style:'thin',color:{argb:A('C7D2EA')}}, kotak={top:garis,left:garis,bottom:garis,right:garis};
+  const nB=per.bulan.length, colTot=3+nB, hurufKol=n=>{let s='';while(n>0){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26);}return s;};
+  const bln=per.bulan.map(b=>P_BLN[+b.slice(5,7)-1]+' '+b.slice(0,4));
+  set.forEach(d=>{
+    if(!d.list.length)return;
+    const ws=wb.addWorksheet(d.jenis==='fast'?'Fast Moving':'Slow Moving',{views:[{state:'frozen',ySplit:6,xSplit:2}]});
+    ws.columns=[{width:6},{width:34}].concat(per.bulan.map(()=>({width:11}))).concat([{width:13}]);
+    ws.mergeCells(1,1,1,colTot); ws.mergeCells(2,1,2,colTot);
+    ws.getCell(1,1).value='TRANSAKSI MATERIAL '+d.judul+' — '+d.list.length+' MATERIAL';
+    ws.getCell(1,1).font={bold:true,size:16,color:{argb:A('1D4ED8')}};
+    ws.getCell(2,1).value='Sum of Quantity (Qty) · MB51 · '+per.label;
+    ws.getCell(2,1).font={size:11,color:{argb:A('2563EB')}};
+    ws.mergeCells(3,1,3,colTot);
+    ws.getCell(3,1).value={richText:[
+      {text:'● Positif = material masuk   ',font:{size:9,color:{argb:A(P_WARNA.pos)}}},
+      {text:'● Negatif = material keluar   ',font:{size:9,color:{argb:A(P_WARNA.neg)}}},
+      {text:'● 0 = transaksi ada, quantity = 0   ',font:{size:9,color:{argb:A(P_WARNA.nol)}}},
+      {text:'● - = tidak ada transaksi',font:{size:9,color:{argb:A(P_WARNA.kosong)}}}]};
+    const H=6, awal=7, akhir=awal+d.list.length-1, gt=akhir+1;
+    const hdr=ws.getRow(H); hdr.values=['No','Material'].concat(bln).concat(['Total']);
+    hdr.eachCell((c,n)=>{c.font={bold:true,color:{argb:A('111827')}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:A('D6E4FB')}};c.alignment={horizontal:n===2?'left':'center',vertical:'middle'};c.border=kotak;});
+    const FMT='#,##0;-#,##0;0';
+    const isi=(cel,v,ada,bold)=>{
+      if(!ada){cel.value='-';cel.font={color:{argb:A(P_WARNA.kosong)},bold:!!bold};}
+      else{cel.value=v;cel.numFmt=FMT;cel.font={bold:!!bold,color:{argb:A(v>0?P_WARNA.pos:v<0?P_WARNA.neg:P_WARNA.nol)}};}
+      cel.alignment={horizontal:'center'};
+    };
+    d.list.forEach((g,i)=>{
+      const r=awal+i, row=ws.getRow(r);
+      row.getCell(1).value=i+1; row.getCell(1).alignment={horizontal:'center'};
+      row.getCell(2).value=g.status;
+      g.qty.forEach((v,j)=>isi(row.getCell(3+j),v,g.n[j]>0));
+      const ct=row.getCell(colTot);
+      ct.value={formula:'SUM('+hurufKol(3)+r+':'+hurufKol(2+nB)+r+')',result:g.total};
+      ct.numFmt=FMT; ct.alignment={horizontal:'center'}; ct.font={bold:true,color:{argb:A(g.total>0?P_WARNA.pos:g.total<0?P_WARNA.neg:P_WARNA.nol)}};
+      for(let c=1;c<=colTot;c++){row.getCell(c).border=kotak; if(i%2)row.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:A('F3F6FD')}};}
+    });
+    const rg=ws.getRow(gt); rg.getCell(2).value='GRAND TOTAL';
+    for(let c=3;c<=colTot;c++){
+      const L=hurufKol(c), hasil=c<colTot?d.tot[c-3]:d.total;
+      rg.getCell(c).value={formula:'SUM('+L+awal+':'+L+akhir+')',result:hasil}; rg.getCell(c).numFmt=FMT; rg.getCell(c).alignment={horizontal:'center'};
+    }
+    for(let c=1;c<=colTot;c++){const cel=rg.getCell(c);cel.fill={type:'pattern',pattern:'solid',fgColor:{argb:A('D6E4FB')}};cel.font={bold:true,color:{argb:A(c===2?'1D4ED8':'111827')}};cel.border=kotak;}
+    ws.autoFilter={from:{row:H,column:1},to:{row:akhir,column:colTot}};
+    ws.mergeCells(gt+2,1,gt+2,colTot);
+    const ck=ws.getCell(gt+2,1); ck.value=pExpCatatan(d,filter); ck.font={size:8,italic:true,color:{argb:A('6B7280')}}; ck.alignment={wrapText:true,vertical:'top'}; ws.getRow(gt+2).height=30;
+    ws.pageSetup={orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,paperSize:9};
+  });
+  const buf=await wb.xlsx.writeBuffer();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+  a.download=nama+'.xlsx'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
 
 function pUpdateLabel() {
   const parts=[];
   if(PF.dateFrom||PF.dateTo)parts.push((PF.dateFrom||'—')+' s/d '+(PF.dateTo||'—'));
   Object.keys(P_MS_CONFIG).forEach(k=>{if(PF[k]&&PF[k].length)parts.push(P_MS_CONFIG[k].label+'('+PF[k].length+')');});
-  if(PF.top5KatTeknik)parts.push('Top5: '+PF.top5KatTeknik);
+  if(PF.top5KatTeknik)parts.push('Kat. Teknik: '+PF.top5KatTeknik);
+  if(PF.cardBrand)parts.push('Brand: '+PF.cardBrand);
   if(PF.search)parts.push('"'+PF.search+'"');
   const el=document.getElementById('p-activeFilterLabel');
   if(el)el.textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
@@ -5073,16 +5389,6 @@ function pExportCSV() {
 
 // ── TOGGLE DIM & PERIOD & METRIC ─────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
-  // Bar chart dimension toggle
-  document.querySelectorAll('.p-dim-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      P_ACTIVE_DIM=btn.dataset.dim;
-      document.querySelectorAll('.p-dim-btn').forEach(b=>{
-        b.className='p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded '+(b===btn?'bg-[#00288e] text-white':'bg-gray-100 text-gray-500 hover:bg-[#f2f3ff]');
-      });
-      pRenderBarChart();
-    });
-  });
   // Period toggle
   document.querySelectorAll('.p-period-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
