@@ -1965,7 +1965,7 @@ html,body   { height:100%; overflow:hidden; }
 
   <!-- FOOTER -->
   <footer class="flex-shrink-0 py-2 px-6 text-center border-t border-gray-100 bg-white">
-    <p class="text-[9px] text-gray-300">Developed &amp; maintained by bin.muji 8614018ICP · 2026</p>
+    <p class="text-[9px] text-gray-300">Developed &amp; maintained by bin.muji · Aset &amp; Inventory SBU RKAL · 2026</p>
   </footer>
 
 </div><!-- end #main -->
@@ -2013,6 +2013,27 @@ const API_PMOSP      = 'https://script.google.com/macros/s/AKfycby2-5gU-v_7A0Vpl
 //  3. bila server tidak terjangkau / error: memakai data tersimpan + banner peringatan.
 // opt.simpan=false untuk API yang sudah punya cache sendiri (Stok lite, Penyerapan lite).
 // ══════════════════════════════════════════════════════════
+// ── Info singkat (toast) — dipakai saat Refresh kena jeda GAS (v3.4 Stok / v3.1 Penyerapan) ──
+// textContent (bukan innerHTML) agar aman dari isi data.
+function tampilInfoSingkat(pesan) {
+  let el = document.getElementById('info-singkat');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'info-singkat';
+    el.setAttribute('role', 'status');
+    el.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] bg-gray-800 text-white text-xs px-4 py-2 rounded-lg shadow-lg max-w-[90vw] text-center';
+    document.body.appendChild(el);
+  }
+  el.textContent = pesan;
+  el.style.display = 'block';
+  clearTimeout(el._t);
+  el._t = setTimeout(function(){ el.style.display = 'none'; }, 7000);
+}
+function cekRefreshDitunda(json, nama) {
+  if (!json || !json.refreshDitunda) return;
+  const menit = Math.max(1, Math.ceil((json.refreshSisaDetik || 0) / 60));
+  tampilInfoSingkat('Data ' + nama + ' baru saja diperbarui. Muat ulang paksa bisa dilakukan lagi dalam ± ' + menit + ' menit.');
+}
 const API_NAMA = {};
 [[API_KEUANGAN,'Keuangan'],[API_STOK,'Stok'],[API_PENYERAPAN,'Penyerapan'],[API_WIG,'WIG'],
  [API_DOKTEK,'Doktek'],[API_PMISP,'PM ISP'],[API_HAR,'HAR'],[API_PMOSP,'PM OSP']].forEach(function(a){API_NAMA[a[0]]=a[1];});
@@ -2392,6 +2413,7 @@ async function homeLoadData(force) {
       ambilHar(),
     ]);
     homeWriteCache(data);
+    if(force) cekRefreshDitunda(data.stok, 'stok');
     loaded.home = true;
     // Simpan ke modul state supaya tidak re-fetch saat pindah modul
     if(data.serap?.ok && Array.isArray(data.serap.rows) && !P_ROWS.length) { P_ROWS = data.serap.rows; }
@@ -3288,6 +3310,7 @@ async function sLoadData(force) {
     // 2) GAS ?mode=lite: 13 kolom, Tgl Update terbaru saja (±0,4 MB, bukan 41 MB)
     const json=await apiJson(API_STOK+'?mode=lite'+(force?'&nocache=1':''),{simpan:false});
     if(!json.ok)throw new Error(json.error||'Gagal memuat data');
+    if(force)cekRefreshDitunda(json,'stok');
     try{ localStorage.setItem(S_CACHE_KEY, JSON.stringify({json, ts:Date.now()})); }catch(e){}
     // Render ulang hanya jika data berbeda dari yang sudah tampil (filter user tidak tereset)
     if(!shown || (json.tglAktif+'|'+json.total)!==S_LITE_SIG) sSetLite(json);
@@ -4096,6 +4119,7 @@ function pFetch(force) {
   P_FETCH = apiJson(API_PENYERAPAN + '?mode=lite' + (force ? '&nocache=1' : ''), {simpan:false})
     .then(json => {
       if(!json.ok) throw new Error(json.error || 'Gagal memuat data');
+      if(force) cekRefreshDitunda(json, 'penyerapan');
       P_LAST_FETCH = Date.now();
       idbSet(P_IDB_KEY, json);
       return json;
