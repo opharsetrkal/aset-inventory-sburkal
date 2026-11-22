@@ -1469,8 +1469,11 @@ html,body   { height:100%; overflow:hidden; }
             </div>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold text-[#131b2e] mb-1">Brand Material</p>
-            <p class="text-[9px] text-gray-400 mb-3">Sesuai filter aktif · hover untuk detail</p>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <p class="text-xs font-bold text-[#131b2e]">Brand Material</p>
+              <span id="s-brandSel"></span>
+            </div>
+            <p class="text-[9px] text-gray-400 mb-3">Sesuai filter aktif · klik irisan/legend untuk filter semua card</p>
             <div style="position:relative;height:280px"><canvas id="s-brandChart"></canvas></div>
           </div>
         </div>
@@ -1481,7 +1484,7 @@ html,body   { height:100%; overflow:hidden; }
         <div class="px-4 py-3 border-b border-gray-100 flex items-start justify-between gap-2">
           <div>
             <p class="text-sm font-bold text-[#131b2e]">Alert Stok Rendah</p>
-            <p class="text-[10px] text-gray-400">Per Kategori Teknik · stok ≤ Estimasi Reorder Point · Safety Stock = 1× avg bulanan · Lead Time = 45 hari.</p>
+            <p class="text-[10px] text-gray-400" id="s-alertInfo">Per Kategori Teknik · stok ≤ Estimasi Reorder Point · Safety Stock = 1× avg bulanan · Lead Time = 45 hari.</p>
           </div>
           <span class="text-[9px] font-semibold text-orange-600 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full whitespace-nowrap" id="s-alertCount">—</span>
         </div>
@@ -1507,41 +1510,58 @@ html,body   { height:100%; overflow:hidden; }
         <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between gap-2">
           <div>
             <p class="text-sm font-bold text-[#131b2e]">Stok Kabel FOC (Non-DW)</p>
-            <p class="text-[10px] text-gray-400">Klasifikasi per panjang · Kategori Teknik = FOC, kecuali DW · per baris (Material × Batch × Sloc).</p>
+            <p class="text-[10px] text-gray-400">Kelompok panjang per baris (Material × Batch × Sloc) · Kategori Teknik = FOC, kecuali DW · klik kotak untuk filter semua card.</p>
           </div>
           <span class="text-[9px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full whitespace-nowrap" id="s-kabelCount">—</span>
         </div>
-        <div class="overflow-x-auto overflow-y-auto custom-scrollbar" style="max-height:320px">
-          <table class="w-full text-left border-collapse" style="min-width:700px">
-            <thead class="bg-gray-50 sticky top-0"><tr>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Material</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Deskripsi</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Batch</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Sloc KP</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Qty (Unrestricted)</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">UoM</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Kelas Panjang</th>
-            </tr></thead>
-            <tbody id="s-kabelTbody">
-              <tr><td colspan="7" class="p-8 text-center text-gray-400 text-xs">Memuat data…</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="px-4 py-3 border-t border-gray-100">
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="s-kabelSummary"></div>
+        <div class="p-4">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2" id="s-kabelSummary">
+            <div class="skeleton rounded-lg h-16"></div><div class="skeleton rounded-lg h-16"></div><div class="skeleton rounded-lg h-16"></div>
+          </div>
         </div>
       </section>
 
-      <!-- Tabel Stok -->
-      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <!-- Tabel Stok (overflow-visible agar menu Export tidak terpotong) -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-visible">
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
             <p class="text-sm font-bold">Data Detail Stok Material</p>
             <p class="text-[10px] text-gray-400" id="s-activeFilterLabel">Menampilkan semua data</p>
           </div>
-          <button onclick="sExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print">
-            <span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV
-          </button>
+          <div class="relative no-print" id="s-expWrap">
+            <button onclick="sExpToggle(event)" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50">
+              <span class="material-symbols-outlined text-[13px]">download</span> Export <span class="material-symbols-outlined text-[13px]">expand_more</span>
+            </button>
+            <div id="s-expMenu" class="hidden absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-3 w-72 space-y-2.5">
+              <div>
+                <p class="text-[11px] font-bold text-[#131b2e]">Export Stok per Status (Kategori Teknik)</p>
+                <p class="text-[9px] text-gray-500" id="s-expTgl">Tgl Update: —</p>
+              </div>
+              <div>
+                <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Format</p>
+                <div class="flex gap-1" id="s-expFormat">
+                  <button type="button" data-v="pptx" onclick="sExpPilih('format','pptx')" class="s-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">PPT</button>
+                  <button type="button" data-v="xlsx" onclick="sExpPilih('format','xlsx')" class="s-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">Excel</button>
+                </div>
+              </div>
+              <div>
+                <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Kategori Moving</p>
+                <div class="flex gap-1" id="s-expMoving">
+                  <button type="button" data-v="fast" onclick="sExpPilih('moving','fast')" class="s-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">Fast</button>
+                  <button type="button" data-v="slow" onclick="sExpPilih('moving','slow')" class="s-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">Slow</button>
+                  <button type="button" data-v="both" onclick="sExpPilih('moving','both')" class="s-exp-opt flex-1 text-[10px] font-semibold border rounded py-1">Keduanya</button>
+                </div>
+              </div>
+              <p class="text-[9px] text-gray-400 leading-snug">Tanggal & filter lain mengikuti card Filter. Fast = "Fast Moving", Slow = Moving kosong. Hanya stok aktif (tanpa sloc/batch rusak).</p>
+              <button type="button" id="s-expGo" onclick="sExportJalankan()" class="w-full flex items-center justify-center gap-1 bg-[#00288e] text-white text-[10px] font-bold rounded py-1.5 hover:opacity-90">
+                <span class="material-symbols-outlined text-[13px]">download</span> Unduh
+              </button>
+              <p class="text-[9px] leading-snug" id="s-expMsg"></p>
+              <div class="border-t border-gray-100 pt-2">
+                <button type="button" onclick="sExportCSV()" class="text-[10px] text-[#00288e] font-semibold hover:underline">CSV data detail (sesuai filter)</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="overflow-x-auto custom-scrollbar">
@@ -2028,6 +2048,12 @@ function tampilInfoSingkat(pesan) {
   el.style.display = 'block';
   clearTimeout(el._t);
   el._t = setTimeout(function(){ el.style.display = 'none'; }, 7000);
+}
+// Escape teks sebelum masuk innerHTML
+function esc(v) {
+  return String(v === null || v === undefined ? '' : v).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
 }
 function cekRefreshDitunda(json, nama) {
   if (!json || !json.refreshDitunda) return;
@@ -3255,7 +3281,7 @@ const S_CACHE_KEY='asus_stok_lite_v1';
 
 const S_COLS=['Material','Material Description','Batch','Base Unit of Measure','Unrestricted','Value Unrestricted','Sloc - Gudang','Sloc - KP','Material - Brand'];
 
-const SF={slocGudang:[],slocKp:[],brand:[],katSap:[],katTeknik:[],batch:[],moving:[],tglUpdate:[],search:'',cardKp:'',cardGudang:''};
+const SF={slocGudang:[],slocKp:[],brand:[],katSap:[],katTeknik:[],batch:[],moving:[],tglUpdate:[],search:'',cardKp:'',cardGudang:'',cardBrand:'',kabelBand:''};
 
 const S_MS_CONFIG={
   slocGudang:{col:'Sloc - Gudang',    label:'Sloc Gudang'},
@@ -3288,6 +3314,8 @@ const sApplyF=(rows,f)=>{
     if(!sChk(f.tglUpdate ||[],r['Tgl Update']))return false;
     if(f.cardKp    &&r['Sloc - KP']     !==f.cardKp)return false;
     if(f.cardGudang&&r['Sloc - Gudang'] !==f.cardGudang)return false;
+    if(f.cardBrand &&r['Material - Brand']!==f.cardBrand)return false;
+    if(f.kabelBand!==''&&f.kabelBand!==undefined&&!sIsKabelBand(r,f.kabelBand))return false;
     if(q){var sk=S_COLS.map(function(c){return String(r[c]||'');}).join('|').toLowerCase();if(!sk.includes(q))return false;}
     return true;
   });
@@ -3548,11 +3576,13 @@ function sOnFilterChange() {
 
 function sToggleCardKp(kp){SF.cardKp=SF.cardKp===kp?'':kp;SF.cardGudang='';sApplyAll();}
 function sToggleCardGudang(g){SF.cardGudang=SF.cardGudang===g?'':g;SF.cardKp='';sApplyAll();}
+function sToggleCardBrand(b){SF.cardBrand=SF.cardBrand===b?'':b;sApplyAll();}
+function sToggleKabelBand(i){SF.kabelBand=SF.kabelBand===i?'':i;sApplyAll();}
 
 function sResetAllFilters() {
   ['slocGudang','slocKp','brand','katSap','katTeknik','batch','moving'].forEach(k=>SF[k]=[]);
   SF.tglUpdate=S_DEFAULT_TGL?[S_DEFAULT_TGL]:[];
-  SF.search='';SF.cardKp='';SF.cardGudang='';
+  SF.search='';SF.cardKp='';SF.cardGudang='';SF.cardBrand='';SF.kabelBand='';
   const s=document.getElementById('s-search');if(s)s.value='';
   document.querySelectorAll('[id^="ms-s-"][id$="-menu"] input[type=checkbox]').forEach(cb=>cb.checked=false);
   if(S_DEFAULT_TGL){
@@ -3581,6 +3611,17 @@ function sApplyAll() {
 
 // ── ALERT STOK RENDAH ─────────────────────────────────────
 // Grup per Kategori Teknik. Reorder Point = AvgMonthly × 1.5 (45hr), Safety Stock = AvgMonthly × 1
+const S_ALERT_BULAN = 6;
+const S_NAMA_BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+function sAlertWindow() {
+  const now = new Date(), keys = [];
+  for(let i = S_ALERT_BULAN; i >= 1; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    keys.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+  }
+  const lbl = k => S_NAMA_BLN[+k.slice(5, 7) - 1] + ' ' + k.slice(0, 4);
+  return { set: new Set(keys), label: lbl(keys[0]) + '–' + lbl(keys[keys.length - 1]) };
+}
 function sRenderAlert(filtered) {
   const tbody = document.getElementById('s-alertTbody');
   const countEl = document.getElementById('s-alertCount');
@@ -3596,18 +3637,25 @@ function sRenderAlert(filtered) {
     return;
   }
 
-  // Avg monthly consumption per Kategori Teknik dari GI
-  const giRows = P_ROWS.filter(r => r['_type'] === 'penyerapan');
+  // Rata-rata pemakaian per Kategori Teknik dari GI:
+  //  · rentang TETAP = S_ALERT_BULAN bulan kalender penuh sebelum bulan berjalan, dibagi S_ALERT_BULAN
+  //    (bulan tanpa pemakaian tetap dihitung 0)
+  //  · lokasi pemakaian mengikuti filter lokasi stok (Sloc KP, Sloc Gudang, card KP, bar gudang)
+  const win = sAlertWindow();
+  const lokasiOk = r => sChk(SF.slocKp||[], r['Sloc - KP']) && sChk(SF.slocGudang||[], r['Sloc - Gudang'])
+    && (!SF.cardKp || r['Sloc - KP'] === SF.cardKp) && (!SF.cardGudang || r['Sloc - Gudang'] === SF.cardGudang);
   const conByKat = {};
-  giRows.forEach(r => {
+  P_ROWS.forEach(r => {
+    if(r['_type'] !== 'penyerapan') return;
+    const mk = String(r['Posting Date'] || '').slice(0, 7);
+    if(!win.set.has(mk) || !lokasiOk(r)) return;
     const kat = r['Kategori - Teknik'] || '(Tidak ada)';
     const qty = (r['_qty_abs'] !== undefined) ? (+r['_qty_abs'] || 0) : Math.abs(parseFloat(r['Quantity']) || 0);
-    const mk  = (r['Posting Date'] || '').slice(0, 7);
-    if(!mk) return;
-    if(!conByKat[kat]) conByKat[kat] = { totalQty: 0, months: new Set() };
-    conByKat[kat].totalQty += qty;
-    conByKat[kat].months.add(mk);
+    conByKat[kat] = (conByKat[kat] || 0) + qty;
   });
+  const infoEl = document.getElementById('s-alertInfo');
+  if(infoEl) infoEl.textContent = 'Per Kategori Teknik · Avg/Bulan = pemakaian (GI) ' + win.label + ' ÷ ' + S_ALERT_BULAN
+    + ' · lokasi pemakaian ikut filter KP/Gudang · Reorder = 1,5× avg (lead time 45 hari) · Safety Stock = 1× avg.';
 
   // Total stok per Kategori Teknik dari filtered stok aktif
   const aktif = filtered.filter(sIsAktif);
@@ -3621,9 +3669,7 @@ function sRenderAlert(filtered) {
   const LEAD_MONTHS = 45 / 30;
   const alerts = [];
   Object.entries(stokByKat).forEach(([kat, stok]) => {
-    const c = conByKat[kat];
-    if(!c || c.months.size === 0) return;
-    const avgMonthly = c.totalQty / c.months.size;
+    const avgMonthly = (conByKat[kat] || 0) / S_ALERT_BULAN;
     if(avgMonthly <= 0) return;
     const reorderPoint = avgMonthly * LEAD_MONTHS;
     const safetyStock  = avgMonthly * 1;
@@ -3684,74 +3730,41 @@ function kabelBand(qty) {
   return KABEL_BANDS.length - 1;
 }
 
+const sIsKabelFoc=r=>{const k=(r['Kategori - Teknik']||'').toUpperCase();return k.includes('FOC')&&!k.includes('DW');};
+function sIsKabelBand(r,i){return sIsKabelFoc(r)&&sIsAktif(r)&&kabelBand(parseFloat(r['Unrestricted'])||0)===i;}
+
+// Kotak kelompok panjang dihitung dari filter aktif TANPA filter kelompok itu sendiri,
+// supaya semua kelompok tetap terlihat; kelompok terpilih ditandai.
 function sRenderKabel(filtered) {
-  var tbody   = document.getElementById('s-kabelTbody');
   var countEl = document.getElementById('s-kabelCount');
   var summaryEl = document.getElementById('s-kabelSummary');
-  if(!tbody) return;
-
-  // Filter: Kategori Teknik mengandung 'FOC', tidak mengandung 'DW', Batch = BAIK, Unrestricted > 0
-  var rows = filtered.filter(function(r){
-    var kat = (r['Kategori - Teknik'] || '').toUpperCase();
-    if(!kat.includes('FOC')) return false;
-    if(kat.includes('DW')) return false;
-    if(!sIsAktif(r)) return false;
-    return true;
+  if(!summaryEl) return;
+  var sel = SF.kabelBand;
+  var rows = sApplyF(S_ROWS, Object.assign({}, SF, {kabelBand:''})).filter(function(r){ return sIsKabelFoc(r) && sIsAktif(r); });
+  var band = KABEL_BANDS.map(function(){ return { count:0, totalQty:0 }; });
+  rows.forEach(function(r){
+    var qty = parseFloat(r['Unrestricted'])||0, bi = kabelBand(qty);
+    band[bi].count++; band[bi].totalQty += qty;
   });
-
-  if(countEl) countEl.textContent = rows.length + ' baris';
-
+  if(countEl) countEl.textContent = rows.length + ' baris' + (sel!=='' ? ' · filter ' + KABEL_BANDS[sel].label + ' M' : '');
   if(!rows.length){
-    tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-gray-400 text-xs">Tidak ada data kabel FOC (non-DW).</td></tr>';
-    if(summaryEl) summaryEl.innerHTML = '';
+    summaryEl.innerHTML = '<p class="col-span-full text-center text-gray-400 text-xs py-4">Tidak ada data kabel FOC (non-DW).</p>';
     return;
   }
-
-  // Urutkan: band panjang tertinggi dulu, lalu qty terbesar
-  rows = rows.slice().sort(function(a,b){
-    var qa = parseFloat(a['Unrestricted'])||0;
-    var qb = parseFloat(b['Unrestricted'])||0;
-    var ba = kabelBand(qa), bb = kabelBand(qb);
-    if(ba !== bb) return ba - bb;
-    return qb - qa;
-  });
-
-  // Render tabel
-  tbody.innerHTML = rows.map(function(r){
-    var qty  = parseFloat(r['Unrestricted'])||0;
-    var bi   = kabelBand(qty);
-    var band = KABEL_BANDS[bi];
-    var cls  = KABEL_BAND_CLS[bi];
-    return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
-      +'<td class="p-2.5 text-xs font-mono">'+(r['Material']||'—')+'</td>'
-      +'<td class="p-2.5 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r['Material Description']||'')+'">'+(r['Material Description']||'—')+'</td>'
-      +'<td class="p-2.5 text-xs">'+(r['Batch']||'—')+'</td>'
-      +'<td class="p-2.5 text-xs">'+(r['Sloc - KP']||'—')+'</td>'
-      +'<td class="p-2.5 text-xs text-right font-bold font-mono">'+Math.round(qty).toLocaleString('id-ID')+'</td>'
-      +'<td class="p-2.5 text-xs">'+(r['Base Unit of Measure']||'—')+'</td>'
-      +'<td class="p-2.5 text-center"><span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold '+cls+'">'+band.label+'</span></td>'
-      +'</tr>';
+  summaryEl.innerHTML = KABEL_BANDS.map(function(b, i){
+    var c = band[i], on = sel === i, kosong = !c.count;
+    if(kosong && !on) return '<div class="rounded-lg border border-dashed border-gray-200 p-2 text-center opacity-50">'
+      +'<p class="text-[8px] font-bold uppercase text-gray-400 mb-0.5">'+b.label+' M</p>'
+      +'<p class="text-sm font-black text-gray-300">0</p><p class="text-[9px] text-gray-300">—</p></div>';
+    var redup = sel!=='' && !on;
+    return '<div class="cf rounded-lg border p-2 text-center cursor-pointer select-none transition '
+      +(on?'border-[#00288e] on bg-[#eaedff] ring-2 ring-[#00288e]':'border-gray-200 hover:border-[#00288e]')
+      +(redup?' opacity-40':'')+'" onclick="sToggleKabelBand('+i+')" title="'+(on?'Klik lagi untuk batal':'Klik untuk filter semua card')+'">'
+      +'<p class="text-[8px] font-bold uppercase '+(on?'text-[#00288e]':'text-gray-400')+' mb-0.5">'+b.label+' M</p>'
+      +'<p class="text-sm font-black text-[#131b2e]">'+c.count.toLocaleString('id-ID')+' <span class="text-[9px] font-semibold text-gray-400">baris</span></p>'
+      +'<p class="text-[9px] text-gray-500">'+Math.round(c.totalQty).toLocaleString('id-ID')+' M</p>'
+      +'</div>';
   }).join('');
-
-  // Summary per band
-  var bandCount = KABEL_BANDS.map(function(){ return { count:0, totalQty:0 }; });
-  rows.forEach(function(r){
-    var qty = parseFloat(r['Unrestricted'])||0;
-    var bi  = kabelBand(qty);
-    bandCount[bi].count++;
-    bandCount[bi].totalQty += qty;
-  });
-  if(summaryEl) {
-    summaryEl.innerHTML = KABEL_BANDS.map(function(b, i){
-      if(!bandCount[i].count) return '';
-      var cls = KABEL_BAND_CLS[i];
-      return '<div class="rounded-lg border p-2 text-center">'
-        +'<p class="text-[8px] font-bold uppercase text-gray-400 mb-0.5">'+b.label+' M</p>'
-        +'<p class="text-sm font-black text-[#131b2e]">'+bandCount[i].count+'</p>'
-        +'<p class="text-[9px] text-gray-400">'+Math.round(bandCount[i].totalQty).toLocaleString('id-ID')+' M</p>'
-        +'</div>';
-    }).join('');
-  }
 }
 
 function sUpdateLabel(filtered) {
@@ -3765,6 +3778,8 @@ function sUpdateLabel(filtered) {
   if(SF.tglUpdate.length&&SF.tglUpdate[0]!==S_DEFAULT_TGL)parts.push('Tgl: '+SF.tglUpdate.join(','));
   if(SF.cardKp)parts.push('KP: '+SF.cardKp);
   if(SF.cardGudang)parts.push((SF.cardGudang.split(' - ')[1]||SF.cardGudang));
+  if(SF.cardBrand)parts.push('Brand: '+SF.cardBrand);
+  if(SF.kabelBand!=='')parts.push('Kabel FOC '+KABEL_BANDS[SF.kabelBand].label+' M');
   if(SF.search)parts.push('"'+SF.search+'"');
   const el=document.getElementById('s-activeFilterLabel');
   if(el)el.textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
@@ -3874,28 +3889,46 @@ function sRenderGudangChart(filtered) {
   }
 }
 
+// Dihitung dari filter aktif TANPA filter brand-card, supaya brand lain tetap terlihat (diredupkan).
 function sRenderBrandChart(filtered) {
-  const src=filtered.filter(sIsAktif);
+  const src=sApplyF(S_ROWS,{...SF,cardBrand:''}).filter(sIsAktif);
   const totalQty=src.reduce((s,r)=>s+(parseFloat(r['Unrestricted'])||0),0);
   const byB={};
   src.forEach(r=>{const b=r['Material - Brand'];if(b)byB[b]=(byB[b]||0)+(parseFloat(r['Unrestricted'])||0);});
   const sorted=Object.entries(byB).sort((a,b)=>b[1]-a[1]);
-  const top9=sorted.slice(0,9),others=sorted.slice(9).reduce((s,e)=>s+e[1],0);
-  const labels=[...top9.map(e=>e[0]),...(others>0?['Lainnya']:[])];
-  const data=[...top9.map(e=>e[1]),...(others>0?[others]:[])];
-  const colors=['#378ADD','#EF9F27','#1D9E75','#E24B4A','#7F77DD','#F472B6','#34D399','#FB923C','#60A5FA','#94A3B8'];
+  const sel=SF.cardBrand||'';
+  // Brand terpilih selalu tampil sebagai irisan sendiri walau di luar 9 besar
+  let top=sorted.slice(0,9);
+  if(sel&&!top.some(e=>e[0]===sel)){const e=sorted.find(e=>e[0]===sel);if(e)top=[...sorted.slice(0,8),e];}
+  const topSet=new Set(top.map(e=>e[0]));
+  const others=sorted.filter(e=>!topSet.has(e[0])).reduce((s,e)=>s+e[1],0);
+  const labels=[...top.map(e=>e[0]),...(others>0?['Lainnya']:[])];
+  const data=[...top.map(e=>e[1]),...(others>0?[others]:[])];
+  const base=['#378ADD','#EF9F27','#1D9E75','#E24B4A','#7F77DD','#F472B6','#34D399','#FB923C','#60A5FA','#94A3B8'];
+  const redup=h=>{const n=parseInt(h.slice(1),16);return 'rgba('+(n>>16)+','+((n>>8)&255)+','+(n&255)+',0.18)';};
+  const colors=labels.map((l,i)=>(!sel||l===sel)?base[i]:redup(base[i]));
+  const bisaKlik=i=>labels[i]&&labels[i]!=='Lainnya';
+  const klik=i=>{if(bisaKlik(i))sToggleCardBrand(labels[i]);};
   rebuildChart('s-brandChart',{
     type:'doughnut',
-    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length),borderWidth:1,borderColor:'#fff',hoverOffset:8}]},
+    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:labels.map(l=>sel&&l===sel?3:1),borderColor:labels.map(l=>sel&&l===sel?'#00288e':'#fff'),hoverOffset:8,offset:labels.map(l=>sel&&l===sel?10:0)}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      onHover(evt,els){const t=evt.native&&evt.native.target;if(t)t.style.cursor=(els.length&&bisaKlik(els[0].index))?'pointer':'default';},
+      onClick(evt,els){if(els.length)klik(els[0].index);},
       plugins:{
-        legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:6,
-          generateLabels:chart=>chart.data.labels.map((l,i)=>({text:l.length>14?l.slice(0,14)+'…':l,fillStyle:chart.data.datasets[0].backgroundColor[i],hidden:false,index:i}))
+        legend:{position:'bottom',onClick:(e,item)=>klik(item.index),
+          onHover:(e)=>{const t=e.native&&e.native.target;if(t)t.style.cursor='pointer';},
+          labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{size:9},padding:6,
+          generateLabels:chart=>chart.data.labels.map((l,i)=>({text:(l.length>14?l.slice(0,14)+'…':l)+(sel&&l===sel?' ✔':''),fillStyle:chart.data.datasets[0].backgroundColor[i],strokeStyle:chart.data.datasets[0].backgroundColor[i],fontColor:(!sel||l===sel)?'#374151':'#c4c5d5',hidden:false,index:i}))
         }},
-        tooltip:{callbacks:{label:ctx=>{const qty=ctx.parsed;const pct=totalQty>0?((qty/totalQty)*100).toFixed(1):0;return` ${ctx.label}: ${Math.round(qty).toLocaleString('id-ID')} unit (${pct}%)`;}}}
+        tooltip:{callbacks:{
+          label:ctx=>{const qty=ctx.parsed;const pct=totalQty>0?((qty/totalQty)*100).toFixed(1):0;return` ${ctx.label}: ${Math.round(qty).toLocaleString('id-ID')} unit (${pct}%)`;},
+          footer:items=>{const i=items.length?items[0].dataIndex:-1;if(!bisaKlik(i))return '';return labels[i]===sel?'✔ Terpilih — klik lagi untuk batal':'Klik untuk filter semua card';}}}
       }
     }
   });
+  const selEl=document.getElementById('s-brandSel');
+  if(selEl)selEl.innerHTML=sel?`<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#eaedff] text-[#00288e] text-[10px] font-bold border border-[#00288e]">${esc(sel)}<button onclick="sToggleCardBrand(SF.cardBrand)" class="ml-1 hover:text-red-600" title="Batalkan filter brand">✕</button></span>`:'';
 }
 
 let S_SORT = { col: '', dir: 1 };
@@ -3948,7 +3981,7 @@ function sRenderTable(filtered) {
       if(col==='Batch')return`<td class="p-3">${bBadge}</td>`;
       if(col==='Value Unrestricted')return`<td class="p-3 font-mono text-right text-xs whitespace-nowrap">${v?fmtRpFull(+v):'-'}</td>`;
       if(col==='Unrestricted')return`<td class="p-3 text-right text-xs">${v?Math.round(+v).toLocaleString('id-ID'):'-'}</td>`;
-      if(col==='Material Description')return`<td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${v||''}">${v||'-'}</td>`;
+      if(col==='Material Description')return`<td class="p-2 text-[10px] leading-snug whitespace-normal break-words min-w-[220px] max-w-[340px]">${v||'-'}</td>`;
       return`<td class="p-3 text-xs whitespace-nowrap">${v||'-'}</td>`;
     }).join('');
     return`<tr class="hover:bg-[#f2f3ff] transition-colors"><td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>${cells}</tr>`;
@@ -3967,6 +4000,321 @@ function sExportCSV(){
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
   a.download='stok_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+// ══════════════════════════════════════════════════════════
+// EXPORT STOK PER STATUS (Kategori Teknik) — PPT / Excel
+//  · Fast = Kategori - Moving 'Fast Moving'; Slow = Kategori - Moving KOSONG.
+//    Nilai lain (mis. 'Tidak ditemukan') tidak masuk keduanya -> dicatat di catatan kaki.
+//  · Tanggal = 1 Tgl Update yang dipilih di card Filter; filter lain ikut (kecuali Moving)
+//  · Hanya stok aktif (sIsAktif); kolom KP dari Sloc - KP; KP kosong/Tidak ditemukan dicatat di catatan kaki
+//  · Library dimuat saat dipakai saja, versi dikunci + SRI
+// ══════════════════════════════════════════════════════════
+const S_FAST_MOVING = 'Fast Moving';
+const S_EXP_KP = [
+  {kode:'BPN',     nama:'BALIKPAPAN', sloc:'Balikpapan',         warna:'1565C0'},
+  {kode:'KALBAR',  nama:'KALBAR',     sloc:'Kalimantan Barat',   warna:'0891B2'},
+  {kode:'KALSEL',  nama:'KALSEL',     sloc:'Kalimantan Selatan', warna:'15803D'},
+  {kode:'KALTENG', nama:'KALTENG',    sloc:'Kalimantan Tengah',  warna:'C2410C'},
+  {kode:'KALTIM',  nama:'KALTIM',     sloc:'Kalimantan Timur',   warna:'6D28D9'},
+];
+const S_EXP_LIB = {
+  pptx: {url:'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js',
+         sri:'sha384-Cck14aA9cifjYolcnjebXRfWGkz5ltHMBiG4px/j8GS+xQcb7OhNQWZYyWjQ+UwQ', glob:'PptxGenJS'},
+  xlsx: {url:'https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js',
+         sri:'sha384-Pqp51FUN2/qzfxZxBCtF0stpc9ONI6MYZpVqmo8m20SoaQCzf+arZvACkLkirlPz', glob:'ExcelJS'},
+};
+const S_EXP = {format:'pptx', moving:'fast', jalan:false};
+const S_BLN_EXP = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGU','SEP','OKT','NOV','DES'];
+
+function sExpToggle(ev) {
+  if(ev) ev.stopPropagation();
+  const m = document.getElementById('s-expMenu');
+  if(!m) return;
+  m.classList.toggle('hidden');
+  if(!m.classList.contains('hidden')) sExpSegarkan();
+}
+function sExpPilih(k, v) { S_EXP[k] = v; sExpSegarkan(); }
+function sExpSegarkan() {
+  ['format','moving'].forEach(k => {
+    const wrap = document.getElementById(k === 'format' ? 's-expFormat' : 's-expMoving');
+    if(!wrap) return;
+    wrap.querySelectorAll('.s-exp-opt').forEach(b => {
+      const on = b.dataset.v === S_EXP[k];
+      b.style.background = on ? '#00288e' : '#fff';
+      b.style.color = on ? '#fff' : '#374151';
+      b.style.borderColor = on ? '#00288e' : '#e5e7eb';
+    });
+  });
+  const t = sExpTanggal();
+  const el = document.getElementById('s-expTgl');
+  if(el) el.textContent = t.ok ? 'Tgl Update: ' + t.label : t.pesan;
+  if(el) el.style.color = t.ok ? '' : '#c2410c';
+}
+document.addEventListener('click', e => {
+  const w = document.getElementById('s-expWrap'), m = document.getElementById('s-expMenu');
+  if(w && m && !m.classList.contains('hidden') && !w.contains(e.target)) m.classList.add('hidden');
+});
+
+function sExpTanggal() {
+  const t = SF.tglUpdate || [];
+  if(t.length !== 1) return {ok:false, pesan: t.length ? 'Pilih SATU Tgl Update di card Filter (sekarang ' + t.length + ' dipilih).' : 'Pilih satu Tgl Update di card Filter.'};
+  const v = String(t[0]), m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+  return {ok:true, iso:v, label: m ? (+m[3]) + ' ' + S_BLN_EXP[+m[2]-1] + ' ' + m[1] : v, file: v.replace(/-/g,'')};
+}
+
+// Ringkas filter aktif (selain Tgl & Moving) untuk catatan kaki
+function sExpFilterTeks() {
+  const p = [];
+  const daftar = (k, n) => { if(SF[k] && SF[k].length) p.push(n + ': ' + SF[k].join(', ')); };
+  daftar('slocGudang','Gudang'); daftar('slocKp','KP'); daftar('brand','Brand'); daftar('katSap','Kat. SAP');
+  daftar('katTeknik','Kat. Teknik'); daftar('batch','Batch');
+  if(SF.cardKp) p.push('KP: ' + SF.cardKp);
+  if(SF.cardGudang) p.push('Gudang: ' + SF.cardGudang);
+  if(SF.cardBrand) p.push('Brand: ' + SF.cardBrand);
+  if(SF.kabelBand !== '') p.push('Kabel FOC ' + KABEL_BANDS[SF.kabelBand].label + ' M');
+  if(SF.search) p.push('Cari: "' + SF.search + '"');
+  return p.join(' · ');
+}
+
+function sExpData(jenis) {
+  const semua = sApplyF(S_ROWS, {...SF, moving:[]}).filter(sIsAktif);
+  const mv = r => String(r['Kategori - Moving'] === null || r['Kategori - Moving'] === undefined ? '' : r['Kategori - Moving']).trim();
+  const rows = semua.filter(r => jenis === 'fast' ? mv(r) === S_FAST_MOVING : mv(r) === '');
+  const lain = semua.filter(r => mv(r) !== S_FAST_MOVING && mv(r) !== '');
+  const movLain = {baris: lain.length, nilai: [...new Set(lain.map(mv))]};
+  const petaKp = {}; S_EXP_KP.forEach(k => petaKp[k.sloc.toLowerCase()] = k.kode);
+  const grup = {}, luar = {baris:0, qty:0};
+  rows.forEach(r => {
+    const q = parseFloat(r['Unrestricted']) || 0;
+    if(!q) return;
+    const kp = petaKp[String(r['Sloc - KP'] || '').trim().toLowerCase()];
+    if(!kp) { luar.baris++; luar.qty += q; return; }
+    const st = String(r['Kategori - Teknik'] || '').trim() || '(Kosong)';
+    if(!grup[st]) { grup[st] = {status:st, total:0}; S_EXP_KP.forEach(k => grup[st][k.kode] = 0); }
+    grup[st][kp] += q; grup[st].total += q;
+  });
+  const list = Object.values(grup).filter(g => Math.round(g.total) !== 0)
+    .sort((a,b) => a.status.localeCompare(b.status, 'en', {numeric:true, sensitivity:'base'}));
+  const total = {total:0}; S_EXP_KP.forEach(k => total[k.kode] = 0);
+  list.forEach(g => { S_EXP_KP.forEach(k => total[k.kode] += g[k.kode]); total.total += g.total; });
+  return {jenis, judul: jenis === 'fast' ? 'FAST MOVING' : 'SLOW MOVING', list, total, luar, movLain};
+}
+
+function sExpMuatLib(k) {
+  const L = S_EXP_LIB[k];
+  if(window[L.glob]) return Promise.resolve(window[L.glob]);
+  return new Promise((res, rej) => {
+    const sc = document.createElement('script');
+    sc.src = L.url; sc.integrity = L.sri; sc.crossOrigin = 'anonymous';
+    sc.onload = () => window[L.glob] ? res(window[L.glob]) : rej(new Error('Library ' + L.glob + ' tidak terbaca.'));
+    sc.onerror = () => { sc.remove(); rej(new Error('Gagal memuat library ' + L.glob + ' (cek koneksi ke cdn.jsdelivr.net).')); };
+    document.head.appendChild(sc);
+  });
+}
+
+function sExpPesan(t, err) {
+  const el = document.getElementById('s-expMsg');
+  if(el) { el.textContent = t; el.style.color = err ? '#dc2626' : '#15803d'; }
+}
+
+async function sExportJalankan() {
+  if(S_EXP.jalan) return;
+  const tgl = sExpTanggal();
+  if(!tgl.ok) { sExpPesan(tgl.pesan, true); return; }
+  if(!S_ROWS.length) { sExpPesan('Data stok belum dimuat.', true); return; }
+  const jenis = S_EXP.moving === 'both' ? ['fast','slow'] : [S_EXP.moving];
+  const set = jenis.map(sExpData);
+  if(set.every(d => !d.list.length)) { sExpPesan('Tidak ada data untuk pilihan & filter ini.', true); return; }
+  const btn = document.getElementById('s-expGo');
+  S_EXP.jalan = true; if(btn) btn.style.opacity = '0.5';
+  sExpPesan('Menyiapkan file…', false);
+  try {
+    const lib = await sExpMuatLib(S_EXP.format);
+    const label = S_EXP.moving === 'both' ? 'FastSlow' : (S_EXP.moving === 'fast' ? 'FastMoving' : 'SlowMoving');
+    const nama = 'Stok_' + label + '_' + tgl.file;
+    const filter = sExpFilterTeks();
+    if(S_EXP.format === 'pptx') await sExpPptx(lib, set, tgl, filter, nama);
+    else await sExpXlsx(lib, set, tgl, filter, nama);
+    sExpPesan('Selesai: ' + nama + '.' + S_EXP.format, false);
+  } catch(e) {
+    console.error('Export stok:', e);
+    sExpPesan('Gagal: ' + (e && e.message ? e.message : e), true);
+  } finally {
+    S_EXP.jalan = false; if(btn) btn.style.opacity = '';
+  }
+}
+
+const sExpAngka = n => Math.round(n) ? Math.round(n).toLocaleString('en-US') : '-';
+function sExpCatatan(d, filter) {
+  const c = ['Sumber: Dashboard Opharset SBU RKAL · MB52 · Qty Unrestricted · stok aktif (tanpa sloc/batch rusak) · Status = Kategori Teknik'];
+  if(d.jenis === 'slow') c.push('Slow Moving = Kategori Moving kosong');
+  if(d.movLain.baris) c.push('Tidak termasuk ' + d.movLain.baris + ' baris Moving "' + d.movLain.nilai.join('", "') + '"');
+  if(filter) c.push('Filter: ' + filter);
+  if(d.luar.baris) c.push('Tidak termasuk ' + d.luar.baris + ' baris tanpa KP (' + sExpAngka(d.luar.qty) + ')');
+  return c.join(' · ');
+}
+
+// ── PPT: format sesuai contoh (header, kartu per KP, 2 tabel berdampingan, 62 status per slide) ──
+async function sExpPptx(PptxGenJS, set, tgl, filter, nama) {
+  const pptx = new PptxGenJS();
+  pptx.layout = 'LAYOUT_WIDE'; // 13.33 x 7.5 in
+  pptx.title = 'Stok Material per Status';
+  const NAVY = '0B2A6B', HEAD = '0D3FA6', KUNING = 'FFD54A', ABU = '9CA3AF', FONT = 'Arial';
+  const PER_KOLOM = 31, PER_SLIDE = PER_KOLOM * 2;
+  set.forEach(d => {
+    if(!d.list.length) return;
+    const halaman = [];
+    for(let i = 0; i < d.list.length; i += PER_SLIDE) halaman.push(d.list.slice(i, i + PER_SLIDE));
+    halaman.forEach((isi, hi) => {
+      const sl = pptx.addSlide();
+      sl.background = {color:'FFFFFF'};
+      // Header
+      sl.addShape(pptx.ShapeType.rect, {x:0, y:0, w:13.333, h:1.15, fill:{color:NAVY}, line:{color:NAVY}});
+      sl.addShape(pptx.ShapeType.triangle, {x:0.25, y:0.18, w:0.75, h:0.32, fill:{color:NAVY}, line:{color:'FFFFFF', width:2}});
+      sl.addShape(pptx.ShapeType.rect, {x:0.33, y:0.5, w:0.59, h:0.45, fill:{color:NAVY}, line:{color:'FFFFFF', width:2}});
+      [[0.42,0.58],[0.57,0.58],[0.72,0.58],[0.42,0.75],[0.57,0.75],[0.72,0.75]].forEach(([x,y]) =>
+        sl.addShape(pptx.ShapeType.rect, {x, y, w:0.12, h:0.13, fill:{color:'5B8DEF'}, line:{color:'5B8DEF'}}));
+      sl.addText([
+        {text:'STOK MATERIAL ', options:{color:'FFFFFF'}},
+        {text:d.judul, options:{color:KUNING}}
+      ], {x:1.1, y:0.1, w:6.4, h:0.55, fontFace:FONT, fontSize:26, bold:true, margin:0});
+      sl.addText('(BERDASARKAN STATUS) · MB52 · PER ' + tgl.label + ' · ' + d.list.length + ' MATERIAL'
+        + (halaman.length > 1 ? ' · HAL ' + (hi + 1) + '/' + halaman.length : ''),
+        {x:1.1, y:0.66, w:6.4, h:0.35, fontFace:FONT, fontSize:11, color:'DCE6FF', margin:0});
+      // Kartu per KP + Grand Total
+      const kartu = S_EXP_KP.map(k => ({nama:k.nama, nilai:d.total[k.kode], warna:k.warna}))
+        .concat([{nama:'GRAND TOTAL', nilai:d.total.total, warna:NAVY, gt:true}]);
+      const kw = 0.9, kg = 0.07, kx0 = 13.333 - 0.25 - (kw * 6 + kg * 5);
+      kartu.forEach((k, i) => {
+        const x = kx0 + i * (kw + kg);
+        sl.addShape(pptx.ShapeType.roundRect, {x, y:0.14, w:kw, h:0.86, rectRadius:0.08, fill:{color:k.warna}, line:{color:k.gt ? 'FFFFFF' : k.warna, width:k.gt ? 1.5 : 0.5}});
+        sl.addText(k.nama, {x, y:0.17, w:kw, h:0.24, fontFace:FONT, fontSize:8, bold:true, color:'FFFFFF', align:'center', margin:0});
+        sl.addShape(pptx.ShapeType.roundRect, {x:x + 0.07, y:0.44, w:kw - 0.14, h:0.46, rectRadius:0.05, fill:{color:'FFFFFF'}, line:{color:'FFFFFF'}});
+        sl.addText(sExpAngka(k.nilai), {x:x + 0.07, y:0.44, w:kw - 0.14, h:0.46, fontFace:FONT, fontSize:12, bold:true, color:k.gt ? '111827' : k.warna, align:'center', valign:'middle', margin:0});
+      });
+      // Tabel kiri/kanan
+      const halTerakhir = hi === halaman.length - 1;
+      const nKiri = isi.length > PER_KOLOM ? (halTerakhir ? Math.ceil(isi.length / 2) : PER_KOLOM) : isi.length;
+      const kolom = [isi.slice(0, nKiri), isi.slice(nKiri)];
+      const offset = hi * PER_SLIDE;
+      const sel = (t, o) => ({text:String(t), options:Object.assign({fontFace:FONT, fontSize:7.5, margin:[0,0.04,0,0.04], valign:'middle'}, o)});
+      const header = ['No','Status (Material)'].concat(S_EXP_KP.map(k => k.kode)).concat(['Total'])
+        .map((t, i) => sel(t, {bold:true, color:'FFFFFF', fill:{color:HEAD}, align:i === 1 ? 'left' : 'center'}));
+      const colW = [0.36, 2.2].concat(S_EXP_KP.map(() => 0.61)).concat([0.68]);
+      kolom.forEach((baris, ci) => {
+        if(!baris.length) return;
+        const rows = [header];
+        baris.forEach((g, ri) => {
+          const no = offset + (ci === 0 ? 0 : nKiri) + ri + 1;
+          const fill = {color: ri % 2 ? 'F3F6FD' : 'FFFFFF'};
+          rows.push([sel(no, {align:'center', color:'374151', fill}), sel(g.status, {color:'111827', fill})]
+            .concat(S_EXP_KP.map(k => sel(sExpAngka(g[k.kode]), {align:'center', color:Math.round(g[k.kode]) ? k.warna : ABU, fill})))
+            .concat([sel(sExpAngka(g.total), {align:'center', color:'111827', fill})]));
+        });
+        const gtDiSini = halTerakhir && (ci === 1 || !kolom[1].length);
+        if(gtDiSini) {
+          const f = {color:HEAD};
+          rows.push([sel('', {fill:f}), sel('GRAND TOTAL', {bold:true, color:KUNING, fill:f})]
+            .concat(S_EXP_KP.map(k => sel(sExpAngka(d.total[k.kode]), {bold:true, align:'center', color:'FFFFFF', fill:f})))
+            .concat([sel(sExpAngka(d.total.total), {bold:true, align:'center', color:'FFFFFF', fill:f})]));
+        }
+        sl.addTable(rows, {x:ci === 0 ? 0.22 : 6.78, y:1.3, w:6.33, colW, rowH:0.172,
+          border:{type:'solid', pt:0.5, color:'D1D9EE'}, autoPage:false});
+      });
+      sl.addText(sExpCatatan(d, filter), {x:0.22, y:7.16, w:12.9, h:0.24, fontFace:FONT, fontSize:7, color:'6B7280', margin:0});
+    });
+  });
+  await pptx.writeFile({fileName: nama + '.pptx', compression: true});
+}
+
+// ── Excel: 1 sheet per kategori moving; ringkasan KP di atas, tabel tunggal (bisa sort/filter), Total & Grand Total pakai rumus ──
+async function sExpXlsx(ExcelJS, set, tgl, filter, nama) {
+  const wb = new ExcelJS.Workbook();
+  wb.creator = 'Dashboard Opharset SBU RKAL';
+  const ARGB = h => 'FF' + h;
+  const NAVY = '0B2A6B', HEAD = '0D3FA6', KUNING = 'FFD54A';
+  const garis = {style:'thin', color:{argb:ARGB('D1D9EE')}};
+  const kotak = {top:garis, left:garis, bottom:garis, right:garis};
+  const FMT = '#,##0;-#,##0;"-"';
+  set.forEach(d => {
+    if(!d.list.length) return;
+    const ws = wb.addWorksheet(d.jenis === 'fast' ? 'Fast Moving' : 'Slow Moving', {views:[{state:'frozen', ySplit:7}]});
+    ws.columns = [{width:6},{width:36}].concat(S_EXP_KP.map(() => ({width:13}))).concat([{width:14}]);
+    const isiBaris = (r, warnaBg) => { for(let c = 1; c <= 8; c++) ws.getCell(r, c).fill = {type:'pattern', pattern:'solid', fgColor:{argb:ARGB(warnaBg)}}; };
+    // Judul
+    ws.mergeCells('A1:H1'); ws.mergeCells('A2:H2');
+    ws.getCell('A1').value = {richText:[
+      {text:'STOK MATERIAL ', font:{bold:true, size:16, color:{argb:ARGB('FFFFFF')}}},
+      {text:d.judul, font:{bold:true, size:16, color:{argb:ARGB(KUNING)}}}]};
+    ws.getCell('A2').value = '(BERDASARKAN STATUS) · MB52 · PER ' + tgl.label + ' · ' + d.list.length + ' MATERIAL';
+    ws.getCell('A2').font = {size:10, color:{argb:ARGB('DCE6FF')}};
+    isiBaris(1, NAVY); isiBaris(2, NAVY);
+    ws.getRow(1).height = 26; ws.getRow(2).height = 18;
+    ws.getCell('A1').alignment = ws.getCell('A2').alignment = {vertical:'middle', indent:1};
+    // Ringkasan per KP (baris 4-5)
+    ws.mergeCells('A4:B5');
+    ws.getCell('A4').value = 'Ringkasan per KP';
+    ws.getCell('A4').font = {bold:true, color:{argb:ARGB(NAVY)}};
+    ws.getCell('A4').alignment = {vertical:'middle', horizontal:'center'};
+    const awal = 8, akhir = awal + d.list.length - 1, gtRow = akhir + 1;
+    S_EXP_KP.concat([{nama:'GRAND TOTAL', warna:NAVY}]).forEach((k, i) => {
+      const col = 3 + i, huruf = String.fromCharCode(64 + col);
+      const l = ws.getCell(4, col), v = ws.getCell(5, col);
+      l.value = k.nama; l.font = {bold:true, size:9, color:{argb:ARGB('FFFFFF')}};
+      l.fill = {type:'pattern', pattern:'solid', fgColor:{argb:ARGB(k.warna)}};
+      l.alignment = {horizontal:'center'}; l.border = kotak;
+      v.value = {formula: huruf + gtRow, result: i < 5 ? Math.round(d.total[k.kode]) : Math.round(d.total.total)};
+      v.numFmt = FMT; v.font = {bold:true, size:12, color:{argb:ARGB(i < 5 ? k.warna : '111827')}};
+      v.alignment = {horizontal:'center'}; v.border = {top:garis, left:garis, right:garis, bottom:{style:'medium', color:{argb:ARGB(k.warna)}}};
+    });
+    // Header tabel (baris 7)
+    const hdr = ws.getRow(7);
+    hdr.values = ['No','Status (Material)'].concat(S_EXP_KP.map(k => k.kode)).concat(['Total']);
+    hdr.eachCell((c, n) => { c.font = {bold:true, color:{argb:ARGB('FFFFFF')}}; c.fill = {type:'pattern', pattern:'solid', fgColor:{argb:ARGB(HEAD)}};
+      c.alignment = {horizontal:n === 2 ? 'left' : 'center', vertical:'middle'}; c.border = kotak; });
+    hdr.height = 18;
+    // Data
+    d.list.forEach((g, i) => {
+      const r = awal + i, row = ws.getRow(r);
+      row.getCell(1).value = i + 1;
+      row.getCell(2).value = g.status;
+      S_EXP_KP.forEach((k, j) => { const c = row.getCell(3 + j); c.value = Math.round(g[k.kode]); c.font = {color:{argb:ARGB(k.warna)}}; });
+      row.getCell(8).value = {formula:'SUM(C' + r + ':G' + r + ')', result: S_EXP_KP.reduce((s, k) => s + Math.round(g[k.kode]), 0)};
+      row.getCell(8).font = {bold:true};
+      for(let c = 1; c <= 8; c++) {
+        const cel = row.getCell(c);
+        cel.border = kotak;
+        if(c >= 3) { cel.numFmt = FMT; cel.alignment = {horizontal:'center'}; }
+        if(c === 1) cel.alignment = {horizontal:'center'};
+        if(i % 2) cel.fill = {type:'pattern', pattern:'solid', fgColor:{argb:ARGB('F3F6FD')}};
+      }
+    });
+    // Grand total
+    const gt = ws.getRow(gtRow);
+    gt.getCell(2).value = 'GRAND TOTAL';
+    for(let c = 3; c <= 8; c++) {
+      const huruf = String.fromCharCode(64 + c);
+      const hasil = c < 8 ? d.list.reduce((s, g) => s + Math.round(g[S_EXP_KP[c - 3].kode]), 0)
+                          : d.list.reduce((s, g) => s + S_EXP_KP.reduce((t, k) => t + Math.round(g[k.kode]), 0), 0);
+      gt.getCell(c).value = {formula:'SUM(' + huruf + awal + ':' + huruf + akhir + ')', result:hasil};
+      gt.getCell(c).numFmt = FMT; gt.getCell(c).alignment = {horizontal:'center'};
+    }
+    for(let c = 1; c <= 8; c++) { const cel = gt.getCell(c); cel.fill = {type:'pattern', pattern:'solid', fgColor:{argb:ARGB(HEAD)}};
+      cel.font = {bold:true, color:{argb:ARGB(c === 2 ? KUNING : 'FFFFFF')}}; cel.border = kotak; }
+    ws.autoFilter = {from:{row:7, column:1}, to:{row:akhir, column:8}};
+    // Catatan kaki
+    ws.mergeCells(gtRow + 2, 1, gtRow + 2, 8);
+    const ck = ws.getCell(gtRow + 2, 1);
+    ck.value = sExpCatatan(d, filter); ck.font = {size:8, italic:true, color:{argb:ARGB('6B7280')}};
+    ck.alignment = {wrapText:true, vertical:'top'}; ws.getRow(gtRow + 2).height = 30;
+    ws.pageSetup = {orientation:'portrait', fitToPage:true, fitToWidth:1, fitToHeight:0, paperSize:9};
+  });
+  const buf = await wb.xlsx.writeBuffer();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([buf], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+  a.download = nama + '.xlsx'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 }
 
 // ══════════════════════════════════════════════════════════
